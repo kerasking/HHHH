@@ -5,7 +5,10 @@
 #include <NDBaseDirector.h>
 #include <NDGameApplication.h>
 #include "NDSharedPtr.h"
+
+#ifndef WIN32
 #include "NDBeforeGameMgr.h"
+#endif
 
 #ifdef WIN32
 #include "windows.h"

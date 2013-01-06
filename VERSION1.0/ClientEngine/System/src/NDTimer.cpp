@@ -63,13 +63,13 @@ void NDTimer::SetTimer(ITimerCallback* timerCallback, OBJID tag, float interval)
 
 		if (m_mapTimer.count(cbImp) <= 0)
 		{
-			CCScheduler *sch = GetScheduler();
-			Timer *timer = new Timer;
-			timer->setTag(tag);
-			timer->setTimerCallback(timerCallback);
-			sch->scheduleSelector(schedule_selector(Timer::onTimer), timer,
+			CCScheduler* pkScheduler = GetScheduler();
+			Timer* pkTimer = new Timer;
+			pkTimer->setTag(tag);
+			pkTimer->setTimerCallback(timerCallback);
+			pkScheduler->scheduleSelector(schedule_selector(Timer::onTimer), pkTimer,
 					interval, false);
-			m_mapTimer[cbImp] = timer;
+			m_mapTimer[cbImp] = pkTimer;
 		}
 	}
 }

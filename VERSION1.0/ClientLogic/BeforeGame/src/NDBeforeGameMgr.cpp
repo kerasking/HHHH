@@ -1856,6 +1856,7 @@ bool NDBeforeGameMgr::isWifiNetWork()
 
 bool NDBeforeGameMgr::CheckClientVersion( const char* szURL )
 {
+	LOGD("NDBeforeGameMgr::CheckClientVersion");
     static int s_nVersion = 0;
     unsigned char ucResType = RES_TYPE;
     //取得当前客户端版本
@@ -1887,8 +1888,11 @@ bool NDBeforeGameMgr::CheckClientVersion( const char* szURL )
 	{
 		return false;
 	}
+
 	NDTransData kData(_MSG_CLIENT_VERSION);
     
+	LOGD("Send the _MSG_CLIENT_VERSION message to server!");
+
 	kData << s_nVersion;
     kData << ucResType;
 	NDDataTransThread::DefaultThread()->GetSocket()->Send(&kData);
@@ -2054,7 +2058,7 @@ void* CopyLoginResThread(void* ptr)
 		ZIPENTRY kTempZipEntry = {0};
 		GetZipItem(pZipHandle,i,&kTempZipEntry);
 		string strFilename = strPath + string(kTempZipEntry.name);
-		LOGD("Unzipping the %s file.",strFilename.c_str());
+		//LOGD("Unzipping the %s file.",strFilename.c_str());
 		UnzipItem(pZipHandle,i,strFilename.c_str());
 	}
 
@@ -2125,12 +2129,18 @@ void* CopyResThread(void* ptr)
 		ZIPENTRY kTempZipEntry = {0};
 		GetZipItem(pZipHandle,i,&kTempZipEntry);
 		string strFilename = strPath + string(kTempZipEntry.name);
-		LOGD("Unzipping the file:%s",strFilename.c_str());
+
+		float fCur = i;
+		float fMax = nMaxIndex;
+
+		NDBeforeGameMgr::ms_nCopyStatus = (int)(fCur / fMax * 100.0f);
+	//	LOGD("Unzipping the file:%s",strFilename.c_str());
 		UnzipItem(pZipHandle,i,strFilename.c_str());
 	}
 
+	NDBeforeGameMgr::ms_nCopyStatus = 100;
+
 	CloseZip(pZipHandle);
-	NDBeforeGameMgr::ms_nCopyStatus = 1;
 
 #else
 #endif
@@ -2140,8 +2150,11 @@ void* CopyResThread(void* ptr)
 void NDBeforeGameMgr::CopyRes()
 {
 	pthread_t pid = {0};
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 	CopyResThread(0);
-	//pthread_create(&pid, NULL, CopyResThread, this);	
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	pthread_create(&pid, NULL, CopyResThread, this);
+#endif
 }
 int NDBeforeGameMgr::GetCopyStatus()
 {

@@ -3884,18 +3884,18 @@ void NDMapMgr::processActivity(NDTransData& kData)
 	 * ¹ùºÆ
 	 */
 	CloseProgressBar;
-	int flag = kData.ReadByte();
-	int amount = kData.ReadByte();
-	if (flag == 1)
+	int nFlag = kData.ReadByte();
+	int nAmount = kData.ReadByte();
+	if (nFlag == 1)
 	{
 		//CustomActivity::ClearData();
 	}
-	for (int i = 0; i < amount; i++)
+	for (int i = 0; i < nAmount; i++)
 	{
 		std::string str = kData.ReadUnicodeString();
 		//CustomActivity::AddData(str);
 	}
-	if (flag == 2 || flag == 3)
+	if (nFlag == 2 || nFlag == 3)
 	{
 		//CustomActivity::refresh();
 	}
