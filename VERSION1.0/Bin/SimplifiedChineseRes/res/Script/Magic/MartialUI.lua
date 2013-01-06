@@ -122,7 +122,7 @@ local USER_FLAG_DIS = 5749;
 --local StaffListItemSize = CGSizeMake(130.0*ScaleFactor, 65.0*ScaleFactor);
 local TAG_STAFFLIST_SIZE_PIC    = 100;
 
-local SKILL_RECT = CGSizeMake((40+TagListItem.edge)*ScaleFactor, 40*ScaleFactor);               -- 技能框大小
+local SKILL_RECT = CGSizeMake((40+TagListItem.edge)*CoordScaleX, 40*CoordScaleY);               -- 技能框大小
 
 function p.LoadUI()
    

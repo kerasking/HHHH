@@ -198,8 +198,8 @@ local scene = GetSMGameScene();
 	--屏蔽11 12级vip按钮
 	local btn11 = RecursiveButton(layer, {61});
 	local btn12 = RecursiveButton(layer, {62});
-	btn11:SetChecked( true );
-	btn12:SetChecked( true );
+	btn11:EnalbeGray( true );
+	btn12:EnalbeGray( true );
 	
 
 	
