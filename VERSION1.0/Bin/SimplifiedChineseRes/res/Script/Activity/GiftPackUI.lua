@@ -259,6 +259,8 @@ function p.RefreshGiftItem(view,i)
         return;
     end
     
+    LogInfo("gift.type:[%d]",gift.type);
+    
     local pic = GetImage(view, TAG_LIST_IMG);
     pic:SetPicture(GetGiftPic(GetDataBaseDataN("giftpack_config",gift.type,DB_GIFTPACK_CONFIG.ICON)));
     

@@ -273,9 +273,14 @@ void CCDirector::setGLDefaultValues(void)
     setProjection(m_eProjection);
 
     // set other opengl default values
+#if ND_MOD
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+#else
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+#endif
 }
 
+#if ND_MOD
 void CCDirector::setGLDefaultValues( float fR,float fG,float fB,float fA /*= 1.0f*/ )
 {
 	CCAssert(m_pobOpenGLView, "opengl view should not be null");
@@ -287,6 +292,7 @@ void CCDirector::setGLDefaultValues( float fR,float fG,float fB,float fA /*= 1.0
 	// set other opengl default values
 	glClearColor(fR, fG, fB, fA);
 }
+#endif
 
 // Draw the Scene
 void CCDirector::drawScene(void)

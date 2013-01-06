@@ -518,6 +518,19 @@ bool ScriptMgr::excuteLuaFunc(const char* funcname, const char* modulename, int 
 	
 	return ret;
 }
+bool ScriptMgr::excuteLuaFunc(const char* funcname, const char* modulename, int param1, int param2, int param3,int param4,int param5)
+{
+	LuaObject funcObj = GetLuaFunc(funcname, modulename);
+
+	if (!funcObj.IsFunction())
+	{
+		return false;
+	}
+	LuaFunction<bool> func = funcObj;
+	bool ret = func(param1, param2, param3, param4,param5);
+
+	return ret;
+}
 bool ScriptMgr::IsLuaFuncExist(const char* funcname, const char* modulename)
 {
 	LuaObject funcObj = GetLuaFunc(funcname, modulename);

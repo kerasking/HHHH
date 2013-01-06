@@ -230,6 +230,9 @@ end
 function p.OnUIEventInfo(uiNode, uiEventType, param)
 	if uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK then
 	    local tag = uiNode:GetTag();
+	    if(friendId==nil or friendId<=0) then
+			return true;
+	    end
 		if tag == ID_FRIEND_CTRL_BUTTON_4 then
 			--info
 			MsgFriend.SendFriendSel(friendId,friendName);	
