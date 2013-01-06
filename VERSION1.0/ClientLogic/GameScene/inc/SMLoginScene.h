@@ -130,11 +130,14 @@ public:
 	NDUILabel*      m_pkProgressTextLabel;
 	
 protected:
+
 	static void * LoadTextAndLua( void * pScene );
 	void ShowWaitingAni();
 	void CloseWaitingAni();
 	void OnProcessUpdate();
+
 protected:
+
 	NDUILayer *		m_pLayerOld; //¾ÉµÄµÇÂ½½çÃæ
     NDUILayer *		m_pLayerUpdate;
     NDTimer *		m_pTimer;
@@ -143,5 +146,6 @@ protected:
 	int				m_iAccountID;
 	int				m_iState;//
     NDUILayer *		m_pLayerCheckWIFI;
+	CC_SYNTHESIZE(bool,m_bIsLoadingLocalString,IsLoadLocalString);
 };
 #endif

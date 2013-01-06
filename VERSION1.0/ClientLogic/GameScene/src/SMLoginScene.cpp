@@ -50,9 +50,7 @@
 
 //--------------------//
 
-#define UPDATE_ON		1	//0关闭下载，1开启下载
-#define CACHE_MODE 		1  //发布模式//0关闭拷贝；1开启将资源拷贝至cache目录来访问
-
+#define CACHE_MODE 		0  //发布模式//0关闭拷贝；1开启将资源拷贝至cache目录来访问
 //--------------------//
 
 #define TAG_INSTALL_SUCCESS			1
@@ -120,7 +118,10 @@ CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
     
 	if ( bShowEntry )
 	{
-		NDLocalXmlString::GetSingleton().LoadLoginString();
+		if (NDLocalXmlString::GetSingleton().LoadLoginString())
+		{
+			pkScene->setIsLoadLocalString(true);
+		}
 
 		CCSize kWinSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 
@@ -157,6 +158,7 @@ CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
 		NDPicture* pkPicture = kPool.AddPicture( NDPath::GetImgPath("Res00/Load/mobage_bg.png") );
 #elif ((CACHE_MODE == 1) && (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID))
 		NDPicture* pkPicture = kPool.AddPicture("res/drawable/mobage_splash.png");
+		CCImage::changeSystemFont(true);
 
 		if (pkPicture)
 		{
@@ -214,6 +216,7 @@ CSMLoginScene::CSMLoginScene()
 , m_iAccountID(0)
 , m_iState(0)
 , m_pLayerCheckWIFI(NULL)
+,m_bIsLoadingLocalString(false)
 ,m_pkProgressTextLabel(0)
 {
 	INC_NDOBJ_RTCLS
@@ -347,6 +350,13 @@ void CSMLoginScene::OnTimer( OBJID idTag )
                 break;
             case 100:
 				{
+					if (!m_bIsLoadingLocalString)
+					{
+						NDLocalXmlString::GetSingleton().LoadLoginString();
+						m_bIsLoadingLocalString = true;
+					}
+
+					CCImage::changeSystemFont(false);
 					LOGD("Copy files succeeded!");
 					CCDirector::sharedDirector()->setGLDefaultValues();
 					m_pTimer->KillTimer( this, TAG_TIMER_CHECK_COPY );
@@ -651,27 +661,32 @@ void CSMLoginScene::InitDownload( std::string & szUpdatePath )
 //++Guosen2012.8.7
 void CSMLoginScene::ShowRequestError()
 {
-	NDUIDialog* dlg = new NDUIDialog();
-	dlg->Initialization();
-	dlg->SetTag(TAG_REQUEST_URL_ERROR);
-	dlg->SetDelegate(this);
-	dlg->Show(NDCommonCString2("Common_error").c_str(), NDCommonCString2("LOGIN_SZ_REQUEST_DOWNLOAD_FAIL").c_str(), NULL, NDCommonCString2("Common_Ok").c_str(), NULL);
+	NDUIDialog* pkUIDialog = new NDUIDialog();
+	pkUIDialog->Initialization();
+	pkUIDialog->SetTag(TAG_REQUEST_URL_ERROR);
+	pkUIDialog->SetDelegate(this);
+	pkUIDialog->Show(NDCommonCString2("Common_error").c_str(),
+		NDCommonCString2("LOGIN_SZ_REQUEST_DOWNLOAD_FAIL").c_str(),
+		NULL, NDCommonCString2("Common_Ok").c_str(), NULL);
 }
 
 //===========================================================================
 //通过传递进的文件路径，获得待删除的文件路径，删除待删除的文件，删除传递进的文件
 bool CSMLoginScene::DeleteFileFromFile( std::string & szDelListFile )
 {
-	std::ifstream	tmpFile;
-	tmpFile.open( szDelListFile.c_str(), ios_base::in );
-	if ( !tmpFile )
+	std::ifstream kTempFile;
+	kTempFile.open( szDelListFile.c_str(), ios_base::in );
+	if ( !kTempFile )
 	{
-		if ( tmpFile.is_open() )
-			tmpFile.close();
+		if ( kTempFile.is_open() )
+		{
+			kTempFile.close();
+		}
+
 		return false;
 	}
-	std::string  lineStr;
-	while ( getline( tmpFile, lineStr ) )
+	std::string lineStr;
+	while ( getline( kTempFile, lineStr ) )
 	{
 		std::string DelFile = m_strCachePath + lineStr;
  		if ( remove( DelFile.c_str() ) )
@@ -679,7 +694,7 @@ bool CSMLoginScene::DeleteFileFromFile( std::string & szDelListFile )
 			NDLog( "删除文件失败：%s",DelFile.c_str() );
 		}
 	}
-	tmpFile.close();
+	kTempFile.close();
 	remove( szDelListFile.c_str() );
 	return true;
 }
@@ -831,7 +846,7 @@ void CSMLoginScene::OnMsg_ClientVersion(NDTransData& kData)
 
 	if (bUpdate)
 	{
-		LOGD("Pass bUpdate,value is",bUpdate ? "true" : "false");
+		LOGD("Pass bUpdate,value is %s",bUpdate ? "true" : "false");
 
 		if (bLatest)
 		{

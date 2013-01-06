@@ -30,7 +30,6 @@
 		5A1B38D91649F33800C94D7F /* KCondition.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B38B61649F33800C94D7F /* KCondition.cpp */; };
 		5A1B38DA1649F33800C94D7F /* KConnection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B38B81649F33800C94D7F /* KConnection.cpp */; };
 		5A1B38DB1649F33800C94D7F /* KDirectory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B38BA1649F33800C94D7F /* KDirectory.cpp */; };
-		5A1B38DC1649F33800C94D7F /* KFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B38BC1649F33800C94D7F /* KFile.cpp */; };
 		5A1B38DD1649F33800C94D7F /* KFtpClient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B38BE1649F33800C94D7F /* KFtpClient.cpp */; };
 		5A1B38DF1649F33800C94D7F /* KIniFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B38C21649F33800C94D7F /* KIniFile.cpp */; };
 		5A1B38E01649F33800C94D7F /* KMD5.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B38C41649F33800C94D7F /* KMD5.cpp */; };
@@ -810,9 +809,7 @@
 		5A3FC1AA1652A8A6002166DD /* SimplifiedChineseRes in Resources */ = {isa = PBXBuildFile; fileRef = 5A3FC1A91652A8A6002166DD /* SimplifiedChineseRes */; };
 		5A47BAA1169730BE0092C259 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A47BAA0169730BE0092C259 /* AdSupport.framework */; };
 		5A5FF1E4167B243B00E897F9 /* DownloadPackage.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A5FF1DB167B243B00E897F9 /* DownloadPackage.h */; };
-		5A5FF1E5167B243B00E897F9 /* Reachability.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A5FF1DC167B243B00E897F9 /* Reachability.h */; };
 		5A5FF1E8167B243B00E897F9 /* DownloadPackage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5FF1E0167B243B00E897F9 /* DownloadPackage.cpp */; };
-		5A5FF1E9167B243B00E897F9 /* Reachability.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5FF1E1167B243B00E897F9 /* Reachability.cpp */; };
 		5A5FF1EF167B29DA00E897F9 /* ScriptRegLua.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5FF1ED167B29DA00E897F9 /* ScriptRegLua.cpp */; };
 		5A5FF1F0167B29DA00E897F9 /* ScriptGameData_New.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5FF1EE167B29DA00E897F9 /* ScriptGameData_New.cpp */; };
 		5A5FF1F4167B29E700E897F9 /* ScriptGameData_New.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A5FF1F1167B29E700E897F9 /* ScriptGameData_New.h */; };
@@ -839,6 +836,8 @@
 		5AB9906616991D58005C8A5B /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5AB9904C16991D58005C8A5B /* icon.png */; };
 		5AB9906716991D58005C8A5B /* MobageNativeSDK.VERSION in Resources */ = {isa = PBXBuildFile; fileRef = 5AB9904D16991D58005C8A5B /* MobageNativeSDK.VERSION */; };
 		5AB9906816991D58005C8A5B /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5AB9904F16991D58005C8A5B /* Localizable.strings */; };
+		5AB9906F1699C541005C8A5B /* Reachability.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5AB9906E1699C540005C8A5B /* Reachability.mm */; };
+		5AB990711699C54A005C8A5B /* Reachability.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AB990701699C54A005C8A5B /* Reachability.h */; };
 		5AC4563C1643D6FA0014B2E7 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AC4563B1643D6FA0014B2E7 /* UIKit.framework */; };
 		5AC4563E1643D6FA0014B2E7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AC4563D1643D6FA0014B2E7 /* Foundation.framework */; };
 		5AC456401643D6FA0014B2E7 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AC4563F1643D6FA0014B2E7 /* CoreGraphics.framework */; };
@@ -1165,7 +1164,6 @@
 		5A1B38B91649F33800C94D7F /* KData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KData.h; path = ../../../KUtil/KData.h; sourceTree = "<group>"; };
 		5A1B38BA1649F33800C94D7F /* KDirectory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = KDirectory.cpp; path = ../../../KUtil/KDirectory.cpp; sourceTree = "<group>"; };
 		5A1B38BB1649F33800C94D7F /* KDirectory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KDirectory.h; path = ../../../KUtil/KDirectory.h; sourceTree = "<group>"; };
-		5A1B38BC1649F33800C94D7F /* KFile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = KFile.cpp; path = ../../../KUtil/KFile.cpp; sourceTree = "<group>"; };
 		5A1B38BD1649F33800C94D7F /* KFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KFile.h; path = ../../../KUtil/KFile.h; sourceTree = "<group>"; };
 		5A1B38BE1649F33800C94D7F /* KFtpClient.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = KFtpClient.cpp; path = ../../../KUtil/KFtpClient.cpp; sourceTree = "<group>"; };
 		5A1B38BF1649F33800C94D7F /* KFtpClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KFtpClient.h; path = ../../../KUtil/KFtpClient.h; sourceTree = "<group>"; };
@@ -2167,9 +2165,7 @@
 		5A3FC1A91652A8A6002166DD /* SimplifiedChineseRes */ = {isa = PBXFileReference; lastKnownFileType = folder; name = SimplifiedChineseRes; path = ../../Bin/SimplifiedChineseRes; sourceTree = "<group>"; };
 		5A47BAA0169730BE0092C259 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		5A5FF1DB167B243B00E897F9 /* DownloadPackage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DownloadPackage.h; sourceTree = "<group>"; };
-		5A5FF1DC167B243B00E897F9 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		5A5FF1E0167B243B00E897F9 /* DownloadPackage.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = DownloadPackage.cpp; sourceTree = "<group>"; };
-		5A5FF1E1167B243B00E897F9 /* Reachability.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = Reachability.cpp; sourceTree = "<group>"; };
 		5A5FF1ED167B29DA00E897F9 /* ScriptRegLua.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = ScriptRegLua.cpp; sourceTree = "<group>"; };
 		5A5FF1EE167B29DA00E897F9 /* ScriptGameData_New.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = ScriptGameData_New.cpp; sourceTree = "<group>"; };
 		5A5FF1F1167B29E700E897F9 /* ScriptGameData_New.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScriptGameData_New.h; sourceTree = "<group>"; };
@@ -2283,6 +2279,8 @@
 		5AB9905016991D58005C8A5B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		5AB9905116991D58005C8A5B /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		5AB9905216991D58005C8A5B /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		5AB9906E1699C540005C8A5B /* Reachability.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Reachability.mm; sourceTree = "<group>"; };
+		5AB990701699C54A005C8A5B /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		5AC456371643D6FA0014B2E7 /* dhlj.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = dhlj.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5AC4563B1643D6FA0014B2E7 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		5AC4563D1643D6FA0014B2E7 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -2520,7 +2518,6 @@
 				5A1B38B91649F33800C94D7F /* KData.h */,
 				5A1B38BA1649F33800C94D7F /* KDirectory.cpp */,
 				5A1B38BB1649F33800C94D7F /* KDirectory.h */,
-				5A1B38BC1649F33800C94D7F /* KFile.cpp */,
 				5A1B38BD1649F33800C94D7F /* KFile.h */,
 				5A1B38BE1649F33800C94D7F /* KFtpClient.cpp */,
 				5A1B38BF1649F33800C94D7F /* KFtpClient.h */,
@@ -3522,6 +3519,7 @@
 		5A1B46F2164ABC9800C94D7F /* inc */ = {
 			isa = PBXGroup;
 			children = (
+				5AB990701699C54A005C8A5B /* Reachability.h */,
 				5A28E45E1665BFFC002E987B /* MobageSdkLogin.h */,
 				5A28E45F1665BFFC002E987B /* NDSdkLogin.h */,
 				5A1B46F3164ABC9800C94D7F /* NDBeforeGameMgr.h */,
@@ -3533,6 +3531,7 @@
 		5A1B46F5164ABC9800C94D7F /* src */ = {
 			isa = PBXGroup;
 			children = (
+				5AB9906E1699C540005C8A5B /* Reachability.mm */,
 				5A28E4621665C007002E987B /* MobageSdkLogin.mm */,
 				5A28E4631665C007002E987B /* NDSdkLogin.mm */,
 				5A1B46F6164ABC9800C94D7F /* NDBeforeGameMgr.cpp */,
@@ -4631,7 +4630,6 @@
 				5AD25BDB167F414700EEA44B /* myunzip.h */,
 				5A5FF203167B2D9B00E897F9 /* ZipUnZip.h */,
 				5A5FF1DB167B243B00E897F9 /* DownloadPackage.h */,
-				5A5FF1DC167B243B00E897F9 /* Reachability.h */,
 			);
 			path = inc;
 			sourceTree = "<group>";
@@ -4642,7 +4640,6 @@
 				5AD25BDD167F414D00EEA44B /* myunzip.cpp */,
 				5A5FF200167B2D9100E897F9 /* ZipUnZip.cpp */,
 				5A5FF1E0167B243B00E897F9 /* DownloadPackage.cpp */,
-				5A5FF1E1167B243B00E897F9 /* Reachability.cpp */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -5354,7 +5351,6 @@
 				5AF6F59A1663BBD6006834AF /* NDUIBaseItemButton.h in Headers */,
 				5AF6F5A11663BBF1006834AF /* EngineScriptCommon.h in Headers */,
 				5A5FF1E4167B243B00E897F9 /* DownloadPackage.h in Headers */,
-				5A5FF1E5167B243B00E897F9 /* Reachability.h in Headers */,
 				5A5FF1F9167B2B5700E897F9 /* NDVideoEventListener.h in Headers */,
 				5A5FF1FA167B2B5700E897F9 /* NDVideoMgr.h in Headers */,
 				5A5FF205167B2D9B00E897F9 /* ZipUnZip.h in Headers */,
@@ -5603,6 +5599,7 @@
 				5A5FF1F4167B29E700E897F9 /* ScriptGameData_New.h in Headers */,
 				5A5FF1F5167B29E700E897F9 /* ScriptGameData_NewUtil.h in Headers */,
 				5A5FF1F6167B29E700E897F9 /* ScriptRegLua.h in Headers */,
+				5AB990711699C54A005C8A5B /* Reachability.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5875,7 +5872,6 @@
 				5A1B38D91649F33800C94D7F /* KCondition.cpp in Sources */,
 				5A1B38DA1649F33800C94D7F /* KConnection.cpp in Sources */,
 				5A1B38DB1649F33800C94D7F /* KDirectory.cpp in Sources */,
-				5A1B38DC1649F33800C94D7F /* KFile.cpp in Sources */,
 				5A1B38DD1649F33800C94D7F /* KFtpClient.cpp in Sources */,
 				5A1B38DF1649F33800C94D7F /* KIniFile.cpp in Sources */,
 				5A1B38E01649F33800C94D7F /* KMD5.cpp in Sources */,
@@ -6001,7 +5997,6 @@
 				5AF6F59F1663BBE0006834AF /* NDUIBaseItemButton.cpp in Sources */,
 				5AF6F5A31663BBF8006834AF /* EngineScriptCommon.cpp in Sources */,
 				5A5FF1E8167B243B00E897F9 /* DownloadPackage.cpp in Sources */,
-				5A5FF1E9167B243B00E897F9 /* Reachability.cpp in Sources */,
 				5A5FF1FD167B2B6500E897F9 /* NDVideoEventListener.cpp in Sources */,
 				5A5FF1FE167B2B6500E897F9 /* NDVideoMgr.cpp in Sources */,
 				5A5FF202167B2D9100E897F9 /* ZipUnZip.cpp in Sources */,
@@ -6100,6 +6095,7 @@
 				5A8D3C311667333C00BBDCAA /* GatherPoint.cpp in Sources */,
 				5A5FF1EF167B29DA00E897F9 /* ScriptRegLua.cpp in Sources */,
 				5A5FF1F0167B29DA00E897F9 /* ScriptGameData_New.cpp in Sources */,
+				5AB9906F1699C541005C8A5B /* Reachability.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6759,7 +6755,7 @@
 				PROVISIONING_PROFILE = "C39D5866-69E2-4D6F-8807-451168CB77FE";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALID_ARCHS = armv7;
+				VALID_ARCHS = "armv7 armv7s";
 			};
 			name = Debug;
 		};
@@ -6786,7 +6782,7 @@
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
-				VALID_ARCHS = armv7;
+				VALID_ARCHS = "armv7 armv7s";
 			};
 			name = Release;
 		};
@@ -6839,7 +6835,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "C39D5866-69E2-4D6F-8807-451168CB77FE";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALID_ARCHS = armv7;
+				VALID_ARCHS = "armv7 armv7s";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -6891,7 +6887,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "C39D5866-69E2-4D6F-8807-451168CB77FE";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALID_ARCHS = armv7;
+				VALID_ARCHS = "armv7 armv7s";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

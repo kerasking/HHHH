@@ -15,6 +15,19 @@
 #include "CCPlatformConfig.h"
 #include "NDUtil.h"
 
+#ifdef ANDROID
+#include <jni.h>
+#include <android/log.h>
+
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
+#define  LOGERROR(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
+#else
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)
+#define  LOGERROR(...)
+#endif
+
 const string NDLocalXmlString::GetCString(string szKeyName)
 {
 	if (szKeyName.empty())
@@ -48,9 +61,9 @@ bool NDLocalXmlString::LoadLoginString()
 {
 	string strFile = NDEngine::NDPath::GetResPath("Login.strings");
 	vector<string> vecLines;
-	if ( this->readLines( strFile, vecLines ) )
+	if (readLines( strFile, vecLines ) )
 	{
-		this->parseLines( vecLines );
+		parseLines( vecLines );
 		return true;
 	}
 	return false;
@@ -61,7 +74,11 @@ bool NDLocalXmlString::readLines( string & strFile, vector<string>& vecLines )
 {
 	// open file
 	FILE *fp = fopen(strFile.c_str(), "r");
-	if (!fp) return false;
+
+	if (!fp)
+	{
+		return false;
+	}
 	
 	// file len
 	fseek( fp, 0L, SEEK_END );
@@ -118,7 +135,7 @@ bool NDLocalXmlString::parseLines( vector<string>& vecLines )
 	if (vecLines.size() < 2) return false;
 	mapData.clear();
 
-	bool ok = true;
+	bool bOK = true;
 	int index = 0;
 	while (index < vecLines.size() - 2)
 	{
@@ -129,7 +146,7 @@ bool NDLocalXmlString::parseLines( vector<string>& vecLines )
 		{
 			index += 2;
 
-			ok &= addKeyValue( keyLine, valLine );
+			bOK &= addKeyValue( keyLine, valLine );
 		}
 		else
 		{
@@ -137,11 +154,11 @@ bool NDLocalXmlString::parseLines( vector<string>& vecLines )
 
 			//bad line!
 			logErr( keyLine, valLine );
-			ok = false;
+			bOK = false;
 		}
 	}
 
-	return ok;
+	return bOK;
 }
 
 void NDLocalXmlString::logErr( const string& keyLine, const string& valLine )
