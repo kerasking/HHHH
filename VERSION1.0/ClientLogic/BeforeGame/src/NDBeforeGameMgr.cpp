@@ -63,6 +63,10 @@
 #include "myunzip.h"
 #include "CCPlatformConfig.h"
 
+#if(CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#import "Reachability.h"
+#endif
+
 using namespace NDEngine;
 
 #define DES_KEY "n7=7=7d" //密钥
@@ -1846,16 +1850,35 @@ void NDBeforeGameMgr::SaveAccountPwdToDB(const char* pszName,
 
 ////////////////////////////////////////////////////////////
 bool NDBeforeGameMgr::isWifiNetWork()
-{//待实现
-//    Reachability *r = [Reachability reachabilityWithHostName:@"www.baidu.com"];
-//    if (r == nil || [r currentReachabilityStatus] != ReachableViaWiFi) 
-//        return false;
-//    else 
+{
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    Reachability *r = [Reachability reachabilityWithHostName:@"www.baidu.com"];
+    if (r == nil || [r currentReachabilityStatus] != ReachableViaWiFi) 
+        return false;
+    else
         return true;
+#endif
+    
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    JniMethodInfo t;
+    
+    if (JniHelper::getStaticMethodInfo(t
+                                       , "org/DeNA/DHLJ/DaHuaLongJiang"
+                                       , "isWifiConnected"
+                                       , "()I"))
+        
+    {
+        jint b = (jint)t.env->CallStaticObjectMethod(t.classID, t.methodID);
+        t.env->DeleteLocalRef(t.classID);
+        return (b == 1);
+    }
+#endif
+    return false;
 }
 
 bool NDBeforeGameMgr::CheckClientVersion( const char* szURL )
 {
+	LOGD("NDBeforeGameMgr::CheckClientVersion");
     static int s_nVersion = 0;
     unsigned char ucResType = RES_TYPE;
     //取得当前客户端版本
@@ -1881,14 +1904,17 @@ bool NDBeforeGameMgr::CheckClientVersion( const char* szURL )
     }        
 
     NDDataTransThread::ResetDefaultThread();
-    NDDataTransThread::DefaultThread()->Start( szURL, 9500 );//("192.168.65.77", 9500);//++Guosen
+    NDDataTransThread::DefaultThread()->Start( szURL, 9700 );//("192.168.65.77", 9500);//++Guosen
 
 	if (NDDataTransThread::DefaultThread()->GetThreadStatus() != ThreadStatusRunning)	
 	{
 		return false;
 	}
+
 	NDTransData kData(_MSG_CLIENT_VERSION);
     
+	LOGD("Send the _MSG_CLIENT_VERSION message to server!");
+
 	kData << s_nVersion;
     kData << ucResType;
 	NDDataTransThread::DefaultThread()->GetSocket()->Send(&kData);
@@ -2054,7 +2080,7 @@ void* CopyLoginResThread(void* ptr)
 		ZIPENTRY kTempZipEntry = {0};
 		GetZipItem(pZipHandle,i,&kTempZipEntry);
 		string strFilename = strPath + string(kTempZipEntry.name);
-		LOGD("Unzipping the %s file.",strFilename.c_str());
+		//LOGD("Unzipping the %s file.",strFilename.c_str());
 		UnzipItem(pZipHandle,i,strFilename.c_str());
 	}
 
@@ -2125,12 +2151,17 @@ void* CopyResThread(void* ptr)
 		ZIPENTRY kTempZipEntry = {0};
 		GetZipItem(pZipHandle,i,&kTempZipEntry);
 		string strFilename = strPath + string(kTempZipEntry.name);
-		LOGD("Unzipping the file:%s",strFilename.c_str());
+
+		float fCur = i;
+		float fMax = nMaxIndex;
+
+		NDBeforeGameMgr::ms_nCopyStatus = (int)(fCur / fMax * 100.0f);
 		UnzipItem(pZipHandle,i,strFilename.c_str());
 	}
 
+	NDBeforeGameMgr::ms_nCopyStatus = 100;
+
 	CloseZip(pZipHandle);
-	NDBeforeGameMgr::ms_nCopyStatus = 1;
 
 #else
 #endif
@@ -2140,8 +2171,11 @@ void* CopyResThread(void* ptr)
 void NDBeforeGameMgr::CopyRes()
 {
 	pthread_t pid = {0};
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 	CopyResThread(0);
-	//pthread_create(&pid, NULL, CopyResThread, this);	
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	pthread_create(&pid, NULL, CopyResThread, this);
+#endif
 }
 int NDBeforeGameMgr::GetCopyStatus()
 {

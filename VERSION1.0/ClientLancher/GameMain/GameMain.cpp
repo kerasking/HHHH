@@ -6,6 +6,10 @@
 #include <NDGameApplication.h>
 #include "NDSharedPtr.h"
 
+#ifndef WIN32
+#include "NDBeforeGameMgr.h"
+#endif
+
 #ifdef WIN32
 #include "windows.h"
 #include "GameApp.h"
@@ -163,10 +167,11 @@ extern "C"
 		LOGD("Leave Java_org_DeNA_DHLJ_DaHuaLongJiang_nativeInit,value is %d",(int)spDirector);
 	}
     
-	void Java_org_DeNA_DHLJ_DaHuaLongJiang_onLoginComplete(JNIEnv*  env, jobject thiz, jint userid)
+	void Java_org_DeNA_DHLJ_DaHuaLongJiang_onLoginComplete(JNIEnv*  env, jobject thiz, jint userid, jstring DeviceToken)
 	{
 		LOGD("Enter Java_org_DeNA_DHLJ_DaHuaLongJiang_onLoginComplete,value is %d",(int)userid);
         MobageSdkLoginAndroid::onLoginComplete(userid);
+	NDBeforeGameMgrObj.SetDeviceToken(jstringTostring(env, DeviceToken));
 		LOGD("Leave Java_org_DeNA_DHLJ_DaHuaLongJiang_onLoginComplete,value is %d",(int)userid);
 	}
     

@@ -28,7 +28,6 @@ LOCAL_SRC_FILES := \
 ../../Framework/src/NDBaseGlobalDialog.cpp \
 ../../Framework/src/NDBaseScriptMgr.cpp \
 ../../Update/src/DownloadPackage.cpp \
-../../Update/src/Reachability.cpp \
 ../../Update/src/ZipUnzip.cpp \
 ../../Update/src/myunzip.cpp \
 ../../Graphic/src/CCTexture2DExt.cpp \

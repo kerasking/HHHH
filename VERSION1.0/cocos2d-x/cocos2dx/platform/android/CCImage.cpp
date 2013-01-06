@@ -34,17 +34,38 @@ THE SOFTWARE.
 #include <string.h>
 #include <jni.h>
 
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
+#define  LOGERROR(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
+
 #if ND_MOD
 #include "ccMacros.h"
 #include "CCDirector.h"
 #endif
 
-
 NS_CC_BEGIN
 
+//--------------------------------------------------------------------------------------------------<<
 #if ND_MOD
+
+static bool gs_bIsSystemFont = false;
+
 struct FONT_UTIL
 {
+	static bool isVerOlder()
+	{
+		JniMethodInfo t;
+		if (JniHelper::getStaticMethodInfo(t, "org/DeNA/DHLJ/DaHuaLongJiang",
+			"isVerOlder",
+			"(I)I"))
+		{
+			jint isOldVer = (jint) t.env->CallStaticObjectMethod(t.classID, t.methodID);
+			t.env->DeleteLocalRef(t.classID);
+			return (isOldVer == 1);
+		}
+		return false;
+	}
+
 	static bool isPureAscii( const string& text )
 	{
 		if (text.length() == 0) return true;
@@ -52,28 +73,38 @@ struct FONT_UTIL
 		while (*p != 0)
 		{
 			const char c = *p++;
-			if (!(c >= 0 && c <= 0x7f))
+			if ((c >= '0' && c <= '9') || 
+				(c >= 'a' && c <= 'z') || 
+				(c >= 'A' && c <= 'Z') ||
+				(c == '%' || c == '/' || c == ':' || c == '+' || c == '-'))
+				continue;
+			else
 				return false;
 		}
 		return true;
 	}
 
+	//对应低版本的android系统（主版本号为2），若字符串为纯数字或纯字母，则强制使用Arial字体.
 	static const char* changeFontName( const char* fontName, const jstring& jstrText ) 
 	{	
 		static const char arialFontName[] = "Arial-BoldMT";
 
-		string text = JniHelper::jstring2string( jstrText );
-
-		if (isPureAscii(text))
+		if (isVerOlder() || gs_bIsSystemFont)
 		{
-			return arialFontName;
+			LOGD("gs_bIsSystemFont is %s",gs_bIsSystemFont ? "true" : "false");
+			string text = JniHelper::jstring2string( jstrText );
+
+			if (isPureAscii(text))
+			{
+				return arialFontName;
+			}
 		}
 
 		return fontName;
 	}
 };
-#endif
-
+#endif //ND_MOD
+//-------------------------------------------------------------------------------------------------->>
 
 class BitmapDC
 {
@@ -218,6 +249,12 @@ bool CCImage::getStringSize( const char *    in_utf8,
         t.env->DeleteLocalRef(stringArg2);
         t.env->DeleteLocalRef(t.classID);
     }
+}
+
+void CCImage::changeSystemFont( bool bSystemFont )
+{
+	LOGD("Set bSystemFont");
+	gs_bIsSystemFont = bSystemFont;
 }
 
 #endif

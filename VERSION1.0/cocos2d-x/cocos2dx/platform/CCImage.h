@@ -122,6 +122,9 @@ public:
 
     bool hasAlpha()                     { return m_bHasAlpha; }
     bool isPremultipliedAlpha()         { return m_bPreMulti; }
+#if ND_MOD
+	static void changeSystemFont(bool bSystemFont); ///< 爲了配合某些特殊情況要使用系統字體，特加此函數 郭浩
+#endif
 
     /**
     @brief    Save CCImage data to the specified file, with specified format.

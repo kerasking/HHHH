@@ -522,6 +522,13 @@ bool CCImage::getStringSize( const char *    in_utf8,
 	return false;
 }
 
+#if ND_MOD
+void CCImage::changeSystemFont( bool bSystemFont )
+{
+	///< Windows版本暫時用不到
+}
+#endif
+
 #endif
 
 

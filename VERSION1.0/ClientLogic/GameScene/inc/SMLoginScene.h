@@ -60,7 +60,6 @@ public:// ISMUpdateEvent
 	virtual void UnzipPercent(int nFileNum,int nFileIndex);
     virtual void UnzipStatus(bool bResult);
     bool StartUpdate();
-    //bool CheckClientVersion();//--Guosen 2012.8.7//在"NDBeforeGameMgr"里
     
 protected:// ITQZipEvent
 	virtual void OnUnCompressEvent(bool &bOpContinue,int nFileNum,int nFileIndex,const char* pszFileName);
@@ -127,12 +126,18 @@ public:
 	void ShowCheckWIFIOff();
 	//
 	void ShowUpdateOff();
+
+	NDUILabel*      m_pkProgressTextLabel;
 	
 protected:
+
 	static void * LoadTextAndLua( void * pScene );
 	void ShowWaitingAni();
 	void CloseWaitingAni();
+	void OnProcessUpdate();
+
 protected:
+
 	NDUILayer *		m_pLayerOld; //旧的登陆界面
     NDUILayer *		m_pLayerUpdate;
     NDTimer *		m_pTimer;
@@ -141,5 +146,6 @@ protected:
 	int				m_iAccountID;
 	int				m_iState;//
     NDUILayer *		m_pLayerCheckWIFI;
+	CC_SYNTHESIZE(bool,m_bIsLoadingLocalString,IsLoadLocalString);
 };
 #endif

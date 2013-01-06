@@ -14,56 +14,66 @@
 
 namespace NDEngine
 {
-	IMPLEMENT_CLASS(NDUIProgressBar, NDUINode)
-	
-	NDUIProgressBar::NDUIProgressBar()
+IMPLEMENT_CLASS(NDUIProgressBar, NDUINode)
+
+NDUIProgressBar::NDUIProgressBar()
+{
+	INC_NDOBJ_RTCLS
+	m_fCount = 100;
+	m_fStep = 0;
+}
+
+NDUIProgressBar::~NDUIProgressBar()
+{
+	DEC_NDOBJ_RTCLS
+}
+
+void NDUIProgressBar::SetStepCount(float count)
+{
+	if (count > 0)
 	{
-		INC_NDOBJ_RTCLS
-		m_count = 100;
-		m_step = 0;
+		m_fCount = count;
 	}
-	
-	NDUIProgressBar::~NDUIProgressBar()
+}
+
+void NDUIProgressBar::SetCurrentStep(float step)
+{
+	if (step > m_fCount)
 	{
-		DEC_NDOBJ_RTCLS
+		m_fStep = m_fCount;
 	}
-	
-	void NDUIProgressBar::SetStepCount(float count)
+	else
 	{
-		if (count > 0) 
+		m_fStep = step;
+	}
+	draw();
+}
+
+void NDUIProgressBar::draw()
+{
+	if (!isDrawEnabled())
+	{
+		return;
+	}
+
+	TICK_ANALYST (ANALYST_NDUIProgressBar);
+	NDUINode::draw();
+
+	if (this->IsVisibled())
+	{
+		CCRect scrRect = this->GetScreenRect();
+		if (scrRect.size.width > 0)
 		{
-			m_count = count;
+			DrawRecttangle(
+					CCRectMake(scrRect.origin.x, scrRect.origin.y,
+							scrRect.size.width, scrRect.size.height),
+					ccc4(193, 193, 194, 200));
+			float percent = m_fStep / m_fCount;
+			DrawRecttangle(
+					CCRectMake(scrRect.origin.x, scrRect.origin.y,
+							percent * scrRect.size.width, scrRect.size.height),
+					ccc4(0, 255, 0, 200));
 		}
 	}
-	
-	void NDUIProgressBar::SetCurrentStep(float step)
-	{
-		if (step > m_count) 
-		{
-			m_step = m_count;
-		}
-		else 
-		{
-			m_step = step;
-		}
-		draw();
-	}
-	
-	void NDUIProgressBar::draw()
-	{
-		if (!isDrawEnabled()) return;
-        TICK_ANALYST(ANALYST_NDUIProgressBar);	
-		NDUINode::draw();
-		
-		if (this->IsVisibled()) 
-		{
-			CCRect scrRect = this->GetScreenRect();
-			if (scrRect.size.width > 0) 
-			{
-				DrawRecttangle(CCRectMake(scrRect.origin.x, scrRect.origin.y, scrRect.size.width, scrRect.size.height), ccc4(193, 193, 194, 200));
-				float percent = m_step / m_count;
-				DrawRecttangle(CCRectMake(scrRect.origin.x, scrRect.origin.y, percent * scrRect.size.width, scrRect.size.height), ccc4(0, 255, 0, 200));
-			}
-		}		
-	}
+}
 }

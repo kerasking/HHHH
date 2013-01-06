@@ -28,12 +28,14 @@ import org.DeNA.DHLJ.SocialUtils;
 import android.R;
 //import android.app.ActionBar.LayoutParams;
 import android.app.AlertDialog;
+import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
 import android.net.Uri;
+import android.net.wifi.WifiManager;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.os.Environment;
@@ -77,6 +79,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	private static float s_fScale;
 	private View rootView = null;
 	private static boolean m_bIsStartingVideo = false;
+	private static Context s_context;
 
 	private static Handler VideoViewHandler = new Handler();
 	private static Handler RootViewHandler = new Handler();
@@ -162,6 +165,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 
 			Context context = getApplication().getApplicationContext();
 			CookieSyncManager.createInstance(this);
+			s_context = context;
 
 			Mobage.registerMobageResource(this, "org.DeNA.DHLJ.R");
 			SocialUtils.initializeMobage(this);
@@ -329,6 +333,8 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 				ViewGroup.LayoutParams.FILL_PARENT);
 		this.setContentView(menubar, pkParams);
 		menubar.setMenubarVisibility(View.VISIBLE);
+		
+		//getAndroidVer();
 	}
 
 	public void addEditView()
@@ -351,7 +357,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 
 	public void LoginComplete(int userid)
 	{
-		onLoginComplete(userid);
+		onLoginComplete(userid, mDeviceID);
 	}
 
 	public void LoginError(String error)
@@ -494,6 +500,37 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		return true;		
 	}
 
+	private void getAndroidVer()
+	{
+// 		Log.d( "getAndroidVer" , "@@ ver SDK: " + android.os.Build.VERSION.SDK );
+// 		Log.d( "getAndroidVer" , "@@ ver release: " + android.os.Build.VERSION.RELEASE );
+// 		Log.d( "getAndroidVer" , "@@ ver codename: " + android.os.Build.VERSION.CODENAME );
+// 		Log.d( "getAndroidVer" , "@@ ver incremental: " + android.os.Build.VERSION.INCREMENTAL );
+// 		Log.d( "getAndroidVer" , "@@ ver SDK: " + android.os.Build.VERSION.SDK );
+//		isVerOlder(0);
+	}
+
+	public static int isWifiConnected() {
+		WifiManager wifiManger=(WifiManager)s_context.getSystemService(Service.WIFI_SERVICE);
+		if(WifiManager.WIFI_STATE_ENABLED == wifiManger.getWifiState())
+			return 1;
+		return 0;
+	}
+
+	//是否古老系统
+	public static int isVerOlder(int n)
+	{
+		String osVer = android.os.Build.VERSION.RELEASE;
+		final String[] ver = osVer.split("\\.");
+		
+// 		for (String v : ver)
+// 		{
+// 			Log.d( "ver", "@@ v: " + v );
+// 		}
+
+		return (ver[0].compareTo("2") == 0) ? 1 : 0;
+	}
+
 	static
 	{
 		System.loadLibrary("mobage");
@@ -507,7 +544,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 
 	private static native void nativeInit(int w, int h);
 
-	private static native void onLoginComplete(int userid);
+	private static native void onLoginComplete(int userid, String DeviceToken);
 
 	private static native void onLoginError(String error);
 }

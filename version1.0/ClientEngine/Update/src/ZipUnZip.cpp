@@ -203,7 +203,7 @@ void* CZipUnZip::UnzipThreadExcute( void* ptr )
 
 		if (pkUnZip->m_pnStatus)
 		{
-			*(pkUnZip->m_pnStatus) = bResult ? 1 : -1;
+			*(pkUnZip->m_pnStatus) = bResult ? 100 : -1;
 		}
 	}
 

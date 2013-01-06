@@ -29,6 +29,10 @@
 #include "ScriptRegLua.h"
 #include "ObjectTracker.h"
 #include "CCPlatformConfig.h"
+#include "NDUIProgressBar.h"
+#include "TQPlatform.h"
+#include "UsePointPls.h"
+#include "StringConvert.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #include <jni.h>
@@ -47,8 +51,7 @@
 //--------------------//
 
 #define UPDATE_ON		0	//0关闭下载，1开启下载
-#define CACHE_MODE 		0   //发布模式//0关闭拷贝；1开启将资源拷贝至cache目录来访问
-
+#define CACHE_MODE 		0  //发布模式//0关闭拷贝；1开启将资源拷贝至cache目录来访问
 //--------------------//
 
 #define TAG_INSTALL_SUCCESS			1
@@ -71,7 +74,7 @@
 #define TAG_CTRL_PIC_BG					1	//背景图片控件tag
 #define TAG_LABEL_PROMPT				4	//文字标签控件tag
 #define TAG_CTRL_PROGRESS				2	//进度条控件tag
-#define TAG_UPDATE_LAYER				(2000+167)	//层Tag
+#define TAG_UPDATE_LAYER				(2000 + 167)	//层Tag
 
 #define TAG_DLG_CONFIRM					100	//确认对话框tag
 
@@ -116,7 +119,10 @@ CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
     
 	if ( bShowEntry )
 	{
-		NDLocalXmlString::GetSingleton().LoadLoginString();
+		if (NDLocalXmlString::GetSingleton().LoadLoginString())
+		{
+			pkScene->setIsLoadLocalString(true);
+		}
 
 		CCSize kWinSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 
@@ -130,27 +136,69 @@ CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
 		NDPicturePool& kPool = *(NDPicturePool::DefaultPool());
 		NDUIImage* pkBackgroundImage = new NDUIImage;
 
+		string strText = CONVERT_GBK_TO_UTF8("正在準備中……");
+		CCSize kTextSize = getStringSize("正在準備中……", 20 * FONT_SCALE);
+		ccColor4B kColor = {0,0,255,255};
+
+		pkScene->m_pkProgressTextLabel = new NDUILabel();
+		pkScene->m_pkProgressTextLabel->Initialization();
+		pkScene->m_pkProgressTextLabel->SetRenderTimes(1);
+		pkScene->m_pkProgressTextLabel->SetText(strText.c_str());
+		pkScene->m_pkProgressTextLabel->SetTag(0);
+		pkScene->m_pkProgressTextLabel->SetFontSize(15);
+		pkScene->m_pkProgressTextLabel->SetFontColor(kColor);
+		pkScene->m_pkProgressTextLabel->SetFrameRect(CCRectMake(kWinSize.width / 2 - 150,
+			kWinSize.height - 50, kTextSize.width, kTextSize.height));
+
 		pkBackgroundImage->Initialization();
 		pkBackgroundImage->SetFrameRect(CCRectMake(0, 0, kWinSize.width, kWinSize.height));
+		NDUIImage* pkUILoadingImage = 0;
+		NDPicture* pkLoadingPic = 0;
 
 #ifdef USE_MGSDK
-		NDPicture* pic = kPool.AddPicture( NDPath::GetImgPath("Res00/Load/mobage_bg.png") );
-#else
-#if CACHE_MODE
-		NDPicture* pic = kPool.AddPicture("bg_load.png");
-#else
-		NDPicture* pic = kPool.AddPicture( NDPath::GetImg00Path("Res00/Load/bg_load.png") );
-#endif
-#endif
-		if (pic) 
+		NDPicture* pkPicture = kPool.AddPicture( NDPath::GetImgPath("Res00/Load/mobage_bg.png") );
+#elif ((CACHE_MODE == 1) && (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID))
+		NDPicture* pkPicture = kPool.AddPicture("res/drawable/mobage_splash.png");
+		CCImage::changeSystemFont(true);
+
+		if (pkPicture)
 		{
-			pkBackgroundImage->SetPicture(pic, true);
+			CCSize kPictureSize = pkPicture->GetSize();
+			CCDirector::sharedDirector()->setGLDefaultValues(1.0f,1.0f,1.0f);
+			pkBackgroundImage->SetFrameRect(CCRectMake(kWinSize.width / 2.0 - kPictureSize.width / 4,
+				kWinSize.height / 2.0f - kPictureSize.height / 4,
+				kPictureSize.width / 2, kPictureSize.height / 2));
+		}
+
+		pkLoadingPic = kPool.AddPicture("res/drawable/mbga_mobage_loading.png");
+
+		if (pkLoadingPic)
+		{
+			CCSize kPicSize = pkLoadingPic->GetSize();
+
+			pkUILoadingImage = new NDUIImage;
+			pkUILoadingImage->Initialization();
+			pkUILoadingImage->SetFrameRect(CCRectMake(kWinSize.width / 2.0f, kWinSize.height / 2.0f,
+				kPicSize.width, kPicSize.height));
+			pkUILoadingImage->SetPicture(pkLoadingPic,true);
+		}
+#else
+		NDPicture* pkPicture = kPool.AddPicture( NDPath::GetImg00Path("Res00/Load/bg_load.png") );
+#endif
+		if (pkPicture) 
+		{
+			pkBackgroundImage->SetPicture(pkPicture, true);
 		}
 
 		pkLayer->AddChild(pkBackgroundImage);
+		pkLayer->AddChild(pkScene->m_pkProgressTextLabel,10,0);
+		
+		if (pkUILoadingImage)
+		{
+			LOGD("pkUILoadingImage != null");
+			//pkLayer->AddChild(pkUILoadingImage);
+		}
 
-		//layer->SetFrameRect( CCRectMake(winSize.width*0.0, winSize.height*0.0, winSize.width*0.7, winSize.height*0.225f));
-		//layer->SetBackgroundColor( ccc4( 20,30,0,50) );
 		CCLog( "@@login01: open CSMLoginScene\r\n" );
 		LOGD("TAG_TIMER_FIRST_RUN is register");
 		pkScene->m_pTimer->SetTimer( pkScene, TAG_TIMER_FIRST_RUN,0.5f );
@@ -169,6 +217,8 @@ CSMLoginScene::CSMLoginScene()
 , m_iAccountID(0)
 , m_iState(0)
 , m_pLayerCheckWIFI(NULL)
+,m_bIsLoadingLocalString(false)
+,m_pkProgressTextLabel(0)
 {
 	INC_NDOBJ_RTCLS
 
@@ -183,6 +233,7 @@ CSMLoginScene::~CSMLoginScene()
 	WriteCon( "%08X: CSMLoginScene::~CSMLoginScene()\r\n", this);
 
    	SAFE_DELETE( m_pTimer );
+	//SAFE_DELETE(m_pkProgressTextLabel);
 
 	NDDirector::DefaultDirector()->Recyle();
 }
@@ -193,7 +244,7 @@ void CSMLoginScene::Initialization(void)
 	NDScene::Initialization();
 	//m_doucumentPath = NDPath::GetDocumentPath();
 	m_strCachePath = NDPath::GetCashesPath();
-	m_strSavePath = m_strCachePath + "supdate.zip";
+	m_strSavePath = m_strCachePath + "update.zip";
 	//m_resPath = NDPath::GetResPath();
 	PackageCount = 0;
 	m_pTimer = new NDTimer();
@@ -202,6 +253,7 @@ void CSMLoginScene::Initialization(void)
 //===========================================================================
 void CSMLoginScene::OnTimer( OBJID idTag )
 {
+	/*
 	static bool bFirst = true;
 
 	if (bFirst)
@@ -210,9 +262,11 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 		//idTag = TAG_TIMER_UPDATE;
 		bFirst = false;
 	}
-
+   */
 	if ( idTag == TAG_TIMER_UPDATE ) 
 	{
+		LOGD("TAG_TIMER_UPDATE process entry");
+
 		if ( !rename( m_strSavePath.c_str(), m_strSavePath.c_str() ) )
 		{
 			if ( remove( m_strSavePath.c_str() ) )
@@ -222,6 +276,8 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 			}
 		}
 
+		LOGD("m_strUpdateURL is %s,m_strSavePath is %s",m_strUpdateURL.c_str(),m_strSavePath.c_str());
+
 		FromUrl(m_strUpdateURL.c_str());
 		ToPath(m_strSavePath.c_str()); 
 		Download();
@@ -230,7 +286,7 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 	else if ( idTag == TAG_TIMER_DOWNLOAD_SUCCESS )
 	{
 		m_pTimer->KillTimer(this, TAG_TIMER_DOWNLOAD_SUCCESS);
-        
+
 		LOGD("Entry TAG_TIMER_DOWNLOAD_SUCCESS process.");
 		UnZipFile( m_strSavePath.c_str(), m_strCachePath.c_str());
 	}
@@ -293,46 +349,56 @@ void CSMLoginScene::OnTimer( OBJID idTag )
                 break;
             case 0:
                 break;
-            case 1:
-				LOGD("Copy files succeeded!");
-                m_pTimer->KillTimer( this, TAG_TIMER_CHECK_COPY );
-                NDBeforeGameMgrObj.doNDSdkLogin();
-                ShowWaitingAni();
-				StartEntry();
+            case 100:
+				{
+					if (!m_bIsLoadingLocalString)
+					{
+						NDLocalXmlString::GetSingleton().LoadLoginString();
+						m_bIsLoadingLocalString = true;
+					}
+
+					CCImage::changeSystemFont(false);
+					LOGD("Copy files succeeded!");
+					CCDirector::sharedDirector()->setGLDefaultValues();
+					m_pTimer->KillTimer( this, TAG_TIMER_CHECK_COPY );
+					m_pkProgressTextLabel->SetVisible(false);
+					NDBeforeGameMgrObj.doNDSdkLogin();
+					ShowWaitingAni();
+#ifdef ANDROID
+					usleep(400);
+#endif
+					OnProcessUpdate();
+				}
                 break;
             default:
+				{
+					CCString* pstrString = CCString::stringWithFormat("解壓資源……已經解壓了%d%%",nCopyStatus);
+					string strText = CONVERT_GBK_TO_UTF8(pstrString->getCString());
+					LOGD(strText.c_str());
+					CCSize kTextSize = getStringSize(pstrString->getCString(), 20 * FONT_SCALE);
+					m_pkProgressTextLabel->SetText(strText.c_str());
+// 					CCSize kWinSize = CCDirector::sharedDirector()->getWinSizeInPixels();
+// 					m_pkProgressTextLabel->SetPosx(kWinSize.width / 2 - kTextSize.width / 2);
+// 					m_pkProgressTextLabel->SetPosy(kWinSize.height - 110);
+				}
                 break;
         }
 	}
 	else if (TAG_TIMER_CHECK_LOGIN_COPY == idTag)
 	{
-		int nCopyStatus = NDBeforeGameMgr::GetLoginCopyStatus();
-
-		switch(nCopyStatus)
-		{
-		case 1:
-			{
-				LOGD("Copy login res succeeded!");
-				CreateUpdateUILayer();
-			}
-			break;
-		default:
-			break;
-		}
 	}
     else if ( TAG_TIMER_FIRST_RUN == idTag )
 	{
 		LOGD("Entry TAG_TIMER_FIRST_RUN == idTag");
 		m_pTimer->KillTimer( this, TAG_TIMER_FIRST_RUN );
 		
-		CreateUpdateUILayer();
+		//CreateUpdateUILayer();
 
-// #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
- 		CCLog( "@@login02: to call OnEvent_LoginOKNormal()\r\n" );
-		m_iAccountID = NDBeforeGameMgrObj.GetCurrentUser();
-		OnEvent_LoginOKNormal(m_iAccountID);
-// #else
-#ifdef USE_MGSDK
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+ 		CCLog( "@@login02: to call OnEvent_LoginOKNormal()\r\n" );		m_iAccountID = NDBeforeGameMgrObj.GetCurrentUser();		OnEvent_LoginOKNormal(m_iAccountID);
+#else
+
+//#ifdef USE_MGSDK
 // 		NDUIImage * pImage = (NDUIImage *)m_pLayerUpdate->GetChild( TAG_CTRL_PIC_BG);
 // 		if ( pImage )
 // 		{
@@ -340,7 +406,9 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 // 			pPicture->Initialization( NDPath::GetUIImgPath( SZ_MOBAGE_BG_PNG_PATH ).c_str() );
 // 			pImage->SetPicture( pPicture, true );
 // 		}
+//#endif
 #endif
+
 #if CACHE_MODE == 1
     	if ( NDBeforeGameMgrObj.CheckFirstTimeRuning() )
         {
@@ -349,9 +417,9 @@ void CSMLoginScene::OnTimer( OBJID idTag )
         		m_pLabelPromtp->SetText( NDCommonCString2(SZ_FIRST_INSTALL).c_str() );
         		m_pLabelPromtp->SetVisible( true );
                 ShowWaitingAni();
-#ifdef USE_MGSDK
+		#ifdef USE_MGSDK
         		m_pLabelPromtp->SetVisible( false );//Mobage的版本暂将文字绘在背景图上
-#endif
+		#endif
             }
 			
 			m_pTimer->SetTimer( this, TAG_TIMER_CHECK_COPY, 0.5f );
@@ -360,12 +428,13 @@ void CSMLoginScene::OnTimer( OBJID idTag )
         {
             NDBeforeGameMgrObj.doNDSdkLogin();
 			CloseWaitingAni();
-			StartEntry();
+			OnProcessUpdate();
            // ShowWaitingAni();
 		}
 #else
 		NDBeforeGameMgrObj.doNDSdkLogin();
 		CloseWaitingAni();
+		OnProcessUpdate();
 #endif
     	//CreateUpdateUILayer();
 		//NDBeforeGameMgrObj.CheckClientVersion(SZ_UPDATE_URL);
@@ -418,13 +487,16 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 // 开启更新
 bool CSMLoginScene::StartUpdate()
 {
+	LOGD("Entry StartUpdate");
+
 	if ( kDeqUpdateUrl.empty() )
 	{
+		LOGERROR("kDeqUpdateUrl is empty");
 		return false;
 	}
 	//请求第一个包
-	std::string url = *kDeqUpdateUrl.begin();
-	m_strUpdateURL	= url;
+	std::string strURL = *kDeqUpdateUrl.begin();
+	m_strUpdateURL	= strURL;
 	m_pTimer->SetTimer( this, TAG_TIMER_UPDATE, 0.5f );	
 	StartDownload();
 	return true;
@@ -528,7 +600,17 @@ void CSMLoginScene::ReflashPercent(int percent, int pos, int filelen )
 		
 		m_progressBar->SetCurrentStep(percent);
 	}
-    */ 
+	*/ 
+	if ( m_pLabelPromtp )
+	{
+		std::stringstream str;
+		char buff[10] = {0};
+		sprintf(buff,"%.2f",filelen/(1024*1024.0));
+		str << "("<<buff<< "MB)" << NDCommonCString2(SZ_DOWNLOADING);
+
+		m_pLabelPromtp->SetText( str.str().c_str() );
+		m_pLabelPromtp->SetVisible( true );
+	}
 	SetProgress( percent );
 }
 
@@ -580,27 +662,32 @@ void CSMLoginScene::InitDownload( std::string & szUpdatePath )
 //++Guosen2012.8.7
 void CSMLoginScene::ShowRequestError()
 {
-	NDUIDialog* dlg = new NDUIDialog();
-	dlg->Initialization();
-	dlg->SetTag(TAG_REQUEST_URL_ERROR);
-	dlg->SetDelegate(this);
-	dlg->Show(NDCommonCString2("Common_error").c_str(), NDCommonCString2("LOGIN_SZ_REQUEST_DOWNLOAD_FAIL").c_str(), NULL, NDCommonCString2("Common_Ok").c_str(), NULL);
+	NDUIDialog* pkUIDialog = new NDUIDialog();
+	pkUIDialog->Initialization();
+	pkUIDialog->SetTag(TAG_REQUEST_URL_ERROR);
+	pkUIDialog->SetDelegate(this);
+	pkUIDialog->Show(NDCommonCString2("Common_error").c_str(),
+		NDCommonCString2("LOGIN_SZ_REQUEST_DOWNLOAD_FAIL").c_str(),
+		NULL, NDCommonCString2("Common_Ok").c_str(), NULL);
 }
 
 //===========================================================================
 //通过传递进的文件路径，获得待删除的文件路径，删除待删除的文件，删除传递进的文件
 bool CSMLoginScene::DeleteFileFromFile( std::string & szDelListFile )
 {
-	std::ifstream	tmpFile;
-	tmpFile.open( szDelListFile.c_str(), ios_base::in );
-	if ( !tmpFile )
+	std::ifstream kTempFile;
+	kTempFile.open( szDelListFile.c_str(), ios_base::in );
+	if ( !kTempFile )
 	{
-		if ( tmpFile.is_open() )
-			tmpFile.close();
+		if ( kTempFile.is_open() )
+		{
+			kTempFile.close();
+		}
+
 		return false;
 	}
-	std::string  lineStr;
-	while ( getline( tmpFile, lineStr ) )
+	std::string lineStr;
+	while ( getline( kTempFile, lineStr ) )
 	{
 		std::string DelFile = m_strCachePath + lineStr;
  		if ( remove( DelFile.c_str() ) )
@@ -608,7 +695,7 @@ bool CSMLoginScene::DeleteFileFromFile( std::string & szDelListFile )
 			NDLog( "删除文件失败：%s",DelFile.c_str() );
 		}
 	}
-	tmpFile.close();
+	kTempFile.close();
 	remove( szDelListFile.c_str() );
 	return true;
 }
@@ -626,26 +713,26 @@ bool CSMLoginScene::CreateUpdateUILayer()
 	
 	CCSize kWinSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 	
-	NDUILayer *	pLayer = new NDUILayer();
+	NDUILayer*	pkLayer = new NDUILayer();
 
-	if ( !pLayer )
+	if ( !pkLayer )
 	{
 		LOGERROR( "CSMLoginScene::CreateUpdateUILayer() pLayer is null" );
 		return false;
 	}
 
-	pLayer->Initialization();
-	pLayer->SetFrameRect( CCRectMake(0, 0, kWinSize.width, kWinSize.height) );
-	pLayer->SetTag( TAG_UPDATE_LAYER );
-	AddChild(pLayer);
-	m_pLayerUpdate = pLayer;
+	pkLayer->Initialization();
+	pkLayer->SetFrameRect( CCRectMake(0, 0, kWinSize.width, kWinSize.height) );
+	pkLayer->SetTag( TAG_UPDATE_LAYER );
+	AddChild(pkLayer);
+	m_pLayerUpdate = pkLayer;
 	
-	NDUILoad tmpUILoad;
+	NDUILoad kTempUILoad;
 
 	LOGD("Ready to load update.ini file");
-	tmpUILoad.Load( "UpdateUI.ini", pLayer, this, CCSizeMake(0, 0));
+	kTempUILoad.Load( "UpdateUI.ini", pkLayer, this, CCSizeMake(0, 0));
 	
-	m_pCtrlProgress	= (CUIExp*)pLayer->GetChild( TAG_CTRL_PROGRESS );
+	m_pCtrlProgress	= (CUIExp*)pkLayer->GetChild( TAG_CTRL_PROGRESS );
 	if ( !m_pCtrlProgress )
 	{
 		NDLog( "CSMLoginScene::CreateUpdateUILayer() m_pCtrlProgress is null" );
@@ -654,17 +741,26 @@ bool CSMLoginScene::CreateUpdateUILayer()
 
 	m_pCtrlProgress->SetProcess(0);
 	m_pCtrlProgress->SetTotal(100);
-	m_pCtrlProgress->SetStyle(2);
+	m_pCtrlProgress->SetStyle(1);
 	m_pCtrlProgress->SetVisible(false);
 	
-	m_pLabelPromtp	= (NDUILabel*)pLayer->GetChild( TAG_LABEL_PROMPT );
+	m_pLabelPromtp	= (NDUILabel*)pkLayer->GetChild( TAG_LABEL_PROMPT );
 	if ( !m_pLabelPromtp )
 	{
 		NDLog( "CSMLoginScene::CreateUpdateUILayer() m_pLabelPromtp is null" );
 		return false;
 	}
-	if (m_pLabelPromtp) m_pLabelPromtp->SetVisible(false);
-	if (m_pLayerOld) m_pLayerOld->SetVisible(false);
+
+	if (m_pLabelPromtp)
+	{
+		m_pLabelPromtp->SetVisible(false);
+	}
+
+	if (m_pLayerOld)
+	{
+		m_pLayerOld->SetVisible(false);
+	}
+
 	return true;
 }
 
@@ -683,57 +779,61 @@ void CSMLoginScene::CloseUpdateUILayer()
 //===========================================================================
 void CSMLoginScene::OnMsg_ClientVersion(NDTransData& kData)
 {
+	LOGD("Entry OnMsg_ClientVersion");
+
 	bool bUpdate = false;
 	
 	int bLatest				= kData.ReadByte();
 	int bForceUpdate		= kData.ReadByte();
-	int FromVersion			= kData.ReadInt();
-	int ToVersion			= kData.ReadInt();
-	std::string UpdatePath	= kData.ReadUnicodeString();
+	int nFromVersion		= kData.ReadInt();
+	int nToVersion			= kData.ReadInt();
+	std::string strUpdatePath  = kData.ReadUnicodeString();
+	LOGD("Client Version:FromVersion is %d,ToVersion is %d",nFromVersion,nToVersion);
+
+	//std::string strUpdatePath = "http://222.77.177.219/twt/android/6999_7000_in_dhljupdate.zip";//kData.ReadUnicodeString();
 	
 	if ( bForceUpdate )
 	{
         CloseWaitingAni();
-		//printf("请用户重新下载最新游戏版本");
+		LOGD("Redown the game client please!");
 		if ( m_pLabelPromtp )
 		{
 			m_pLabelPromtp->SetText( NDCommonCString2(SZ_ERROR_01).c_str() );
 			m_pLabelPromtp->SetFontColor( ccc4(0xFF,0x0,0x0,255) );
     		m_pLabelPromtp->SetVisible( true );
-    		//m_pLabelPromtp->SetFontSize( 20 );
 		}
 		return ;
 	}
-	else if ( ( FromVersion ==  ToVersion ) &&  ( !bLatest ) )
+	else if ( ( nFromVersion ==  nToVersion ) &&  ( !bLatest ) )
 	{
         CloseWaitingAni();
-		//printf("当前版本数据有误,请重新下载或者联系GM");
+		LOGERROR("Current version error!!,Please call GM!");
+
 		if ( m_pLabelPromtp )
 		{
 			m_pLabelPromtp->SetText( NDCommonCString2(SZ_ERROR_02).c_str() );
 			m_pLabelPromtp->SetFontColor( ccc4(0xFF,0x0,0x0,255) );
     		m_pLabelPromtp->SetVisible( true );
-    		//m_pLabelPromtp->SetFontSize( 20 );
 		}
 		return ;
 	}
-	else if ( ( FromVersion == 0 ) && ( ToVersion == 0 ) )
+	else if ( ( nFromVersion == 0 ) && ( nToVersion == 0 ) )
 	{
         CloseWaitingAni();
-		//printf("版本信息损坏，请重新下载或者联系GM");
+		LOGERROR("Version info is broken,Please call GM!");
+
 		if ( m_pLabelPromtp )
 		{
 			m_pLabelPromtp->SetText( NDCommonCString2(SZ_ERROR_03).c_str() );
 			m_pLabelPromtp->SetFontColor( ccc4(0xFF,0x0,0x0,255) );
     		m_pLabelPromtp->SetVisible( true );
-    		//m_pLabelPromtp->SetFontSize( 20 );
 		}
 
 		return ;
 	}
-	else if ( ( FromVersion == ToVersion ) && (bLatest) )
+	else if ( ( nFromVersion == nToVersion ) && (bLatest) )
 	{
-		//printf("当前版本是最新游戏版本");
+		LOGD("Current version is newest");
 		StartEntry();
 		return;
 	}
@@ -741,25 +841,30 @@ void CSMLoginScene::OnMsg_ClientVersion(NDTransData& kData)
 	{
 		bUpdate = true;
 	}
-	    
-	NDLog("URL:%s",UpdatePath.c_str());
-	kDeqUpdateUrl.push_back(UpdatePath);
+
+	LOGD("Res update URL:%s",strUpdatePath.c_str());
+	kDeqUpdateUrl.push_back(strUpdatePath);
+
 	if (bUpdate)
 	{
-		if (!bLatest) 
+		LOGD("Pass bUpdate,value is %s",bUpdate ? "true" : "false");
+
+		if (bLatest)
 		{
 			CloseWaitingAni();
-			//if ( !NDBeforeGameMgrObj.isWifiNetWork() )//关闭掉坑爹的WIFI监测
-			//{
-			//	ShowCheckWIFIOff();
-			//	m_pTimer->SetTimer( this, TAG_TIMER_CHECK_WIFI, 1.0f );
-			//}
-			//else
+			if ( !NDBeforeGameMgrObj.isWifiNetWork() )//
+			{
+				ShowCheckWIFIOff();
+				m_pTimer->SetTimer( this, TAG_TIMER_CHECK_WIFI, 1.0f );
+			}
+			else
 			{
 				StartUpdate();
 			}
 		}
 	}
+
+	LOGD("Leave OnMsg_ClientVersion");
 }
 
 //===========================================================================
@@ -770,42 +875,24 @@ void CSMLoginScene::OnEvent_LoginOKNormal( int iAccountID )
 
 	m_iAccountID = iAccountID;
 #ifdef USE_MGSDK
-    if(m_pLayerUpdate)
-    {
-        NDUIImage * pImage = (NDUIImage *)m_pLayerUpdate->GetChild( TAG_CTRL_PIC_BG);
-        if ( pImage )
-        {
-            NDPicture * pPicture = new NDPicture;
-            std::string str = SZ_UPDATE_BG_PNG_PATH;
-            pPicture->Initialization( NDPath::GetUIImgPath( str.c_str() ).c_str() );
-            pImage->SetPicture( pPicture, true );
-        }
-    }
+	if(m_pLayerUpdate)
+	{
+		NDUIImage * pImage = (NDUIImage *)m_pLayerUpdate->GetChild( TAG_CTRL_PIC_BG);
+		if ( pImage )
+		{
+			NDPicture * pPicture = new NDPicture;
+			std::string str = SZ_UPDATE_BG_PNG_PATH;
+			pPicture->Initialization( NDPath::GetUIImgPath( str.c_str() ).c_str() );
+			pImage->SetPicture( pPicture, true );
+		}
+}
 #endif
 	
 #if (UPDATE_ON == 0 && CACHE_MODE == 0)
-		CloseWaitingAni();
-		StartEntry();
+ 		CloseWaitingAni();
+ 		StartEntry();
 #endif
 #if UPDATE_ON == 1
-	const char*	pszUpdateURL	= SZ_UPDATE_URL;//ScriptMgrObj.excuteLuaFuncRetS( "GetUpdateURL", "Update" );//此时Lua脚本未加载……
-	if ( !pszUpdateURL )
-	{
-		CloseWaitingAni();
-		StartEntry();
-		return;
-	}
-		
-	if (m_pLabelPromtp)
-	{
-		m_pLabelPromtp->SetText( NDCommonCString2(SZ_CONNECT_SERVER).c_str() );
-		m_pLabelPromtp->SetVisible( true );
-	}
-	if ( !NDBeforeGameMgrObj.CheckClientVersion( pszUpdateURL ) )
-	{
-		CloseWaitingAni();
-		StartEntry();
-	}
 #endif
 }
 
@@ -824,19 +911,21 @@ void CSMLoginScene::OnEvent_LoginOKGuest2Normal( int iAccountID )
 //---------------------------------------------------------------------------
 void CSMLoginScene::OnEvent_LoginError( int iError )
 {
-    std::stringstream  tmpSS;
-    tmpSS << "Error:" << iError;
+	std::stringstream  tmpSS;
+	tmpSS << "Error:" << iError;
 	if ( m_pLabelPromtp )
-    {
+	{
 		m_pLabelPromtp->SetVisible( true );
 		m_pLabelPromtp->SetText( tmpSS.str().c_str() );
 		m_pLabelPromtp->SetVisible( true );
-    }
+	}
 }
 
 //===========================================================================
 void CSMLoginScene::StartDownload()
 {
+	LOGD("Entry StartDownload");
+
 	if ( m_pLabelPromtp )
 	{
 		m_pLabelPromtp->SetText( NDCommonCString2(SZ_DOWNLOADING).c_str() );
@@ -906,7 +995,7 @@ void CSMLoginScene::StartEntry()
 	m_iAccountID = ScriptMgrPtr->excuteLuaFuncRetN( "GetAccountID", "Login_ServerUI" );
 #endif
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) || (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	m_iAccountID = NDBeforeGameMgrObj.GetCurrentUser();
 #endif
 
@@ -935,7 +1024,7 @@ void CSMLoginScene::OnDialogButtonClick(NDUIDialog* dialog, unsigned int buttonI
 {
 	if (dialog->GetTag() == TAG_DLG_CONFIRM)
 	{
-    	NDBeforeGameMgrObj.doNDSdkLogin();
+		NDBeforeGameMgrObj.doNDSdkLogin();
 	}
 }
 
@@ -958,29 +1047,27 @@ bool CSMLoginScene::OnTargetBtnEvent( NDUINode * uiNode, int targetEvent )
 	return true;
 }
 
-
-
 //===========================================================================
 bool CSMLoginScene::CreatConfirmDlg( const char * szTip )
 {
-	CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
+	CCSize kWinSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 	
-	NDUILayer *	pLayer	= new NDUILayer();
+	NDUILayer* pkLayer = new NDUILayer();
 
-	if (!pLayer)
+	if (!pkLayer)
 	{
 		return false;
 	}
 
-	pLayer->Initialization();
-	pLayer->SetFrameRect( CCRectMake(0, 0, winSize.width, winSize.height) );
-	pLayer->SetTag( TAG_DLG_CONFIRM );
-	AddChild(pLayer);	
+	pkLayer->Initialization();
+	pkLayer->SetFrameRect( CCRectMake(0, 0, kWinSize.width, kWinSize.height) );
+	pkLayer->SetTag( TAG_DLG_CONFIRM );
+	AddChild(pkLayer);	
 	
-	NDUILoad tmpUILoad2;
-	tmpUILoad2.Load( "ShowYesOrNoDlg.ini", pLayer, this, CCSizeMake(0, 0) );
+	NDUILoad kTempUILoad2;
+	kTempUILoad2.Load( "ShowYesOrNoDlg.ini", pkLayer, this, CCSizeMake(0, 0) );
 	
-	NDUILabel * pLabelTip	= (NDUILabel*)pLayer->GetChild( TAG_LABEL_TIP );
+	NDUILabel * pLabelTip	= (NDUILabel*)pkLayer->GetChild( TAG_LABEL_TIP );
 	if ( pLabelTip && szTip )
 	{
 		pLabelTip->SetText( szTip );
@@ -995,7 +1082,7 @@ void CSMLoginScene::CloseConfirmDlg()
 //===========================================================================
 void CSMLoginScene::UnzipPercent(int nFileNum,int nFileIndex)
 {    
-    int nPercent = 100*(nFileIndex+1)/nFileNum;
+    int nPercent = 100 * (nFileIndex + 1) / nFileNum;
     SetProgress( nPercent );
 }
 
@@ -1013,18 +1100,19 @@ void CSMLoginScene::UnzipStatus(bool bResult)
 //显示等待的转圈圈动画
 void CSMLoginScene::ShowWaitingAni()
 {
-	CUISpriteNode * pNode = (CUISpriteNode *)GetChild(TAG_SPRITE_NODE);
-	if ( pNode )
+	CUISpriteNode* pkCheckNode = (CUISpriteNode *)GetChild(TAG_SPRITE_NODE);
+
+	if ( pkCheckNode )
 	{
 		return;
 	}
-	CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();	
-	CUISpriteNode *node = new CUISpriteNode;
-	node->Initialization();
-	node->ChangeSprite(NDPath::GetAniPath("busy.spr").c_str());
-	node->SetTag( TAG_SPRITE_NODE );
-	node->SetFrameRect(CCRectMake(0, 0, winSize.width, winSize.height));
-	AddChild(node);
+	CCSize kWinSize = CCDirector::sharedDirector()->getWinSizeInPixels();	
+	CUISpriteNode* pkUIScriptNode = new CUISpriteNode;
+	pkUIScriptNode->Initialization();
+	pkUIScriptNode->ChangeSprite(NDPath::GetAniPath("busy.spr").c_str());
+	pkUIScriptNode->SetTag( TAG_SPRITE_NODE );
+	pkUIScriptNode->SetFrameRect(CCRectMake(0, 0, kWinSize.width, kWinSize.height));
+	AddChild(pkUIScriptNode);
 }
 void CSMLoginScene::CloseWaitingAni()
 {
@@ -1035,17 +1123,17 @@ void CSMLoginScene::CloseWaitingAni()
 //显示检测WIFI失败对话框
 void CSMLoginScene::ShowCheckWIFIOff()
 {
-	//CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
-	//
-	//NDUILayer *	pLayer	= new NDUILayer();
-	//if ( !pLayer )
-	//	return;
-	//pLayer->Initialization();
-	//pLayer->SetFrameRect( CCRectMake(0, 0, winSize.width, winSize.height) );
-	//AddChild(pLayer);
-	//m_pLayerCheckWIFI = pLayer;
-	//NDUILoad tmpUILoad;
-	//tmpUILoad.Load( "CheckWIFIDlg.ini", pLayer, this, CCSizeMake(0, 0) );
+// 	CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
+// 	
+// 	NDUILayer *	pLayer	= new NDUILayer();
+// 	if ( !pLayer )
+// 		return;
+// 	pLayer->Initialization();
+// 	pLayer->SetFrameRect( CCRectMake(0, 0, winSize.width, winSize.height) );
+// 	AddChild(pLayer);
+// 	m_pLayerCheckWIFI = pLayer;
+// 	NDUILoad tmpUILoad;
+// 	tmpUILoad.Load( "CheckWIFIDlg.ini", pLayer, this, CCSizeMake(0, 0) );
 	CreatConfirmDlg( NDCommonCString2(SZ_WIFI_OFF).c_str() );
 	m_iState = 1;
 }
@@ -1058,7 +1146,7 @@ void CSMLoginScene::ShowUpdateOff()
 }
 
 //装载文本和Lua//多线程
-void * CSMLoginScene::LoadTextAndLua( void * pPointer )
+void* CSMLoginScene::LoadTextAndLua( void * pPointer )
 {
 	if ( pPointer )
 	{
@@ -1069,4 +1157,34 @@ void * CSMLoginScene::LoadTextAndLua( void * pPointer )
 		pScene->m_pTimer->SetTimer( pScene, TAG_TIMER_LOAD_RES_OK,0.05f );
 	}
 	return pPointer;
+}
+
+void CSMLoginScene::OnProcessUpdate()
+{
+#if UPDATE_ON == 1
+	const char*	pszUpdateURL	= SZ_UPDATE_URL;//ScriptMgrObj.excuteLuaFuncRetS( "GetUpdateURL", "Update" );//此时Lua脚本未加载……
+	CreateUpdateUILayer();
+
+	if ( !pszUpdateURL )
+	{
+		CloseWaitingAni();
+		StartEntry();
+		return;
+	}
+
+	if (m_pLabelPromtp)
+	{
+		m_pLabelPromtp->SetText( NDCommonCString2(SZ_CONNECT_SERVER).c_str() );
+		m_pLabelPromtp->SetVisible( true );
+	}
+
+	if ( !NDBeforeGameMgrObj.CheckClientVersion( pszUpdateURL ) )
+	{
+		CloseWaitingAni();
+		StartEntry();
+		return;
+	}
+#else
+	//StartEntry();
+#endif
 }
