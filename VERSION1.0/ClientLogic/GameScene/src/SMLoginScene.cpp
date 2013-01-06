@@ -850,7 +850,7 @@ void CSMLoginScene::OnEvent_LoginOKNormal( int iAccountID )
 	
 #if (UPDATE_ON == 0 && CACHE_MODE == 0)
 		CloseWaitingAni();
-		StartEntry();
+		//StartEntry();
 #endif
 #if UPDATE_ON == 1
 #endif
