@@ -51,7 +51,7 @@
 //--------------------//
 
 #define UPDATE_ON		0	//0关闭下载，1开启下载
-#define CACHE_MODE 		0   //发布模式//0关闭拷贝；1开启将资源拷贝至cache目录来访问
+#define CACHE_MODE 		0  //发布模式//0关闭拷贝；1开启将资源拷贝至cache目录来访问
 
 //--------------------//
 
@@ -374,15 +374,7 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 		m_iAccountID = NDBeforeGameMgrObj.GetCurrentUser();
 		OnEvent_LoginOKNormal(m_iAccountID);
 // #else
-#ifdef USE_MGSDK
-// 		NDUIImage * pImage = (NDUIImage *)m_pLayerUpdate->GetChild( TAG_CTRL_PIC_BG);
-// 		if ( pImage )
-// 		{
-// 			NDPicture * pPicture = new NDPicture;
-// 			pPicture->Initialization( NDPath::GetUIImgPath( SZ_MOBAGE_BG_PNG_PATH ).c_str() );
-// 			pImage->SetPicture( pPicture, true );
-// 		}
-#endif
+
 #if CACHE_MODE == 1
     	if ( NDBeforeGameMgrObj.CheckFirstTimeRuning() )
         {
@@ -391,9 +383,9 @@ void CSMLoginScene::OnTimer( OBJID idTag )
         		m_pLabelPromtp->SetText( NDCommonCString2(SZ_FIRST_INSTALL).c_str() );
         		m_pLabelPromtp->SetVisible( true );
                 ShowWaitingAni();
-#ifdef USE_MGSDK
+		#ifdef USE_MGSDK
         		m_pLabelPromtp->SetVisible( false );//Mobage的版本暂将文字绘在背景图上
-#endif
+		#endif
             }
 			
 			m_pTimer->SetTimer( this, TAG_TIMER_CHECK_COPY, 0.5f );
@@ -848,11 +840,14 @@ void CSMLoginScene::OnEvent_LoginOKNormal( int iAccountID )
     }
 #endif
 	
+#if 0
 #if (UPDATE_ON == 0 && CACHE_MODE == 0)
 // 		CloseWaitingAni();
 // 		StartEntry();
 #endif
 #if UPDATE_ON == 1
+#endif
+
 #endif
 }
 
