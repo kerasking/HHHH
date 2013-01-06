@@ -1228,10 +1228,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\Update\inc\Reachability.h"
-					>
-				</File>
-				<File
 					RelativePath="..\Update\inc\ZipUnZip.h"
 					>
 				</File>
@@ -1245,10 +1241,6 @@
 				</File>
 				<File
 					RelativePath="..\Update\src\myunzip.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\Update\src\Reachability.cpp"
 					>
 				</File>
 				<File
