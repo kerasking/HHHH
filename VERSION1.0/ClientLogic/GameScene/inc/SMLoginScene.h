@@ -60,7 +60,6 @@ public:// ISMUpdateEvent
 	virtual void UnzipPercent(int nFileNum,int nFileIndex);
     virtual void UnzipStatus(bool bResult);
     bool StartUpdate();
-    //bool CheckClientVersion();//--Guosen 2012.8.7//ÔÚ"NDBeforeGameMgr"Àï
     
 protected:// ITQZipEvent
 	virtual void OnUnCompressEvent(bool &bOpContinue,int nFileNum,int nFileIndex,const char* pszFileName);
