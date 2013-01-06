@@ -4,6 +4,12 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>zh_CN</string>
+	<key>CFBundleLocalizations</key>
+	<array>
+		<string>zh_TW</string>
+		<string>zh_CN</string>
+		<string>en</string>
+	</array>
 	<key>CFBundleDisplayName</key>
 	<string>大話龍將</string>
 	<key>CFBundleExecutable</key>
@@ -26,7 +32,7 @@
 	<true/>
 	<key>UIAppFonts</key>
 	<array>
-		<string>LiSu.ttf</string>
+		<string>SimplifiedChineseRes/res/fonts/LiSu.ttf</string>
 	</array>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>

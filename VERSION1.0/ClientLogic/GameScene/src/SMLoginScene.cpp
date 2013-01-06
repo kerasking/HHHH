@@ -327,19 +327,24 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 		
 		CreateUpdateUILayer();
 
-// #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
- 		CCLog( "@@login02: to call OnEvent_LoginOKNormal()\r\n" );
-		m_iAccountID = NDBeforeGameMgrObj.GetCurrentUser();
-		OnEvent_LoginOKNormal(m_iAccountID);
-// #else
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+ 		CCLog( "@@login02: to call OnEvent_LoginOKNormal()\r\n" );
+
+		m_iAccountID = NDBeforeGameMgrObj.GetCurrentUser();
+
+		OnEvent_LoginOKNormal(m_iAccountID);
+
+#else
+
 #ifdef USE_MGSDK
-// 		NDUIImage * pImage = (NDUIImage *)m_pLayerUpdate->GetChild( TAG_CTRL_PIC_BG);
-// 		if ( pImage )
-// 		{
-// 			NDPicture * pPicture = new NDPicture;
-// 			pPicture->Initialization( NDPath::GetUIImgPath( SZ_MOBAGE_BG_PNG_PATH ).c_str() );
-// 			pImage->SetPicture( pPicture, true );
-// 		}
+ 		NDUIImage * pImage = (NDUIImage *)m_pLayerUpdate->GetChild( TAG_CTRL_PIC_BG);
+ 		if ( pImage )
+ 		{
+ 			NDPicture * pPicture = new NDPicture;
+ 			pPicture->Initialization( NDPath::GetUIImgPath( SZ_MOBAGE_BG_PNG_PATH ).c_str() );
+ 			pImage->SetPicture( pPicture, true );
+ 		}
+#endif
 #endif
 #if CACHE_MODE == 1
     	if ( NDBeforeGameMgrObj.CheckFirstTimeRuning() )
