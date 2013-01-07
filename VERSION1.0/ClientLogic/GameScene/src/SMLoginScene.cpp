@@ -729,6 +729,9 @@ bool CSMLoginScene::CreateUpdateUILayer()
 	m_pLayerUpdate = pkLayer;
 	
 	NDUILoad kTempUILoad;
+	
+	//爲了識別 居中等效果 每次load都會clear一次，所以多次調用也沒關係
+	NDLocalXmlString::GetSingleton().LoadLoginString();
 
 	LOGD("Ready to load update.ini file");
 	kTempUILoad.Load( "UpdateUI.ini", pkLayer, this, CCSizeMake(0, 0));
