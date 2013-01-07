@@ -40,7 +40,7 @@ typedef unsigned int ZRESULT;
 typedef struct
 {
 	int index;                 // index of this file within the zip
-	char name[MAX_PATH];      // filename within the zip
+	char name[260];      // filename within the zip ///< 过去是MAX_PATH，但是包含的值却是很大。 郭浩
 	unsigned int attr;                // attributes, as in GetFileAttributes.
 	time_t atime, ctime, mtime;              // access, create, modify filetimes
 	long comp_size;         // sizes of item, compressed and uncompressed. These

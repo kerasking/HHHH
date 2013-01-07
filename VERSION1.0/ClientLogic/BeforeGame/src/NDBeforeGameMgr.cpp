@@ -1960,9 +1960,25 @@ bool NDBeforeGameMgr::CheckFirstTimeRuning()
 	int nVersionINIIndex = 0;
 
 	unsigned char* pszData = CCFileUtils::sharedFileUtils()->
-		getFileDataFromZip(strAPKPath.c_str(),"assets/version.ini",&ulSize);
+		getFileDataFromZip(strAPKPath.c_str(),"assets/SimplifiedChineseRes.zip",&ulSize);
 
-	strInstallResVersion = (char*)pszData;
+	pZip = OpenZip(pszData,ulSize,0);
+
+	if (0 == pZip)
+	{
+		LOGERROR("pZip is null!The file can't find:%s","assets/SimplifiedChineseRes.zip");
+		return false;
+	}
+
+	ZIPENTRY kEntry = {0};
+	int nIndex = 0;
+	FindZipItem(pZip,"SimplifiedChineseRes/version.ini",true,&nIndex,&kEntry);
+	LOGD("The kEntry size is %d,name is %s",kEntry.unc_size,kEntry.name);
+	char szBuffer[2048] = {0};
+	UnzipItem(pZip,nIndex,szBuffer,kEntry.unc_size);
+	LOGD("The buffer value is %s",(const char*)szBuffer);
+
+	strInstallResVersion = szBuffer;//(char*)pszData;
 	strInstallResVersion = strInstallResVersion.substr(0,4);
 
 	LOGD("ulSize is %d",ulSize);

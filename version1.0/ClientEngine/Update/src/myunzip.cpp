@@ -57,6 +57,19 @@ typedef unsigned short WORD;
 #define _tsprintf sprintf
 #endif
 
+#ifdef ANDROID
+#include <jni.h>
+#include <android/log.h>
+
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
+#define  LOGERROR(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
+#else
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)
+#define  LOGERROR(...)
+#endif
+
 #define ZIP_HANDLE   1
 #define ZIP_FILENAME 2
 #define ZIP_MEMORY   3
@@ -98,7 +111,7 @@ bool FileExists(const char *fn)
 
 time_t dosdatetime2filetime(WORD dosdate, WORD dostime)
 {
-	struct tm t;
+	struct tm t = {0};
 	t.tm_year = (WORD) (((dosdate >> 9) & 0x7f) + 1980 - 1900);
 	t.tm_isdst = -1;
 	t.tm_mon = (WORD) ((dosdate >> 5) & 0xf - 1);
@@ -5252,8 +5265,8 @@ ZRESULT TUnzip::Get(int index, ZIPENTRY *ze)
 		unzGoToFirstFile(uf);
 	while ((int) uf->num_file < index)
 		unzGoToNextFile(uf);
-	unz_file_info ufi;
-	char fn[MAX_PATH];
+	unz_file_info ufi = {0};
+	char fn[MAX_PATH] = {0};
 	unzGetCurrentFileInfo(uf, &ufi, fn, MAX_PATH, NULL, 0, NULL, 0);
 	// now get the extra header. We do this ourselves, instead of
 	// calling unzOpenCurrentFile &c., to avoid allocating more than necessary.
@@ -5266,6 +5279,8 @@ ZRESULT TUnzip::Get(int index, ZIPENTRY *ze)
 	if (lufseek(uf->file, offset, SEEK_SET) != 0)
 		return ZR_READ;
 	unsigned char *extra = new unsigned char[extralen];
+	memset(extra,0,sizeof(unsigned char) * extralen);
+
 	if (lufread(extra, 1, (uInt) extralen, uf->file) != extralen)
 	{
 		delete[] extra;
@@ -5273,7 +5288,7 @@ ZRESULT TUnzip::Get(int index, ZIPENTRY *ze)
 	}
 
 	ze->index = uf->num_file;
-	char tfn[MAX_PATH];
+	char tfn[MAX_PATH] = {0};
 #ifdef UNICODE
 	MultiByteToWideChar(CP_UTF8,0,fn,-1,tfn,MAX_PATH);
 #else
@@ -5334,6 +5349,8 @@ ZRESULT TUnzip::Get(int index, ZIPENTRY *ze)
 	int nLength = strlen(sfn);
 	nLength = nLength < MAX_PATH ? nLength + 1 : MAX_PATH;
 
+	LOGD("nLength is %d",nLength);
+
 	//_tcsncpy(ze->name, sfn,MAX_PATH);
 	strncpy(ze->name, sfn, nLength);
 
@@ -5391,7 +5408,7 @@ ZRESULT TUnzip::Get(int index, ZIPENTRY *ze)
 	unsigned int epos = 0;
 	while (epos + 4 < extralen)
 	{
-		char etype[3];
+		char etype[3] = {0};
 		etype[0] = extra[epos + 0];
 		etype[1] = extra[epos + 1];
 		etype[2] = 0;
@@ -5439,7 +5456,8 @@ ZRESULT TUnzip::Get(int index, ZIPENTRY *ze)
 
 ZRESULT TUnzip::Find(const char *tname, bool ic, int *index, ZIPENTRY *ze)
 {
-	char name[MAX_PATH];
+	char name[MAX_PATH] = {0};
+	LOGD("MAX_PATH is %d",MAX_PATH);
 #ifdef UNICODE
 	WideCharToMultiByte(CP_UTF8,0,tname,-1,name,MAX_PATH,0,0);
 #else
@@ -5466,6 +5484,9 @@ ZRESULT TUnzip::Find(const char *tname, bool ic, int *index, ZIPENTRY *ze)
 	if (ze != NULL)
 	{
 		ZRESULT zres = Get(i, ze);
+		
+		LOGD("ze comp_size is %d,unc_size is %d",ze->comp_size,ze->unc_size);
+
 		if (zres != ZR_OK)
 			return zres;
 	}
@@ -5868,6 +5889,7 @@ ZRESULT FindZipItem(HZIP hz, const char *name, bool ic, int *index,
 {
 	if (hz == 0)
 	{
+		LOGERROR("hz is null");
 		lasterrorU = ZR_ARGS;
 		return ZR_ARGS;
 	}
@@ -5877,8 +5899,13 @@ ZRESULT FindZipItem(HZIP hz, const char *name, bool ic, int *index,
 		lasterrorU = ZR_ZMODE;
 		return ZR_ZMODE;
 	}
+
 	TUnzip *unz = han->unz;
+	LOGD("Ready unz->Find");
 	lasterrorU = unz->Find(name, ic, index, ze);
+
+	LOGD("ze value is,%d,%d,%s",ze->unc_size,ze->comp_size,ze->name);
+
 	return lasterrorU;
 }
 

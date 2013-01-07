@@ -141,7 +141,7 @@ CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
 
 		string strText = CONVERT_GBK_TO_UTF8("正在準備中……");
 		CCSize kTextSize = getStringSize("正在準備中……", 20 * FONT_SCALE);
-		ccColor4B kColor = {6,123,224,255};
+		ccColor4B kColor = {100,100,100,255};
 
 		pkScene->m_pkProgressTextLabel = new NDUILabel();
 		pkScene->m_pkProgressTextLabel->Initialization();
@@ -439,6 +439,7 @@ void CSMLoginScene::OnTimer( OBJID idTag )
         }
         else
         {
+			CCImage::changeSystemFont(false);
             NDBeforeGameMgrObj.doNDSdkLogin();
 			CloseWaitingAni();
 			OnProcessUpdate();
