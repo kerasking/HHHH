@@ -438,6 +438,15 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		Log.v(TAG, "begin showBalanceButton");
 		BalanceHandler.post(mHideBalance);
 	}
+	
+	public static String getTextFromStringXML(int nTextID)
+	{
+		String strRet = "";
+		
+		strRet = ms_pkDHLJ.getResources().getString(nTextID);
+		
+		return strRet;
+	}
 
 	public static void ShowBankUi()
 	{
