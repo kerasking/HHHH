@@ -23,6 +23,8 @@ THE SOFTWARE.
  ****************************************************************************/
 package org.cocos2dx.lib;
 
+import org.DeNA.DHLJ.DaHuaLongJiang;
+
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.os.Handler;
@@ -39,6 +41,8 @@ public class Cocos2dxGLSurfaceView extends GLSurfaceView
 	// Constants
 	// ===========================================================
 
+	public static DaHuaLongJiang ms_pkDHLJ = null; //ND_MOD
+	
 	private static final String TAG = Cocos2dxGLSurfaceView.class
 			.getSimpleName();
 
@@ -52,8 +56,8 @@ public class Cocos2dxGLSurfaceView extends GLSurfaceView
 	// TODO Static handler -> Potential leak!
 	private static Handler sHandler;
 
-	private static Cocos2dxGLSurfaceView mCocos2dxGLSurfaceView;
-	private static Cocos2dxTextInputWraper sCocos2dxTextInputWraper;
+	/*private*/ public static Cocos2dxGLSurfaceView mCocos2dxGLSurfaceView;
+	/*private*/ public static Cocos2dxTextInputWraper sCocos2dxTextInputWraper;
 
 	private Cocos2dxRenderer mCocos2dxRenderer;
 	private Cocos2dxEditText mCocos2dxEditText;
@@ -378,6 +382,8 @@ public class Cocos2dxGLSurfaceView extends GLSurfaceView
 		msg.what = Cocos2dxGLSurfaceView.HANDLER_OPEN_IME_KEYBOARD;
 		msg.obj = Cocos2dxGLSurfaceView.mCocos2dxGLSurfaceView.getContentText();
 		Cocos2dxGLSurfaceView.sHandler.sendMessage(msg);
+		
+		notifyIMEOpenClose(true);//ND_MOD @ime
 	}
 
 	public static void closeIMEKeyboard()
@@ -385,8 +391,26 @@ public class Cocos2dxGLSurfaceView extends GLSurfaceView
 		final Message msg = new Message();
 		msg.what = Cocos2dxGLSurfaceView.HANDLER_CLOSE_IME_KEYBOARD;
 		Cocos2dxGLSurfaceView.sHandler.sendMessage(msg);
+		
+		notifyIMEOpenClose(false);//ND_MOD @ime
 	}
 
+	//ND_MOD @ime
+	public static void notifyIMEOpenClose( boolean bOpen ) {
+		Log.d("test", "@@ Cocos2dxGLSurfaceView.notifyIMEOpenClose(): " + ms_pkDHLJ );
+		if (ms_pkDHLJ != null)
+		{
+			ms_pkDHLJ.notifyIMEOpenClose( bOpen );
+		}
+	}
+	
+	//ND_MOD
+	public void setDHLJ( DaHuaLongJiang dhlj ) {
+		Log.d("test", "@@ setDHLJ()");
+		
+		ms_pkDHLJ = dhlj;
+	}
+	
 	public void insertText(final String pText)
 	{
 		this.queueEvent(new Runnable()
@@ -413,7 +437,8 @@ public class Cocos2dxGLSurfaceView extends GLSurfaceView
 		});
 	}
 
-	// ND_MOD
+	
+	//ND_MOD
 	public void onAction(final int action)
 	{
 		this.queueEvent(new Runnable()

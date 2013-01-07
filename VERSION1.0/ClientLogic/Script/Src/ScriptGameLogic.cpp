@@ -733,10 +733,10 @@ void doShowMobageBalance()
     if (JniHelper::getStaticMethodInfo(t
                                        , "org/DeNA/DHLJ/DaHuaLongJiang"
                                        , "showBalanceButton"
-                                       , "(F)V"))
+                                       , "()V"))
         
     {
-        t.env->CallStaticObjectMethod(t.classID, t.methodID, RESOURCE_SCALE);
+        t.env->CallStaticObjectMethod(t.classID, t.methodID);
         t.env->DeleteLocalRef(t.classID);
     }
 #endif
