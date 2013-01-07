@@ -1452,7 +1452,7 @@ void BattleMgr::showBattleResult()
 	ScriptMgrObj.excuteLuaFunc("CloseUI", "BattleMapCtrl");
 
 	//为了回放界面显示奖励的物品，特记录奖励的东西
-	if (m_pkPrebattleReward != NULL)
+	if (m_pkBattleReward != NULL)
 	{
 		if(m_pkPrebattleReward == NULL)
 		{
