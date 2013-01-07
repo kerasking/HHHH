@@ -50,8 +50,8 @@
 
 //--------------------//
 
-#define UPDATE_ON		0	//0关闭下载，1开启下载
-#define CACHE_MODE 		0  //发布模式//0关闭拷贝；1开启将资源拷贝至cache目录来访问
+#define UPDATE_ON		1	//0关闭下载，1开启下载
+#define CACHE_MODE 		1  //发布模式//0关闭拷贝；1开启将资源拷贝至cache目录来访问
 
 //--------------------//
 
@@ -240,7 +240,7 @@ void CSMLoginScene::Initialization(void)
 	NDScene::Initialization();
 	//m_doucumentPath = NDPath::GetDocumentPath();
 	m_strCachePath = NDPath::GetCashesPath();
-	m_strSavePath = m_strCachePath + "supdate.zip";
+	m_strSavePath = m_strCachePath + "update.zip";
 	//m_resPath = NDPath::GetResPath();
 	PackageCount = 0;
 	m_pTimer = new NDTimer();
@@ -249,6 +249,7 @@ void CSMLoginScene::Initialization(void)
 //===========================================================================
 void CSMLoginScene::OnTimer( OBJID idTag )
 {
+	/*
 	static bool bFirst = true;
 
 	if (bFirst)
@@ -257,7 +258,7 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 		//idTag = TAG_TIMER_UPDATE;
 		bFirst = false;
 	}
-
+   */
 	if ( idTag == TAG_TIMER_UPDATE ) 
 	{
 		LOGD("TAG_TIMER_UPDATE process entry");
@@ -579,7 +580,17 @@ void CSMLoginScene::ReflashPercent(int percent, int pos, int filelen )
 		
 		m_progressBar->SetCurrentStep(percent);
 	}
-    */ 
+	*/ 
+	if ( m_pLabelPromtp )
+	{
+		std::stringstream str;
+		char buff[10] = {0};
+		sprintf(buff,"%.2f",filelen/(1024*1024.0));
+		str << NDCommonCString2(SZ_DOWNLOADING) << "("<<buff<< "MB)";
+
+		m_pLabelPromtp->SetText( str.str().c_str() );
+		m_pLabelPromtp->SetVisible( true );
+	}
 	SetProgress( percent );
 }
 
@@ -705,7 +716,7 @@ bool CSMLoginScene::CreateUpdateUILayer()
 
 	m_pCtrlProgress->SetProcess(0);
 	m_pCtrlProgress->SetTotal(100);
-	m_pCtrlProgress->SetStyle(2);
+	m_pCtrlProgress->SetStyle(1);
 	m_pCtrlProgress->SetVisible(false);
 	
 	m_pLabelPromtp	= (NDUILabel*)pkLayer->GetChild( TAG_LABEL_PROMPT );
@@ -749,13 +760,12 @@ void CSMLoginScene::OnMsg_ClientVersion(NDTransData& kData)
 	
 	int bLatest				= kData.ReadByte();
 	int bForceUpdate		= kData.ReadByte();
-	kData.ReadInt();
-	int nFromVersion		= 6999;//kData.ReadInt();
-	int nToVersion			= 7000;//kData.ReadInt();
-
+	int nFromVersion		= kData.ReadInt();
+	int nToVersion			= kData.ReadInt();
+	std::string strUpdatePath  = kData.ReadUnicodeString();
 	LOGD("Client Version:FromVersion is %d,ToVersion is %d",nFromVersion,nToVersion);
 
-	std::string strUpdatePath = "http://222.77.177.219/twt/android/6999_7000_in_dhljupdate.zip";//kData.ReadUnicodeString();
+	//std::string strUpdatePath = "http://222.77.177.219/twt/android/6999_7000_in_dhljupdate.zip";//kData.ReadUnicodeString();
 	
 	if ( bForceUpdate )
 	{
@@ -814,7 +824,7 @@ void CSMLoginScene::OnMsg_ClientVersion(NDTransData& kData)
 	{
 		LOGD("Pass bUpdate,value is",bUpdate ? "true" : "false");
 
-		if (!bLatest)
+		if (bLatest)
 		{
 			CloseWaitingAni();
 			//if ( !NDBeforeGameMgrObj.isWifiNetWork() )//关闭掉坑爹的WIFI监测
@@ -823,9 +833,9 @@ void CSMLoginScene::OnMsg_ClientVersion(NDTransData& kData)
 			//	m_pTimer->SetTimer( this, TAG_TIMER_CHECK_WIFI, 1.0f );
 			//}
 			//else
-			{
+			//{
 				StartUpdate();
-			}
+			//}
 		}
 	}
 
@@ -1091,17 +1101,17 @@ void CSMLoginScene::CloseWaitingAni()
 //显示检测WIFI失败对话框
 void CSMLoginScene::ShowCheckWIFIOff()
 {
-	//CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
-	//
-	//NDUILayer *	pLayer	= new NDUILayer();
-	//if ( !pLayer )
-	//	return;
-	//pLayer->Initialization();
-	//pLayer->SetFrameRect( CCRectMake(0, 0, winSize.width, winSize.height) );
-	//AddChild(pLayer);
-	//m_pLayerCheckWIFI = pLayer;
-	//NDUILoad tmpUILoad;
-	//tmpUILoad.Load( "CheckWIFIDlg.ini", pLayer, this, CCSizeMake(0, 0) );
+	CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
+	
+	NDUILayer *	pLayer	= new NDUILayer();
+	if ( !pLayer )
+		return;
+	pLayer->Initialization();
+	pLayer->SetFrameRect( CCRectMake(0, 0, winSize.width, winSize.height) );
+	AddChild(pLayer);
+	m_pLayerCheckWIFI = pLayer;
+	NDUILoad tmpUILoad;
+	tmpUILoad.Load( "CheckWIFIDlg.ini", pLayer, this, CCSizeMake(0, 0) );
 	CreatConfirmDlg( NDCommonCString2(SZ_WIFI_OFF).c_str() );
 	m_iState = 1;
 }

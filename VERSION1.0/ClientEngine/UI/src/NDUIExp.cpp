@@ -181,7 +181,7 @@ void CUIExp::draw()
 			{
 				m_lbText->SetVisible(true);
                 std::stringstream ss;
-                ss << m_strText.c_str() << m_unProcess/m_unTotal << "%";
+                ss << m_strText.c_str() << m_unProcess*100/m_unTotal << "%";
                 //tq::CString str("%s%u/%u", m_strText.c_str(), m_unProcess, m_unTotal);
                 m_lbText->SetText(ss.str().c_str());
             }

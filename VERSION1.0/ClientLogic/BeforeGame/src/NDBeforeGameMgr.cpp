@@ -1847,11 +1847,12 @@ void NDBeforeGameMgr::SaveAccountPwdToDB(const char* pszName,
 ////////////////////////////////////////////////////////////
 bool NDBeforeGameMgr::isWifiNetWork()
 {//´ýÊµÏÖ
+
 //    Reachability *r = [Reachability reachabilityWithHostName:@"www.baidu.com"];
 //    if (r == nil || [r currentReachabilityStatus] != ReachableViaWiFi) 
 //        return false;
 //    else 
-        return true;
+	return true;
 }
 
 bool NDBeforeGameMgr::CheckClientVersion( const char* szURL )
