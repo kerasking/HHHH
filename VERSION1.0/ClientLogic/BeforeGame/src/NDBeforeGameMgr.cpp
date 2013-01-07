@@ -1847,12 +1847,27 @@ void NDBeforeGameMgr::SaveAccountPwdToDB(const char* pszName,
 ////////////////////////////////////////////////////////////
 bool NDBeforeGameMgr::isWifiNetWork()
 {//´ýÊµÏÖ
-
 //    Reachability *r = [Reachability reachabilityWithHostName:@"www.baidu.com"];
 //    if (r == nil || [r currentReachabilityStatus] != ReachableViaWiFi) 
 //        return false;
-//    else 
-	return true;
+//    else
+//        return true;
+    
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    JniMethodInfo t;
+    
+    if (JniHelper::getStaticMethodInfo(t
+                                       , "org/DeNA/DHLJ/DaHuaLongJiang"
+                                       , "isWifiConnected"
+                                       , "()I"))
+        
+    {
+        jint b = (jint)t.env->CallStaticObjectMethod(t.classID, t.methodID);
+        t.env->DeleteLocalRef(t.classID);
+        return (b == 1);
+    }
+#endif
+    return false;
 }
 
 bool NDBeforeGameMgr::CheckClientVersion( const char* szURL )
@@ -2135,7 +2150,6 @@ void* CopyResThread(void* ptr)
 		float fMax = nMaxIndex;
 
 		NDBeforeGameMgr::ms_nCopyStatus = (int)(fCur / fMax * 100.0f);
-	//	LOGD("Unzipping the file:%s",strFilename.c_str());
 		UnzipItem(pZipHandle,i,strFilename.c_str());
 	}
 

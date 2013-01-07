@@ -155,16 +155,16 @@ CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
 
 #ifdef USE_MGSDK
 		NDPicture* pkPicture = kPool.AddPicture( NDPath::GetImgPath("Res00/Load/mobage_bg.png") );
-#else
-#if ((CACHE_MODE == 1) && (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID))
+#elif ((CACHE_MODE == 1) && (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID))
 		NDPicture* pkPicture = kPool.AddPicture("res/drawable/mobage_splash.png");
 
 		if (pkPicture)
 		{
 			CCSize kPictureSize = pkPicture->GetSize();
 			CCDirector::sharedDirector()->setGLDefaultValues(1.0f,1.0f,1.0f);
-			pkBackgroundImage->SetFrameRect(CCRectMake(kWinSize.width / 2.0 - kPictureSize / 4,
-				kWinSize.height / 2.0f - kPictureSize / 4, kPictureSize / 2, kPictureSize / 2));
+			pkBackgroundImage->SetFrameRect(CCRectMake(kWinSize.width / 2.0 - kPictureSize.width / 4,
+				kWinSize.height / 2.0f - kPictureSize.height / 4,
+				kPictureSize.width / 2, kPictureSize.height / 2));
 		}
 
 		pkLoadingPic = kPool.AddPicture("res/drawable/mbga_mobage_loading.png");
@@ -175,12 +175,12 @@ CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
 
 			pkUILoadingImage = new NDUIImage;
 			pkUILoadingImage->Initialization();
-			pkUILoadingImage->SetFrameRect(CCRectMake(kWinSize.width / 2.0f, kWinSize.height / 2.0f, kPicSize.width, kPicSize.height));
+			pkUILoadingImage->SetFrameRect(CCRectMake(kWinSize.width / 2.0f, kWinSize.height / 2.0f,
+				kPicSize.width, kPicSize.height));
 			pkUILoadingImage->SetPicture(pkLoadingPic,true);
 		}
 #else
 		NDPicture* pkPicture = kPool.AddPicture( NDPath::GetImg00Path("Res00/Load/bg_load.png") );
-#endif
 #endif
 		if (pkPicture) 
 		{
@@ -383,11 +383,20 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 		
 		//CreateUpdateUILayer();
 
-// #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
- 		CCLog( "@@login02: to call OnEvent_LoginOKNormal()\r\n" );
-		m_iAccountID = NDBeforeGameMgrObj.GetCurrentUser();
-		OnEvent_LoginOKNormal(m_iAccountID);
-// #else
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+ 		CCLog( "@@login02: to call OnEvent_LoginOKNormal()\r\n" );		m_iAccountID = NDBeforeGameMgrObj.GetCurrentUser();		OnEvent_LoginOKNormal(m_iAccountID);
+#else
+
+//#ifdef USE_MGSDK
+// 		NDUIImage * pImage = (NDUIImage *)m_pLayerUpdate->GetChild( TAG_CTRL_PIC_BG);
+// 		if ( pImage )
+// 		{
+// 			NDPicture * pPicture = new NDPicture;
+// 			pPicture->Initialization( NDPath::GetUIImgPath( SZ_MOBAGE_BG_PNG_PATH ).c_str() );
+// 			pImage->SetPicture( pPicture, true );
+// 		}
+//#endif
+#endif
 
 #if CACHE_MODE == 1
     	if ( NDBeforeGameMgrObj.CheckFirstTimeRuning() )
@@ -863,14 +872,11 @@ void CSMLoginScene::OnEvent_LoginOKNormal( int iAccountID )
 }
 #endif
 	
-#if 0
 #if (UPDATE_ON == 0 && CACHE_MODE == 0)
-// 		CloseWaitingAni();
-// 		StartEntry();
+ 		CloseWaitingAni();
+ 		StartEntry();
 #endif
 #if UPDATE_ON == 1
-#endif
-
 #endif
 }
 
@@ -973,7 +979,7 @@ void CSMLoginScene::StartEntry()
 	m_iAccountID = ScriptMgrPtr->excuteLuaFuncRetN( "GetAccountID", "Login_ServerUI" );
 #endif
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) || (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	m_iAccountID = NDBeforeGameMgrObj.GetCurrentUser();
 #endif
 
@@ -1163,6 +1169,6 @@ void CSMLoginScene::OnProcessUpdate()
 		return;
 	}
 #else
-	StartEntry();
+	//StartEntry();
 #endif
 }

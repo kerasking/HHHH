@@ -143,7 +143,8 @@ void CUIExp::draw()
         unsigned int t_unTotal      = m_unTotal - m_unStart;
 		if(t_unTotal > 0)
 		{
-			m_fPercent = max(0.0f, (float(t_unProcess) / float(t_unTotal)));
+			float bili = (float(t_unProcess) / float(t_unTotal));
+			m_fPercent = max(0.0f, (bili>1?1:bili));
 		}
 
 #if 0
