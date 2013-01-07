@@ -836,15 +836,15 @@ void CSMLoginScene::OnMsg_ClientVersion(NDTransData& kData)
 		if (bLatest)
 		{
 			CloseWaitingAni();
-			//if ( !NDBeforeGameMgrObj.isWifiNetWork() )//¹Ø±Õµô¿ÓµùµÄWIFI¼à²â
-			//{
-			//	ShowCheckWIFIOff();
-			//	m_pTimer->SetTimer( this, TAG_TIMER_CHECK_WIFI, 1.0f );
-			//}
-			//else
-			//{
+			if ( !NDBeforeGameMgrObj.isWifiNetWork() )//
+			{
+				ShowCheckWIFIOff();
+				m_pTimer->SetTimer( this, TAG_TIMER_CHECK_WIFI, 1.0f );
+			}
+			else
+			{
 				StartUpdate();
-			//}
+			}
 		}
 	}
 
@@ -1107,17 +1107,17 @@ void CSMLoginScene::CloseWaitingAni()
 //ÏÔÊ¾¼ì²âWIFIÊ§°Ü¶Ô»°¿ò
 void CSMLoginScene::ShowCheckWIFIOff()
 {
-	CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
-	
-	NDUILayer *	pLayer	= new NDUILayer();
-	if ( !pLayer )
-		return;
-	pLayer->Initialization();
-	pLayer->SetFrameRect( CCRectMake(0, 0, winSize.width, winSize.height) );
-	AddChild(pLayer);
-	m_pLayerCheckWIFI = pLayer;
-	NDUILoad tmpUILoad;
-	tmpUILoad.Load( "CheckWIFIDlg.ini", pLayer, this, CCSizeMake(0, 0) );
+// 	CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
+// 	
+// 	NDUILayer *	pLayer	= new NDUILayer();
+// 	if ( !pLayer )
+// 		return;
+// 	pLayer->Initialization();
+// 	pLayer->SetFrameRect( CCRectMake(0, 0, winSize.width, winSize.height) );
+// 	AddChild(pLayer);
+// 	m_pLayerCheckWIFI = pLayer;
+// 	NDUILoad tmpUILoad;
+// 	tmpUILoad.Load( "CheckWIFIDlg.ini", pLayer, this, CCSizeMake(0, 0) );
 	CreatConfirmDlg( NDCommonCString2(SZ_WIFI_OFF).c_str() );
 	m_iState = 1;
 }
