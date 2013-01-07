@@ -37,6 +37,7 @@
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #include <jni.h>
 #include <android/log.h>
+#include "android/jni/JniHelper.h"
 
 #define  LOG_TAG    "DaHuaLongJiang"
 #define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
@@ -49,6 +50,8 @@
 ////////////////////////////////////////////////////////////
 
 //--------------------//
+
+#define UPDATE_TIP_TEXT_ANDROID 0x7f080039	///< 安卓解壓介面提示文字，對應安卓String.xml里的unzip_text 郭浩
 
 #define UPDATE_ON		0	//0关闭下载，1开启下载
 #define CACHE_MODE 		0  //发布模式//0关闭拷贝；1开启将资源拷贝至cache目录来访问
@@ -138,7 +141,7 @@ CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
 
 		string strText = CONVERT_GBK_TO_UTF8("正在準備中……");
 		CCSize kTextSize = getStringSize("正在準備中……", 20 * FONT_SCALE);
-		ccColor4B kColor = {0,0,255,255};
+		ccColor4B kColor = {6,123,224,255};
 
 		pkScene->m_pkProgressTextLabel = new NDUILabel();
 		pkScene->m_pkProgressTextLabel->Initialization();
@@ -147,8 +150,6 @@ CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
 		pkScene->m_pkProgressTextLabel->SetTag(0);
 		pkScene->m_pkProgressTextLabel->SetFontSize(15);
 		pkScene->m_pkProgressTextLabel->SetFontColor(kColor);
-		pkScene->m_pkProgressTextLabel->SetFrameRect(CCRectMake(kWinSize.width / 2 - 150,
-			kWinSize.height - 50, kTextSize.width, kTextSize.height));
 
 		pkBackgroundImage->Initialization();
 		pkBackgroundImage->SetFrameRect(CCRectMake(0, 0, kWinSize.width, kWinSize.height));
@@ -365,22 +366,33 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 					m_pkProgressTextLabel->SetVisible(false);
 					NDBeforeGameMgrObj.doNDSdkLogin();
 					ShowWaitingAni();
-#ifdef ANDROID
-					usleep(400);
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) || (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+					usleep(200);
 #endif
 					OnProcessUpdate();
 				}
                 break;
             default:
 				{
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+					string strTempText = getTextFromStringXML_JNI(UPDATE_TIP_TEXT_ANDROID);
+					CCString* pstrString = CCString::stringWithFormat("%s%d%%...",strTempText.c_str(),nCopyStatus);
+#elif(CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 					CCString* pstrString = CCString::stringWithFormat("解壓資源……已經解壓了%d%%",nCopyStatus);
-					string strText = CONVERT_GBK_TO_UTF8(pstrString->getCString());
-					LOGD(strText.c_str());
+#elif(CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+					CCAssert(0);///< 未实现 郭浩
+#endif
+					//string strText = CONVERT_GBK_TO_UTF8(pstrString->getCString());
+					
 					CCSize kTextSize = getStringSize(pstrString->getCString(), 20 * FONT_SCALE);
-					m_pkProgressTextLabel->SetText(strText.c_str());
-// 					CCSize kWinSize = CCDirector::sharedDirector()->getWinSizeInPixels();
-// 					m_pkProgressTextLabel->SetPosx(kWinSize.width / 2 - kTextSize.width / 2);
-// 					m_pkProgressTextLabel->SetPosy(kWinSize.height - 110);
+					CCSize kWinSize = CCDirector::sharedDirector()->getWinSizeInPixels();
+
+					m_pkProgressTextLabel->SetFrameRect(CCRectMake(kWinSize.width / 2.0f - kTextSize.width / 3.0f,
+						kWinSize.height - kTextSize.height * 2.0f, kTextSize.width, kTextSize.height));
+
+					//LOGD("kTextSize.width is %d,kTextSize.height is %d",(int)kTextSize.width,(int)kTextSize.height);
+
+					m_pkProgressTextLabel->SetText(pstrString->getCString());
 				}
                 break;
         }
@@ -399,15 +411,15 @@ void CSMLoginScene::OnTimer( OBJID idTag )
  		CCLog( "@@login02: to call OnEvent_LoginOKNormal()\r\n" );		m_iAccountID = NDBeforeGameMgrObj.GetCurrentUser();		OnEvent_LoginOKNormal(m_iAccountID);
 #else
 
-//#ifdef USE_MGSDK
-// 		NDUIImage * pImage = (NDUIImage *)m_pLayerUpdate->GetChild( TAG_CTRL_PIC_BG);
-// 		if ( pImage )
-// 		{
-// 			NDPicture * pPicture = new NDPicture;
-// 			pPicture->Initialization( NDPath::GetUIImgPath( SZ_MOBAGE_BG_PNG_PATH ).c_str() );
-// 			pImage->SetPicture( pPicture, true );
-// 		}
-//#endif
+#ifdef USE_MGSDK
+		NDUIImage * pImage = (NDUIImage *)m_pLayerUpdate->GetChild( TAG_CTRL_PIC_BG);
+		if ( pImage )
+		{
+			NDPicture * pPicture = new NDPicture;
+			pPicture->Initialization( NDPath::GetUIImgPath( SZ_MOBAGE_BG_PNG_PATH ).c_str() );
+			pImage->SetPicture( pPicture, true );
+		}
+#endif
 #endif
 
 #if CACHE_MODE == 1
@@ -1192,4 +1204,30 @@ void CSMLoginScene::OnProcessUpdate()
 #else
 	//StartEntry();
 #endif
+}
+
+std::string CSMLoginScene::getTextFromStringXML_JNI( int nTextID )
+{
+	std::string ret;
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	JniMethodInfo t;
+
+	if (JniHelper::getStaticMethodInfo(t, "org/DeNA/DHLJ/DaHuaLongJiang",
+		"getTextFromStringXML",
+		"(I)Ljava/lang/String;"))
+	{
+		jstring retFromJava = (jstring) t.env->CallStaticObjectMethod(t.classID,
+			t.methodID, nTextID);
+		const char* str = t.env->GetStringUTFChars(retFromJava, 0);
+		ret = str;
+
+		t.env->ReleaseStringUTFChars(retFromJava, str);
+		t.env->DeleteLocalRef(t.classID);
+	}
+	else
+	{
+		LOGERROR("Cant' find java function:getTextFromStringXML");
+	}
+#endif
+	return ret;
 }

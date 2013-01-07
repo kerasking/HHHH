@@ -69,6 +69,7 @@ import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import android.widget.MediaController;
 import android.widget.VideoView;
@@ -87,6 +88,8 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	private static Context s_context;
 	private static LinearLayout s_balancelayout;
 
+	private static Cocos2dxEditText edittext; //@ime
+	
 	private static Handler VideoViewHandler = new Handler();
 	private static Handler RootViewHandler = new Handler();
 	private static Runnable mHideBalance = new Runnable()
@@ -330,8 +333,9 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 
 	public void setMain()
 	{
-		Log.e(TAG, "DaHuaLongJiang::setMain()");
+		Log.d(TAG, "DaHuaLongJiang::setMain()");
 
+		// remove all views
 		rootView = (View) getView();
 		FrameLayout parent = (FrameLayout) rootView.getParent();
 		if (parent != null)
@@ -340,8 +344,10 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		}
 		menubar.removeAllViews();
 
+		// add edit view
 		addEditView();
 
+		// add surface view
 		m_pkView.setVisibility(View.INVISIBLE);
 		// menubar.addView(m_pkView);
 		menubar.addView(rootView);
@@ -366,33 +372,84 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		menubar.addView(s_balancelayout);
 		s_balancelayout.setVisibility(View.INVISIBLE);
 
+		// set content view
 		ViewGroup.LayoutParams pkParams = new ViewGroup.LayoutParams(
 				ViewGroup.LayoutParams.FILL_PARENT,
 				ViewGroup.LayoutParams.FILL_PARENT);
 		this.setContentView(menubar, pkParams);
+		
+		// set menu bar visible
 		menubar.setMenubarVisibility(View.VISIBLE);
-
-		// getAndroidVer();
 	}
 
+	//@ime
 	public void addEditView()
 	{
-		// Cocos2dxEditText layout
-		ViewGroup.LayoutParams edittext_layout_params = new ViewGroup.LayoutParams(
+		if (edittext == null)
+		{
+			ViewGroup.LayoutParams edittext_layout_params = new ViewGroup.LayoutParams(
 				ViewGroup.LayoutParams.FILL_PARENT,
 				ViewGroup.LayoutParams.WRAP_CONTENT);
-		Cocos2dxEditText edittext = new Cocos2dxEditText(this);
-		edittext.setLayoutParams(edittext_layout_params);
-		// edittext.setVisibility( View.INVISIBLE );
-
-		// add edit to layout
-		menubar.addView(edittext);
-
-		// set this edit to cocos2dx surface view
-		Cocos2dxGLSurfaceView surfaceView = getView();
-		surfaceView.setCocos2dxEditText(edittext);
+		
+			edittext = new Cocos2dxEditText(this);
+			edittext.setLayoutParams(edittext_layout_params);
+		}
+				
+		if (edittext != null)
+		{
+			// add edit to layout
+			menubar.addView(edittext);
+	
+			// set this edit to cocos2dx surface view
+			Cocos2dxGLSurfaceView surfaceView = getView();
+			surfaceView.setCocos2dxEditText(edittext);
+			surfaceView.setDHLJ(this);
+			
+			// single line
+			edittext.setSingleLine();
+		}
 	}
 
+	//@ime
+	private static boolean isFullScreenIME()
+	{
+		if (ms_pkDHLJ != null && ms_pkDHLJ.rootView != null)
+		{
+			final InputMethodManager imm = (InputMethodManager) 
+					ms_pkDHLJ.rootView.getContext()
+						.getSystemService(Context.INPUT_METHOD_SERVICE);
+			
+			if (imm != null)
+			{
+				boolean bFull = imm.isFullscreenMode();
+				Log.d("test", "@@ ime isFull: " + bFull);
+				return bFull;
+			}
+		}
+		return false;
+	}
+	
+	//@ime
+	public void notifyIMEOpenClose( boolean bImeOpen ) 
+	{
+		Log.d("test", "@@ DaHuaLongJiang.notifyIMEOpenClose(): " + bImeOpen );
+		
+		//refreshLayout( bOpen );
+		if (!isFullScreenIME())
+		{
+			if (bImeOpen) 
+			{
+				//bring editView to top
+				menubar.bringChildToFront(edittext);
+			}
+			else 
+			{
+				//bring surface view to top
+				menubar.bringChildToFront(getView());
+			}
+		}
+	}
+	
 	public void LoginComplete(int userid)
 	{
 		onLoginComplete(userid, mDeviceID);
@@ -426,6 +483,15 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	{
 		Log.v(TAG, "begin showBalanceButton");
 		BalanceHandler.post(mHideBalance);
+	}
+	
+	public static String getTextFromStringXML(int nTextID)
+	{
+		String strRet = "";
+		
+		strRet = ms_pkDHLJ.getResources().getString(nTextID);
+		
+		return strRet;
 	}
 
 	public static void ShowBankUi()

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">大話龍將</string>
+    <string name="unzip_text">首次運行,初始化配置中</string>
     
 </resources>

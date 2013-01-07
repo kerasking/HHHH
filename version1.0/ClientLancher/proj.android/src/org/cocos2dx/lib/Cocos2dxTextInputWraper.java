@@ -150,7 +150,6 @@ public class Cocos2dxTextInputWraper implements TextWatcher, OnEditorActionListe
 //
 //			final String insertText = text;
 //			this.mCocos2dxGLSurfaceView.insertText(insertText);
-			this.mCocos2dxGLSurfaceView.onAction( pActionID ); //ND_MOD
 			
 			/*
 			if (BuildConfig.DEBUG) {
@@ -158,6 +157,9 @@ public class Cocos2dxTextInputWraper implements TextWatcher, OnEditorActionListe
 			}
 			*/
 		}
+
+		this.mCocos2dxGLSurfaceView.onAction( pActionID ); //ND_MOD
+
 		return false;
 	}
 	

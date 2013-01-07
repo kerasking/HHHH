@@ -605,8 +605,8 @@ bool CUIEdit::canDetachWithIME()
 
 void CUIEdit::insertText(const char * text, int len)
 {
-	//CCLog( "@@ CUIEdit::insertText() text=%s\r\n", text);
-	//CCLog( "@@ CUIEdit::insertText() length=%d \r\n", len);
+	CCLog( "@@ CUIEdit::insertText() text=%s\r\n", text);
+	CCLog( "@@ CUIEdit::insertText() length=%d \r\n", len);
 
 	bool enterDown = false;
 
@@ -615,20 +615,61 @@ void CUIEdit::insertText(const char * text, int len)
 #else
 	std::string	tmpStr = text ? text : "";//这个是=
 
-	for (int i = 0; i < 2; i++)
+	//检测换行
+	char *p = (char*)tmpStr.c_str();
+	while (*p != '\0')
 	{
-		int len = tmpStr.length();
-		if (len > 0)
+		if ((unsigned char) *p < 0x80)
 		{
-			const char c = tmpStr[len - 1];
+			const char c = *p;
 			if (c == '\r' || c == '\n')
 			{
-				tmpStr.erase( tmpStr.end() - 1 );
 				enterDown = true;
+				break;
 			}
+			p++;
+		}
+		else
+		{
+			p += 3;
 		}
 	}
 
+	//替换换行为空格
+	p = (char*)tmpStr.c_str();
+	while (*p != '\0')
+	{
+		if ((unsigned char) *p < 0x80)
+		{
+			const char c = *p;
+			if (c == '\r' || c == '\n')
+			{
+				*p = ' ';
+			}
+			p++;
+		}
+		else
+		{
+			p += 3;
+		}
+	}
+
+// 	//删除末尾的换行
+// 	for (int i = 0; i < 2; i++)
+// 	{
+// 		int len = tmpStr.length();
+// 		if (len > 0)
+// 		{
+// 			const char c = tmpStr[len - 1];
+// 			if (c == '\r' || c == '\n')
+// 			{
+// 				tmpStr.erase( tmpStr.end() - 1 );
+// 				enterDown = true;
+// 			}
+// 		}
+// 	}
+
+	//计算字符个数
 	int inputCount = 0;
 	const char *tmpPointer = tmpStr.c_str();
 	while (*tmpPointer != '\0')
@@ -755,6 +796,7 @@ void CUIEdit::onAction( int action )
 	if (action == 0)
 	{
 		//action=enter
+		this->detachWithIME();
 	}
 	else if (action == 6)
 	{
