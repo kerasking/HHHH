@@ -138,7 +138,8 @@ function p.AddItem(idItem)
                 local nItemType			= Item.GetItemInfoN(idItem, Item.ITEM_TYPE);
                 local strName			= ItemFunc.GetName(nItemType);
                 local levelLV           = Item.GetItemInfoN(idItem, Item.ITEM_ADDITION);
-                itemlbl:SetText(string.format("%sLv%d",strName,levelLV));
+                itemlbl:SetText(string.format("%sL%d",strName,levelLV));
+
                 --设置物品颜色
                 ItemFunc.SetDaoFaLabelColor(itemlbl,nItemType);
                 
@@ -243,7 +244,9 @@ function p.AddEquip(idPet, idItem, nPostion)
     local nItemType			= Item.GetItemInfoN(idItem, Item.ITEM_TYPE);
     local strName			= ItemFunc.GetName(nItemType);
     local levelLV           = Item.GetItemInfoN(idItem, Item.ITEM_ADDITION);
-    equiplbl:SetText(string.format("%sLv%d",strName,levelLV));
+
+    equiplbl:SetText(string.format("%sL%d",strName,levelLV));
+
     --设置物品颜色
     ItemFunc.SetDaoFaLabelColor(equiplbl,nItemType);
 end

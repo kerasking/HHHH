@@ -387,7 +387,7 @@ function p.TimerTick(tag)
 			
 			if CDLabel ~= nil then
 				LogInfo("qboy99 222222:");
-				CDLabel:SetTitle("参战");
+				CDLabel:SetTitle(GetTxtPri("SYN_D27"));
 			end
 			
 			if bIfAutoJoinNextBattle == tState.WINOutBattle then
@@ -419,13 +419,13 @@ function p.TimerTick(tag)
 		elseif g_Count <= 30 then	
 			if bIfAutoJoinNextBattle == tState.WINOutBattle then
 				CDLabel:SetChecked( true );
-				CDLabel:SetTitle("战斗中 "..g_Count);
+				CDLabel:SetTitle(GetTxtPri("SYN_D28")..g_Count);
 			else	
 				CDLabel:SetChecked( false );
 				--CDLabel:SetTitle("战斗中 "..(g_Count-30));
 			end
 		else	
-			CDLabel:SetTitle("战斗中 "..(g_Count-30));
+			CDLabel:SetTitle(GetTxtPri("SYN_D28")..(g_Count-30));
 			CDLabel:SetChecked( true );
 		end		
 	end
@@ -542,7 +542,7 @@ function p.updateCount(restCount)
 			if p.IfIsInBattle() then
 				LogInfo("qboy 已经在战斗中");
 			else
-				CDlabel:SetTitle("参战");
+				CDlabel:SetTitle(GetTxtPri("SYN_D27"));
 				CDlabel:SetChecked( false );		
 			end
 			
@@ -553,7 +553,7 @@ function p.updateCount(restCount)
 			CDlabel:SetTitle(FormatTime(restCount,1));
 			CDlabel:SetChecked( false );
 		else
-			CDlabel:SetTitle("战斗中...");
+			CDlabel:SetTitle(GetTxtPri("SYN_D28"));
 			CDlabel:SetChecked( true );
 		end
 	end
@@ -595,9 +595,9 @@ function p.refreshResultInfo()
 	LostLabel:SetText(""..g_nLost);
 	MoneyLabel:SetText(""..g_Money);	
 	if g_EncourageLev ~= 0 then
-		EncourageLabel:SetText("鼓舞"..g_EncourageLev.."星")
+		EncourageLabel:SetText(GetTxtPri("SYN_D29")..g_EncourageLev..GetTxtPri("SYN_D30"))
 	else
-		EncourageLabel:SetText("无")
+		EncourageLabel:SetText(GetTxtPri("SYN_D31"))
 	end
 end
 
@@ -619,8 +619,8 @@ function p.refreshPlayerCount()
 	local AttkLabel 	=  RecursiveLabel(p.GetParent(),{ID_SCUFFLE_CTRL_TEXT_ATTACK});
 	local DefLabel 		=  RecursiveLabel(p.GetParent(),{ID_SCUFFLE_CTRL_TEXT_DEFENCE});
 	
-	AttkLabel:SetText("龙狼卫("..nCountAtt.."人)");
-	DefLabel:SetText("虎豹骑("..nCountDef.."人)");
+	AttkLabel:SetText(GetTxtPri("SYN_D32")..nCountAtt..GetTxtPri("SYN_D34"));
+	DefLabel:SetText(GetTxtPri("SYN_D33")..nCountDef..GetTxtPri("SYN_D34"));
 	
 	
 end
@@ -700,7 +700,7 @@ function p.AddPlayerToList(nUserId,nCamp,sName)
 		local CDLabel = p.GetCDLabel();
 
 		if CDLabel ~= nil then
-			CDLabel:SetTitle("等待战斗...");
+			CDLabel:SetTitle(GetTxtPri("SYN_D35"));
 			CDLabel:SetChecked( true );
 		end
 	end	
@@ -845,14 +845,14 @@ function p.AddPlayer(container, nIndex)
 						12,
 						NameColor.GREEN);--]]
 						
-			hyperlinkBtn   = CreateLabel("[待]"..sUserName,CGRectMake(0, 0, sizeview.w , sizeview.h),12,NameColor.GREEN);
+			hyperlinkBtn   = CreateLabel(GetTxtPri("SYN_D36")..sUserName,CGRectMake(0, 0, sizeview.w , sizeview.h),12,NameColor.GREEN);
 
 		else
 			 --[[hyperlinkBtn	= CreateHyperlinkButton("[待]"..sUserName, 
 						CGRectMake(0, 0, sizeview.w , sizeview.h),
 						12,
 						NameColor.YELLOW);	--]]
-			hyperlinkBtn   = CreateLabel("[待]"..sUserName,CGRectMake(0, 0, sizeview.w , sizeview.h),12,NameColor.YELLOW);									
+			hyperlinkBtn   = CreateLabel(GetTxtPri("SYN_D36")..sUserName,CGRectMake(0, 0, sizeview.w , sizeview.h),12,NameColor.YELLOW);									
 		end		
 		--]]
 		
@@ -884,9 +884,9 @@ function p.ChangeColorByIndex(nIndex,Color)
 	
 	local sState = ""
 	if Color == NameColor.YELLOW then
-		sState = "[待]"
+		sState = GetTxtPri("SYN_D36")
 	else	
-		sState = "[战]"
+		sState = GetTxtPri("SYN_D37")
 	end
 	
 	local attContainer = p.GetAttContainer();
@@ -941,26 +941,26 @@ function p.AddMainReport(nIdWin,nIdLost,nMoney,nRepute,nWinCombo,nLoseCombo,sWin
 	
 	local str = "";
 	if nIdWin == nIdLost then
-		str = "<c32abb3【"..sWinName.."】此回合轮空,"
+		str = "<c32abb3【"..sWinName.."】此回合輪空,"
 	else
-		str = "<c32abb3【"..sWinName.."】/e击败了".."<cb6440c【"..sLostName.."】/e,"
+		str = "<c32abb3【"..sWinName.."】/e擊敗了".."<cb6440c【"..sLostName.."】/e,"
 	end
 	
 	
 	
 	if nWinCombo > 0 then
-		str = str.."取得了"..nWinCombo.."<cfefc2a".."连胜,/e"
+		str = str.."取得了"..nWinCombo.."<cfefc2a".."連勝,/e"
 	end
 	
 	if nLoseCombo > 0 then
-		str = str.."终结了<cb6440c【"..sLostName.."】/e的<cfefc2a"..nLoseCombo.."/e连胜,"
+		str = str.."終結了<cb6440c【"..sLostName.."】/e的<cfefc2a"..nLoseCombo.."/e連勝,"
 	end
 	
-	str = str.."获得了<c02c600"..nMoney.."/e银币,"
+	str = str.."獲得了<c02c600"..nMoney.."/e銀幣,"
 	if nRepute > 0 then
-		str = str.."<c02c600"..nRepute.."/e声望"
+		str = str.."<c02c600"..nRepute.."/e聲望"
 	elseif nIdWin ~= nIdLost then
-		str = str.."本场大乱斗声望已满"
+		str = str.."本場大亂斗聲望已滿"
 	end
 	
 	
@@ -983,25 +983,25 @@ function p.AddUserReport(nIdWin,nIdLost,nMoney,nRepute,nWinCombo,nLoseCombo,sWin
 
 	local str = "";
 	if nIdWin == nIdLost then
-		str = "<c32abb3【"..sWinName.."】此回合轮空,"
+		str = "<c32abb3【"..sWinName.."】此回合輪空,"
 	else
-		str = "<c32abb3【"..sWinName.."】/e击败了".."<cb6440c【"..sLostName.."】/e,"
+		str = "<c32abb3【"..sWinName.."】/e擊敗了".."<cb6440c【"..sLostName.."】/e,"
 	end	
 	
 	
 	if nWinCombo > 0 then
-		str = str.."取得了"..nWinCombo.."<cfefc2a".."连胜,/e"
+		str = str.."取得了"..nWinCombo.."<cfefc2a".."連勝,/e"
 	end
 	
 	if nLoseCombo > 0 then
-		str = str.."终结了<cb6440c【"..sLostName.."】/e的<cfefc2a"..nLoseCombo.."/e连胜,"
+		str = str.."終結了<cb6440c【"..sLostName.."】/e的<cfefc2a"..nLoseCombo.."/e連勝,"
 	end
 	
-	str = str.."获得了<c02c600"..nMoney.."/e银币,"
+	str = str.."獲得了<c02c600"..nMoney.."/e銀幣,"
 	if nRepute > 0 then
-		str = str.."<c02c600"..nRepute.."/e声望"
+		str = str.."<c02c600"..nRepute.."/e聲望"
 	elseif nIdWin ~= nIdLost then
-		str = str.."本场大乱斗声望已满"
+		str = str.."本場大亂鬥聲望已滿"
 	end
 
 	nUserReportHead = nUserReportHead + 1;
@@ -1117,7 +1117,7 @@ end
 
 
 --===============================xxxxxxxx====================================----
-
+--[[
 local TipTxt ={
 "规则:",
 "一、活动条件：",
@@ -1137,7 +1137,27 @@ local TipTxt ={
 "	1、鼓舞",
 "	2、自动战斗，达到vip6玩家可以选择自动战斗","，自动参战：战斗结束且冷却时间清零后，自动","加入参战队列，省去玩家手动点击参战的操作。",
 }
+]]
 
+local TipTxt ={
+規則:,
+一、活動條件：,
+"	1、大亂鬥於每天晚上20:30開啟，21:00結束；,"
+"	2、等級40級以上的玩家都能參與；,"
+二、活動詳細規則：,
+"	1、 隨機分為兩大陣營：龍狼衛、虎豹騎；,"
+"	2、玩家報名參戰後，自動分配到人數較少的一,""方，人數相同時，分配到龍狼衛，雙方隨機配對進"",""行對戰；"","
+"	3、戰勝方，自動處於等待佇列，陣營不變，並,""記錄連勝數和戰勝方的剩餘血量（不會回復氣血"",""）；"","
+"	4、戰敗方，退出佇列，連勝清0並補齊血量，冷,""卻時間過後可以重新點擊參與，系統再次給他分"",""配陣營並排到最後（參照第一點）；"","
+三、獎勵：,
+"	1、戰勝方將得到大量的銀幣和聲望獎勵，連勝,""數越高獎勵越豐富，若終結對方的連勝也能獲得"",""額外獎勵，對方的連勝越高獎勵也越豐富；"","
+"	2、戰敗方將得到基本的銀幣和聲望獎勵；,"
+"	3、輪空只獲得基本銀幣獎勵；,"
+"	4、大亂鬥積分前十玩家額外獲得聲望獎勵；,"
+四、其他功能：（暫不開放）,
+"	1、鼓舞,"
+"	2、自動戰鬥，達到vip6玩家可以選擇自動戰鬥,""，自動參戰：戰鬥結束且冷卻時間清零後，自動"",""加入參戰佇列，省去玩家手動點擊參戰的操作。"","
+}
 
 local Tiptag = 9998;
 --显示提示信息
@@ -1311,7 +1331,7 @@ function p.RefreshBoard()
 			local pLabelScore = RecursiveLabel(view, {5});
 
 			if nIndex == 0 then
-				pLabelScore:SetText("连胜");
+				pLabelScore:SetText("連勝");
 			else
 				pLabelRank:SetText(""..nIndex);
 				pLabelName:SetText(""..tRankBoardStreak[nIndex][1]);
@@ -1442,7 +1462,7 @@ function p.CloseUI()
 	end
 
 	if bIfAutoJoinNextBattle == tState.InBattle   then
-		CommonDlgNew.ShowYesDlg("已退出，战斗结束后请关闭活动界面！");
+		CommonDlgNew.ShowYesDlg("已退出，戰鬥結束后請關閉活動界面");
 	else
 		CloseUI(NMAINSCENECHILDTAG.CampBattle);		
 	end
@@ -1494,7 +1514,7 @@ function p.OnUIEvent(uiNode, uiEventType, param)
                     
 
 			if g_BattleEndTime > 0 then
-				CommonDlgNew.ShowYesOrNoDlg( "退出将会清除当前连胜数，确定退出吗？", p.CloseCampbattleUI, true );
+				CommonDlgNew.ShowYesOrNoDlg( "退出將會清除當前連勝數，確定退出嗎？", p.CloseCampbattleUI, true );
 			else
 				p.QuitBattle();
 				p.CloseUI();			
@@ -1505,17 +1525,17 @@ function p.OnUIEvent(uiNode, uiEventType, param)
 		--参战/退出	
 		elseif tag == ID_SCUFFLE_CTRL_BUTTON_BATTLE then
 			if  p.ActivityState == 3 then
-				CommonDlgNew.ShowYesDlg("您已退出，请重新打开界面！");
+				CommonDlgNew.ShowYesDlg("您已退出，請重新打開介面！");
 				return;
 			end
 
 			if p.IfIsInBattle() then
-				LogInfo("qboy 已经在战斗中");
+				LogInfo("qboy 已經在戰鬥中");
 			else
 				LogInfo("qboy sign up战斗 ");
 				--cd未冷却
 				if g_Count > 0 then
-					CommonDlgNew.ShowYesOrNoDlg( "是否花费2金币清除冷却时间", p.ClearCDTime, true );
+					CommonDlgNew.ShowYesOrNoDlg( "是否話費2金幣清除冷卻時間", p.ClearCDTime, true );
 					return true;
 				end
 				
@@ -1649,7 +1669,7 @@ function p.OnUIEventInfoList(uiNode, uiEventType, param)
 		elseif tag == ID_TALK_LIST_CTRL_BUTTON_12 then
 			--加好友
 			if FriendFunc.IsExistFriend(nCheckPlayerId)  then
-				CommonDlgNew.ShowYesDlg("该玩家已经是您的好友！");
+				CommonDlgNew.ShowYesDlg("該玩家已經是您的好友！");
 			else
 				FriendFunc.AddFriend(nCheckPlayerId,sCheckPlayerName); --加为好友 
 			end
@@ -1705,7 +1725,7 @@ function p.ClearCDTime(nId, param)
     	local emoney = GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_EMONEY);           
                
     	if emoney < 2 then
-			CommonDlgNew.ShowYesDlg("抱歉，您的金币不足！");
+			CommonDlgNew.ShowYesDlg("抱歉，您的金幣不足！");
 			return;
 		end
 	

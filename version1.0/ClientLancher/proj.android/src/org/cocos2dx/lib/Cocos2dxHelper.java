@@ -25,12 +25,14 @@ package org.cocos2dx.lib;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Locale;
+import java.io.*; 
 
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.res.AssetManager;
 import android.os.Build;
 import android.os.Environment;
+import android.util.Log;
 
 public class Cocos2dxHelper
 {
@@ -298,6 +300,43 @@ public class Cocos2dxHelper
 	{
 		return Environment.getExternalStorageDirectory() + "/Android/data/"
 				+ pApplicationInfo.packageName + "/files/" + pPath;
+	}
+
+	//get file desc, file len
+	//return string format: fd,len
+	public static String getFileDescriptor( final String pathName )
+	{
+		//Log.d("test", "@@ java getFileDescriptor: " + pathName);
+		String result = "";
+		try
+		{
+			FileInputStream stream = new FileInputStream( pathName );
+			if (stream != null)
+			{
+				// get file desc
+				FileDescriptor fd = stream.getFD();
+				String str = fd.toString();
+				str = str.replaceAll("FileDescriptor\\[", "");
+				str = str.replaceAll("\\]", "");
+				//int nFd = Integer.parseInt( str ); 
+				
+				//get file len
+				File f = new File( pathName );
+				if (f != null)
+				{
+					result += str + "," + f.length(); 
+				}
+			}
+		}
+		catch (final FileNotFoundException e)
+		{
+			Log.d("test", "@@ getFileDescriptor, FileNotFoundException: " + e.getMessage());
+		}
+		catch (final Exception e) 
+		{
+			Log.d("test", "@@ getFileDescriptor, Exception: " + e.getMessage());
+		}	
+		return result;
 	}
 
 	// ===========================================================

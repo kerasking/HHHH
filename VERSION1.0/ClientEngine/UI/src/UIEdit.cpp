@@ -121,7 +121,7 @@ void CUIEdit::OnTextChanged()
 //设置字体大小
 void CUIEdit::SetTextSize(unsigned int nSize)
 {
-    int curFontSize = int(nSize * FONT_SCALE);
+    int curFontSize = nSize;
     
     if (m_lbText)
 		m_lbText->SetFontSize(curFontSize);

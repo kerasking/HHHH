@@ -176,7 +176,7 @@ function p.refreshArmylist(signUpList)
 			local layer = p.GetParent();
 			local btn = RecursiveButton(layer, {19});
 			btn:SetChecked( true );
-			btn:SetTitle("已报名");	
+			btn:SetTitle(GetTxtPri("SYN_D20"));	
 		end		
 	end	
 	
@@ -207,7 +207,7 @@ function p.AddArmy(container, cell)
 	local sArmyName = cell.name;
 	if "" == sArmyName then
 		LogInfo("qboy AddArmy sArmyName nil");
-		sArmyName = "无"; --return;
+		sArmyName = GetTxtPri("SYN_D21"); --return;
 	end
 
 		
@@ -288,6 +288,8 @@ GetTxtPri("SYN_D3"),
 GetTxtPri("SYN_D4"),
 GetTxtPri("SYN_D_NULL"),
 GetTxtPri("SYN_D5"),
+}
+--[[
 GetTxtPri("SYN_D6"),
 GetTxtPri("SYN_D7"),
 GetTxtPri("SYN_D_NULL"),
@@ -310,6 +312,7 @@ GetTxtPri("SYN_D18"),
 GetTxtPri("SYN_D19"),
 GetTxtPri("SYN_D_NULL"),
 }
+]]
 --[[
 local TipTxt ={
 "军团战规则:",       1
@@ -429,7 +432,7 @@ function p.ShowTip()
 			local pLabelTips = nil;
 			local pLabelScore = nil;
 			
-			
+			LogInfo("tzq  tag1111");
 		  	pLabelTips = _G.CreateColorLabel( TipTxt[nIndex], 11, nWidthLimit );
 			pLabelTips:SetFrameRect(CGRectMake(0, 0, nWidthLimit, 20 * ScaleFactor));
 			view:AddChild(pLabelTips);
@@ -473,7 +476,7 @@ function p.CloseUI()
 	end
 
 	if bIfAutoJoinNextBattle == tState.InBattle   then
-		CommonDlgNew.ShowYesDlg("已退出，战斗结束后请关闭活动界面！");
+		CommonDlgNew.ShowYesDlg(GetTxtPri("SYN_D22"));
 	else
 		CloseUI(NMAINSCENECHILDTAG.SyndicateBattleSignUpUI);		
 	end
@@ -506,20 +509,20 @@ function p.OnUIEvent(uiNode, uiEventType, param)
 			local nAGID			= MsgArmyGroup.GetUserArmyGroupID( nUserID );
 	
 			if nAGID == nil then
-				CommonDlgNew.ShowTipDlg("您尚未加入军团!"); 
+				CommonDlgNew.ShowTipDlg(GetTxtPri("SYN_D23")); 
 				return true;
 			end	
 			
 			--军团职位
 			local nArmyPosition =MsgArmyGroup.GetUserArmyGroupPosition( nUserID )
 			if  nArmyPosition == 1 then
-				CommonDlgNew.ShowTipDlg("只有军团长和副军团长可以报名!"); 
+				CommonDlgNew.ShowTipDlg(GetTxtPri("SYN_D24")); 
 				return true;				
 			end
 			
 			--军团等级
 			if g_ArmyLev < 3 then
-				CommonDlgNew.ShowTipDlg("军团等级需要到达3级才可以参加军团战!"); 
+				CommonDlgNew.ShowTipDlg(GetTxtPri("SYN_D25")); 
 				return true;
 			end
 			
@@ -531,7 +534,7 @@ function p.OnUIEvent(uiNode, uiEventType, param)
 			--金钱不足返回提示
   			local nNeedMoney 		= 200000;
 			if  PlayerFunc.GetUserAttr(GetPlayerId(),USER_ATTR.USER_ATTR_MONEY) < nNeedMoney  then
-				 CommonDlgNew.ShowTipDlg("报名军团战需要缴纳报名费20万银币!"); 
+				 CommonDlgNew.ShowTipDlg(GetTxtPri("SYN_D26")); 
 				return true;
 			end
 			--]]

@@ -1163,7 +1163,7 @@ void Fighter::drawHPMP()
 	int drawx = m_pkRole->GetPosition().x;
 	int drawy = m_pkRole->GetPosition().y;
 
-	drawy -= m_nRoleInitialHeight;//++Guosen 2012.6.29 固定位置//drawy -= this->m_role->GetHeight();
+	drawy -= m_nRoleInitialHeight*COORD_SCALE_Y_960;//++Guosen 2012.6.29 固定位置//drawy -= this->m_role->GetHeight();
 
 	//战斗时血条的宽高
 	int iBarWidth	= HP_BAR_WIDTH;
