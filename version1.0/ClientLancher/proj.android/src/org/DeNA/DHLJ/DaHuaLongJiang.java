@@ -220,16 +220,18 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 
 			Mobage.checkLoginStatus();
 			Mobage.onCreate();
-			
-	        mDeviceID = Secure.getString(this.getContentResolver(), Secure.ANDROID_ID);   
-			PushService.actionStart(context);	
+
+			mDeviceID = Secure.getString(this.getContentResolver(),
+					Secure.ANDROID_ID);
+			PushService.actionStart(context);
 
 			menubar = new DynamicMenuBar(this);
 			menubar.setMenubarVisibility(View.VISIBLE);
 			menubar.setMenuIconGravity(Gravity.TOP | Gravity.LEFT);
 
 			Rect rect = new Rect(0, 0, 200, 120);
-			balancebutton = com.mobage.android.social.common.Service.getBalanceButton(rect);
+			balancebutton = com.mobage.android.social.common.Service
+					.getBalanceButton(rect);
 
 			// button1 = new Button(this);
 			// button1.setText("aaaaaaaaa".toCharArray(), 1, 6);
@@ -326,15 +328,15 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		menubar.addView(rootView);
 
 		menubar.addView(balancebutton);
-		balancebutton.setVisibility( View.INVISIBLE );
+		balancebutton.setVisibility(View.INVISIBLE);
 
 		ViewGroup.LayoutParams pkParams = new ViewGroup.LayoutParams(
 				ViewGroup.LayoutParams.FILL_PARENT,
 				ViewGroup.LayoutParams.FILL_PARENT);
 		this.setContentView(menubar, pkParams);
 		menubar.setMenubarVisibility(View.VISIBLE);
-		
-		//getAndroidVer();
+
+		// getAndroidVer();
 	}
 
 	public void addEditView()
@@ -427,7 +429,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	public static int playVideo(final String strFile)
 	{
 		if (true)
-	8
+		{
 			return 0;
 		}
 
@@ -488,45 +490,52 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		}
 		return super.onKeyDown(keyCode, event);
 	}
-	
+
 	public boolean onTouchEvent(MotionEvent event)
 	{
-		if(m_bIsStartingVideo)
+		if (m_bIsStartingVideo)
 		{
 			m_pkView.stopPlayback();
 			continueRootView();
 		}
-		
-		return true;		
+
+		return true;
 	}
 
 	private void getAndroidVer()
 	{
-// 		Log.d( "getAndroidVer" , "@@ ver SDK: " + android.os.Build.VERSION.SDK );
-// 		Log.d( "getAndroidVer" , "@@ ver release: " + android.os.Build.VERSION.RELEASE );
-// 		Log.d( "getAndroidVer" , "@@ ver codename: " + android.os.Build.VERSION.CODENAME );
-// 		Log.d( "getAndroidVer" , "@@ ver incremental: " + android.os.Build.VERSION.INCREMENTAL );
-// 		Log.d( "getAndroidVer" , "@@ ver SDK: " + android.os.Build.VERSION.SDK );
-//		isVerOlder(0);
+		// Log.d( "getAndroidVer" , "@@ ver SDK: " +
+		// android.os.Build.VERSION.SDK );
+		// Log.d( "getAndroidVer" , "@@ ver release: " +
+		// android.os.Build.VERSION.RELEASE );
+		// Log.d( "getAndroidVer" , "@@ ver codename: " +
+		// android.os.Build.VERSION.CODENAME );
+		// Log.d( "getAndroidVer" , "@@ ver incremental: " +
+		// android.os.Build.VERSION.INCREMENTAL );
+		// Log.d( "getAndroidVer" , "@@ ver SDK: " +
+		// android.os.Build.VERSION.SDK );
+		// isVerOlder(0);
 	}
 
-	public static int isWifiConnected() {
-		WifiManager wifiManger=(WifiManager)s_context.getSystemService(Service.WIFI_SERVICE);
-		if(WifiManager.WIFI_STATE_ENABLED == wifiManger.getWifiState())
+	public static int isWifiConnected()
+	{
+		WifiManager wifiManger = (WifiManager) s_context
+				.getSystemService(Service.WIFI_SERVICE);
+		if (WifiManager.WIFI_STATE_ENABLED == wifiManger.getWifiState())
 			return 1;
 		return 0;
 	}
 
-	//是否古老系统
+	// 是否古老系统
 	public static int isVerOlder(int n)
 	{
 		String osVer = android.os.Build.VERSION.RELEASE;
 		final String[] ver = osVer.split("\\.");
-		
-// 		for (String v : ver)
-// 		{
-// 			Log.d( "ver", "@@ v: " + v );
-// 		}
+
+		// for (String v : ver)
+		// {
+		// Log.d( "ver", "@@ v: " + v );
+		// }
 
 		return (ver[0].compareTo("2") == 0) ? 1 : 0;
 	}
