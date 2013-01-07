@@ -15,6 +15,7 @@ import org.json.JSONObject;
 import org.xmlpull.v1.XmlPullParserException;
 
 import com.mobage.android.C2DMBaseReceiver;
+import com.mobage.android.Error;
 import com.mobage.android.Mobage;
 import com.mobage.android.Mobage.PlatformListener;
 import com.mobage.android.Mobage.ServerMode;
@@ -22,6 +23,8 @@ import com.mobage.android.cn.dynamicmenubar.DynamicMenuBar;
 import com.mobage.android.social.BalanceButton;
 import com.mobage.android.social.common.RemoteNotification;
 import com.mobage.android.social.common.RemoteNotification.RemoteNotificationListener;
+import com.mobage.android.social.common.RemoteNotificationResponse;
+
 import org.DeNA.DHLJ.PushService;
 
 import org.DeNA.DHLJ.SocialUtils;
@@ -40,6 +43,7 @@ import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -51,6 +55,7 @@ import android.view.ViewGroup.LayoutParams;
 import android.view.ViewParent;
 import android.webkit.CookieSyncManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -80,6 +85,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	private View rootView = null;
 	private static boolean m_bIsStartingVideo = false;
 	private static Context s_context;
+	private static LinearLayout s_balancelayout;
 
 	private static Handler VideoViewHandler = new Handler();
 	private static Handler RootViewHandler = new Handler();
@@ -87,7 +93,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	{
 		public void run()
 		{
-			balancebutton.setVisibility(View.INVISIBLE);
+			s_balancelayout.setVisibility(View.INVISIBLE);
 		};
 	};
 	private static Runnable mShowVideoView = new Runnable()
@@ -141,20 +147,31 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	{
 		public void run()
 		{
-			Float x = 264 * s_fScale;
-			Float y = 70 * s_fScale;
-			Float sizex = 100 * s_fScale;
-			Float sizey = 75 * s_fScale;
-			FrameLayout.LayoutParams pkParamsButton = new FrameLayout.LayoutParams(
-					sizex.intValue(), sizey.intValue());
-			pkParamsButton.topMargin = y.intValue();
-			pkParamsButton.leftMargin = x.intValue();
-			balancebutton.setLayoutParams(pkParamsButton);
+			s_balancelayout.setVisibility(View.VISIBLE);
 			balancebutton.update();
-			balancebutton.setVisibility(View.VISIBLE);
 		};
 	};
+	private static class Callback implements RemoteNotification.OnSetRemoteNotificationsEnabledComplete, RemoteNotification.OnGetRemoteNotificationsEnabledComplete, RemoteNotification.OnSendComplete {
+		@Override
+		public void onSuccess(RemoteNotificationResponse arg0) {
+			// TODO Auto-generated method stub
+		}
 
+		@Override
+		public void onSuccess(boolean arg0) {
+			// TODO Auto-generated method stub
+		}
+
+		@Override
+		public void onError(Error arg0) {
+			// TODO Auto-generated method stub
+		}
+
+		@Override
+		public void onSuccess() {
+			// TODO Auto-generated method stub
+		}
+	}
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		if (isSDCardCanUse())
@@ -168,53 +185,55 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 			s_context = context;
 
 			Mobage.registerMobageResource(this, "org.DeNA.DHLJ.R");
+			final Callback callback = new Callback(); 
+			RemoteNotification.setRemoteNotificationsEnabled(false, callback);
 			SocialUtils.initializeMobage(this);
 			mPlatformListener = SocialUtils.createPlatformListener(true);
 			Mobage.addPlatformListener(mPlatformListener);
 
-			RemoteNotification.setListener(new RemoteNotificationListener()
-			{
-
-				@Override
-				public void handleReceive(Context context, Intent intent)
-				{
-					// You can use static method which performing a notification
-					// in status bar.
-					C2DMBaseReceiver.displayStatusBarNotification(context,
-							intent);
-
-					// If you want to handle message yourself, below lists one
-					// of keys:
-					// "NOTIFICATION_MESSAGE"
-					// You should analysis the json string by yourself, keys are
-					// "style", "message", "iconUrl", "extras", etc,
-					Bundle bundle = intent.getExtras();
-					String message = bundle.getString("NOTIFICATION_MESSAGE");
-					try
-					{
-						JSONObject obj = new JSONObject(message);
-						String style = obj.getString("style");
-						String iconUrl = obj.getString("iconUrl");
-						String msg = obj.getString("message");
-
-						Map<String, String> extras = new HashMap<String, String>();
-						JSONObject e = new JSONObject(obj.getString("extras"));
-						Iterator<String> keys = e.keys();
-						while (keys.hasNext())
-						{
-							String key = keys.next();
-							String val = e.optString(key);
-							if (val != null)
-							{
-								extras.put(key, val);
-							}
-						}
-					} catch (JSONException ex)
-					{
-						ex.printStackTrace();
-					}
-				}
-			});
+//			RemoteNotification.setListener(new RemoteNotificationListener()
+//			{
+//
+//				@Override
+//				public void handleReceive(Context context, Intent intent)
+//				{
+//					// You can use static method which performing a notification
+//					// in status bar.
+//					C2DMBaseReceiver.displayStatusBarNotification(context,
+//							intent);
+//
+//					// If you want to handle message yourself, below lists one
+//					// of keys:
+//					// "NOTIFICATION_MESSAGE"
+//					// You should analysis the json string by yourself, keys are
+//					// "style", "message", "iconUrl", "extras", etc,
+//					Bundle bundle = intent.getExtras();
+//					String message = bundle.getString("NOTIFICATION_MESSAGE");
+//					try
+//					{
+//						JSONObject obj = new JSONObject(message);
+//						String style = obj.getString("style");
+//						String iconUrl = obj.getString("iconUrl");
+//						String msg = obj.getString("message");
+//
+//						Map<String, String> extras = new HashMap<String, String>();
+//						JSONObject e = new JSONObject(obj.getString("extras"));
+//						Iterator<String> keys = e.keys();
+//						while (keys.hasNext())
+//						{
+//							String key = keys.next();
+//							String val = e.optString(key);
+//							if (val != null)
+//							{
+//								extras.put(key, val);
+//							}
+//						}
+//					} catch (JSONException ex)
+//					{
+//						ex.printStackTrace();
+//					}
+//				}
+//			});
 
 			nativeInit(480, 320);
 
@@ -229,7 +248,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 			menubar.setMenubarVisibility(View.VISIBLE);
 			menubar.setMenuIconGravity(Gravity.TOP | Gravity.LEFT);
 
-			Rect rect = new Rect(0, 0, 200, 120);
+			Rect rect = new Rect(0, 0, 160, 90);
 			balancebutton = com.mobage.android.social.common.Service
 					.getBalanceButton(rect);
 
@@ -327,8 +346,25 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		// menubar.addView(m_pkView);
 		menubar.addView(rootView);
 
-		menubar.addView(balancebutton);
-		balancebutton.setVisibility(View.INVISIBLE);
+		s_balancelayout = new LinearLayout(s_context);
+		s_balancelayout.setOrientation(LinearLayout.VERTICAL);
+
+		LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT);
+		
+		setScaleX();
+		Float x = 200 * s_fScale;
+		Float y = 56 * s_fScale;
+		Float sizex = 80 * s_fScale;
+		Float sizey = 36 * s_fScale;
+		layoutParams.topMargin = y.intValue();
+		layoutParams.leftMargin = x.intValue();
+		layoutParams.width = sizex.intValue();
+		layoutParams.height = sizey.intValue();
+
+		s_balancelayout.addView(balancebutton, layoutParams);
+		
+		menubar.addView(s_balancelayout);
+		s_balancelayout.setVisibility(View.INVISIBLE);
 
 		ViewGroup.LayoutParams pkParams = new ViewGroup.LayoutParams(
 				ViewGroup.LayoutParams.FILL_PARENT,
@@ -367,11 +403,22 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		onLoginError(error);
 	}
 
-	private static void showBalanceButton(float fScale)
+	private void setScaleX()
+	{
+		Log.v(TAG, "begin setScaleX");
+		
+		DisplayMetrics dm = new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(dm); 
+		 
+		//dm.heightPixels;
+		//dm.widthPixels;
+
+		s_fScale = 2.0f*dm.widthPixels/960.0f;
+	}
+	private static void showBalanceButton()
 	{
 		Log.v(TAG, "begin showBalanceButton");
 
-		s_fScale = fScale;
 		BalanceHandler.post(mUpdateBalance);
 	}
 
