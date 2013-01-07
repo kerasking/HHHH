@@ -50,6 +50,7 @@
 
 //--------------------//
 
+#define UPDATE_ON		0	//0关闭下载，1开启下载
 #define CACHE_MODE 		0  //发布模式//0关闭拷贝；1开启将资源拷贝至cache目录来访问
 //--------------------//
 
@@ -605,7 +606,7 @@ void CSMLoginScene::ReflashPercent(int percent, int pos, int filelen )
 		std::stringstream str;
 		char buff[10] = {0};
 		sprintf(buff,"%.2f",filelen/(1024*1024.0));
-		str << NDCommonCString2(SZ_DOWNLOADING) << "("<<buff<< "MB)";
+		str << "("<<buff<< "MB)" << NDCommonCString2(SZ_DOWNLOADING);
 
 		m_pLabelPromtp->SetText( str.str().c_str() );
 		m_pLabelPromtp->SetVisible( true );
