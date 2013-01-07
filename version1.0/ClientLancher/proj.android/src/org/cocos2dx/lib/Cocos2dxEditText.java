@@ -28,7 +28,8 @@ import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.widget.EditText;
 
-public class Cocos2dxEditText extends EditText {
+public class Cocos2dxEditText extends EditText
+{
 	// ===========================================================
 	// Constants
 	// ===========================================================
@@ -43,15 +44,19 @@ public class Cocos2dxEditText extends EditText {
 	// Constructors
 	// ===========================================================
 
-	public Cocos2dxEditText(final Context context) {
+	public Cocos2dxEditText(final Context context)
+	{
 		super(context);
 	}
 
-	public Cocos2dxEditText(final Context context, final AttributeSet attrs) {
+	public Cocos2dxEditText(final Context context, final AttributeSet attrs)
+	{
 		super(context, attrs);
 	}
 
-	public Cocos2dxEditText(final Context context, final AttributeSet attrs, final int defStyle) {
+	public Cocos2dxEditText(final Context context, final AttributeSet attrs,
+			final int defStyle)
+	{
 		super(context, attrs, defStyle);
 	}
 
@@ -59,7 +64,9 @@ public class Cocos2dxEditText extends EditText {
 	// Getter & Setter
 	// ===========================================================
 
-	public void setCocos2dxGLSurfaceView(final Cocos2dxGLSurfaceView pCocos2dxGLSurfaceView) {
+	public void setCocos2dxGLSurfaceView(
+			final Cocos2dxGLSurfaceView pCocos2dxGLSurfaceView)
+	{
 		this.mCocos2dxGLSurfaceView = pCocos2dxGLSurfaceView;
 	}
 
@@ -68,11 +75,13 @@ public class Cocos2dxEditText extends EditText {
 	// ===========================================================
 
 	@Override
-	public boolean onKeyDown(final int pKeyCode, final KeyEvent pKeyEvent) {
+	public boolean onKeyDown(final int pKeyCode, final KeyEvent pKeyEvent)
+	{
 		super.onKeyDown(pKeyCode, pKeyEvent);
 
 		/* Let GlSurfaceView get focus if back key is input. */
-		if (pKeyCode == KeyEvent.KEYCODE_BACK) {
+		if (pKeyCode == KeyEvent.KEYCODE_BACK)
+		{
 			this.mCocos2dxGLSurfaceView.requestFocus();
 		}
 
