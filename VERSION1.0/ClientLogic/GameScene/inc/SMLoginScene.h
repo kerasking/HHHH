@@ -135,6 +135,7 @@ protected:
 	void ShowWaitingAni();
 	void CloseWaitingAni();
 	void OnProcessUpdate();
+	std::string getTextFromStringXML_JNI(int nTextID);			///< Add by ¹ùºÆ
 
 protected:
 

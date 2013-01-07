@@ -149,7 +149,14 @@ public:
         jstring jstrText = methodInfo.env->NewStringUTF(text);
 
 #if ND_MOD
-		pFontName = FONT_UTIL::changeFontName( pFontName, jstrText ); 
+		if (gs_bIsSystemFont)
+		{
+			pFontName = "xxxxxxxxxx";
+		}
+		else
+		{
+			pFontName = FONT_UTIL::changeFontName( pFontName, jstrText );
+		}
 #endif
 
         jstring jstrFont = methodInfo.env->NewStringUTF(pFontName);
@@ -239,7 +246,14 @@ bool CCImage::getStringSize( const char *    in_utf8,
         jstring stringArg1 = t.env->NewStringUTF(in_utf8);
 
 #if ND_MOD
-		pFontName = FONT_UTIL::changeFontName( pFontName, stringArg1 ); 
+		if (gs_bIsSystemFont)
+		{
+			pFontName = "xxxxxxxxxx";
+		}
+		else
+		{
+			pFontName = FONT_UTIL::changeFontName( pFontName, stringArg1 );
+		}
 #endif
 
         jstring stringArg2 = t.env->NewStringUTF(pFontName);
