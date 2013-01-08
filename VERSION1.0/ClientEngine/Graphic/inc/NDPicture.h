@@ -56,7 +56,9 @@ public:
 	CC_SYNTHESIZE(ccGLServerState, m_glServerState, GLServerState);
 
 public:
+
 	void Initialization(const char* imageFile);
+	void Initialization(unsigned char* pszBuffer,unsigned int uiSize);
 	void Initialization(vector<const char*>& vImgFiles);
 	void Initialization(vector<const char*>& vImgFiles, vector<CCRect>& vImgCustomRect, vector<CCPoint>&vOffsetPoint);
 	void Initialization(const char* imageFile, int hrizontalPixel,int verticalPixel = 0);

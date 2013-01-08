@@ -83,7 +83,7 @@ void NDPicture::Initialization(const char* imageFile)
 {
 	if (!imageFile) return;
 
-	this->destroy();
+	destroy();
     
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || !ENABLE_PAL_MODE)
 	CCImage image;
@@ -272,41 +272,52 @@ void NDPicture::Initialization(vector<const char*>& vImgFiles)
 
 void NDPicture::Initialization(vector<const char*>& vImgFiles, vector<CCRect>& vImgCustomRect, vector<CCPoint>&vOffsetPoint)
 {
-// 	if (vImgFiles.size() < 1 || vImgCustomRect.size() < 1 || vOffsetPoint.size() < 1
-// 		|| vImgFiles.size() != vImgCustomRect.size() || vImgFiles.size() != vOffsetPoint.size())
-// 		return;
-// 	
-// 	m_pkTexture->release();
-// 	
-// 	vector<CCTexture2D*> vImgs;
-// 	for (unsigned int i = 0; i < vImgFiles.size(); i++) {
-// 		CCTexture2D* img = [[UIImage alloc] initWithContentsOfFile:[NSString stringWithUTF8String:vImgFiles.at(i)]];
-// 		CCTexture2D* imgCut = [img getSubImageFromWithRect:vImgCustomRect[i]];
-// 		vImgs.push_back(imgCut);
-// 		
-// 		if (0 == i) {
-// 			UIGraphicsBeginImageContext(imgCut.size);
-// 		}
-// 		
-// 		[img release];
-// 	}
-// 	
-// 	for (unsigned int i = 0; i < vImgs.size(); i++) {
-// 		UIImage* img = vImgs.at(i);
-// 		[img drawInRect:CCRectMake(vOffsetPoint[i].x, vOffsetPoint[i].y, img.size.width, img.size.height)];
-// 		//[img release];
-// 	}
-// 	
-// 	UIImage *resultImg = UIGraphicsGetImageFromCurrentImageContext();
-// 	
-// 	UIGraphicsEndImageContext();
-// 	
-// 	m_texture = [[CCTexture2D alloc] initWithImage:resultImg];
-// 	
-// 	m_cutRect = CCRectMake(0, 0, m_texture->getContentSizeInPixels().width, m_texture->getContentSizeInPixels().height);
-// 	SetCoorinates();		
-// 	SetColor(ccc4(255, 255, 255, 255));	
 	
+}
+
+void NDPicture::Initialization( unsigned char* pszBuffer,unsigned int uiSize )
+{
+	if (0 == pszBuffer || 0 == uiSize)
+	{
+		return;
+	}
+
+	//if (!imageFile) return;
+
+	destroy();
+    
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || !ENABLE_PAL_MODE)
+	CCImage kImage;
+
+	if (!kImage.initWithImageData((void*)pszBuffer,uiSize))
+	{
+		LOGERROR("picture [%s] not exist", imageFile);
+	}
+#endif
+
+	//m_pkTexture = new CCTexture2D;
+	m_pkTexture = CCTexture2D::create();
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || !ENABLE_PAL_MODE)
+	m_pkTexture->initWithImage(&kImage);
+#else
+	m_pkTexture->initWithPalettePNG(imageFile);
+#endif
+
+	LOGD("m_pkTexture->getContentSizeInPixels().width is %d,m_pkTexture->getContentSizeInPixels().height is %d",
+		m_pkTexture->getContentSizeInPixels().width,m_pkTexture->getContentSizeInPixels().height);
+
+	m_kCutRect = CCRectMake(0, 0, 
+		m_pkTexture->getContentSizeInPixels().width,
+			m_pkTexture->getContentSizeInPixels().height);
+
+	SetCoorinates();
+	SetColor(ccc4(255, 255, 255, 255));
+
+// 	if (imageFile)
+// 	{
+// 		m_strfile = imageFile;
+// 	}
 }
 
 //@shader

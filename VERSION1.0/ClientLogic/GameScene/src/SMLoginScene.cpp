@@ -167,7 +167,9 @@ CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
 #ifdef USE_MGSDK
 		NDPicture* pkPicture = kPool.AddPicture( NDPath::GetImgPath("Res00/Load/mobage_bg.png") );
 #elif ((CACHE_MODE == 1) && (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID))
-		NDPicture* pkPicture = kPool.AddPicture("res/drawable/mobage_splash.png");
+
+		NDPicture* pkPicture = new NDPicture(false);//kPool.AddPicture("res/drawable/mobage_splash.png");
+
 		CCImage::changeSystemFont(true);
 
 		if (pkPicture)

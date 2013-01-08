@@ -1,6 +1,11 @@
 #include "NDUtil.h"
 #include<iostream>
 #include "ObjectTracker.h"
+#include "myunzip.h"
+#include "CCFileUtils.h"
+
+using namespace cocos2d;
+
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 #include "NDConsole.h"
 #endif
@@ -58,6 +63,54 @@ STRING_VEC NDUtil::ErgodicFolderForSpceialFileExtName(const char* pszPath,
 void NDUtil::QuitGameToServerList()
 {
 
+}
+
+unsigned char* NDUtil::GetFileBufferFromSimplifiedChineseResZip( const char* pszPath )
+{
+	unsigned char* pszResult = 0;
+	unsigned char* pszZipBuffer = 0;
+	unsigned long ulFileSize = 0;
+	int nFileIndex = 0;
+	ZIPENTRY kZipEntry = {0};
+	HZIP hZip = 0;
+
+	if (0 == pszResult || !*pszResult)
+	{
+		LOGERROR("pszResult is null");
+		return 0;
+	}
+
+	pszZipBuffer = CCFileUtils::sharedFileUtils()->
+		getFileData("asserts/SimplifiedChineseRes.zip","rb",&ulFileSize);
+
+	if (0 == pszZipBuffer)
+	{
+		LOGERROR("pszZipBuffer is null");
+		return 0;
+	}
+
+	hZip = OpenZip((void*)pszZipBuffer,ulFileSize,0);
+
+	if (0 == hZip)
+	{
+		LOGERROR("hZip is null");
+		return 0;
+	}
+
+	FindZipItem(hZip,pszPath,true,&nFileIndex,&kZipEntry);
+
+	if (kZipEntry.unc_size == 0)
+	{
+		LOGERROR("FindZipItem failed");
+		return 0;
+	}
+
+	pszResult = new unsigned char[kZipEntry.unc_size + 1];
+	memset(pszResult,0,sizeof(unsigned char) * (kZipEntry.unc_size + 1));
+
+	UnzipItem(hZip,nFileIndex,pszResult,kZipEntry.unc_size);
+
+	return pszResult;
 }
 
 NS_NDENGINE_END
