@@ -399,8 +399,8 @@ function p.OnUIEvent(uiNode, uiEventType, param)
             PlayerUIAttr.LoadUI();
             --CommonScrollDlg.ShowTipDlg({"由于服务器维护，3点关服，请大家通知大家！",ccc4(255,255,255,255)});
         elseif( p.BtnFunc[2] == tag ) then   --背包
-            p.TestButtonClick(); --删除角色测试 郭浩
-            --PlayerUIBackBag.LoadUI();
+            --p.TestButtonClick(); --删除角色测试 郭浩
+            PlayerUIBackBag.LoadUI();
         elseif( p.BtnFunc[3] == tag ) then   --强化
             EquipUpgradeUI.LoadUI();
         elseif( p.BtnFunc[4] == tag ) then   --阵法
@@ -665,7 +665,8 @@ function p.SendMsgDelPlayer2(nEventType , nEvent, param)
 		netdata:WriteInt(GetPlayerId());
 		SendMsg(netdata);
 		netdata:Free();
-		LogInfo("p.SendMsgDelPlayer")	
+		QuitGame();			--能夠在刪除后自動回到服務器列表介面，Add by 郭浩
+		LogInfo("p.SendMsgDelPlayer");
 	end
 end
 
