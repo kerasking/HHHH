@@ -54,6 +54,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.ViewGroup.LayoutParams;
 import android.view.ViewParent;
 import android.webkit.CookieSyncManager;
@@ -64,6 +65,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Environment;
@@ -74,7 +76,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
-import android.widget.MediaController;
 import android.widget.VideoView;
 
 public class DaHuaLongJiang extends Cocos2dxActivity
@@ -91,8 +92,17 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	private static Context s_context;
 	private static LinearLayout s_balancelayout;
 
-	private static Cocos2dxEditText edittext; // @ime
+	private static Cocos2dxEditText edittext; //@ime
+	private static Button testbutton;
 
+	private WindowManager wm=null;
+	private FloatView myFV=null;
+
+	private WindowManager.LayoutParams wmParams=new WindowManager.LayoutParams();
+
+	public static WindowManager.LayoutParams getMywmParams(){
+		return ms_pkDHLJ.wmParams;
+	}
 	private static Handler VideoViewHandler = new Handler();
 	private static Handler RootViewHandler = new Handler();
 	private static Runnable mHideBalance = new Runnable()
@@ -158,35 +168,6 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		};
 	};
 
-	private static class Callback implements
-			RemoteNotification.OnSetRemoteNotificationsEnabledComplete,
-			RemoteNotification.OnGetRemoteNotificationsEnabledComplete,
-			RemoteNotification.OnSendComplete
-	{
-		@Override
-		public void onSuccess(RemoteNotificationResponse arg0)
-		{
-			// TODO Auto-generated method stub
-		}
-
-		@Override
-		public void onSuccess(boolean arg0)
-		{
-			// TODO Auto-generated method stub
-		}
-
-		@Override
-		public void onError(Error arg0)
-		{
-			// TODO Auto-generated method stub
-		}
-
-		@Override
-		public void onSuccess()
-		{
-			// TODO Auto-generated method stub
-		}
-	}
 
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -200,56 +181,23 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 			CookieSyncManager.createInstance(this);
 			s_context = context;
 
-			Mobage.registerMobageResource(this, "org.DeNA.DHLJ.R");
-			final Callback callback = new Callback();
-			RemoteNotification.setRemoteNotificationsEnabled(false, callback);
+			Mobage.registerMobageResource(this, "tw.mobage.g23000052.R");
+//			RemoteNotificationView.DisableRemoteNotification();
 			SocialUtils.initializeMobage(this);
 			mPlatformListener = SocialUtils.createPlatformListener(true);
 			Mobage.addPlatformListener(mPlatformListener);
 
-			// RemoteNotification.setListener(new RemoteNotificationListener()
-			// {
-			//
-			// @Override
-			// public void handleReceive(Context context, Intent intent)
-			// {
-			// // You can use static method which performing a notification
-			// // in status bar.
-			// C2DMBaseReceiver.displayStatusBarNotification(context,
-			// intent);
-			//
-			// // If you want to handle message yourself, below lists one
-			// // of keys:
-			// // "NOTIFICATION_MESSAGE"
-			// // You should analysis the json string by yourself, keys are
-			// // "style", "message", "iconUrl", "extras", etc,
-			// Bundle bundle = intent.getExtras();
-			// String message = bundle.getString("NOTIFICATION_MESSAGE");
-			// try
-			// {
-			// JSONObject obj = new JSONObject(message);
-			// String style = obj.getString("style");
-			// String iconUrl = obj.getString("iconUrl");
-			// String msg = obj.getString("message");
-			//
-			// Map<String, String> extras = new HashMap<String, String>();
-			// JSONObject e = new JSONObject(obj.getString("extras"));
-			// Iterator<String> keys = e.keys();
-			// while (keys.hasNext())
-			// {
-			// String key = keys.next();
-			// String val = e.optString(key);
-			// if (val != null)
-			// {
-			// extras.put(key, val);
-			// }
-			// }
-			// } catch (JSONException ex)
-			// {
-			// ex.printStackTrace();
-			// }
-			// }
-			// });
+			RemoteNotification.setListener(new RemoteNotificationListener()
+			{
+				@Override
+				public void handleReceive(Context context, Intent intent)
+				{
+					// You can use static method which performing a notification
+					// in status bar.
+					C2DMBaseReceiver.displayStatusBarNotification(context,
+							intent);
+				}
+			});
 
 			nativeInit(480, 320);
 
@@ -268,27 +216,28 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 			balancebutton = com.mobage.android.social.common.Service
 					.getBalanceButton(rect);
 
-			// button1 = new Button(this);
-			// button1.setText("aaaaaaaaa".toCharArray(), 1, 6);
-			// FrameLayout.LayoutParams pkParamsButton = new
-			// FrameLayout.LayoutParams(200,200);
-			// pkParamsButton.topMargin = 10;
-			// pkParamsButton.leftMargin = 10;
-			// button1.setLayoutParams(pkParamsButton);
-			//
-			// button1.setOnClickListener(new OnClickListener() {
-			// @Override
-			// public void onClick(View view) {
-			// FeedsView.openActivityFeeds();
-			// // RemoteNotificationView.SendRemoteNotification("500002013");
-			// // RemoteNotificationView.SendRemoteNotification("500001919");
-			// // PeopleView.getFriendsWithGame();
-			// // PeopleView.getFriends();
-			// // PeopleView.getUsers();
-			// // PeopleView.getCurrentUser();
-			// // PeopleView.getUser();
-			// }
-			// });
+//			 testbutton = new Button(this);
+//			 testbutton.setText("aaaaaaaaa".toCharArray(), 1, 6);
+//			 FrameLayout.LayoutParams pkParamsButton = new
+//			 FrameLayout.LayoutParams(200,200);
+//			 pkParamsButton.topMargin = 100;
+//			 pkParamsButton.leftMargin = 10;
+//			 testbutton.setLayoutParams(pkParamsButton);
+//			
+//			 testbutton.setOnClickListener(new OnClickListener() {
+//			 @Override
+//			 public void onClick(View view) {
+//				 menubar.setRankButtonVisibility(View.INVISIBLE);
+//			 //FeedsView.openActivityFeeds();
+//			 // RemoteNotificationView.SendRemoteNotification("500002013");
+//			 // RemoteNotificationView.SendRemoteNotification("500001919");
+//			 // PeopleView.getFriendsWithGame();
+//			 // PeopleView.getFriends();
+//			 // PeopleView.getUsers();
+//			 // PeopleView.getCurrentUser();
+//			 // PeopleView.getUser();
+//			 }
+//			 });
 		} else
 		{
 			AlertDialog alertDialog = new AlertDialog.Builder(this).create();
@@ -368,10 +317,8 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		s_balancelayout = new LinearLayout(s_context);
 		s_balancelayout.setOrientation(LinearLayout.VERTICAL);
 
-		LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-				ViewGroup.LayoutParams.FILL_PARENT,
-				ViewGroup.LayoutParams.FILL_PARENT);
-
+		LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT);
+		
 		setScaleX();
 		Float x = 200 * s_fScale;
 		Float y = 56 * s_fScale;
@@ -386,6 +333,8 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 
 		menubar.addView(s_balancelayout);
 		s_balancelayout.setVisibility(View.INVISIBLE);
+		
+//		menubar.addView(testbutton);
 
 		// set content view
 		ViewGroup.LayoutParams pkParams = new ViewGroup.LayoutParams(
@@ -430,10 +379,10 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	{
 		if (ms_pkDHLJ != null && ms_pkDHLJ.rootView != null)
 		{
-			final InputMethodManager imm = (InputMethodManager) ms_pkDHLJ.rootView
-					.getContext()
-					.getSystemService(Context.INPUT_METHOD_SERVICE);
-
+			final InputMethodManager imm = (InputMethodManager) 
+					ms_pkDHLJ.rootView.getContext()
+						.getSystemService(Context.INPUT_METHOD_SERVICE);
+			
 			if (imm != null)
 			{
 				boolean bFull = imm.isFullscreenMode();
@@ -456,9 +405,10 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 			{
 				// bring editView to top
 				menubar.bringChildToFront(edittext);
-			} else
+			}
+			else 
 			{
-				// bring surface view to top
+				//bring surface view to top
 				menubar.bringChildToFront(getView());
 			}
 		}
@@ -698,6 +648,48 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 			return 1;
 		return 0;
 	}
+	
+
+    private void createView(){
+    	myFV=new FloatView(getApplicationContext());
+//    	myFV.setImageResource(R.drawable.icon);
+    	//获取WindowManager
+    	wm=(WindowManager)getApplicationContext().getSystemService("window");
+        //设置LayoutParams(全局变量）相关参数
+    	wmParams = getMywmParams();
+
+         /**
+         *以下都是WindowManager.LayoutParams的相关属性
+         * 具体用途可参考SDK文档
+         */
+//        wmParams.type=LayoutParams.TYPE_PHONE;   //设置window type
+//        wmParams.format=PixelFormat.RGBA_8888;   //设置图片格式，效果为背景透明
+//
+//        //设置Window flag
+//        wmParams.flags=LayoutParams.FLAG_NOT_TOUCH_MODAL
+//                              | LayoutParams.FLAG_NOT_FOCUSABLE;
+        /*
+         * 下面的flags属性的效果形同“锁定”。
+         * 悬浮窗不可触摸，不接受任何事件,同时不影响后面的事件响应。
+         wmParams.flags=LayoutParams.FLAG_NOT_TOUCH_MODAL 
+                               | LayoutParams.FLAG_NOT_FOCUSABLE
+                               | LayoutParams.FLAG_NOT_TOUCHABLE;
+        */
+        
+        
+        wmParams.gravity=Gravity.LEFT|Gravity.TOP;   //调整悬浮窗口至左上角
+        //以屏幕左上角为原点，设置x、y初始值
+        wmParams.x=0;
+        wmParams.y=0;
+        
+        //设置悬浮窗口长宽数据
+        wmParams.width=40;
+        wmParams.height=40;
+    
+        //显示myFloatView图像
+        wm.addView(myFV, wmParams);
+    	
+    }
 
 	// 是否古老系统
 	public static int isVerOlder(int n)

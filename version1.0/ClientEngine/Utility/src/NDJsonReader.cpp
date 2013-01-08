@@ -3,7 +3,7 @@
 #include "CCFileUtils.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-#include "android\jni\JniHelper.h"
+#include "android/jni/JniHelper.h"
 #include <jni.h>
 #include <android/log.h>
 
