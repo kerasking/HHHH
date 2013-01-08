@@ -197,4 +197,4 @@ function p.OnEnterGameScene()
 	
 end
 
---_G.RegisterGlobalEventHandler(_G.GLOBALEVENT.GE_GENERATE_GAMESCENE, "Music.OnEnterGameScene", p.OnEnterGameScene);
+_G.RegisterGlobalEventHandler(_G.GLOBALEVENT.GE_GENERATE_GAMESCENE, "Music.OnEnterGameScene", p.OnEnterGameScene);
