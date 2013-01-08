@@ -115,6 +115,7 @@ LOCAL_SRC_FILES := \
 ../../Utility/src/NDRidePet.cpp \
 ../../Utility/src/NDVideoEventListener.cpp \
 ../../Utility/src/NDVideoMgr.cpp \
+../../Utility/src/NDJsonReader.cpp \
 ../../TempClass/NDUITableLayer.cpp \
 ../../Performance.cpp
 

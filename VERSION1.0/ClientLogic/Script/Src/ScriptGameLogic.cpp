@@ -933,11 +933,6 @@ void LoadLoginScene(void)
 {
 	//NDDirector::DefaultDirector()->ReplaceScene(CSMLoginScene::Scene());
 }
-/*
- void LoginServer(const char* Login_Account,const char* Login_Server)
- {
- return NDBeforeGameMgrObj.LoginServer(Login_Account, Login_server);
- }*/
 
 void PauseScene(void)
 {

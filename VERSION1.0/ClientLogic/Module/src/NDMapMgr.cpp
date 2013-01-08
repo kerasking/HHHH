@@ -4119,7 +4119,7 @@ void NDMapMgr::ProcessTempCredential(NDTransData& kData)
                                        , "(Ljava/lang/String;)V"))
         
     {
-        jstring stringArg = t.env->NewStringUTF(temporaryCredential.c_str());
+		jstring stringArg = t.env->NewStringUTF(temporaryCredential.c_str());
         
         t.env->CallStaticObjectMethod(t.classID, t.methodID, stringArg);
         t.env->DeleteLocalRef(stringArg);

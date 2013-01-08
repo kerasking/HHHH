@@ -665,7 +665,8 @@ function p.SendMsgDelPlayer2(nEventType , nEvent, param)
 		netdata:WriteInt(GetPlayerId());
 		SendMsg(netdata);
 		netdata:Free();
-		LogInfo("p.SendMsgDelPlayer")	
+		QuitGame();			--能夠在刪除后自動回到服務器列表介面，Add by 郭浩
+		LogInfo("p.SendMsgDelPlayer");
 	end
 end
 
