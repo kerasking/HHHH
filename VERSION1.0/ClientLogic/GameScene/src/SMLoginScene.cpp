@@ -38,6 +38,7 @@
 #include <jni.h>
 #include <android/log.h>
 #include "android/jni/JniHelper.h"
+#include "NDJsonReader.h"
 
 #define  LOG_TAG    "DaHuaLongJiang"
 #define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
@@ -53,8 +54,8 @@
 
 #define UPDATE_TIP_TEXT_ANDROID 0x7f080039	///< 安卓解壓介面提示文字，對應安卓String.xml里的unzip_text 郭浩
 
-#define UPDATE_ON		0	//0关闭下载，1开启下载
-#define CACHE_MODE 		0  //发布模式//0关闭拷贝；1开启将资源拷贝至cache目录来访问
+#define UPDATE_ON		1	//0关闭下载，1开启下载
+#define CACHE_MODE 		1  //发布模式//0关闭拷贝；1开启将资源拷贝至cache目录来访问
 //--------------------//
 
 #define TAG_INSTALL_SUCCESS			1
@@ -119,6 +120,13 @@ CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
 	CSMLoginScene* pkScene = new CSMLoginScene;
     pkScene->Initialization();
     pkScene->SetTag(SMLOGINSCENE_TAG);
+
+	///< 給湯自勤哥展示用法……
+// 	NDJsonReader kReader("assets/conf.json");
+// 
+// 	string strID = kReader.readData("app_id");
+// 
+// 	LOGD("strID = %s",strID.c_str());
     
 	if ( bShowEntry )
 	{

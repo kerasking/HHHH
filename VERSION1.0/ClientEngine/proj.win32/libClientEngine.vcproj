@@ -1002,6 +1002,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\Utility\inc\NDJsonReader.h"
+					>
+				</File>
+				<File
 					RelativePath="..\Utility\inc\NDString.h"
 					>
 				</File>
@@ -1055,6 +1059,10 @@
 				</File>
 				<File
 					RelativePath="..\Utility\src\NDConsole.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\Utility\src\NDJsonReader.cpp"
 					>
 				</File>
 				<File
@@ -1286,11 +1294,11 @@
 			>
 		</File>
 		<File
-			RelativePath="..\UI\inc\NDUITableLayer.h"
+			RelativePath="..\TempClass\NDUITableLayer.h"
 			>
 		</File>
 		<File
-			RelativePath="..\TempClass\NDUITableLayer.h"
+			RelativePath="..\UI\inc\NDUITableLayer.h"
 			>
 		</File>
 		<File

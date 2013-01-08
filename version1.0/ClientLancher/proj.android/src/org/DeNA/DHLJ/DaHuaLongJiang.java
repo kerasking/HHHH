@@ -1,5 +1,7 @@
 package org.DeNA.DHLJ;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -37,6 +39,7 @@ import android.content.Intent;
 import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
+import android.net.ParseException;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.opengl.GLSurfaceView;
@@ -88,8 +91,8 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	private static Context s_context;
 	private static LinearLayout s_balancelayout;
 
-	private static Cocos2dxEditText edittext; //@ime
-	
+	private static Cocos2dxEditText edittext; // @ime
+
 	private static Handler VideoViewHandler = new Handler();
 	private static Handler RootViewHandler = new Handler();
 	private static Runnable mHideBalance = new Runnable()
@@ -154,27 +157,37 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 			balancebutton.update();
 		};
 	};
-	private static class Callback implements RemoteNotification.OnSetRemoteNotificationsEnabledComplete, RemoteNotification.OnGetRemoteNotificationsEnabledComplete, RemoteNotification.OnSendComplete {
+
+	private static class Callback implements
+			RemoteNotification.OnSetRemoteNotificationsEnabledComplete,
+			RemoteNotification.OnGetRemoteNotificationsEnabledComplete,
+			RemoteNotification.OnSendComplete
+	{
 		@Override
-		public void onSuccess(RemoteNotificationResponse arg0) {
+		public void onSuccess(RemoteNotificationResponse arg0)
+		{
 			// TODO Auto-generated method stub
 		}
 
 		@Override
-		public void onSuccess(boolean arg0) {
+		public void onSuccess(boolean arg0)
+		{
 			// TODO Auto-generated method stub
 		}
 
 		@Override
-		public void onError(Error arg0) {
+		public void onError(Error arg0)
+		{
 			// TODO Auto-generated method stub
 		}
 
 		@Override
-		public void onSuccess() {
+		public void onSuccess()
+		{
 			// TODO Auto-generated method stub
 		}
 	}
+
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		if (isSDCardCanUse())
@@ -188,55 +201,55 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 			s_context = context;
 
 			Mobage.registerMobageResource(this, "org.DeNA.DHLJ.R");
-			final Callback callback = new Callback(); 
+			final Callback callback = new Callback();
 			RemoteNotification.setRemoteNotificationsEnabled(false, callback);
 			SocialUtils.initializeMobage(this);
 			mPlatformListener = SocialUtils.createPlatformListener(true);
 			Mobage.addPlatformListener(mPlatformListener);
 
-//			RemoteNotification.setListener(new RemoteNotificationListener()
-//			{
-//
-//				@Override
-//				public void handleReceive(Context context, Intent intent)
-//				{
-//					// You can use static method which performing a notification
-//					// in status bar.
-//					C2DMBaseReceiver.displayStatusBarNotification(context,
-//							intent);
-//
-//					// If you want to handle message yourself, below lists one
-//					// of keys:
-//					// "NOTIFICATION_MESSAGE"
-//					// You should analysis the json string by yourself, keys are
-//					// "style", "message", "iconUrl", "extras", etc,
-//					Bundle bundle = intent.getExtras();
-//					String message = bundle.getString("NOTIFICATION_MESSAGE");
-//					try
-//					{
-//						JSONObject obj = new JSONObject(message);
-//						String style = obj.getString("style");
-//						String iconUrl = obj.getString("iconUrl");
-//						String msg = obj.getString("message");
-//
-//						Map<String, String> extras = new HashMap<String, String>();
-//						JSONObject e = new JSONObject(obj.getString("extras"));
-//						Iterator<String> keys = e.keys();
-//						while (keys.hasNext())
-//						{
-//							String key = keys.next();
-//							String val = e.optString(key);
-//							if (val != null)
-//							{
-//								extras.put(key, val);
-//							}
-//						}
-//					} catch (JSONException ex)
-//					{
-//						ex.printStackTrace();
-//					}
-//				}
-//			});
+			// RemoteNotification.setListener(new RemoteNotificationListener()
+			// {
+			//
+			// @Override
+			// public void handleReceive(Context context, Intent intent)
+			// {
+			// // You can use static method which performing a notification
+			// // in status bar.
+			// C2DMBaseReceiver.displayStatusBarNotification(context,
+			// intent);
+			//
+			// // If you want to handle message yourself, below lists one
+			// // of keys:
+			// // "NOTIFICATION_MESSAGE"
+			// // You should analysis the json string by yourself, keys are
+			// // "style", "message", "iconUrl", "extras", etc,
+			// Bundle bundle = intent.getExtras();
+			// String message = bundle.getString("NOTIFICATION_MESSAGE");
+			// try
+			// {
+			// JSONObject obj = new JSONObject(message);
+			// String style = obj.getString("style");
+			// String iconUrl = obj.getString("iconUrl");
+			// String msg = obj.getString("message");
+			//
+			// Map<String, String> extras = new HashMap<String, String>();
+			// JSONObject e = new JSONObject(obj.getString("extras"));
+			// Iterator<String> keys = e.keys();
+			// while (keys.hasNext())
+			// {
+			// String key = keys.next();
+			// String val = e.optString(key);
+			// if (val != null)
+			// {
+			// extras.put(key, val);
+			// }
+			// }
+			// } catch (JSONException ex)
+			// {
+			// ex.printStackTrace();
+			// }
+			// }
+			// });
 
 			nativeInit(480, 320);
 
@@ -355,8 +368,10 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		s_balancelayout = new LinearLayout(s_context);
 		s_balancelayout.setOrientation(LinearLayout.VERTICAL);
 
-		LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT);
-		
+		LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+				ViewGroup.LayoutParams.FILL_PARENT,
+				ViewGroup.LayoutParams.FILL_PARENT);
+
 		setScaleX();
 		Float x = 200 * s_fScale;
 		Float y = 56 * s_fScale;
@@ -368,7 +383,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		layoutParams.height = sizey.intValue();
 
 		s_balancelayout.addView(balancebutton, layoutParams);
-		
+
 		menubar.addView(s_balancelayout);
 		s_balancelayout.setVisibility(View.INVISIBLE);
 
@@ -377,48 +392,48 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 				ViewGroup.LayoutParams.FILL_PARENT,
 				ViewGroup.LayoutParams.FILL_PARENT);
 		this.setContentView(menubar, pkParams);
-		
+
 		// set menu bar visible
 		menubar.setMenubarVisibility(View.VISIBLE);
 	}
 
-	//@ime
+	// @ime
 	public void addEditView()
 	{
 		if (edittext == null)
 		{
 			ViewGroup.LayoutParams edittext_layout_params = new ViewGroup.LayoutParams(
-				ViewGroup.LayoutParams.FILL_PARENT,
-				ViewGroup.LayoutParams.WRAP_CONTENT);
-		
+					ViewGroup.LayoutParams.FILL_PARENT,
+					ViewGroup.LayoutParams.WRAP_CONTENT);
+
 			edittext = new Cocos2dxEditText(this);
 			edittext.setLayoutParams(edittext_layout_params);
 		}
-				
+
 		if (edittext != null)
 		{
 			// add edit to layout
 			menubar.addView(edittext);
-	
+
 			// set this edit to cocos2dx surface view
 			Cocos2dxGLSurfaceView surfaceView = getView();
 			surfaceView.setCocos2dxEditText(edittext);
 			surfaceView.setDHLJ(this);
-			
+
 			// single line
 			edittext.setSingleLine();
 		}
 	}
 
-	//@ime
+	// @ime
 	private static boolean isFullScreenIME()
 	{
 		if (ms_pkDHLJ != null && ms_pkDHLJ.rootView != null)
 		{
-			final InputMethodManager imm = (InputMethodManager) 
-					ms_pkDHLJ.rootView.getContext()
-						.getSystemService(Context.INPUT_METHOD_SERVICE);
-			
+			final InputMethodManager imm = (InputMethodManager) ms_pkDHLJ.rootView
+					.getContext()
+					.getSystemService(Context.INPUT_METHOD_SERVICE);
+
 			if (imm != null)
 			{
 				boolean bFull = imm.isFullscreenMode();
@@ -428,28 +443,27 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		}
 		return false;
 	}
-	
-	//@ime
-	public void notifyIMEOpenClose( boolean bImeOpen ) 
+
+	// @ime
+	public void notifyIMEOpenClose(boolean bImeOpen)
 	{
-		Log.d("test", "@@ DaHuaLongJiang.notifyIMEOpenClose(): " + bImeOpen );
-		
-		//refreshLayout( bOpen );
+		Log.d("test", "@@ DaHuaLongJiang.notifyIMEOpenClose(): " + bImeOpen);
+
+		// refreshLayout( bOpen );
 		if (!isFullScreenIME())
 		{
-			if (bImeOpen) 
+			if (bImeOpen)
 			{
-				//bring editView to top
+				// bring editView to top
 				menubar.bringChildToFront(edittext);
-			}
-			else 
+			} else
 			{
-				//bring surface view to top
+				// bring surface view to top
 				menubar.bringChildToFront(getView());
 			}
 		}
 	}
-	
+
 	public void LoginComplete(int userid)
 	{
 		onLoginComplete(userid, mDeviceID);
@@ -463,15 +477,16 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	private void setScaleX()
 	{
 		Log.v(TAG, "begin setScaleX");
-		
-		DisplayMetrics dm = new DisplayMetrics();
-		getWindowManager().getDefaultDisplay().getMetrics(dm); 
-		 
-		//dm.heightPixels;
-		//dm.widthPixels;
 
-		s_fScale = 2.0f*dm.widthPixels/960.0f;
+		DisplayMetrics dm = new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(dm);
+
+		// dm.heightPixels;
+		// dm.widthPixels;
+
+		s_fScale = 2.0f * dm.widthPixels / 960.0f;
 	}
+
 	private static void showBalanceButton()
 	{
 		Log.v(TAG, "begin showBalanceButton");
@@ -484,13 +499,61 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		Log.v(TAG, "begin showBalanceButton");
 		BalanceHandler.post(mHideBalance);
 	}
-	
+
 	public static String getTextFromStringXML(int nTextID)
 	{
 		String strRet = "";
-		
+
 		strRet = ms_pkDHLJ.getResources().getString(nTextID);
-		
+
+		return strRet;
+	}
+
+	public static String getStringFromJasonFile(String strBuffer,
+			String strTextName)
+	{
+		String strRet = "";
+		StringBuffer strReadBuffer = new StringBuffer();
+		String strLine = null;
+
+		strReadBuffer.append(strBuffer);
+//			BufferedReader kReader = new BufferedReader(strBuffer);
+//			while ((strLine = kReader.readLine()) != null)
+//			{
+//				
+//			}
+
+		try
+		{
+			JSONObject kJsonObject;
+			kJsonObject = new JSONObject(strReadBuffer.toString());
+			strRet = kJsonObject.getString(strTextName);
+			// JSONArray provinces = jsonObject.getJSONArray("provinces");
+			// String name = null;
+			// StringBuffer jsonFileInfo = new StringBuffer();
+			// JSONArray citys = null;
+			// for (int i = 0; i < provinces.length(); i++)
+			// {
+			// name = provinces.getJSONObject(i).getString("name");
+			// jsonFileInfo.append("/nname:" + name + "/n" + "citys:");
+			// citys = provinces.getJSONObject(i).getJSONArray("citys");
+			// for (int j = 0; j < citys.length(); j++)
+			// {
+			// jsonFileInfo.append(citys.getString(j) + "/t");
+			// }
+			// }
+			//
+			// System.out.println(jsonFileInfo);
+		} catch (ParseException e)
+		{
+			e.printStackTrace();
+		}
+		catch (JSONException e1)
+		{
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
 		return strRet;
 	}
 
