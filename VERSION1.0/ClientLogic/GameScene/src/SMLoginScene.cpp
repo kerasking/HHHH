@@ -38,6 +38,7 @@
 #include <jni.h>
 #include <android/log.h>
 #include "android/jni/JniHelper.h"
+#include "NDJsonReader.h"
 
 #define  LOG_TAG    "DaHuaLongJiang"
 #define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
@@ -119,6 +120,13 @@ CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
 	CSMLoginScene* pkScene = new CSMLoginScene;
     pkScene->Initialization();
     pkScene->SetTag(SMLOGINSCENE_TAG);
+
+	///< 給湯自勤哥展示用法……
+// 	NDJsonReader kReader("assets/conf.json");
+// 
+// 	string strID = kReader.readData("app_id");
+// 
+// 	LOGD("strID = %s",strID.c_str());
     
 	if ( bShowEntry )
 	{
