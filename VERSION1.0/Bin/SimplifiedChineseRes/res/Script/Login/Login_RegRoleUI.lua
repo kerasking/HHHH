@@ -310,7 +310,7 @@ function p.SetCurrentAnimate()
     if ( p.nTimerID ) then
 		UnRegisterTimer( p.nTimerID );
 	end
-    p.nTimerID = RegisterTimer( p.OnTimerCoutDownCounter, 1/24 );
+    p.nTimerID = RegisterTimer( p.OnTimerCoutDownCounter, 1 / 24 );
     
 end
 
