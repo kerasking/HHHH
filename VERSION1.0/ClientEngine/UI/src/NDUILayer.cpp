@@ -330,6 +330,9 @@ bool NDUILayer::UITouchBegin(NDTouch* touch)
 //			return false;
 //		}
 
+	if(m_bDragOutFlag)
+		return false;
+
 	StartDispatchEvent();
 
 	ResetEventParam();
@@ -1387,6 +1390,7 @@ bool NDUILayer::DispatchDragOutCompleteEvent(CCPoint beginTouch,
 
 		if (OnScriptUiEvent(uiNode, TE_TOUCH_BTN_DRAG_OUT_COMPLETE))
 		{
+			m_bDragOutFlag = false;
 			return true;
 		}
 	}
