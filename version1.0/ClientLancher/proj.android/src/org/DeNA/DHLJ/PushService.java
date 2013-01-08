@@ -414,7 +414,7 @@ public class PushService extends Service
 			   throws UnsupportedEncodingException 
 	{
 		if (str != null) {
-			//用默认字符编码解码字符串。
+			//用默认字符编码解码字符串〄1�7
 			byte[] bs = str.getBytes();
 			//用新的字符编码生成字符串
 			return new String(bs, newCharset);
@@ -449,7 +449,7 @@ public class PushService extends Service
 		 n.flags |= Notification.FLAG_ONGOING_EVENT; // 设置常驻 Flag
 
 		 n.defaults = Notification.DEFAULT_ALL;
-		 n.icon = org.DeNA.DHLJ.R.drawable.dhlj_icon;
+		 n.icon = tw.mobage.g23000052.R.drawable.dhlj_icon;
 		 n.when = System.currentTimeMillis();
 		 Intent intent = new Intent(this, DaHuaLongJiang.class); 
 		 intent.addCategory(Intent.CATEGORY_LAUNCHER); 
