@@ -202,11 +202,7 @@ void NDMapLayer::replaceMapData(int mapId, int center_x, int center_y)
 
 	if (m_pkMapData)
 	{
-		SetContentSize(
-// 				CCSizeMake(
-// 						m_pkMapData->getColumns() * MAP_UNITSIZE_X,
-// 						m_pkMapData->getRows() * MAP_UNITSIZE_Y)); //@del
-			m_pkMapData->getMapDataSize());
+		SetContentSize(m_pkMapData->getMapDataSize());
 
 		MakeOrdersOfMapscenesAndMapanimations();
 		MakeFrameRunRecords();
@@ -251,10 +247,7 @@ void NDMapLayer::Initialization(const char* mapFile)
 	m_pkMapData->setDramaMapFlag( IsDramaLayer());
 	m_pkMapData->initWithFile(mapFile);
 
-	SetContentSize(
-// 		CCSizeMake(m_pkMapData->getColumns() * MAP_UNITSIZE_X,
-// 					m_pkMapData->getRows() * MAP_UNITSIZE_Y)); //@del
-		m_pkMapData->getMapDataSize());
+	SetContentSize( m_pkMapData->getMapDataSize());
 
 	MakeOrdersOfMapscenesAndMapanimations();
 	MakeFrameRunRecords();
@@ -895,9 +888,6 @@ void NDMapLayer::DrawScenesAndAnimations()
 
 			m_pkSwitchAniGroup->setReverse(false);
 
-// 			CCPoint kPos = ccp(
-// 					pkMapSwitch->getX() * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
-// 					pkMapSwitch->getY() * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET);//@del
 			CCPoint kPos = ConvertUtil::convertCellToDisplay( pkMapSwitch->getX(), pkMapSwitch->getY());
 
 			m_pkSwitchAniGroup->setPosition(kPos);
@@ -1788,8 +1778,6 @@ void NDMapLayer::ShowRoadSign(bool bShow, int nX /*=0*/, int nY /*=0*/)
 
 	m_pkRoadSignLightEffect->SetPosition(
 		ConvertUtil::convertCellToDisplay( nX, nY ));
-// 			ccp(nX * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
-// 					nY * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET));//@del
 }
 
 bool NDMapLayer::GetMapDataAniParamReverse(int nIndex)

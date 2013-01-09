@@ -58,8 +58,6 @@ NS_NDENGINE_BGN
 #define BATTLEFIELD_DISTANCE (1)
 
 ///////////////////////////////////////////////////////////////////////////////////////
-//@del
-void TestDrama();
 
 //测试：android平台下点NPC打log
 void dumpLog()
@@ -575,11 +573,6 @@ void NDPlayer::Walk(CCPoint toPos, SpriteSpeed speed, bool mustArrive/*=false*/)
 
 void NDPlayer::SetPosition(CCPoint newPosition)
 {
-//@del
-// 	int nNewCol = (newPosition.x - DISPLAY_POS_X_OFFSET) / MAP_UNITSIZE;
-// 	int nNewRow = (newPosition.y - DISPLAY_POS_Y_OFFSET) / MAP_UNITSIZE;
-// 	int nOldCol = (GetPosition().x - DISPLAY_POS_X_OFFSET) / MAP_UNITSIZE;
-// 	int nOldRow = (GetPosition().y - DISPLAY_POS_Y_OFFSET) / MAP_UNITSIZE;
 	CCPoint newCell = ConvertUtil::convertDisplayToCell( newPosition );
 	int nNewCol = newCell.x;
 	int nNewRow = newCell.y;
@@ -735,9 +728,6 @@ void NDPlayer::OnMoveBegin()
 
 	CCPoint pos = m_kPointList[m_kPointList.size() - 1];
 
-//@del
-// 	int nX = (pos.x - DISPLAY_POS_X_OFFSET) / MAP_UNITSIZE;
-// 	int nY = (pos.y - DISPLAY_POS_Y_OFFSET) / MAP_UNITSIZE;
 	CCPoint cellPos = ConvertUtil::convertDisplayToCell( pos );
 	int nX = (int) cellPos.x;
 	int nY = (int) cellPos.y;
@@ -1284,8 +1274,6 @@ bool NDPlayer::canUnpackRidePet()
 		if (!mapswitch) return true;
 
 		// 不能自动寻路到切屏点 todo
-// 		CCPoint from = ccp(m_nServerCol*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, m_nServerRow*MAP_UNITSIZE+DISPLAY_POS_Y_OFFSET); //@del
-// 		CCPoint to = ccp(mapswitch->getX()*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, mapswitch->getY()*MAP_UNITSIZE+DISPLAY_POS_Y_OFFSET);
 		CCPoint from = ConvertUtil::convertCellToDisplay( m_nServerCol, m_nServerRow );
 		CCPoint to = ConvertUtil::convertCellToDisplay( mapswitch->getX(), mapswitch->getY() );
 		return NDAutoPath::sharedAutoPath()->autoFindPath(from, to , maplayer,

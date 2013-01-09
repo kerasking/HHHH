@@ -144,8 +144,6 @@ void NDMapSwitch::SetLabelNew(NDMapData* pkMapdata)
 	strName = m_strNameDesMap;
 
 	int tw = getStringSize(strName.c_str(), 15).width;//Ó²±àÂë£¡
-// 	int tx = m_nX * MAP_UNITSIZE_X + DISPLAY_POS_X_OFFSET - tw / 2;
-// 	int ty = m_nY * MAP_UNITSIZE_Y + DISPLAY_POS_Y_OFFSET - 62 * fScaleFactor; //@del
 	int tx = int( ConvertUtil::convertCellToDisplayX( m_nX ) - tw / 2);
 	int ty = int( ConvertUtil::convertCellToDisplayY( m_nY ) - 62 * fScaleFactor);
 
@@ -159,8 +157,6 @@ void NDMapSwitch::SetLabelNew(NDMapData* pkMapdata)
 		//T.drawString2(g, introduce, tx2, ty2, 0xFFF5B4,0xC75900, 0);//ºóÎÄ×Ö 0xFFF5B4, 0xC75900
 		this->SetLableByType(1, tx2, ty2, strDes.c_str(),
 				INTCOLORTOCCC4(0xFFF5B4), INTCOLORTOCCC4(0xC75900),
-// 				CCSizeMake(pkMapdata->getColumns() * MAP_UNITSIZE_X,
-// 							pkMapdata->getRows() * MAP_UNITSIZE_Y)); //@del
 				pkMapdata->getMapDataSize());
 
 		ty -= 20 * fScaleFactor;
@@ -169,8 +165,6 @@ void NDMapSwitch::SetLabelNew(NDMapData* pkMapdata)
 	//T.drawString2(g, name, tx, ty, 0xFFFF00,0x2F4F4F,0);//0x2F4F4F
 	this->SetLableByType(0, tx, ty, strName.c_str(), INTCOLORTOCCC4(0xFFFF00),
 			INTCOLORTOCCC4(0x2F4F4F),
-// 			CCSizeMake(pkMapdata->getColumns() * MAP_UNITSIZE_X,
-// 						pkMapdata->getRows() * MAP_UNITSIZE_Y)); //@del
 			pkMapdata->getMapDataSize());
 }
 
