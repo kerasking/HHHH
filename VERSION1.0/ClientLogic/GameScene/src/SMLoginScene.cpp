@@ -122,10 +122,10 @@ CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
     pkScene->SetTag(SMLOGINSCENE_TAG);
 
 	///< 給湯自勤哥展示用法……
-// 	NDJsonReader kReader;
-// 	kReader.readJsonFile("conf.json");
-// 
-// 	string strID = kReader.readData("app_id");
+	NDJsonReader kReader;
+	kReader.readJsonFile("assets/conf.json");
+
+	string strID = kReader.readData("app_id");
 
 	LOGD("strID = %s",strID.c_str());
     
@@ -169,7 +169,27 @@ CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
 		NDPicture* pkPicture = kPool.AddPicture( NDPath::GetImgPath("Res00/Load/mobage_bg.png") );
 #elif ((CACHE_MODE == 1) && (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID))
 
+		LOGD("Ready to new pkPicture");
 		NDPicture* pkPicture = new NDPicture(false);//kPool.AddPicture("res/drawable/mobage_splash.png");
+		unsigned char* pszImageBuffer = 0;
+		unsigned int uiLength = 0;
+		pszImageBuffer = g_pUtil.GetFileBufferFromSimplifiedChineseResZip("SimplifiedChineseRes/res/image/Res00/Load/UnzipLoading.png",
+			&uiLength);
+
+		if (0 == pszImageBuffer)
+		{
+			LOGERROR("pszImageBuffer == 0");
+		}
+		
+		LOGD("Ready to initialize pkPicture");
+		pkPicture->Initialization(pszImageBuffer,uiLength);
+
+// 		if ()
+// 		{
+// 			LOGERROR("pkPicture->Initialization failed");
+// 			SAFE_DELETE_ARRAY(pszImageBuffer);
+// 			SAFE_DELETE(pkPicture);
+// 		}
 
 		CCImage::changeSystemFont(true);
 
@@ -177,9 +197,10 @@ CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
 		{
 			CCSize kPictureSize = pkPicture->GetSize();
 			CCDirector::sharedDirector()->setGLDefaultValues(1.0f,1.0f,1.0f);
-			pkBackgroundImage->SetFrameRect(CCRectMake(kWinSize.width / 2.0 - kPictureSize.width / 4,
-				kWinSize.height / 2.0f - kPictureSize.height / 4,
-				kPictureSize.width / 2, kPictureSize.height / 2));
+// 			pkBackgroundImage->SetFrameRect(CCRectMake(kWinSize.width / 2.0 - kPictureSize.width / 4,
+// 				kWinSize.height / 2.0f - kPictureSize.height / 4,
+// 				kPictureSize.width / 2, kPictureSize.height / 2));
+			pkBackgroundImage->SetFrameRect(CCRectMake(0,0,kWinSize.width,kWinSize.height));
 		}
 
 		pkLoadingPic = kPool.AddPicture("res/drawable/mbga_mobage_loading.png");

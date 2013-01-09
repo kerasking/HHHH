@@ -24,7 +24,8 @@ class NDUtil:
 	STRING_VEC ErgodicFolderForSpceialFileExtName(const char* pszPath,
 		const char* pszExtFilename);
 
-	unsigned char* GetFileBufferFromSimplifiedChineseResZip(const char* pszPath);
+	unsigned char* GetFileBufferFromSimplifiedChineseResZip(const char* pszPath,
+		unsigned int* puiLength);
 
 public:
 
