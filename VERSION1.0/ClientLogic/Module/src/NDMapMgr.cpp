@@ -4491,12 +4491,17 @@ NDBaseRole* NDMapMgr::GetRoleNearstPlayer(int iDistance)
 			{
 				resrole = npc;
 				minDist = dis;
-				player->m_nTargetIndex = 0;
-
-				//npc在附近则返回
-				return resrole;
 			}
 		}
+
+		if(resrole)
+		{
+			player->m_nTargetIndex = 0;
+
+			//npc在附近则返回
+			return resrole;
+		}
+
 	} while (0);
 
 	do
