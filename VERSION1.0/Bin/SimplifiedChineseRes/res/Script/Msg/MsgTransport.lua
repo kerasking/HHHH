@@ -90,6 +90,9 @@ function p.MsgReciveTransportInfo(netdatas)
         p.tbInfo.strArmyGroup = netdatas:ReadUnicodeString();    --军团名称
         p.tbInfo.strPlayerName = netdatas:ReadUnicodeString();    --玩家的名字
         
+        if p.tbInfo.strArmyGroup == "null" then
+			p.tbInfo.strArmyGroup = GetTxtPri("TL_T8")
+        end
         
         if p.tbInfo.nPlayerId == nPlayerId then
             Transport.tbPlayerInfo = p.tbInfo;
