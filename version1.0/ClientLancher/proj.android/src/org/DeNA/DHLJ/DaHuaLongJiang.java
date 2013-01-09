@@ -374,46 +374,78 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		}
 	}
 
-	// @ime
-	private static boolean isFullScreenIME()
+	//@ime
+	//1=yes, 0=no, -1=unknown.
+	private int isFullScreenIME()
 	{
-		if (ms_pkDHLJ != null && ms_pkDHLJ.rootView != null)
+		int ret = -1;
+		if (getView() != null)
 		{
 			final InputMethodManager imm = (InputMethodManager) 
-					ms_pkDHLJ.rootView.getContext()
-						.getSystemService(Context.INPUT_METHOD_SERVICE);
+					getView().getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
 			
 			if (imm != null)
 			{
-				boolean bFull = imm.isFullscreenMode();
-				Log.d("test", "@@ ime isFull: " + bFull);
-				return bFull;
+				ret = imm.isFullscreenMode() ? 1 : 0;
 			}
 		}
-		return false;
+		Log.d("test", "@@ ime isFull: " + ret);
+		return ret;
 	}
-
-	// @ime
-	public void notifyIMEOpenClose(boolean bImeOpen)
+	
+	//@ime
+	public void notifyIMEOpenClose( boolean bImeOpen ) 
 	{
-		Log.d("test", "@@ DaHuaLongJiang.notifyIMEOpenClose(): " + bImeOpen);
-
-		// refreshLayout( bOpen );
-		if (!isFullScreenIME())
+		Log.d("test", "@@ DaHuaLongJiang.notifyIMEOpenClose(): " + (bImeOpen ? "open" : "close"));
+		
+		//refreshLayout( bOpen );
+		if (true)// || isFullScreenIME() == 0)
 		{
-			if (bImeOpen)
+			if (bImeOpen) 
 			{
-				// bring editView to top
+				//bring editView to top
 				menubar.bringChildToFront(edittext);
 			}
 			else 
 			{
 				//bring surface view to top
 				menubar.bringChildToFront(getView());
+				bringLayoutToFront();
+				menubar.bringToFront();
+				menubar.postInvalidate();
+				//dump_menubar();
 			}
 		}
 	}
-
+	
+	private static void bringLayoutToFront()
+	{
+		Log.d("test","@@ bringLayoutToFront()");
+		
+		View vLinearLayout = null;
+		View vRelativeLayout = null;
+		
+		int n = menubar.getChildCount();
+		for (int i = 0; i < n; i++)
+		{
+			View v = menubar.getChildAt(i);
+			if (v.toString().indexOf("LinearLayout") != -1)
+			{
+				vLinearLayout = v;
+			}
+			else if (v.toString().indexOf("RelativeLayout") != -1)
+			{
+				vRelativeLayout = v;
+			}			
+		}
+		
+		if (vLinearLayout != null)
+			menubar.bringChildToFront(vLinearLayout);
+		
+		if (vRelativeLayout != null)
+			menubar.bringChildToFront(vRelativeLayout);		
+	}
+	
 	public void LoginComplete(int userid)
 	{
 		onLoginComplete(userid, mDeviceID);
