@@ -130,6 +130,7 @@ CCTouchDispatcher::CCTouchDispatcher()
 	, m_pHandlersToAdd(NULL)
 	, m_pHandlersToRemove(NULL)
 {
+	m_pHandlingTouch = NULL;
 	INC_CCOBJ("CCTouchDispatcher");
 }
 #endif
@@ -145,7 +146,8 @@ CCTouchDispatcher::~CCTouchDispatcher(void)
      CC_SAFE_RELEASE(m_pHandlersToAdd);
  
      ccCArrayFree(m_pHandlersToRemove);
-    m_pHandlersToRemove = NULL;    
+    m_pHandlersToRemove = NULL;
+	m_pHandlingTouch = NULL;
 }
 
 //
@@ -385,6 +387,8 @@ void CCTouchDispatcher::touches(CCSet *pTouches, CCEvent *pEvent, unsigned int u
 
     // optimization to prevent a mutable copy when it is not necessary
      unsigned int uTargetedHandlersCount = m_pTargetedHandlers->count();
+// 	 CCLog("@@ CCTouchDispatcher::touches() uTargetedHandlersCount=%d", uTargetedHandlersCount);
+// 	 CCLog("@@ CCTouchDispatcher::touches() Touches Count=%d", pTouches->count());
      unsigned int uStandardHandlersCount = m_pStandardHandlers->count();
     bool bNeedsMutableSet = (uTargetedHandlersCount && uStandardHandlersCount);
 
@@ -401,6 +405,12 @@ void CCTouchDispatcher::touches(CCSet *pTouches, CCEvent *pEvent, unsigned int u
         for (setIter = pTouches->begin(); setIter != pTouches->end(); ++setIter)
         {
             pTouch = (CCTouch *)(*setIter);
+
+			if(m_pHandlingTouch)
+			{
+				if(pTouch != m_pHandlingTouch)
+					continue;
+			}
 
             CCTargetedTouchHandler *pHandler = NULL;
             CCObject* pObj = NULL;
@@ -421,6 +431,7 @@ void CCTouchDispatcher::touches(CCSet *pTouches, CCEvent *pEvent, unsigned int u
                     if (bClaimed)
                     {
                         pHandler->getClaimedTouches()->addObject(pTouch);
+						m_pHandlingTouch = pTouch;
                     }
                 } else
                 if (pHandler->getClaimedTouches()->containsObject(pTouch))
@@ -436,10 +447,12 @@ void CCTouchDispatcher::touches(CCSet *pTouches, CCEvent *pEvent, unsigned int u
                     case CCTOUCHENDED:
                         pHandler->getDelegate()->ccTouchEnded(pTouch, pEvent);
                         pHandler->getClaimedTouches()->removeObject(pTouch);
+						m_pHandlingTouch = NULL;
                         break;
                     case CCTOUCHCANCELLED:
                         pHandler->getDelegate()->ccTouchCancelled(pTouch, pEvent);
                         pHandler->getClaimedTouches()->removeObject(pTouch);
+						m_pHandlingTouch = NULL;
                         break;
                     }
                 }
@@ -449,6 +462,7 @@ void CCTouchDispatcher::touches(CCSet *pTouches, CCEvent *pEvent, unsigned int u
                     if (bNeedsMutableSet)
                     {
                         pMutableTouches->removeObject(pTouch);
+						m_pHandlingTouch = NULL;
                     }
 #if ND_MOD && 0
 					CCLog( 

@@ -184,6 +184,8 @@ protected:
 
     // 4, 1 for each type of event
     struct ccTouchHandlerHelperData m_sHandlerHelperData[ccTouchMax];
+
+	CCTouch *m_pHandlingTouch;
 };
 
 // end of input group
