@@ -13,7 +13,6 @@ import com.mobage.android.Error;
 import com.mobage.android.social.Feed;
 import com.mobage.android.social.cn.Feeds.OnActivityFeedsComplete;
 
-import org.DeNA.DHLJ.R;
 import org.DeNA.DHLJ.SocialUtils;
 
 public class FeedsView extends LinearLayout{

@@ -4119,7 +4119,7 @@ void NDMapMgr::ProcessTempCredential(NDTransData& kData)
                                        , "(Ljava/lang/String;)V"))
         
     {
-        jstring stringArg = t.env->NewStringUTF(temporaryCredential.c_str());
+		jstring stringArg = t.env->NewStringUTF(temporaryCredential.c_str());
         
         t.env->CallStaticObjectMethod(t.classID, t.methodID, stringArg);
         t.env->DeleteLocalRef(stringArg);
@@ -4229,10 +4229,10 @@ void  NDMapMgr::ProcessCloseTransactionRet(NDTransData& data)
     if (JniHelper::getStaticMethodInfo(t
                                        , "org/DeNA/DHLJ/DaHuaLongJiang"
                                        , "showBalanceButton"
-                                       , "(F)V"))
+                                       , "()V"))
         
     {
-        t.env->CallStaticObjectMethod(t.classID, t.methodID, RESOURCE_SCALE);
+        t.env->CallStaticObjectMethod(t.classID, t.methodID);
         t.env->DeleteLocalRef(t.classID);
     }
     

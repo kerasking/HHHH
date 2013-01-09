@@ -3,7 +3,6 @@ package org.DeNA.DHLJ;
 import java.util.HashMap;
 
 import com.mobage.android.Error;
-import org.DeNA.DHLJ.R;
 import org.DeNA.DHLJ.SocialUtils;
 import com.mobage.android.social.common.RemoteNotification;
 import com.mobage.android.social.common.RemoteNotificationPayload;
@@ -18,7 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class RemoteNotificationView extends LinearLayout{
-	protected static final String TAG = "RemoteNotification";
+	protected static final String TAG = "RemoteNotificationView";
 
 	public RemoteNotificationView(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -59,6 +58,11 @@ public class RemoteNotificationView extends LinearLayout{
 	}
 
 	private static Callback callback = new Callback();
+	
+
+	public static void DisableRemoteNotification() {
+		RemoteNotification.setRemoteNotificationsEnabled(false, callback);
+	}
 	
 	public static void SendRemoteNotification(String recipientId) {
 		RemoteNotification.setRemoteNotificationsEnabled(true, callback);

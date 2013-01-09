@@ -486,7 +486,8 @@ void SetSceneMusicNew(int idMusic)
 	}
 	
 	string strMusicPath = NDPath::GetSoundPath();
-	CCString* pstrMusicFile = CCString::stringWithFormat("%smusic_%d.aac",strMusicPath.c_str(),idMusic);
+	CCString* pstrMusicFile = CCString::stringWithFormat("%smusic_%d.aac",
+		strMusicPath.c_str(),idMusic);
 	pkSimpleAudio->playBackgroundMusic(pstrMusicFile->getCString(),true);
 }
 
@@ -733,10 +734,10 @@ void doShowMobageBalance()
     if (JniHelper::getStaticMethodInfo(t
                                        , "org/DeNA/DHLJ/DaHuaLongJiang"
                                        , "showBalanceButton"
-                                       , "(F)V"))
+                                       , "()V"))
         
     {
-        t.env->CallStaticObjectMethod(t.classID, t.methodID, RESOURCE_SCALE);
+        t.env->CallStaticObjectMethod(t.classID, t.methodID);
         t.env->DeleteLocalRef(t.classID);
     }
 #endif
@@ -933,11 +934,6 @@ void LoadLoginScene(void)
 {
 	//NDDirector::DefaultDirector()->ReplaceScene(CSMLoginScene::Scene());
 }
-/*
- void LoginServer(const char* Login_Account,const char* Login_Server)
- {
- return NDBeforeGameMgrObj.LoginServer(Login_Account, Login_server);
- }*/
 
 void PauseScene(void)
 {
