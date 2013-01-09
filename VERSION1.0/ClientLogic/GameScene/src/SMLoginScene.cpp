@@ -54,8 +54,8 @@
 
 #define UPDATE_TIP_TEXT_ANDROID 0x7f080039	///< 安卓解壓介面提示文字，對應安卓String.xml里的unzip_text 郭浩
 
-#define UPDATE_ON		0	//0关闭下载，1开启下载
-#define CACHE_MODE 		0  //发布模式//0关闭拷贝；1开启将资源拷贝至cache目录来访问
+#define UPDATE_ON		1	//0关闭下载，1开启下载
+#define CACHE_MODE 		1  //发布模式//0关闭拷贝；1开启将资源拷贝至cache目录来访问
 //--------------------//
 
 #define TAG_INSTALL_SUCCESS			1
@@ -104,7 +104,7 @@
 #define SZ_SETUP						"LOGIN_SZ_SETUP"			//"配置中……"
 
 
-#define SZ_UPDATE_URL					"192.168.19.169"//更新服务器的地址
+#define SZ_UPDATE_URL					"54.248.217.152"//更新服务器的地址
 #define SZ_DEL_FILE						"del.txt"//包含待删除文件路径的配置文件/CACHES目录下
 
 #define SZ_MOBAGE_BG_PNG_PATH			"/res/image00/Res00/Load/mobage_bg.png"
