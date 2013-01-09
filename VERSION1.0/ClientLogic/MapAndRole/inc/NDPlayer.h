@@ -20,7 +20,7 @@ class Task;
 
 using namespace std;
 
-#define FOCUS_JUDGE_DISTANCE (33)
+#define FOCUS_JUDGE_DISTANCE (33*RESOURCE_SCALE_960)
 
 NS_NDENGINE_BGN
 

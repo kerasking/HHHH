@@ -135,7 +135,6 @@ void CreatePlayer(int lookface, int x, int y, int userid, std::string name)
 	kPlayer.InitRoleLookFace(lookface);
 
 	kPlayer.stopMoving();
-	//player.SetPositionEx(ccp(x*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, y*MAP_UNITSIZE+DISPLAY_POS_Y_OFFSET));//@del
 	kPlayer.SetPositionEx(ConvertUtil::convertCellToDisplay(x, y));
 	kPlayer.SetServerPositon(x, y);
 	kPlayer.m_nID = userid;
@@ -158,7 +157,6 @@ void CreatePlayerWithMount(int lookface, int x, int y, int userid,
 	NDPlayer& kPlayer = NDPlayer::defaultHero(lookface, true);
 	kPlayer.ChangeModelWithMount(nRideStatus, nMountType);
 	kPlayer.stopMoving();
-	//player.SetPositionEx(ccp(x*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, y*MAP_UNITSIZE+DISPLAY_POS_Y_OFFSET));//@del
 	kPlayer.SetPositionEx(ConvertUtil::convertCellToDisplay(x, y));
 	kPlayer.SetServerPositon(x, y);
 	kPlayer.m_nID = userid;
@@ -486,7 +484,8 @@ void SetSceneMusicNew(int idMusic)
 	}
 	
 	string strMusicPath = NDPath::GetSoundPath();
-	CCString* pstrMusicFile = CCString::stringWithFormat("%smusic_%d.aac",strMusicPath.c_str(),idMusic);
+	CCString* pstrMusicFile = CCString::stringWithFormat("%smusic_%d.aac",
+		strMusicPath.c_str(),idMusic);
 	pkSimpleAudio->playBackgroundMusic(pstrMusicFile->getCString(),true);
 }
 
@@ -933,11 +932,6 @@ void LoadLoginScene(void)
 {
 	//NDDirector::DefaultDirector()->ReplaceScene(CSMLoginScene::Scene());
 }
-/*
- void LoginServer(const char* Login_Account,const char* Login_Server)
- {
- return NDBeforeGameMgrObj.LoginServer(Login_Account, Login_server);
- }*/
 
 void PauseScene(void)
 {

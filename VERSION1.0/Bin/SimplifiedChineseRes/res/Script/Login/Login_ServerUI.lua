@@ -445,8 +445,6 @@ function p.GetViewContainer()
 	return svc;
 end
 
-
-
 function p.LoginGame(strServerName,strServerIp,strServerPort)
     LogInfo("strServerName[%s],strServerIp[%s],strServerPort[%d],p.UIN[%d]",strServerName,strServerIp,strServerPort,p.UIN);
     --发起登陆
@@ -650,15 +648,11 @@ function p.ProcessServerRole(netdatas)
     record.sRoleName=netdatas:ReadUnicodeString();
     
     --测试使用
-    if(record.nLevel < 0 or record.nLevel>1000) then
+    if(record.nLevel < 0 or record.nLevel > 1000) then
         return;
     end
-    
-    
+
     LogInfo("nIdAccount:[%d],nServerID:[%d],nServerStatus:[%d],nProfession:[%d],nLevel:[%d],nLastLogin:[%d],sRoleName:[%s]",record.nIdAccount,record.nServerID,record.nServerStatus,record.nProfession,record.nLevel,record.nLastLogin,record.sRoleName);
-    
-    
-    
     
     --更新数据库
     SqliteConfig.InsertServerRoleInsert(record);
@@ -724,7 +718,7 @@ function p.GetAccountID()
 end
 --++Guosen 2012.8.4
 function p.LoginGameNew()
-		LogInfo( "Login_ServerUI: LoginGameNew()" );
+	LogInfo( "Login_ServerUI: LoginGameNew()" );
 	Music.PlayLoginMusic()
 	p.LoadUI();
 	p.LoginOK_Normal( p.UIN )

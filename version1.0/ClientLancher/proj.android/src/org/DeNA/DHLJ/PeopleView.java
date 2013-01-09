@@ -5,7 +5,6 @@ import java.util.Random;
 
 import com.mobage.android.Error;
 import com.mobage.android.Platform;
-import org.DeNA.DHLJ.R;
 import org.DeNA.DHLJ.SocialUtils;
 import com.mobage.android.social.PagingOption;
 import com.mobage.android.social.PagingResult;

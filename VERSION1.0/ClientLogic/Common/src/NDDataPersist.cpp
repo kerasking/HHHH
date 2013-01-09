@@ -155,9 +155,6 @@ void NDDataPersist::SetData(unsigned int index, CCString* key, const char* data)
 
 	NDAsssert(dic != nil);
 
-//@del
-//		NSString *nsObj = [NSString stringWithUTF8String:data];
-	//CCStringRef nsObj = CCString::stringWithUTF8String(data);
 	CCString* nsObj = CCString::stringWithCString( CONVERT_UTF8_TO_GBK( data ));
 	
 	if (NeedEncodeForKey(key)) 
@@ -166,10 +163,6 @@ void NDDataPersist::SetData(unsigned int index, CCString* key, const char* data)
 		simpleEncode((const unsigned char*)data, encData);
 
 		CCString* nsObj = CCString::stringWithCString( CONVERT_UTF8_TO_GBK((const char*)encData ));
-
-		//@del
-		//nsObj = CCString::stringWithUTF8String((const char*)encData);
-		//nsObj = [NSString stringWithUTF8String:(const char*)encData];
 	}
 	
 	//[dic setObject:nsObj forKey:key];
@@ -195,9 +188,6 @@ const char* NDDataPersist::GetData(unsigned int index, CCString* key)
 
 	if (NeedEncodeForKey(key)) 
 	{
-		//@del
-		//simpleDecode((const unsigned char*)[nsStr UTF8String], (unsigned char*)decData);
-		//simpleDecode((const unsigned char*)nsStr->getUtf8String(),(unsigned char*)decData);
 		simpleDecode(
 			(const unsigned char*) CONVERT_GBK_TO_UTF8(str->getCString()), //@todo:android转换有问题.
 			(unsigned char*)decData);
@@ -257,7 +247,6 @@ void NDDataPersist::LoadData()
 
 	XMLReader kReader;
 
-	//m_pkDataArray = new CCMutableArray<CCObject*>;//@del
 	m_pkDataArray = new CCArray();
 	
 	if (!kReader.initWithFile(filePath->getCString()))
@@ -275,7 +264,6 @@ void NDDataPersist::LoadData()
 	for (XMLReader::FileData::iterator it = pkMap->begin();
 		it != pkMap->end();it++)
 	{
-		//CCMutableDictionary<CCObject*,CCObject*>* pkDic =  new CCMutableDictionary<CCObject*,CCObject*>;//@del
 		CCDictionary* pkDic =  new CCDictionary();
 
 		string strKey = "";
@@ -288,22 +276,6 @@ void NDDataPersist::LoadData()
 
 		m_pkDataArray->addObject(pkDic);
 	}
-
-//@del
-// 	if ([[NSFileManager defaultManager] fileExistsAtPath:filePath])
-// 	{ 
-// 		dataArray = [[NSMutableArray alloc] initWithContentsOfFile:filePath];
-// 		const char* pszGameSetting = this->GetData(kGameSettingData, kGameSetting);
-// 
-// 		if (pszGameSetting) 
-// 		{ // 已经存储
-// 			NDDataPersist::s_gameSetting = atoi(pszGameSetting);
-// 		}
-// 	}
-// 	else
-// 	{
-// 		dataArray = [[NSMutableArray alloc] init];
-// 	}
 }
 
 CCString* NDDataPersist::GetDataPath()
@@ -532,23 +504,13 @@ void NDDataPersist::AddAccountDevice(const char* account)
 			CCString* tmpAccountNode = (CCString*)m_pkAccountList->objectAtIndex(i);
 			if (!tmpAccountNode) continue;
 
-			//CCStringRef strRef = CCString::stringWithUTF8String((const char*)encAccount);//@del
 			CCString* strAccount = CCString::stringWithCString( CONVERT_UTF8_TO_GBK( (const char*)encAccount ));
 			if (tmpAccountNode->isEqual( strAccount ))
 			{
 				return;
 			}
-
-//@del
-// 			if ([tmpAccountNode isEqual:[NSString stringWithUTF8String:(const char*)encAccount]]) 
-// 			{
-// 				return;
-// 			}
 		}
 		
-		//@del
-		//[accountDeviceList addObject:[NSString stringWithUTF8String:(const char*)encAccount]];
-		//CCStringRef strRef = CCString::stringWithUTF8String((const char*)encAccount);//@del
 		CCString* str = CCString::stringWithCString( CONVERT_UTF8_TO_GBK((const char*)encAccount));
 		m_pkAccountDeviceList->addObject( str );
 	}	

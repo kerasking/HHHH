@@ -229,8 +229,6 @@ void NDAutoPath::GetPath()
 
 		CCPoint kPos;
 		NodeInfo* pkNode = kPath[0];
-// 		kPos.x = pkNode->nX * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET;
-// 		kPos.y = pkNode->nY * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET;//@del
 		kPos = ConvertUtil::convertCellToDisplay( pkNode->nX, pkNode->nY );
 
 		for (int index = 0; index < nCount - 1; index++)

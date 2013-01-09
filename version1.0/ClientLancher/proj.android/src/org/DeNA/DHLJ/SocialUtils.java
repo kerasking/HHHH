@@ -22,6 +22,8 @@ import org.apache.http.util.EntityUtils;
 import org.cocos2dx.lib.Cocos2dxActivity;
 import org.xmlpull.v1.XmlPullParserException;
 
+import tw.mobage.g23000052.R;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;

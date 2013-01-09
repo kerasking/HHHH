@@ -1,5 +1,7 @@
 package org.DeNA.DHLJ;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -37,6 +39,7 @@ import android.content.Intent;
 import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
+import android.net.ParseException;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.opengl.GLSurfaceView;
@@ -51,6 +54,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.ViewGroup.LayoutParams;
 import android.view.ViewParent;
 import android.webkit.CookieSyncManager;
@@ -61,6 +65,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Environment;
@@ -71,7 +76,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
-import android.widget.MediaController;
 import android.widget.VideoView;
 
 public class DaHuaLongJiang extends Cocos2dxActivity
@@ -83,13 +87,23 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	public static DynamicMenuBar menubar;
 	private static BalanceButton balancebutton;
 	private static float s_fScale;
-	private View rootView = null;
+	private static View rootView = null;
 	private static boolean m_bIsStartingVideo = false;
+	private final static boolean playVideoInActivity = true; //是否在独立的activity中播放视频
 	private static Context s_context;
 	private static LinearLayout s_balancelayout;
 
 	private static Cocos2dxEditText edittext; //@ime
-	
+	private static Button testbutton;
+
+	private WindowManager wm=null;
+	private FloatView myFV=null;
+
+	private WindowManager.LayoutParams wmParams=new WindowManager.LayoutParams();
+
+	public static WindowManager.LayoutParams getMywmParams(){
+		return ms_pkDHLJ.wmParams;
+	}
 	private static Handler VideoViewHandler = new Handler();
 	private static Handler RootViewHandler = new Handler();
 	private static Runnable mHideBalance = new Runnable()
@@ -154,27 +168,8 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 			balancebutton.update();
 		};
 	};
-	private static class Callback implements RemoteNotification.OnSetRemoteNotificationsEnabledComplete, RemoteNotification.OnGetRemoteNotificationsEnabledComplete, RemoteNotification.OnSendComplete {
-		@Override
-		public void onSuccess(RemoteNotificationResponse arg0) {
-			// TODO Auto-generated method stub
-		}
 
-		@Override
-		public void onSuccess(boolean arg0) {
-			// TODO Auto-generated method stub
-		}
 
-		@Override
-		public void onError(Error arg0) {
-			// TODO Auto-generated method stub
-		}
-
-		@Override
-		public void onSuccess() {
-			// TODO Auto-generated method stub
-		}
-	}
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		if (isSDCardCanUse())
@@ -187,56 +182,23 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 			CookieSyncManager.createInstance(this);
 			s_context = context;
 
-			Mobage.registerMobageResource(this, "org.DeNA.DHLJ.R");
-			final Callback callback = new Callback(); 
-			RemoteNotification.setRemoteNotificationsEnabled(false, callback);
+			Mobage.registerMobageResource(this, "tw.mobage.g23000052.R");
+//			RemoteNotificationView.DisableRemoteNotification();
 			SocialUtils.initializeMobage(this);
 			mPlatformListener = SocialUtils.createPlatformListener(true);
 			Mobage.addPlatformListener(mPlatformListener);
 
-//			RemoteNotification.setListener(new RemoteNotificationListener()
-//			{
-//
-//				@Override
-//				public void handleReceive(Context context, Intent intent)
-//				{
-//					// You can use static method which performing a notification
-//					// in status bar.
-//					C2DMBaseReceiver.displayStatusBarNotification(context,
-//							intent);
-//
-//					// If you want to handle message yourself, below lists one
-//					// of keys:
-//					// "NOTIFICATION_MESSAGE"
-//					// You should analysis the json string by yourself, keys are
-//					// "style", "message", "iconUrl", "extras", etc,
-//					Bundle bundle = intent.getExtras();
-//					String message = bundle.getString("NOTIFICATION_MESSAGE");
-//					try
-//					{
-//						JSONObject obj = new JSONObject(message);
-//						String style = obj.getString("style");
-//						String iconUrl = obj.getString("iconUrl");
-//						String msg = obj.getString("message");
-//
-//						Map<String, String> extras = new HashMap<String, String>();
-//						JSONObject e = new JSONObject(obj.getString("extras"));
-//						Iterator<String> keys = e.keys();
-//						while (keys.hasNext())
-//						{
-//							String key = keys.next();
-//							String val = e.optString(key);
-//							if (val != null)
-//							{
-//								extras.put(key, val);
-//							}
-//						}
-//					} catch (JSONException ex)
-//					{
-//						ex.printStackTrace();
-//					}
-//				}
-//			});
+			RemoteNotification.setListener(new RemoteNotificationListener()
+			{
+				@Override
+				public void handleReceive(Context context, Intent intent)
+				{
+					// You can use static method which performing a notification
+					// in status bar.
+					C2DMBaseReceiver.displayStatusBarNotification(context,
+							intent);
+				}
+			});
 
 			nativeInit(480, 320);
 
@@ -255,27 +217,28 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 			balancebutton = com.mobage.android.social.common.Service
 					.getBalanceButton(rect);
 
-			// button1 = new Button(this);
-			// button1.setText("aaaaaaaaa".toCharArray(), 1, 6);
-			// FrameLayout.LayoutParams pkParamsButton = new
-			// FrameLayout.LayoutParams(200,200);
-			// pkParamsButton.topMargin = 10;
-			// pkParamsButton.leftMargin = 10;
-			// button1.setLayoutParams(pkParamsButton);
-			//
-			// button1.setOnClickListener(new OnClickListener() {
-			// @Override
-			// public void onClick(View view) {
-			// FeedsView.openActivityFeeds();
-			// // RemoteNotificationView.SendRemoteNotification("500002013");
-			// // RemoteNotificationView.SendRemoteNotification("500001919");
-			// // PeopleView.getFriendsWithGame();
-			// // PeopleView.getFriends();
-			// // PeopleView.getUsers();
-			// // PeopleView.getCurrentUser();
-			// // PeopleView.getUser();
-			// }
-			// });
+//			 testbutton = new Button(this);
+//			 testbutton.setText("aaaaaaaaa".toCharArray(), 1, 6);
+//			 FrameLayout.LayoutParams pkParamsButton = new
+//			 FrameLayout.LayoutParams(200,200);
+//			 pkParamsButton.topMargin = 100;
+//			 pkParamsButton.leftMargin = 10;
+//			 testbutton.setLayoutParams(pkParamsButton);
+//			
+//			 testbutton.setOnClickListener(new OnClickListener() {
+//			 @Override
+//			 public void onClick(View view) {
+//				 menubar.setRankButtonVisibility(View.INVISIBLE);
+//			 //FeedsView.openActivityFeeds();
+//			 // RemoteNotificationView.SendRemoteNotification("500002013");
+//			 // RemoteNotificationView.SendRemoteNotification("500001919");
+//			 // PeopleView.getFriendsWithGame();
+//			 // PeopleView.getFriends();
+//			 // PeopleView.getUsers();
+//			 // PeopleView.getCurrentUser();
+//			 // PeopleView.getUser();
+//			 }
+//			 });
 		} else
 		{
 			AlertDialog alertDialog = new AlertDialog.Builder(this).create();
@@ -333,16 +296,16 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 
 	public void setMain()
 	{
-		Log.d(TAG, "DaHuaLongJiang::setMain()");
+		Log.d(TAG, "@@ DaHuaLongJiang::setMain()");
 
 		// remove all views
 		rootView = (View) getView();
-		FrameLayout parent = (FrameLayout) rootView.getParent();
-		if (parent != null)
-		{
-			parent.removeView(rootView);
-		}
-		menubar.removeAllViews();
+// 		FrameLayout parent = (FrameLayout) rootView.getParent();
+// 		if (parent != null)
+// 		{
+// 			parent.removeView(rootView);
+// 		}
+// 		menubar.removeAllViews();
 
 		// add edit view
 		addEditView();
@@ -352,6 +315,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		// menubar.addView(m_pkView);
 		menubar.addView(rootView);
 
+		// add balance button
 		s_balancelayout = new LinearLayout(s_context);
 		s_balancelayout.setOrientation(LinearLayout.VERTICAL);
 
@@ -368,74 +332,86 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		layoutParams.height = sizey.intValue();
 
 		s_balancelayout.addView(balancebutton, layoutParams);
-		
+
 		menubar.addView(s_balancelayout);
 		s_balancelayout.setVisibility(View.INVISIBLE);
+		
+//		menubar.addView(testbutton);
 
 		// set content view
 		ViewGroup.LayoutParams pkParams = new ViewGroup.LayoutParams(
 				ViewGroup.LayoutParams.FILL_PARENT,
 				ViewGroup.LayoutParams.FILL_PARENT);
 		this.setContentView(menubar, pkParams);
-		
+
 		// set menu bar visible
 		menubar.setMenubarVisibility(View.VISIBLE);
 	}
-
+	
+	private static void dump_menubar()
+	{
+		int n = menubar.getChildCount();
+		for (int i = 0; i < n; i++)
+		{
+			View v = menubar.getChildAt(i);
+			Log.d("test", "@@ menubar.child["+i+"]="+v.toString() + ",vis=" + v.getVisibility());
+		}		
+	}
+	
 	//@ime
 	public void addEditView()
 	{
 		if (edittext == null)
 		{
 			ViewGroup.LayoutParams edittext_layout_params = new ViewGroup.LayoutParams(
-				ViewGroup.LayoutParams.FILL_PARENT,
-				ViewGroup.LayoutParams.WRAP_CONTENT);
-		
+					ViewGroup.LayoutParams.FILL_PARENT,
+					ViewGroup.LayoutParams.WRAP_CONTENT);
+
 			edittext = new Cocos2dxEditText(this);
 			edittext.setLayoutParams(edittext_layout_params);
 		}
-				
+
 		if (edittext != null)
 		{
 			// add edit to layout
 			menubar.addView(edittext);
-	
+
 			// set this edit to cocos2dx surface view
 			Cocos2dxGLSurfaceView surfaceView = getView();
 			surfaceView.setCocos2dxEditText(edittext);
 			surfaceView.setDHLJ(this);
-			
+
 			// single line
 			edittext.setSingleLine();
 		}
 	}
 
 	//@ime
-	private static boolean isFullScreenIME()
+	//1=yes, 0=no, -1=unknown.
+	private int isFullScreenIME()
 	{
-		if (ms_pkDHLJ != null && ms_pkDHLJ.rootView != null)
+		int ret = -1;
+		if (getView() != null)
 		{
 			final InputMethodManager imm = (InputMethodManager) 
-					ms_pkDHLJ.rootView.getContext()
-						.getSystemService(Context.INPUT_METHOD_SERVICE);
+					getView().getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
 			
 			if (imm != null)
 			{
-				boolean bFull = imm.isFullscreenMode();
-				Log.d("test", "@@ ime isFull: " + bFull);
-				return bFull;
+				ret = imm.isFullscreenMode() ? 1 : 0;
 			}
 		}
-		return false;
+		Log.d("test", "@@ ime isFull: " + ret);
+		return ret;
 	}
 	
 	//@ime
 	public void notifyIMEOpenClose( boolean bImeOpen ) 
 	{
-		Log.d("test", "@@ DaHuaLongJiang.notifyIMEOpenClose(): " + bImeOpen );
+		Log.d("test", "@@ DaHuaLongJiang.notifyIMEOpenClose(): " + (bImeOpen ? "open" : "close"));
 		
 		//refreshLayout( bOpen );
-		if (!isFullScreenIME())
+		if (true)// || isFullScreenIME() == 0)
 		{
 			if (bImeOpen) 
 			{
@@ -446,8 +422,40 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 			{
 				//bring surface view to top
 				menubar.bringChildToFront(getView());
+				bringLayoutToFront();
+				menubar.bringToFront();
+				menubar.postInvalidate();
+				//dump_menubar();
 			}
 		}
+	}
+	
+	private static void bringLayoutToFront()
+	{
+		Log.d("test","@@ bringLayoutToFront()");
+		
+		View vLinearLayout = null;
+		View vRelativeLayout = null;
+		
+		int n = menubar.getChildCount();
+		for (int i = 0; i < n; i++)
+		{
+			View v = menubar.getChildAt(i);
+			if (v.toString().indexOf("LinearLayout") != -1)
+			{
+				vLinearLayout = v;
+			}
+			else if (v.toString().indexOf("RelativeLayout") != -1)
+			{
+				vRelativeLayout = v;
+			}			
+		}
+		
+		if (vLinearLayout != null)
+			menubar.bringChildToFront(vLinearLayout);
+		
+		if (vRelativeLayout != null)
+			menubar.bringChildToFront(vRelativeLayout);		
 	}
 	
 	public void LoginComplete(int userid)
@@ -463,15 +471,16 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	private void setScaleX()
 	{
 		Log.v(TAG, "begin setScaleX");
-		
-		DisplayMetrics dm = new DisplayMetrics();
-		getWindowManager().getDefaultDisplay().getMetrics(dm); 
-		 
-		//dm.heightPixels;
-		//dm.widthPixels;
 
-		s_fScale = 2.0f*dm.widthPixels/960.0f;
+		DisplayMetrics dm = new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(dm);
+
+		// dm.heightPixels;
+		// dm.widthPixels;
+
+		s_fScale = 2.0f * dm.widthPixels / 960.0f;
 	}
+
 	private static void showBalanceButton()
 	{
 		Log.v(TAG, "begin showBalanceButton");
@@ -484,13 +493,61 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		Log.v(TAG, "begin showBalanceButton");
 		BalanceHandler.post(mHideBalance);
 	}
-	
+
 	public static String getTextFromStringXML(int nTextID)
 	{
 		String strRet = "";
-		
+
 		strRet = ms_pkDHLJ.getResources().getString(nTextID);
-		
+
+		return strRet;
+	}
+
+	public static String getStringFromJasonFile(String strBuffer,
+			String strTextName)
+	{
+		String strRet = "";
+		StringBuffer strReadBuffer = new StringBuffer();
+		String strLine = null;
+
+		strReadBuffer.append(strBuffer);
+//			BufferedReader kReader = new BufferedReader(strBuffer);
+//			while ((strLine = kReader.readLine()) != null)
+//			{
+//				
+//			}
+
+		try
+		{
+			JSONObject kJsonObject;
+			kJsonObject = new JSONObject(strReadBuffer.toString());
+			strRet = kJsonObject.getString(strTextName);
+			// JSONArray provinces = jsonObject.getJSONArray("provinces");
+			// String name = null;
+			// StringBuffer jsonFileInfo = new StringBuffer();
+			// JSONArray citys = null;
+			// for (int i = 0; i < provinces.length(); i++)
+			// {
+			// name = provinces.getJSONObject(i).getString("name");
+			// jsonFileInfo.append("/nname:" + name + "/n" + "citys:");
+			// citys = provinces.getJSONObject(i).getJSONArray("citys");
+			// for (int j = 0; j < citys.length(); j++)
+			// {
+			// jsonFileInfo.append(citys.getString(j) + "/t");
+			// }
+			// }
+			//
+			// System.out.println(jsonFileInfo);
+		} catch (ParseException e)
+		{
+			e.printStackTrace();
+		}
+		catch (JSONException e1)
+		{
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
 		return strRet;
 	}
 
@@ -538,39 +595,39 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 
 		return false;
 	}
-
+	
+	//@video
 	public static int playVideo(final String strFile)
 	{
-		if (true)
-		{
-			return 0;
-		}
-
+		Log.d("video", "@@ playVideo: " + strFile);
+		
 		pauseAllBackgroundMusic();
-		// ms_pkDHLJ.setContentView(m_pkView,pkLayoutParams);
-		m_bIsStartingVideo = true;
-		VideoViewHandler.post(mShowVideoView);
-		// m_pkView.setVisibility(View.VISIBLE);
-		Log.i("DaHuaLongJiang", "Entry java playVideo");
 
-		if (strFile.length() == 0)
+		if (playVideoInActivity)
 		{
-			Log.e("DaHuaLongJiang", "strFile length == 0");
-			return -1;
+			ms_pkDHLJ.startVideoActivity();
+		}
+		else
+		{
+			m_bIsStartingVideo = true;
+			VideoViewHandler.post(mShowVideoView);
 		}
 
-		if (null == ms_pkDHLJ)
-		{
-			Log.e("DaHuaLongJiang", "ms_pkDHLJ == 0");
-			return -1;
-		}
-
-		// ms_pkDHLJ.m_pkView.start();
-		// ms_pkDHLJ.setContentView(ms_pkDHLJ.m_pkView, pkLayoutParams);
-		Log.i("DaHuaLongJiang", "Leave java playVideo");
 		return 0;
 	}
 
+	//@video
+	private void startVideoActivity()
+	{
+		Log.d( "video", "@@ startVideoActivity()");
+
+        Intent intent = new Intent(getApplication(), VideoActivity.class);
+        startActivity(intent);
+        
+        Log.d( "video", "@@ startVideoActivity() -- done");
+	}
+
+	//@video
 	public static int stopVideo(final String strFile)
 	{
 		return 0;
@@ -635,6 +692,48 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 			return 1;
 		return 0;
 	}
+	
+
+    private void createView(){
+    	myFV=new FloatView(getApplicationContext());
+//    	myFV.setImageResource(R.drawable.icon);
+    	//获取WindowManager
+    	wm=(WindowManager)getApplicationContext().getSystemService("window");
+        //设置LayoutParams(全局变量）相关参数
+    	wmParams = getMywmParams();
+
+         /**
+         *以下都是WindowManager.LayoutParams的相关属性
+         * 具体用途可参考SDK文档
+         */
+//        wmParams.type=LayoutParams.TYPE_PHONE;   //设置window type
+//        wmParams.format=PixelFormat.RGBA_8888;   //设置图片格式，效果为背景透明
+//
+//        //设置Window flag
+//        wmParams.flags=LayoutParams.FLAG_NOT_TOUCH_MODAL
+//                              | LayoutParams.FLAG_NOT_FOCUSABLE;
+        /*
+         * 下面的flags属性的效果形同“锁定”。
+         * 悬浮窗不可触摸，不接受任何事件,同时不影响后面的事件响应。
+         wmParams.flags=LayoutParams.FLAG_NOT_TOUCH_MODAL 
+                               | LayoutParams.FLAG_NOT_FOCUSABLE
+                               | LayoutParams.FLAG_NOT_TOUCHABLE;
+        */
+        
+        
+        wmParams.gravity=Gravity.LEFT|Gravity.TOP;   //调整悬浮窗口至左上角
+        //以屏幕左上角为原点，设置x、y初始值
+        wmParams.x=0;
+        wmParams.y=0;
+        
+        //设置悬浮窗口长宽数据
+        wmParams.width=40;
+        wmParams.height=40;
+    
+        //显示myFloatView图像
+        wm.addView(myFV, wmParams);
+    	
+    }
 
 	// 是否古老系统
 	public static int isVerOlder(int n)
