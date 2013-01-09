@@ -41,6 +41,7 @@ import android.widget.MediaController.MediaPlayerControl;
 
 import java.io.IOException;
 
+
 /**
  * Displays a video file. The VideoView class can load images from various
  * sources (such as resources or content providers), takes care of computing its
@@ -128,7 +129,8 @@ public class NDVideoView extends SurfaceView implements MediaPlayerControl
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
 	{
-		// Log.i("@@@@", "onMeasure");
+		Log.d("mp", "onMeasure(): " + widthMeasureSpec + 'x' + heightMeasureSpec);
+
 		int width = getDefaultSize(mVideoWidth, widthMeasureSpec);
 		int height = getDefaultSize(mVideoHeight, heightMeasureSpec);
 
@@ -138,18 +140,24 @@ public class NDVideoView extends SurfaceView implements MediaPlayerControl
 			{
 				if (mVideoWidth * height > width * mVideoHeight)
 				{
+					Log.d("mp", "onMeasure(): image w/h is smaller" );
+
 					height = width * mVideoHeight / mVideoWidth;
-				} else if (mVideoWidth * height < width * mVideoHeight)
+				} 
+				else if (mVideoWidth * height < width * mVideoHeight)
 				{
-					// Log.i("@@@", "image too wide, correcting");
+					Log.d("mp", "onMeasure(): image w/h is bigger" );
+
 					width = height * mVideoWidth / mVideoHeight;
-				} else
+				} 
+				else
 				{
+					Log.d("mp", "onMeasure(): equal?" );
 				}
 			}
 		}
 
-		// Log.i("@@@@@@@@@@", "setting size: " + width + 'x' + height);
+		Log.d("mp", "setMeasuredDimension(): " + width + 'x' + height);
 		setMeasuredDimension(width, height);
 	}
 

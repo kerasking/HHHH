@@ -238,9 +238,7 @@ void NDManualRole::Update(unsigned long ulDiff)
 						m_bReverse = false;
 					}
 				}
-//@del
-// 				kCurrentPosition = ccp(usRecordX * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
-// 						usRecordY * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET);
+
 				kCurrentPosition = ConvertUtil::convertCellToDisplay( usRecordX, usRecordY );
 
 				vPosition.push_back(kCurrentPosition);
@@ -276,11 +274,6 @@ void NDManualRole::Initialization(int lookface, bool bSetLookFace/*=true*/)
 
 	//根据lookface获取人物图像
 	int nModelID = lookface % 1000;
-
-	//@del
-	//CCStringRef pstrAniPath = new CCString(NDPath::GetAnimationPath().c_str());
-	//CCStringRef pString = CCString::stringWithFormat("%smodel_%d.spr", pstrAniPath->getCString(), nModelID);
-	//NDSprite::Initialization( pString->getCString());
 
 	char spriteFile[200] = "";
 	sprintf( spriteFile, "%smodel_%d.spr", NDPath::GetAnimationPath().c_str(), nModelID );	
@@ -1128,12 +1121,6 @@ void NDManualRole::SetPosition(CCPoint newPosition)
 	//}
 	//}
 
-//@del
-// 	int nNewCol = (newPosition.x - DISPLAY_POS_X_OFFSET) / MAP_UNITSIZE;
-// 	int nNewRow = (newPosition.y - DISPLAY_POS_Y_OFFSET) / MAP_UNITSIZE;
-// 	int nOldCol = (GetPosition().x - DISPLAY_POS_X_OFFSET) / MAP_UNITSIZE;
-// 	int nOldRow = (GetPosition().y - DISPLAY_POS_Y_OFFSET) / MAP_UNITSIZE;
-
 	CCPoint newCell = ConvertUtil::convertDisplayToCell( newPosition );
 	int nNewCol = newCell.x;
 	int nNewRow = newCell.y;
@@ -1502,8 +1489,6 @@ void NDManualRole::stopMoving(bool bResetPos/*=true*/,
 	if (bResetPos)
 	{
 		NDManualRole::SetPosition(
-// 				ccp(m_nServerCol * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
-// 						m_nServerRow * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET));//@del
 		ConvertUtil::convertCellToDisplay( m_nServerCol, m_nServerRow ));
 	}
 
