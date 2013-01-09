@@ -463,7 +463,6 @@ void NDNpc::AddWalkPoint(int col, int row)
 	m_nRow = row;
 
 	m_dequePos.push_back(
-		//ccp(col*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, row*MAP_UNITSIZE+DISPLAY_POS_Y_OFFSET)); //@del
 		ConvertUtil::convertCellToDisplay( col, row ));
 
 	if (!m_bIsMoving) 
@@ -540,8 +539,6 @@ void NDNpc::HandleNpcMask(bool bSet)
 	}
 
 	CCPoint point = this->GetPosition();
-// 	int iCellY = int((point.y-DISPLAY_POS_Y_OFFSET)/MAP_UNITSIZE), //@del
-// 		iCellX = int((point.x-DISPLAY_POS_X_OFFSET)/MAP_UNITSIZE);
  	CCPoint cellPos = ConvertUtil::convertDisplayToCell( point );
 	int iCellX = (int) cellPos.x;
 	int iCellY = (int) cellPos.y;
@@ -724,8 +721,6 @@ bool NDNpc::getNearestPoint(CCPoint srcPoint, CCPoint& dstPoint)
 	
 	int resX = 0, resY = 0;
 	
-// 	int srcY = int((srcPoint.y-DISPLAY_POS_Y_OFFSET)/MAP_UNITSIZE), 
-// 		srcX = int((srcPoint.x-DISPLAY_POS_X_OFFSET)/MAP_UNITSIZE); //@del
 	CCPoint srcCell = ConvertUtil::convertDisplayToCell( srcPoint );
 	int srcX = (int) srcCell.x;
 	int srcY = (int) srcCell.y;
@@ -818,7 +813,6 @@ bool NDNpc::getNearestPoint(CCPoint srcPoint, CCPoint& dstPoint)
 		resY = this->GetPosition().y;
 	}
 	
-	//dstPoint = CCPointMake(resX*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, resY*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET); //@del
 	dstPoint = ConvertUtil::convertCellToDisplay( resX, resY );
 
 	return true;

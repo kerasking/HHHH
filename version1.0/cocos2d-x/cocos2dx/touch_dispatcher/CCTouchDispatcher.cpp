@@ -139,6 +139,7 @@ CCTouchDispatcher::~CCTouchDispatcher(void)
 {
 #if ND_MOD
 	DEC_CCOBJ("CCTouchDispatcher");
+	m_pHandlingTouch = NULL;
 #endif
 
      CC_SAFE_RELEASE(m_pTargetedHandlers);
@@ -147,7 +148,6 @@ CCTouchDispatcher::~CCTouchDispatcher(void)
  
      ccCArrayFree(m_pHandlersToRemove);
     m_pHandlersToRemove = NULL;
-	m_pHandlingTouch = NULL;
 }
 
 //
@@ -406,11 +406,13 @@ void CCTouchDispatcher::touches(CCSet *pTouches, CCEvent *pEvent, unsigned int u
         {
             pTouch = (CCTouch *)(*setIter);
 
+#if ND_MOD
 			if(m_pHandlingTouch)
 			{
 				if(pTouch != m_pHandlingTouch)
 					continue;
 			}
+#endif
 
             CCTargetedTouchHandler *pHandler = NULL;
             CCObject* pObj = NULL;
@@ -431,7 +433,9 @@ void CCTouchDispatcher::touches(CCSet *pTouches, CCEvent *pEvent, unsigned int u
                     if (bClaimed)
                     {
                         pHandler->getClaimedTouches()->addObject(pTouch);
+#if ND_MOD
 						m_pHandlingTouch = pTouch;
+#endif
                     }
                 } else
                 if (pHandler->getClaimedTouches()->containsObject(pTouch))
@@ -447,12 +451,16 @@ void CCTouchDispatcher::touches(CCSet *pTouches, CCEvent *pEvent, unsigned int u
                     case CCTOUCHENDED:
                         pHandler->getDelegate()->ccTouchEnded(pTouch, pEvent);
                         pHandler->getClaimedTouches()->removeObject(pTouch);
+#if ND_MOD
 						m_pHandlingTouch = NULL;
+#endif
                         break;
                     case CCTOUCHCANCELLED:
                         pHandler->getDelegate()->ccTouchCancelled(pTouch, pEvent);
                         pHandler->getClaimedTouches()->removeObject(pTouch);
+#if ND_MOD
 						m_pHandlingTouch = NULL;
+#endif
                         break;
                     }
                 }
@@ -462,7 +470,9 @@ void CCTouchDispatcher::touches(CCSet *pTouches, CCEvent *pEvent, unsigned int u
                     if (bNeedsMutableSet)
                     {
                         pMutableTouches->removeObject(pTouch);
+#if ND_MOD
 						m_pHandlingTouch = NULL;
+#endif
                     }
 #if ND_MOD && 0
 					CCLog( 

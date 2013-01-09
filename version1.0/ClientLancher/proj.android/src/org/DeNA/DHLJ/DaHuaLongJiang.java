@@ -87,8 +87,9 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	public static DynamicMenuBar menubar;
 	private static BalanceButton balancebutton;
 	private static float s_fScale;
-	private View rootView = null;
+	private static View rootView = null;
 	private static boolean m_bIsStartingVideo = false;
+	private final static boolean playVideoInActivity = true; //是否在独立的activity中播放视频
 	private static Context s_context;
 	private static LinearLayout s_balancelayout;
 
@@ -295,16 +296,16 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 
 	public void setMain()
 	{
-		Log.d(TAG, "DaHuaLongJiang::setMain()");
+		Log.d(TAG, "@@ DaHuaLongJiang::setMain()");
 
 		// remove all views
 		rootView = (View) getView();
-		FrameLayout parent = (FrameLayout) rootView.getParent();
-		if (parent != null)
-		{
-			parent.removeView(rootView);
-		}
-		menubar.removeAllViews();
+// 		FrameLayout parent = (FrameLayout) rootView.getParent();
+// 		if (parent != null)
+// 		{
+// 			parent.removeView(rootView);
+// 		}
+// 		menubar.removeAllViews();
 
 		// add edit view
 		addEditView();
@@ -314,6 +315,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		// menubar.addView(m_pkView);
 		menubar.addView(rootView);
 
+		// add balance button
 		s_balancelayout = new LinearLayout(s_context);
 		s_balancelayout.setOrientation(LinearLayout.VERTICAL);
 
@@ -345,8 +347,18 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		// set menu bar visible
 		menubar.setMenubarVisibility(View.VISIBLE);
 	}
-
-	// @ime
+	
+	private static void dump_menubar()
+	{
+		int n = menubar.getChildCount();
+		for (int i = 0; i < n; i++)
+		{
+			View v = menubar.getChildAt(i);
+			Log.d("test", "@@ menubar.child["+i+"]="+v.toString() + ",vis=" + v.getVisibility());
+		}		
+	}
+	
+	//@ime
 	public void addEditView()
 	{
 		if (edittext == null)
@@ -583,39 +595,39 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 
 		return false;
 	}
-
+	
+	//@video
 	public static int playVideo(final String strFile)
 	{
-		if (true)
-		{
-			return 0;
-		}
-
+		Log.d("video", "@@ playVideo: " + strFile);
+		
 		pauseAllBackgroundMusic();
-		// ms_pkDHLJ.setContentView(m_pkView,pkLayoutParams);
-		m_bIsStartingVideo = true;
-		VideoViewHandler.post(mShowVideoView);
-		// m_pkView.setVisibility(View.VISIBLE);
-		Log.i("DaHuaLongJiang", "Entry java playVideo");
 
-		if (strFile.length() == 0)
+		if (playVideoInActivity)
 		{
-			Log.e("DaHuaLongJiang", "strFile length == 0");
-			return -1;
+			ms_pkDHLJ.startVideoActivity();
+		}
+		else
+		{
+			m_bIsStartingVideo = true;
+			VideoViewHandler.post(mShowVideoView);
 		}
 
-		if (null == ms_pkDHLJ)
-		{
-			Log.e("DaHuaLongJiang", "ms_pkDHLJ == 0");
-			return -1;
-		}
-
-		// ms_pkDHLJ.m_pkView.start();
-		// ms_pkDHLJ.setContentView(ms_pkDHLJ.m_pkView, pkLayoutParams);
-		Log.i("DaHuaLongJiang", "Leave java playVideo");
 		return 0;
 	}
 
+	//@video
+	private void startVideoActivity()
+	{
+		Log.d( "video", "@@ startVideoActivity()");
+
+        Intent intent = new Intent(getApplication(), VideoActivity.class);
+        startActivity(intent);
+        
+        Log.d( "video", "@@ startVideoActivity() -- done");
+	}
+
+	//@video
 	public static int stopVideo(final String strFile)
 	{
 		return 0;
