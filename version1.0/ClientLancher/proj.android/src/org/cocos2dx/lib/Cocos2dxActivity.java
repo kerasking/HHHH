@@ -166,8 +166,8 @@ public abstract class Cocos2dxActivity extends Activity implements
 		//
 		// ViewGroup.LayoutParams tp = new
 		// LinearLayout(this.getApplicationContext());
-		ViewGroup.LayoutParams pkLayoutParams = new ViewGroup.LayoutParams(
-				LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+// 		ViewGroup.LayoutParams pkLayoutParams = new ViewGroup.LayoutParams(
+// 				LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
 
 		m_pkView = new NDVideoView(this.getApplicationContext());
 		m_pkView.setVideoPath("/sdcard/dhlj/SimplifiedChineseRes/res/Video/480_0.mp4");
