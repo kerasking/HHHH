@@ -51,7 +51,7 @@
             </intent-filter>
         </activity>
         
-      <activity android:name="VideoActivity"
+      <activity android:name="org.DeNA.DHLJ.VideoActivity"
                 android:label="@string/app_name"
                 android:screenOrientation="landscape"
                 android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
