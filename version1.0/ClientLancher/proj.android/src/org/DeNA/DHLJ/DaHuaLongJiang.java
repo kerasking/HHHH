@@ -86,7 +86,8 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	private PlatformListener mPlatformListener;
 	public static DynamicMenuBar menubar;
 	private static BalanceButton balancebutton;
-	private static float s_fScale;
+	private static float s_fScaleX;
+	private static float s_fScaleY;
 	private View rootView = null;
 	private static boolean m_bIsStartingVideo = false;
 	private static Context s_context;
@@ -328,10 +329,10 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT);
 		
 		setScaleX();
-		Float x = 200 * s_fScale;
-		Float y = 56 * s_fScale;
-		Float sizex = 80 * s_fScale;
-		Float sizey = 36 * s_fScale;
+		Float x = 200 * s_fScaleX;
+		Float y = 70 * s_fScaleY;
+		Float sizex = 80 * s_fScaleX;
+		Float sizey = 40 * s_fScaleY;
 		layoutParams.topMargin = y.intValue();
 		layoutParams.leftMargin = x.intValue();
 		layoutParams.width = sizex.intValue();
@@ -441,10 +442,8 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		DisplayMetrics dm = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(dm);
 
-		// dm.heightPixels;
-		// dm.widthPixels;
-
-		s_fScale = 2.0f * dm.widthPixels / 960.0f;
+		s_fScaleX = 2.0f * dm.widthPixels / 960.0f;
+		s_fScaleY = 2.0f * dm.heightPixels / 640.0f;
 	}
 
 	private static void showBalanceButton()
@@ -669,17 +668,15 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		{
     		//myFV.setBackgroundDrawable(drawable);
 			if(myFV != null) {
-				if(FVAlpha > 10) {
+				if(FVAlpha > 20) {
 					FVAlpha = FVAlpha-2;
 					myFV.getBackground().setAlpha(FVAlpha);  
-					Log.i(TAG, "alpha="+Integer.toString(FVAlpha));
 				}
 			}
 		};
 	};
     TimerTask task = new TimerTask() {   
     	public void run() {  
-    		Log.v(TAG, "begin TimerTask");
     		FloatViewHandler.post(mFloatViewRuner); 
     	}   
     };   
