@@ -322,7 +322,7 @@ void NDSprite::MoveToPosition(std::vector<CCPoint> kToPos, SpriteSpeed speed,
 		{
 			m_bMoveMap = moveMap;
 			m_bIsMoving = true;
-			m_nSpeed = speed;
+			m_nSpeed = speed*RESOURCE_SCALE_960;
 
 			//CCPoint pos = GetPosition();
 			//				if ( ((int)pos.x-DISPLAY_POS_X_OFFSET) % 16 != 0 || 
