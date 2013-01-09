@@ -33,12 +33,12 @@
 #include "TQPlatform.h"
 #include "UsePointPls.h"
 #include "StringConvert.h"
+#include "NDJsonReader.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #include <jni.h>
 #include <android/log.h>
 #include "android/jni/JniHelper.h"
-#include "NDJsonReader.h"
 
 #define  LOG_TAG    "DaHuaLongJiang"
 #define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
@@ -122,11 +122,12 @@ CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
     pkScene->SetTag(SMLOGINSCENE_TAG);
 
 	///< 給湯自勤哥展示用法……
-// 	NDJsonReader kReader("assets/conf.json");
+// 	NDJsonReader kReader;
+// 	kReader.readJsonFile("conf.json");
 // 
 // 	string strID = kReader.readData("app_id");
-// 
-// 	LOGD("strID = %s",strID.c_str());
+
+	LOGD("strID = %s",strID.c_str());
     
 	if ( bShowEntry )
 	{
@@ -453,7 +454,6 @@ void CSMLoginScene::OnTimer( OBJID idTag )
             NDBeforeGameMgrObj.doNDSdkLogin();
 			CloseWaitingAni();
 			OnProcessUpdate();
-           // ShowWaitingAni();
 		}
 #else
 		NDBeforeGameMgrObj.doNDSdkLogin();

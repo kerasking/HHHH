@@ -291,7 +291,7 @@ void NDPicture::Initialization( unsigned char* pszBuffer,unsigned int uiSize )
 
 	if (!kImage.initWithImageData((void*)pszBuffer,uiSize))
 	{
-		LOGERROR("picture [%s] not exist", imageFile);
+		//LOGERROR("picture [%s] not exist", imageFile);
 	}
 #endif
 

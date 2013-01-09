@@ -1,6 +1,7 @@
 #include "NDJsonReader.h"
 #include "CCPlatformConfig.h"
 #include "CCFileUtils.h"
+#include <json.h>
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #include "android\jni\JniHelper.h"
@@ -17,50 +18,23 @@
 #endif
 
 using namespace cocos2d;
+using namespace Json;
 
 NS_NDENGINE_BGN
 IMPLEMENT_CLASS(NDJsonReader,NDObject)
 
 NDJsonReader::NDJsonReader():
-m_pszFilePath(0)
+m_pszFilePath(0),
+m_pszBuffer(0),
+m_ulFileSize(0)
 {
 	
-}
-
-NDJsonReader::NDJsonReader(const char* pszFilePath):
-m_pszFilePath(0)
-{
-	int nLength = strlen(pszFilePath);
-
-	if (0 == nLength)
-	{
-		return;
-	}
-
-	m_pszFilePath = new char [nLength + 1];
-	memset(m_pszFilePath,0,sizeof(char) * (nLength + 1));
-	strcpy(m_pszFilePath,pszFilePath);
 }
 
 NDJsonReader::~NDJsonReader()
 {
 	SAFE_DELETE_ARRAY(m_pszFilePath);
-}
-
-void NDJsonReader::setPath( const char* pszFilePath )
-{
-	if (0 == pszFilePath || !*pszFilePath)
-	{
-		return;
-	}
-
-	int nLength = strlen(pszFilePath);
-	SAFE_DELETE_ARRAY(m_pszFilePath);
-
-	m_pszFilePath = new char[nLength + 1];
-	memset(m_pszFilePath,0,sizeof(char) * (nLength + 1));
-
-	strcpy(m_pszFilePath,pszFilePath);
+	SAFE_DELETE_ARRAY(m_pszBuffer);
 }
 
 string NDJsonReader::readData( const char* pszName )
@@ -69,6 +43,8 @@ string NDJsonReader::readData( const char* pszName )
 
 	string strRet = "";
 	unsigned long ulSize = 0;
+	Reader kReader;
+	Value kValue;
 
 	if (0 == pszName || !*pszName)
 	{
@@ -76,40 +52,55 @@ string NDJsonReader::readData( const char* pszName )
 		return strRet;
 	}
 
-	string strBuffer = (const char*)(CCFileUtils::sharedFileUtils()->
-		getFileData(m_pszFilePath,"rb",&ulSize));
-
-	LOGD("strBuffer is %s",strBuffer.c_str());
-
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	JniMethodInfo t;
-
-	if (JniHelper::getStaticMethodInfo(t, "org/DeNA/DHLJ/DaHuaLongJiang",
-		"getStringFromJasonFile",
-		"(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;"))
+	if (0 == m_pszBuffer || !*m_pszBuffer)
 	{
-		jstring stringArg_1 = t.env->NewStringUTF(strBuffer.c_str());
-		jstring stringArg_2 = t.env->NewStringUTF(pszName);
-		jstring retFromJava = (jstring) t.env->CallStaticObjectMethod(t.classID,
-			t.methodID, stringArg_1,stringArg_2);
-		const char* str = t.env->GetStringUTFChars(retFromJava, 0);
-		strRet = str;
+		LOGERROR("No read file!");
+		return "";
+	}
 
-		t.env->ReleaseStringUTFChars(retFromJava, str);
-		t.env->DeleteLocalRef(stringArg_1);
-		t.env->DeleteLocalRef(stringArg_2);
-		t.env->DeleteLocalRef(t.classID);
-	}
-	else
+	if (!kReader.parse(m_pszBuffer,kValue))
 	{
-		LOGERROR("Cant' find java function:getTextFromStringXML");
+		LOGERROR("Can't parse the buffer!Buffer: %s",m_pszBuffer);
+		return "";
 	}
-#endif
+
+	strRet = kValue[pszName].asString();
 
 	LOGD("strRet is %s",strRet.c_str());
 	return strRet;
+}
+
+bool NDJsonReader::readJsonFile(const char* pszFilePath)
+{
+	if (0 == pszFilePath || !*pszFilePath)
+	{
+		return false;
+	}
+
+	int nLength = strlen(pszFilePath);
+
+	if (0 == nLength)
+	{
+		return false;
+	}
+
+	SAFE_DELETE_ARRAY(m_pszFilePath);
+	SAFE_DELETE_ARRAY(m_pszBuffer);
+
+	m_pszFilePath = new char [nLength + 1];
+	memset(m_pszFilePath,0,sizeof(char) * (nLength + 1));
+	strcpy(m_pszFilePath,pszFilePath);
+
+	string strBuffer = (const char*)(CCFileUtils::sharedFileUtils()->
+		getFileData(m_pszFilePath,"rb",&m_ulFileSize));
+
+	m_pszBuffer = new char[strBuffer.length()];
+	memset(m_pszBuffer,0,sizeof(char) * (strBuffer.length()));
+	strcpy(m_pszBuffer,strBuffer.c_str());
+
+	LOGD("strBuffer is %s",m_pszBuffer);
+
+	return true;
 }
 
 NS_NDENGINE_END
