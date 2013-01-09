@@ -265,14 +265,6 @@ public class Cocos2dxBitmap {
 			ret = lines;
 		}
 
-// 		//@del
-// 		Log.d( "splitString - src", "@@ splitString src line: " + pString );
-// 		for (final String line : ret)
-// 		{
-// 			Log.d( "splitString - dst", "@@ splitString dst line: " + line );
-// 		}
-// 		//
-
 		return ret;
 	}
 

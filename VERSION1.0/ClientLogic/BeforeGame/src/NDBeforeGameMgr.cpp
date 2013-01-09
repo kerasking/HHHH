@@ -1889,11 +1889,12 @@ bool NDBeforeGameMgr::CheckClientVersion( const char* szURL )
     //file = fopen(NDPath::GetResourceFilePath("version.ini").c_str(), "rb");
     //从caches下取版本信息
     string sVersion = NDPath::GetCashesPath() + NDPath::GetRootResDirName() + SZ_VERINI_PATH;
+	LOGD("sVersion is %s",sVersion.c_str());
     pkFile = fopen(sVersion.c_str(), "rb");
 
     if (!pkFile)
     {
-		CCLog("读取CACHES目录下版本文件失败");
+		LOGERROR("读取CACHES目录下版本文件失败");
         bFile = false;
     }
     else
@@ -1908,6 +1909,8 @@ bool NDBeforeGameMgr::CheckClientVersion( const char* szURL )
 
 	if (NDDataTransThread::DefaultThread()->GetThreadStatus() != ThreadStatusRunning)	
 	{
+		LOGERROR("NDDataTransThread::DefaultThread()->GetThreadStatus() != ThreadStatusRunning : %d",
+			(int)ThreadStatusRunning);
 		return false;
 	}
 
