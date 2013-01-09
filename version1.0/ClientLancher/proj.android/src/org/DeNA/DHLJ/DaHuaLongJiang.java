@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Stack;
+import java.util.TimerTask;
 
 import org.cocos2dx.lib.Cocos2dxActivity;
 
@@ -30,7 +31,6 @@ import com.mobage.android.social.common.RemoteNotificationResponse;
 import org.DeNA.DHLJ.PushService;
 
 import org.DeNA.DHLJ.SocialUtils;
-import android.R;
 //import android.app.ActionBar.LayoutParams;
 import android.app.AlertDialog;
 import android.app.Service;
@@ -87,9 +87,8 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	public static DynamicMenuBar menubar;
 	private static BalanceButton balancebutton;
 	private static float s_fScale;
-	private static View rootView = null;
+	private View rootView = null;
 	private static boolean m_bIsStartingVideo = false;
-	private final static boolean playVideoInActivity = true; //是否在独立的activity中播放视频
 	private static Context s_context;
 	private static LinearLayout s_balancelayout;
 
@@ -97,9 +96,11 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	private static Button testbutton;
 
 	private WindowManager wm=null;
-	private FloatView myFV=null;
+	private static FloatView myFV=null;
+	private static int FVAlpha=255;
 
 	private WindowManager.LayoutParams wmParams=new WindowManager.LayoutParams();
+	java.util.Timer timer = new java.util.Timer(true);
 
 	public static WindowManager.LayoutParams getMywmParams(){
 		return ms_pkDHLJ.wmParams;
@@ -270,6 +271,9 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	{
 		Log.e(TAG, "onStop called");
 		super.onStop();
+
+		if(myFV != null)
+			myFV.setVisibility(View.INVISIBLE);
 	}
 
 	@Override
@@ -278,6 +282,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		Log.e(TAG, "onDestroy called");
 		super.onDestroy();
 		Mobage.onStop();
+    	wm.removeView(myFV);
 	}
 
 	@Override
@@ -286,6 +291,8 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		Log.e(TAG, "onRestart called");
 		super.onRestart();
 		Mobage.onRestart();
+		if(myFV != null)
+			myFV.setVisibility(View.VISIBLE);
 	}
 
 	@Override
@@ -296,16 +303,16 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 
 	public void setMain()
 	{
-		Log.d(TAG, "@@ DaHuaLongJiang::setMain()");
+		Log.d(TAG, "DaHuaLongJiang::setMain()");
 
 		// remove all views
 		rootView = (View) getView();
-// 		FrameLayout parent = (FrameLayout) rootView.getParent();
-// 		if (parent != null)
-// 		{
-// 			parent.removeView(rootView);
-// 		}
-// 		menubar.removeAllViews();
+		FrameLayout parent = (FrameLayout) rootView.getParent();
+		if (parent != null)
+		{
+			parent.removeView(rootView);
+		}
+		menubar.removeAllViews();
 
 		// add edit view
 		addEditView();
@@ -315,7 +322,6 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		// menubar.addView(m_pkView);
 		menubar.addView(rootView);
 
-		// add balance button
 		s_balancelayout = new LinearLayout(s_context);
 		s_balancelayout.setOrientation(LinearLayout.VERTICAL);
 
@@ -346,19 +352,11 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 
 		// set menu bar visible
 		menubar.setMenubarVisibility(View.VISIBLE);
+		
+		createFloatView();
 	}
-	
-	private static void dump_menubar()
-	{
-		int n = menubar.getChildCount();
-		for (int i = 0; i < n; i++)
-		{
-			View v = menubar.getChildAt(i);
-			Log.d("test", "@@ menubar.child["+i+"]="+v.toString() + ",vis=" + v.getVisibility());
-		}		
-	}
-	
-	//@ime
+
+	// @ime
 	public void addEditView()
 	{
 		if (edittext == null)
@@ -386,78 +384,46 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		}
 	}
 
-	//@ime
-	//1=yes, 0=no, -1=unknown.
-	private int isFullScreenIME()
+	// @ime
+	private static boolean isFullScreenIME()
 	{
-		int ret = -1;
-		if (getView() != null)
+		if (ms_pkDHLJ != null && ms_pkDHLJ.rootView != null)
 		{
 			final InputMethodManager imm = (InputMethodManager) 
-					getView().getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+					ms_pkDHLJ.rootView.getContext()
+						.getSystemService(Context.INPUT_METHOD_SERVICE);
 			
 			if (imm != null)
 			{
-				ret = imm.isFullscreenMode() ? 1 : 0;
+				boolean bFull = imm.isFullscreenMode();
+				Log.d("test", "@@ ime isFull: " + bFull);
+				return bFull;
 			}
 		}
-		Log.d("test", "@@ ime isFull: " + ret);
-		return ret;
+		return false;
 	}
-	
-	//@ime
-	public void notifyIMEOpenClose( boolean bImeOpen ) 
+
+	// @ime
+	public void notifyIMEOpenClose(boolean bImeOpen)
 	{
-		Log.d("test", "@@ DaHuaLongJiang.notifyIMEOpenClose(): " + (bImeOpen ? "open" : "close"));
-		
-		//refreshLayout( bOpen );
-		if (true)// || isFullScreenIME() == 0)
+		Log.d("test", "@@ DaHuaLongJiang.notifyIMEOpenClose(): " + bImeOpen);
+
+		// refreshLayout( bOpen );
+		if (!isFullScreenIME())
 		{
-			if (bImeOpen) 
+			if (bImeOpen)
 			{
-				//bring editView to top
+				// bring editView to top
 				menubar.bringChildToFront(edittext);
 			}
 			else 
 			{
 				//bring surface view to top
 				menubar.bringChildToFront(getView());
-				bringLayoutToFront();
-				menubar.bringToFront();
-				menubar.postInvalidate();
-				//dump_menubar();
 			}
 		}
 	}
-	
-	private static void bringLayoutToFront()
-	{
-		Log.d("test","@@ bringLayoutToFront()");
-		
-		View vLinearLayout = null;
-		View vRelativeLayout = null;
-		
-		int n = menubar.getChildCount();
-		for (int i = 0; i < n; i++)
-		{
-			View v = menubar.getChildAt(i);
-			if (v.toString().indexOf("LinearLayout") != -1)
-			{
-				vLinearLayout = v;
-			}
-			else if (v.toString().indexOf("RelativeLayout") != -1)
-			{
-				vRelativeLayout = v;
-			}			
-		}
-		
-		if (vLinearLayout != null)
-			menubar.bringChildToFront(vLinearLayout);
-		
-		if (vRelativeLayout != null)
-			menubar.bringChildToFront(vRelativeLayout);		
-	}
-	
+
 	public void LoginComplete(int userid)
 	{
 		onLoginComplete(userid, mDeviceID);
@@ -595,39 +561,39 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 
 		return false;
 	}
-	
-	//@video
+
 	public static int playVideo(final String strFile)
 	{
-		Log.d("video", "@@ playVideo: " + strFile);
-		
+		if (true)
+		{
+			return 0;
+		}
+
 		pauseAllBackgroundMusic();
+		// ms_pkDHLJ.setContentView(m_pkView,pkLayoutParams);
+		m_bIsStartingVideo = true;
+		VideoViewHandler.post(mShowVideoView);
+		// m_pkView.setVisibility(View.VISIBLE);
+		Log.i("DaHuaLongJiang", "Entry java playVideo");
 
-		if (playVideoInActivity)
+		if (strFile.length() == 0)
 		{
-			ms_pkDHLJ.startVideoActivity();
-		}
-		else
-		{
-			m_bIsStartingVideo = true;
-			VideoViewHandler.post(mShowVideoView);
+			Log.e("DaHuaLongJiang", "strFile length == 0");
+			return -1;
 		}
 
+		if (null == ms_pkDHLJ)
+		{
+			Log.e("DaHuaLongJiang", "ms_pkDHLJ == 0");
+			return -1;
+		}
+
+		// ms_pkDHLJ.m_pkView.start();
+		// ms_pkDHLJ.setContentView(ms_pkDHLJ.m_pkView, pkLayoutParams);
+		Log.i("DaHuaLongJiang", "Leave java playVideo");
 		return 0;
 	}
 
-	//@video
-	private void startVideoActivity()
-	{
-		Log.d( "video", "@@ startVideoActivity()");
-
-        Intent intent = new Intent(getApplication(), VideoActivity.class);
-        startActivity(intent);
-        
-        Log.d( "video", "@@ startVideoActivity() -- done");
-	}
-
-	//@video
 	public static int stopVideo(final String strFile)
 	{
 		return 0;
@@ -692,49 +658,63 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 			return 1;
 		return 0;
 	}
+	public static void FVClicked() {
+		FVAlpha = 255;
+		myFV.getBackground().setAlpha(FVAlpha);  
+	}
+	private static Handler FloatViewHandler = new Handler();
+	private static Runnable mFloatViewRuner = new Runnable()
+	{
+		public void run()
+		{
+    		//myFV.setBackgroundDrawable(drawable);
+			if(myFV != null) {
+				if(FVAlpha > 10) {
+					FVAlpha = FVAlpha-2;
+					myFV.getBackground().setAlpha(FVAlpha);  
+					Log.i(TAG, "alpha="+Integer.toString(FVAlpha));
+				}
+			}
+		};
+	};
+    TimerTask task = new TimerTask() {   
+    	public void run() {  
+    		Log.v(TAG, "begin TimerTask");
+    		FloatViewHandler.post(mFloatViewRuner); 
+    	}   
+    };   
 	
-
-    private void createView(){
+    private void createFloatView(){
     	myFV=new FloatView(getApplicationContext());
-//    	myFV.setImageResource(R.drawable.icon);
+    	//myFV.setImageResource(tw.mobage.g23000052.R.drawable.icon);
+    	myFV.setBackgroundResource(tw.mobage.g23000052.R.drawable.icon);
     	//获取WindowManager
     	wm=(WindowManager)getApplicationContext().getSystemService("window");
         //设置LayoutParams(全局变量）相关参数
     	wmParams = getMywmParams();
+        wmParams.type=WindowManager.LayoutParams.TYPE_PHONE;   //设置window type
+        wmParams.format=PixelFormat.RGBA_8888;   //设置图片格式，效果为背景透明
 
-         /**
-         *以下都是WindowManager.LayoutParams的相关属性
-         * 具体用途可参考SDK文档
-         */
-//        wmParams.type=LayoutParams.TYPE_PHONE;   //设置window type
-//        wmParams.format=PixelFormat.RGBA_8888;   //设置图片格式，效果为背景透明
-//
-//        //设置Window flag
-//        wmParams.flags=LayoutParams.FLAG_NOT_TOUCH_MODAL
-//                              | LayoutParams.FLAG_NOT_FOCUSABLE;
-        /*
-         * 下面的flags属性的效果形同“锁定”。
-         * 悬浮窗不可触摸，不接受任何事件,同时不影响后面的事件响应。
-         wmParams.flags=LayoutParams.FLAG_NOT_TOUCH_MODAL 
-                               | LayoutParams.FLAG_NOT_FOCUSABLE
-                               | LayoutParams.FLAG_NOT_TOUCHABLE;
-        */
-        
-        
-        wmParams.gravity=Gravity.LEFT|Gravity.TOP;   //调整悬浮窗口至左上角
+        //设置Window flag
+        wmParams.flags=WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+                              | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
+        wmParams.gravity=Gravity.LEFT|Gravity.TOP;   //调整悬浮窗口至左下角
         //以屏幕左上角为原点，设置x、y初始值
+
+		DisplayMetrics dm = new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(dm);
         wmParams.x=0;
-        wmParams.y=0;
+        wmParams.y=dm.heightPixels-100;
         
         //设置悬浮窗口长宽数据
-        wmParams.width=40;
-        wmParams.height=40;
+        wmParams.width=80;
+        wmParams.height=80;
     
-        //显示myFloatView图像
+        //显示FloatView图像
         wm.addView(myFV, wmParams);
-    	
+        timer.schedule(task, 0, 50);
     }
-
+    	  
 	// 是否古老系统
 	public static int isVerOlder(int n)
 	{

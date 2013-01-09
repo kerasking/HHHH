@@ -11,7 +11,8 @@ public class FloatView extends ImageView {
     private float mTouchStartY;
     private float x;
     private float y;
-    
+    private float mLastX;
+    private float mLastY;
     
     private WindowManager wm=(WindowManager)getContext().getApplicationContext().getSystemService("window");
     
@@ -25,18 +26,20 @@ public class FloatView extends ImageView {
 	
 	 @Override
 	 public boolean onTouchEvent(MotionEvent event) {
-		 
-		 
 		 //获取相对屏幕的坐标，即以屏幕左上角为原点		 
 	     x = event.getRawX();   
 	     y = event.getRawY()-25;   //25是系统状态栏的高度
+	     int nMoveX = 0;
+	     int nMoveY = 0;
 	     Log.i("currP", "currX"+x+"====currY"+y);
 	     switch (event.getAction()) {
 	        case MotionEvent.ACTION_DOWN:
 	        	//获取相对View的坐标，即以此View左上角为原点
 	        	mTouchStartX =  event.getX();  
                 mTouchStartY =  event.getY();
-                
+
+	    		mLastX = x;
+	    		mLastY = y;
 	            Log.i("startP", "startX"+mTouchStartX+"====startY"+mTouchStartY);
 	            
 	            break;
@@ -45,7 +48,15 @@ public class FloatView extends ImageView {
 	            break;
 
 	        case MotionEvent.ACTION_UP:
+	    		nMoveX=(int)Math.abs(x-mLastX);
+	    		nMoveY=(int)Math.abs(y-mLastY);
+	            Log.i("MoveP", "nMoveX"+nMoveX+"====nMoveY"+nMoveY);
+
 	        	updateViewPosition();
+	        	if(nMoveX < 4 && nMoveY < 4) {
+   			 		FeedsView.openActivityFeeds();
+   		            DaHuaLongJiang.FVClicked();
+	        	}
 	        	mTouchStartX=mTouchStartY=0;
 	        	break;
 	        }
@@ -57,7 +68,6 @@ public class FloatView extends ImageView {
 		wmParams.x=(int)( x-mTouchStartX);
 		wmParams.y=(int) (y-mTouchStartY);
 	    wm.updateViewLayout(this, wmParams);
-	    
 	 }
 
 }
