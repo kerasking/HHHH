@@ -284,11 +284,13 @@ void NDNpc::OnDrawEnd(bool bDraw)
 
 	int nShowX = kNPCPos.x;		///< 临时性调整 郭浩
 	//高度临时调整，后续应该修改为在缩放时进行数据处理，否则坐标外部需要处理HJQ
-	int nShowY = kNPCPos.y - kSize.height
-			- ((m_pkCurrentAnimation ?
-					(m_pkCurrentAnimation->getBottomY()
-							- m_pkCurrentAnimation->getY()) : 0)
-											 * 0.5f * fScaleFactor + 20.0f);	///< 临时性调整 + 10.0f 郭浩
+// 	int nShowY = kNPCPos.y - kSize.height
+// 			- ((m_pkCurrentAnimation ?
+// 					(m_pkCurrentAnimation->getBottomY()
+// 							- m_pkCurrentAnimation->getY()) : 0)
+// 											 * 0.5f * fScaleFactor + 20.0f);	///< 临时性调整 + 10.0f 郭浩
+	NDAnimation* pAni = (NDAnimation*) m_pkAniGroup->getAnimations()->objectAtIndex(0);//++Guosen 2013.1.9 NPC名字啥的绘制不随着动画尺寸大小不一而上下跳动
+	int nShowY = kNPCPos.y - kSize.height - ( pAni ? pAni->getH() : 0 )* RESOURCE_SCALE_960;
 
 	bool isEmemy = false;
 
