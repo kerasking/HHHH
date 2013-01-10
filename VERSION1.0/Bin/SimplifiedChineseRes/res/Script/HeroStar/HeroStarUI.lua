@@ -491,7 +491,13 @@ end
 --提示升级将星
 function p.TipUpgrade()
     local scene = GetSMGameScene();
+    if ( scene == nil ) then
+		return;
+	end
 	local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.HeroStarUI);
+    if ( layer == nil ) then
+		return;
+	end
     local animate = RecursivUISprite(layer,{TAG_LAYER_JT});
     animate:SetVisible(HeroStar.CheckHeroStarCanUpLev());
 end
@@ -1061,10 +1067,8 @@ function p.GetNextStarPosition()
 		local lev = HeroStar.GetLevByGrade(nRoleId,nGrade)
 		if lev < levelMax then
 			if lev+1 <= levelMax then
-			
 				return nGrade,lev+1,false;
 			end
-		
 		elseif 	nGrade == #tStarList then
 			--最后一个星点
 			return nGrade,lev,true;
