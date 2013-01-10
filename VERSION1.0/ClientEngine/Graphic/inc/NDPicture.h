@@ -123,17 +123,19 @@ public:
 	static NDPicturePool* DefaultPool();
 	
 public:
-	NDPicture* AddPicture(const string& imageFile, bool gray = false) {
-		return AddPicture(imageFile.c_str(), gray);
-	}
 
-	NDPicture* AddPicture(const string& imageFile, int hrizontalPixel, int verticalPixel = 0, bool gray = false) {
-		return 	AddPicture(imageFile.c_str(), hrizontalPixel, verticalPixel, gray );
-	}
+	NDPicture* AddPicture(unsigned int uiSize,
+		unsigned char* pszBuffer,bool bGray = false);
 
-public:
+	NDPicture* AddPicture(const string& imageFile, bool gray = false);
+
+	NDPicture* AddPicture(const string& imageFile, int hrizontalPixel,
+		int verticalPixel = 0, bool gray = false);
+
 	NDPicture* AddPicture(const char* imageFile, bool gray = false);
-	NDPicture* AddPicture(const char* imageFile, int hrizontalPixel,int verticalPixel = 0, bool gray = false);
+
+	NDPicture* AddPicture(const char* imageFile, int hrizontalPixel,
+		int verticalPixel = 0, bool gray = false);
 
 public:
 	void RemovePicture(const char* imageFile);

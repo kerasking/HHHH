@@ -24,7 +24,7 @@ public:
 
 	bool readJsonFile(const char* pszFilePath);
 
-	string readData(const char* pszName);
+	const char* readData(const char* pszName);
 
 protected:
 

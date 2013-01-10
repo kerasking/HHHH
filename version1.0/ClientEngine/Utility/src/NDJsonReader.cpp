@@ -28,7 +28,7 @@ m_pszFilePath(0),
 m_pszBuffer(0),
 m_ulFileSize(0)
 {
-	
+	int a = 10;
 }
 
 NDJsonReader::~NDJsonReader()
@@ -37,7 +37,7 @@ NDJsonReader::~NDJsonReader()
 	SAFE_DELETE_ARRAY(m_pszBuffer);
 }
 
-string NDJsonReader::readData( const char* pszName )
+const char* NDJsonReader::readData( const char* pszName )
 {
 	LOGD("Entry NDJsonReader::readData");
 
@@ -49,25 +49,25 @@ string NDJsonReader::readData( const char* pszName )
 	if (0 == pszName || !*pszName)
 	{
 		LOGERROR("pszName is null");
-		return strRet;
+		return 0;
 	}
 
 	if (0 == m_pszBuffer || !*m_pszBuffer)
 	{
 		LOGERROR("No read file!");
-		return "";
+		return 0;
 	}
 
 	if (!kReader.parse(m_pszBuffer,kValue))
 	{
 		LOGERROR("Can't parse the buffer!Buffer: %s",m_pszBuffer);
-		return "";
+		return 0;
 	}
 
 	strRet = kValue[pszName].asString();
 
 	LOGD("strRet is %s",strRet.c_str());
-	return strRet;
+	return strRet.c_str();
 }
 
 bool NDJsonReader::readJsonFile(const char* pszFilePath)

@@ -19,7 +19,7 @@
 #include "CCCommon.h"
 #include "CCPlatformConfig.h"
 #include "ObjectTracker.h"
-
+#include "MD5checksum.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #include <jni.h>
@@ -35,6 +35,7 @@
 #endif
 
 using namespace cocos2d;
+using namespace Encrypt;
 
 NS_NDENGINE_BGN
 
@@ -857,6 +858,52 @@ NDPicture* NDPicturePool::AddPicture(const char* imageFile, int hrizontalPixel,
 	}
 
 	return pic->Copy();
+}
+
+NDPicture* NDPicturePool::AddPicture(unsigned int uiSize,
+									 unsigned char* pszBuffer,
+									 bool bGray /*= false*/ )
+{
+	if (0 == pszBuffer || !*pszBuffer || 0 == uiSize)
+	{
+		return 0;
+	}
+
+	CMD5Checksum kMD5;
+	string strMD5;
+
+	strMD5 = kMD5.GetMD5(pszBuffer,uiSize);
+
+	LOGD("Get the buffer MD5 value:%s",strMD5.c_str());
+
+	NDPicture* pkPicture = (NDPicture *) m_pkPicturesDict->Object(strMD5.c_str());
+
+	if (!pkPicture)
+	{
+		pkPicture = new NDPicture(bGray);
+		pkPicture->Initialization(pszBuffer,uiSize);
+		m_pkPicturesDict->SetObject(pkPicture, strMD5.c_str());
+
+		CCTexture2D* pkTexture = pkPicture->GetTexture();
+		m_mapTexture.insert(std::map<CCTexture2D*,
+			std::string>::value_type(pkTexture,strMD5.c_str()));
+	}
+
+	return pkPicture->Copy();
+}
+
+NDPicture* NDPicturePool::AddPicture( const string& imageFile,
+									 bool gray /*= false*/ )
+{
+	return AddPicture(imageFile.c_str(), gray);
+}
+
+NDPicture* NDPicturePool::AddPicture( const string& imageFile,
+									 int hrizontalPixel,
+									 int verticalPixel /*= 0*/,
+									 bool gray /*= false*/ )
+{
+	return 	AddPicture(imageFile.c_str(), hrizontalPixel, verticalPixel, gray );
 }
 
 //Í¨¹ýtexÉ¾³ýpic

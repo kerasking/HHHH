@@ -57,6 +57,7 @@
 #include "ScriptMgr.h"
 #include "NDUITableLayer.h"
 #include "CCPlatformConfig.h"
+#include "NDJsonReader.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #include <jni.h>
@@ -107,6 +108,19 @@ int GetChildrenTagList(LuaState* state)
 	return 1;
 }
 
+string GetTextFromJsonConf(const char* pszStringName)
+{
+	if (0 == pszStringName || !*pszStringName)
+	{
+		return 0;
+	}
+
+	NDJsonReader kReader;
+	kReader.readJsonFile("");
+	string strText = kReader.readData(pszStringName);
+
+	return strText;
+}
 
 //#pragma mark 通过节点获取某节点的子节点
 
@@ -1654,6 +1668,7 @@ namespace NDEngine {
 	void ScriptUiLoad()
 	{
 		ETLUAFUNC("GetChildrenTagList", GetChildrenTagList)
+		ETCFUNC("GetTextFromJsonConf",GetTextFromJsonConf)
 		ETCFUNC("PrintLog",		PrintLog)
 		ETCFUNC("GetUiNode",		GetUiNode)
 		ETCFUNC("GetLabel",			GetLabel)
@@ -1710,9 +1725,6 @@ namespace NDEngine {
 		//** chh 2012-07-24 **//
 		ETCFUNC("RecursiveSCE", RecursiveSCE);
 		ETCFUNC("RecursiveSCEV", RecursiveSCEV);
-
-
-
 
 
 		ETCFUNC("RecursiveHyperText", RecursiveHyperText);
