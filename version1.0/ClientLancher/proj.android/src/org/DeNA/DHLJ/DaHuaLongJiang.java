@@ -90,6 +90,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	private static float s_fScaleY;
 	private View rootView = null;
 	private static boolean m_bIsStartingVideo = false;
+	private final static boolean playVideoInActivity = true; //是否在独立的activity中播放视频
 	private static Context s_context;
 	private static LinearLayout s_balancelayout;
 
@@ -357,6 +358,16 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		createFloatView();
 	}
 
+	private static void dump_menubar()
+	{
+		int n = menubar.getChildCount();
+		for (int i = 0; i < n; i++)
+		{
+			View v = menubar.getChildAt(i);
+			Log.d("test", "@@ menubar.child["+i+"]="+v.toString() + ",vis=" + v.getVisibility());
+		}		
+	}
+	
 	// @ime
 	public void addEditView()
 	{
@@ -385,46 +396,80 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		}
 	}
 
-	// @ime
-	private static boolean isFullScreenIME()
+	//@ime
+	//1=yes, 0=no, -1=unknown.
+	private int isFullScreenIME()
 	{
-		if (ms_pkDHLJ != null && ms_pkDHLJ.rootView != null)
+		int ret = -1;
+		if (getView() != null)
 		{
 			final InputMethodManager imm = (InputMethodManager) 
-					ms_pkDHLJ.rootView.getContext()
-						.getSystemService(Context.INPUT_METHOD_SERVICE);
+					getView().getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
 			
 			if (imm != null)
 			{
-				boolean bFull = imm.isFullscreenMode();
-				Log.d("test", "@@ ime isFull: " + bFull);
-				return bFull;
+				ret = imm.isFullscreenMode() ? 1 : 0;
 			}
 		}
-		return false;
+		Log.d("test", "@@ ime isFull: " + ret);
+		return ret;
 	}
 
-	// @ime
-	public void notifyIMEOpenClose(boolean bImeOpen)
+	//@ime
+	public void notifyIMEOpenClose( boolean bImeOpen ) 
 	{
-		Log.d("test", "@@ DaHuaLongJiang.notifyIMEOpenClose(): " + bImeOpen);
-
-		// refreshLayout( bOpen );
-		if (!isFullScreenIME())
+		Log.d("test", "@@ DaHuaLongJiang.notifyIMEOpenClose(): " + (bImeOpen ? "open" : "close"));
+		
+		//refreshLayout( bOpen );
+		if (true)// || isFullScreenIME() == 0)
 		{
-			if (bImeOpen)
+			if (bImeOpen) 
 			{
-				// bring editView to top
+				//bring editView to top
 				menubar.bringChildToFront(edittext);
 			}
 			else 
 			{
 				//bring surface view to top
 				menubar.bringChildToFront(getView());
+				bringLayoutToFront();
+				menubar.bringToFront();
+				menubar.postInvalidate();
+				dump_menubar();
 			}
 		}
 	}
 
+	private static void bringLayoutToFront()
+	{
+		Log.d("test","@@ bringLayoutToFront()");
+		
+		View vLinearLayout = null;
+		View vRelativeLayout = null;
+		
+		int n = menubar.getChildCount();
+		for (int i = 0; i < n; i++)
+		{
+			View v = menubar.getChildAt(i);
+			if (v.toString().indexOf("LinearLayout") != -1)
+			{
+				vLinearLayout = v;
+			}
+			else if (v.toString().indexOf("RelativeLayout") != -1)
+			{
+				vRelativeLayout = v;
+			}			
+		}
+		
+		if (vLinearLayout != null)
+			menubar.bringChildToFront(vLinearLayout);
+		
+		if (vRelativeLayout != null)
+			menubar.bringChildToFront(vRelativeLayout);		
+		
+		if (s_balancelayout != null)
+			menubar.bringChildToFront(s_balancelayout);		
+	}
 	public void LoginComplete(int userid)
 	{
 		onLoginComplete(userid, mDeviceID);
@@ -560,39 +605,39 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 
 		return false;
 	}
-
+	
+	//@video
 	public static int playVideo(final String strFile)
 	{
-		if (true)
-		{
-			return 0;
-		}
-
+		Log.d("video", "@@ playVideo: " + strFile);
+		
 		pauseAllBackgroundMusic();
-		// ms_pkDHLJ.setContentView(m_pkView,pkLayoutParams);
-		m_bIsStartingVideo = true;
-		VideoViewHandler.post(mShowVideoView);
-		// m_pkView.setVisibility(View.VISIBLE);
-		Log.i("DaHuaLongJiang", "Entry java playVideo");
 
-		if (strFile.length() == 0)
+		if (playVideoInActivity)
 		{
-			Log.e("DaHuaLongJiang", "strFile length == 0");
-			return -1;
+			ms_pkDHLJ.startVideoActivity();
+		}
+		else
+		{
+			m_bIsStartingVideo = true;
+			VideoViewHandler.post(mShowVideoView);
 		}
 
-		if (null == ms_pkDHLJ)
-		{
-			Log.e("DaHuaLongJiang", "ms_pkDHLJ == 0");
-			return -1;
-		}
-
-		// ms_pkDHLJ.m_pkView.start();
-		// ms_pkDHLJ.setContentView(ms_pkDHLJ.m_pkView, pkLayoutParams);
-		Log.i("DaHuaLongJiang", "Leave java playVideo");
 		return 0;
 	}
 
+	//@video
+	private void startVideoActivity()
+	{
+		Log.d( "video", "@@ startVideoActivity()");
+
+        Intent intent = new Intent(getApplication(), VideoActivity.class);
+        startActivity(intent);
+        
+        Log.d( "video", "@@ startVideoActivity() -- done");
+	}
+
+	//@video
 	public static int stopVideo(final String strFile)
 	{
 		return 0;
@@ -701,11 +746,13 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		DisplayMetrics dm = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(dm);
         wmParams.x=0;
-        wmParams.y=dm.heightPixels-100;
+        wmParams.y=dm.heightPixels-10;
         
-        //设置悬浮窗口长宽数据
-        wmParams.width=80;
-        wmParams.height=80;
+        //设置悬浮窗口长宽数据,等宽高
+		Float sizex = 30 * s_fScaleY;
+		Float sizey = 30 * s_fScaleY;
+        wmParams.width=sizex.intValue();
+        wmParams.height=sizey.intValue();
     
         //显示FloatView图像
         wm.addView(myFV, wmParams);
