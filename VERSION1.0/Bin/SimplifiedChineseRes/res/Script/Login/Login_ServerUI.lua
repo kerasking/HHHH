@@ -10,8 +10,7 @@ local p = Login_ServerUI;
 p.curSel=0;
 p.Account=nil;
 p.Pwd="";
-p.UIN=611000318;--319258246; 
---p.UIN=317007836;
+p.UIN=317007816;
 
 p.LoginWait = true;
 p.SerName = "";

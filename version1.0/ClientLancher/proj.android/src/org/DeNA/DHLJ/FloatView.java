@@ -11,7 +11,10 @@ public class FloatView extends ImageView {
     private float mTouchStartY;
     private float x;
     private float y;
-    
+    private float mLastX1;
+    private float mLastY1;
+    private float mLastX2;
+    private float mLastY2;
     
     private WindowManager wm=(WindowManager)getContext().getApplicationContext().getSystemService("window");
     
@@ -25,18 +28,20 @@ public class FloatView extends ImageView {
 	
 	 @Override
 	 public boolean onTouchEvent(MotionEvent event) {
-		 
-		 
 		 //获取相对屏幕的坐标，即以屏幕左上角为原点		 
 	     x = event.getRawX();   
-	     y = event.getRawY()-25;   //25是系统状态栏的高度
+	     y = event.getRawY();   //25是系统状态栏的高度
+	     int nMoveX = 0;
+	     int nMoveY = 0;
 	     Log.i("currP", "currX"+x+"====currY"+y);
 	     switch (event.getAction()) {
 	        case MotionEvent.ACTION_DOWN:
 	        	//获取相对View的坐标，即以此View左上角为原点
 	        	mTouchStartX =  event.getX();  
                 mTouchStartY =  event.getY();
-                
+
+	    		mLastX1=(int)( x-mTouchStartX);
+	    		mLastY1=(int) (y-mTouchStartY);
 	            Log.i("startP", "startX"+mTouchStartX+"====startY"+mTouchStartY);
 	            
 	            break;
@@ -45,7 +50,20 @@ public class FloatView extends ImageView {
 	            break;
 
 	        case MotionEvent.ACTION_UP:
-	        	updateViewPosition();
+	    		mLastX2=(int)( x-event.getX());
+	    		mLastY2=(int) (y-event.getY());
+	    		nMoveX=(int)Math.abs(mLastX2-mLastX1);
+	    		nMoveY=(int)Math.abs(mLastY2-mLastY1);
+	            Log.i("MoveP", "nMoveX"+nMoveX+"====nMoveY"+nMoveY);
+
+	        	if(nMoveX < 4 && nMoveY < 4) {
+	        		restorViewPosition();
+   			 		FeedsView.openActivityFeeds();
+   		            DaHuaLongJiang.FVClicked();
+	        	}
+	        	else {
+		        	updateViewPosition();
+	        	}
 	        	mTouchStartX=mTouchStartY=0;
 	        	break;
 	        }
@@ -57,7 +75,12 @@ public class FloatView extends ImageView {
 		wmParams.x=(int)( x-mTouchStartX);
 		wmParams.y=(int) (y-mTouchStartY);
 	    wm.updateViewLayout(this, wmParams);
-	    
 	 }
 
+	 private void restorViewPosition(){
+		//更新浮动窗口位置参数
+		wmParams.x=(int)( mLastX1);
+		wmParams.y=(int) (mLastY1);
+	    wm.updateViewLayout(this, wmParams);
+	 }
 }

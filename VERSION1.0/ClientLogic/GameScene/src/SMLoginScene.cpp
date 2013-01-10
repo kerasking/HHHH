@@ -1188,7 +1188,7 @@ void* CSMLoginScene::LoadTextAndLua( void * pPointer )
 void CSMLoginScene::OnProcessUpdate()
 {
 #if UPDATE_ON == 1
-	const char*	pszUpdateURL	= SZ_UPDATE_URL;//ScriptMgrObj.excuteLuaFuncRetS( "GetUpdateURL", "Update" );//此时Lua脚本未加载……
+	const char*	pszUpdateURL = SZ_UPDATE_URL;//ScriptMgrObj.excuteLuaFuncRetS( "GetUpdateURL", "Update" );//此时Lua脚本未加载……
 	CreateUpdateUILayer();
 
 	if ( !pszUpdateURL )
@@ -1206,6 +1206,7 @@ void CSMLoginScene::OnProcessUpdate()
 
 	if ( !NDBeforeGameMgrObj.CheckClientVersion( pszUpdateURL ) )
 	{
+		LOGERROR("CheckClientVersion failed");
 		CloseWaitingAni();
 		StartEntry();
 		return;
