@@ -258,6 +258,10 @@
 							RelativePath="..\..\ClientLancher\proj.android\src\org\DeNA\DHLJ\SocialUtils.java"
 							>
 						</File>
+						<File
+							RelativePath="..\..\ClientLancher\proj.android\src\org\DeNA\DHLJ\VideoActivity.java"
+							>
+						</File>
 					</Filter>
 				</Filter>
 			</Filter>

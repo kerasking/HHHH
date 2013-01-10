@@ -134,6 +134,12 @@ void CUIEdit::SetTextSize(unsigned int nSize)
 #endif
 }
 
+void CUIEdit::SetTextAlignment(int alignment)
+{
+	if (m_lbText)
+		m_lbText->SetTextAlignment(alignment);
+}
+
 //ÉèÖÃÎÄ±¾
 void CUIEdit::SetText(const char* pszText)
 {

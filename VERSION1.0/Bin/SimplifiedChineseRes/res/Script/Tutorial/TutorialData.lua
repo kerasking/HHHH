@@ -14,8 +14,11 @@ p.HandleTimerEnd = nil;
 p.HandleTimerIsComplete = nil;
 
 p.GuideConfigIds = GetDataBaseIdList("guide_config");
-p.JtWidth   = 128*ScaleFactor;
-p.JtHeight  = 128*ScaleFactor;
+--p.JtWidth   = 128*ScaleFactor;
+--p.JtHeight  = 128*ScaleFactor;
+
+p.JtWidth   = 128*CoordScaleX;
+p.JtHeight  = 128*CoordScaleY;
 
 --[[
 p.JtTagNum     = 2489;--前头Tag

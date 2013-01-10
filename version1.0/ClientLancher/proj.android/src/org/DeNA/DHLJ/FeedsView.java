@@ -1,5 +1,7 @@
 package org.DeNA.DHLJ;
 
+import java.util.Random;
+
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.util.AttributeSet;
@@ -28,7 +30,10 @@ public class FeedsView extends LinearLayout{
 	}
 
 	public static void openActivityFeeds() {
-		Feed feed = new Feed("´ó»°Áú½«" , "ÎÒÔÚÍæ´ó»°Áú½«£¬ºÜºÃÍæµÄÓÎÏ·Å¶¡«" , "" , "");
+		int count = 3;
+		String str[] = {"æˆ‘åœ¨ç©ã€Šå¤§è©±é¾å°‡ã€‹ï¼Œå¾ˆå¥½ç©çš„éŠæˆ²å“¦ï½","å¿«ä¾†é«”é©—ã€Šå¤§è©±é¾å°‡ã€‹ï¼Œä¸‰åœ‹å·¨ä½œï¼Œé«˜ç•«è³ªï½","ã€Šå¤§è©±é¾å°‡ã€‹é«˜æ¸…Qç‰ˆRPGï¼Œèˆ‡ä¸‰åœ‹æ­¦å°‡å€‘ä¸¦è‚©ä½œæˆ°ï¼Œé«”é©—ä¸‰åœ‹è±ªæƒ…ï½"};
+		int r = new Random().nextInt(count);
+		Feed feed = new Feed("å¤§è©±é¾å°‡" , str[r] , "" , "");
 		com.mobage.android.social.cn.Feeds.openActivityFeeds(feed);
 	}
 	
@@ -41,14 +46,14 @@ public class FeedsView extends LinearLayout{
 			@Override
 			public void onSuccess() {
 				dialog.dismiss();
-				SocialUtils.showConfirmDialog("·ÖÏí³É¹¦", "·ÖÏí³É¹¦", "OK");
+				SocialUtils.showConfirmDialog("åˆ†äº«æˆåŠŸ", "åˆ†äº«æˆåŠŸ", "OK");
 			}
 
 			@Override
 			public void onError(Error error) {
 				// TODO Auto-generated method stub
 				dialog.dismiss();
-				SocialUtils.showConfirmDialog("·ÖÏíÊ§°Ü","·ÖÏíÊ§°Ü" + error.getDescription(), "OK");
+				SocialUtils.showConfirmDialog("åˆ†äº«å¤±æ•—","åˆ†äº«å¤±æ•—" + error.getDescription(), "OK");
 			}
 		});
 	}
