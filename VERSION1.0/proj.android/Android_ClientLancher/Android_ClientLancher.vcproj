@@ -235,7 +235,23 @@
 						Name="DHLJ"
 						>
 						<File
+							RelativePath="..\..\ClientLancher\proj.android\src\org\DeNA\DHLJ\BootReceiver.java"
+							>
+						</File>
+						<File
+							RelativePath="..\..\ClientLancher\proj.android\src\org\DeNA\DHLJ\ConnectionLog.java"
+							>
+						</File>
+						<File
 							RelativePath="..\..\ClientLancher\proj.android\src\org\DeNA\DHLJ\DaHuaLongJiang.java"
+							>
+						</File>
+						<File
+							RelativePath="..\..\ClientLancher\proj.android\src\org\DeNA\DHLJ\FeedsView.java"
+							>
+						</File>
+						<File
+							RelativePath="..\..\ClientLancher\proj.android\src\org\DeNA\DHLJ\FloatView.java"
 							>
 						</File>
 						<File
@@ -252,6 +268,18 @@
 						</File>
 						<File
 							RelativePath="..\..\ClientLancher\proj.android\src\org\DeNA\DHLJ\OAuthSupport.java"
+							>
+						</File>
+						<File
+							RelativePath="..\..\ClientLancher\proj.android\src\org\DeNA\DHLJ\PeopleView.java"
+							>
+						</File>
+						<File
+							RelativePath="..\..\ClientLancher\proj.android\src\org\DeNA\DHLJ\PushService.java"
+							>
+						</File>
+						<File
+							RelativePath="..\..\ClientLancher\proj.android\src\org\DeNA\DHLJ\RemoteNotificationView.java"
 							>
 						</File>
 						<File
