@@ -127,7 +127,7 @@ void DownloadPackage::DownloadThreadExcute()
  	{
  		if (!KDirectory::createDir(strSaveDir))
  		{
-			LOGERROR("Create dir failed");
+			LOGERROR("Create dir failed",strSaveDir.c_str());
  			DidDownloadStatus(DownloadStatusFailed);
  			return;
  		}
