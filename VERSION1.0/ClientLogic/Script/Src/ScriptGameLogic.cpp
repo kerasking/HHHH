@@ -529,10 +529,22 @@ void StartBGMusic()
 	SetSceneMusicNew(1);
 }
 
-void StopBGMusic()
+void DisableBGMusic()
 {
 	SimpleAudioEngine* pkSimpleAudio = SimpleAudioEngine::sharedEngine();
 	gs_bIsMusic = false;
+
+	if (0 == pkSimpleAudio)
+	{
+		return;
+	}
+
+	pkSimpleAudio->stopBackgroundMusic();
+}
+
+void StopBGMusic()
+{
+	SimpleAudioEngine* pkSimpleAudio = SimpleAudioEngine::sharedEngine();
 
 	if (0 == pkSimpleAudio)
 	{
@@ -1028,6 +1040,7 @@ void ScriptGameLogicLoad()
 	ETCFUNC("GetDeviceToken", GetDeviceToken);
 	ETCFUNC("SetRidePet", SetRidePet);
 	ETCFUNC("StartBGMusic", StartBGMusic);
+	ETCFUNC("DisableBGMusic",DisableBGMusic);
 	ETCFUNC("StopBGMusic", StopBGMusic);
 	ETCFUNC("StartEffectSound", StartEffectSound);
 	ETCFUNC("StopEffectSound", StopEffectSound);

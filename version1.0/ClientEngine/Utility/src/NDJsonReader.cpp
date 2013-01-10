@@ -1,6 +1,7 @@
 #include "NDJsonReader.h"
 #include "CCPlatformConfig.h"
 #include "CCFileUtils.h"
+#include "NDPath.h"
 #include <json.h>
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
@@ -34,10 +35,10 @@ m_ulFileSize(0)
 NDJsonReader::~NDJsonReader()
 {
 	SAFE_DELETE_ARRAY(m_pszFilePath);
-	SAFE_DELETE_ARRAY(m_pszBuffer);
+	//SAFE_DELETE_ARRAY(m_pszBuffer);
 }
 
-const char* NDJsonReader::readData( const char* pszName )
+string NDJsonReader::readData( const char* pszName )
 {
 	LOGD("Entry NDJsonReader::readData");
 
@@ -94,13 +95,27 @@ bool NDJsonReader::readJsonFile(const char* pszFilePath)
 	string strBuffer = (const char*)(CCFileUtils::sharedFileUtils()->
 		getFileData(m_pszFilePath,"rb",&m_ulFileSize));
 
-	m_pszBuffer = new char[strBuffer.length()];
-	memset(m_pszBuffer,0,sizeof(char) * (strBuffer.length()));
+	m_pszBuffer = new char[strBuffer.length() + 1];
+	memset(m_pszBuffer,0,sizeof(char) * (strBuffer.length() + 1));
 	strcpy(m_pszBuffer,strBuffer.c_str());
 
 	LOGD("strBuffer is %s",m_pszBuffer);
 
 	return true;
+}
+
+string NDJsonReader::getGameConfig( const char* pszTextName )
+{
+	string strRet = "";
+
+	if (!readJsonFile(NDPath::GetGameConfigPath("GameConfig.json").c_str()))
+	{
+		return "";
+	}
+
+	strRet = readData(pszTextName);
+
+	return strRet;
 }
 
 NS_NDENGINE_END

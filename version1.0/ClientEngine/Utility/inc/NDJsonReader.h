@@ -24,7 +24,8 @@ public:
 
 	bool readJsonFile(const char* pszFilePath);
 
-	const char* readData(const char* pszName);
+	string readData(const char* pszName);
+	string getGameConfig(const char* pszTextName);
 
 protected:
 

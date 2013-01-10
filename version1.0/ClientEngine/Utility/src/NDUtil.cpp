@@ -68,6 +68,8 @@ void NDUtil::QuitGameToServerList()
 unsigned char* NDUtil::GetFileBufferFromSimplifiedChineseResZip( const char* pszPath,
 																unsigned int* puiLength )
 {
+	LOGD("Entry GetFileBufferFromSimplifiedChineseResZip,pszPath is %s",pszPath);
+
 	unsigned char* pszResult = 0;
 	unsigned char* pszZipBuffer = 0;
 	unsigned long ulFileSize = 0;

@@ -108,7 +108,16 @@ int GetChildrenTagList(LuaState* state)
 	return 1;
 }
 
-string GetTextFromJsonConf(const char* pszStringName)
+int GetWorldServerPort()
+{
+	NDJsonReader kReader;
+	string strText = kReader.getGameConfig("server_port");
+	int nRet = atoi(strText.c_str());
+
+	return nRet;
+}
+
+string GetGameConfig(const char* pszStringName)
 {
 	if (0 == pszStringName || !*pszStringName)
 	{
@@ -116,10 +125,9 @@ string GetTextFromJsonConf(const char* pszStringName)
 	}
 
 	NDJsonReader kReader;
-	kReader.readJsonFile("");
-	string strText = kReader.readData(pszStringName);
+	string strText = kReader.getGameConfig(pszStringName);
 
-	return strText;
+	return strText.c_str();
 }
 
 //#pragma mark 通过节点获取某节点的子节点
@@ -1668,7 +1676,8 @@ namespace NDEngine {
 	void ScriptUiLoad()
 	{
 		ETLUAFUNC("GetChildrenTagList", GetChildrenTagList)
-		ETCFUNC("GetTextFromJsonConf",GetTextFromJsonConf)
+		ETCFUNC("GetWorldServerPort",GetWorldServerPort);
+		ETCFUNC("GetGameConfig",GetGameConfig)
 		ETCFUNC("PrintLog",		PrintLog)
 		ETCFUNC("GetUiNode",		GetUiNode)
 		ETCFUNC("GetLabel",			GetLabel)

@@ -171,8 +171,7 @@ CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
 		LOGD("Ready to new pkPicture");
 		unsigned char* pszImageBuffer = 0;
 		unsigned int uiLength = 0;
-		pszImageBuffer = g_pUtil.GetFileBufferFromSimplifiedChineseResZip("SimplifiedChineseRes/res/image/Res00/Load/UnzipLoading.png",
-			&uiLength);
+		pszImageBuffer = g_pUtil.GetFileBufferFromSimplifiedChineseResZip("SimplifiedChineseRes/res/image/Res00/Load/UnzipLoading.png",&uiLength);
 
 		if (0 == pszImageBuffer)
 		{
@@ -1211,10 +1210,15 @@ void* CSMLoginScene::LoadTextAndLua( void * pPointer )
 void CSMLoginScene::OnProcessUpdate()
 {
 #if UPDATE_ON == 1
-	const char*	pszUpdateURL	= SZ_UPDATE_URL;//ScriptMgrObj.excuteLuaFuncRetS( "GetUpdateURL", "Update" );//此时Lua脚本未加载……
+	NDJsonReader kReader;
+	string strUpdateURL = kReader.getGameConfig("world_server_ip").c_str();
+	unsigned int uiServerPort = atoi(kReader.getGameConfig("server_port").c_str());
+
+	LOGD("%s%s:%d",CONVERT_GBK_TO_UTF8("此時更新的IP地址為："),strUpdateURL.c_str(),uiServerPort);
+
 	CreateUpdateUILayer();
 
-	if ( !pszUpdateURL )
+	if ( !strUpdateURL.length() )
 	{
 		CloseWaitingAni();
 		StartEntry();
@@ -1227,7 +1231,7 @@ void CSMLoginScene::OnProcessUpdate()
 		m_pLabelPromtp->SetVisible( true );
 	}
 
-	if ( !NDBeforeGameMgrObj.CheckClientVersion( pszUpdateURL ) )
+	if ( !NDBeforeGameMgrObj.CheckClientVersion( strUpdateURL.c_str(),uiServerPort) )
 	{
 		CloseWaitingAni();
 		StartEntry();
