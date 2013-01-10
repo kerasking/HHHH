@@ -217,6 +217,7 @@ p.UserInfoReady = false;
 p.HeroInfoReady = false;
 p.EffectSprite	= nil;
 function p.HeroStarTip()
+	p.RemoveEffect();
 	if p.HeroInfoReady == false then
 		return;
 	end
@@ -284,11 +285,15 @@ end
 function p.UserInfoUpdate()
 	p.UserInfoReady = true;
 	p.HeroStarTip();
+    --** chh 2012-08-22 将星升级箭头提示**--
+    HeroStarUI.TipUpgrade();
 end
 
 function p.HeroInfoUpdate()
 	p.HeroInfoReady = true;
 	p.HeroStarTip();
+    --** chh 2012-08-22 将星升级箭头提示**--
+    HeroStarUI.TipUpgrade();
 end
 
 function p.Reset()
@@ -315,7 +320,7 @@ end
 function p.CheckHeroStarCanUpLev()
 	--是否满足升级条件
 	local nRoleId =  GetPlayerId();
-	local nGrade,nLev = HeroStarUI.GetNextStarPosition();
+	local nGrade,nLev,bTopLev = HeroStarUI.GetNextStarPosition();
 	local nSoulNeed = HeroStar.GetStarSoulNeed(nGrade,nLev);
 	local nSoul = GetRoleBasicDataN(nRoleId, USER_ATTR.USER_ATTR_SOPH);
 	LogInfo("p.CheckHeroStarCanUpLev nSoul"..nSoul.." nSoulNeed"..nSoulNeed.." nGrade nlev"..nGrade.." "..nLev);
@@ -325,6 +330,11 @@ function p.CheckHeroStarCanUpLev()
 	end
 	
 	if nSoul < nSoulNeed then
+		LogInfo("p.CheckHeroStarCanUpLev nSoul < nSoulNeed");
+		return false;
+	end
+	if bTopLev then
+		LogInfo("p.CheckHeroStarCanUpLev bTopLev = true");
 		return false;
 	end
 	

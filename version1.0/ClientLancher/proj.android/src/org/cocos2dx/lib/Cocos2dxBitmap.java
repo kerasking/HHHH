@@ -295,11 +295,9 @@ public class Cocos2dxBitmap {
 					}
 				}
 
-				//ND_MOD
+				//ND_MOD 此处不能把i++放入循环内，上面的代码会死循环
 				/* Remove spaces at the beginning of a new line. */
-				//while (pString.indexOf(i++) == ' ') {
-				while (pString.indexOf(i) == ' ') {
-					i++;
+				while (pString.indexOf(i++) == ' ') {
 				}
 
 				start = i;

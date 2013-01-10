@@ -85,7 +85,7 @@ public: //@priority
 	virtual ND_LAYER_PRIORITY getPriority();
 	void bringToTop();
 	void bringToBottom();
-	bool getPopupDlgFlag() { m_bPopupDlg; }
+	bool getPopupDlgFlag() { return m_bPopupDlg; }
 	void setPopupDlgFlag( bool bPopup ) { m_bPopupDlg = bPopup; }
 	void setDebugName( const char* inName );
 	const char* getDebugName();
@@ -208,6 +208,8 @@ public:
 	virtual bool DispatchDragOverEvent(CCPoint beginTouch, CCPoint moveTouch,
 			bool longTouch = false);
 
+	virtual bool TryDispatchToButton( NDUINode* uiNode );
+
 private:
 
 	void ResetEventParam();
@@ -234,6 +236,8 @@ protected:
 
 	int m_nIsHVFirstTemp;  //0.还未确定滑动的方向 1.水平 2.垂直
 	bool m_bIsHVContainer;
+
+	bool m_bDispatchBtnClickByPressDown; //标记：通过press down派发了一个click事件
 	
 private:
 

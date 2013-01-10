@@ -71,6 +71,7 @@ public:
 	
     void SetFlag( int iFlag ){ m_iFlag = iFlag; }
     int GetFlag(){ return m_iFlag; }
+	void SetTextAlignment(int alignment);
 	
 private:
 	static CUIEdit*             g_pCurUIEdit;

@@ -13,7 +13,7 @@ p.IsCanBeLoot = false;
 p.LootPlayerLev = 0;
 
 p.Ctrl = {Btn = {btnClose = 46, btnLoot = 45, btnRefresh = 23, btnCall = 18,},
-               Lable = {txtName = 41, txtLev = 18, txtClass = 42, txtIsLoot = 47, txtClass = 19, txtCar = 21, txtRaise = 48, txtAward = 44,},};
+               Lable = {txtName = 41, txtLev = 18, txtIsLoot = 47, txtClass = 19, txtCar = 21, txtRaise = 48, txtAward = 44,},};
                
 p.FoodCar = { {btnId = 11, name = GetTxtPri("TL_T1"), isFocus = true},
                         {btnId = 12, name = GetTxtPri("TL_T2"), isFocus = false},
@@ -81,7 +81,7 @@ function p.RefreshUI()
                 SetLabel(layer, p.Ctrl.Lable.txtIsLoot, GetTxtPri("TL_T7"));
             end
             
-            SetLabel(layer, p.Ctrl.Lable.txtClass, GetTxtPri("TL_T8"));
+            SetLabel(layer, p.Ctrl.Lable.txtClass, v.strArmyGroup);
             local label = GetLabel(layer, p.Ctrl.Lable.txtRaise);
             label:SetVisible(false);
             --SetLabel(layer, p.Ctrl.Lable.txtRaise, GetTxtPri("TL_T8"));

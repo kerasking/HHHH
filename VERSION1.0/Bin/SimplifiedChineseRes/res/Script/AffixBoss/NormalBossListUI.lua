@@ -852,7 +852,7 @@ function p.OnUIEventConfirmDialog( uiNode, uiEventType, param )
 				else
                     local nNeedLevel = GetGetVipLevel_ELITE_MAP_RESET_NUM();
                 
-					CommonDlgNew.ShowYesDlg(string.format(GetTxtPri("TPL2_T4"),nNeedLevel), nil, nil, 3 );
+					CommonDlgNew.ShowYesDlg(string.format(GetTxtPri("NORMAL_T4"),nNeedLevel), nil, nil, 3 );
 				end
             end
 		end
