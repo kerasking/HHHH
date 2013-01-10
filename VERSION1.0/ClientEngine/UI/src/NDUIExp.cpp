@@ -246,7 +246,7 @@ void CUIExp::SetFrameRect(CCRect rect)
 	
 	if (m_lbText)
 	{
-		m_lbText->SetFrameRect(CCRectMake(0, 0, rect.size.width, rect.size.height*1.5));
+		m_lbText->SetFrameRect(CCRectMake(0, 0, rect.size.width, rect.size.height));
 	}
 }
 bool CUIExp::CanDestroyOnRemoveAllChildren(NDNode* pNode)
