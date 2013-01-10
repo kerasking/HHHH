@@ -466,6 +466,9 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		
 		if (vRelativeLayout != null)
 			menubar.bringChildToFront(vRelativeLayout);		
+		
+		if (s_balancelayout != null)
+			menubar.bringChildToFront(s_balancelayout);		
 	}
 	public void LoginComplete(int userid)
 	{
@@ -743,11 +746,13 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		DisplayMetrics dm = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(dm);
         wmParams.x=0;
-        wmParams.y=dm.heightPixels-100;
+        wmParams.y=dm.heightPixels-10;
         
-        //设置悬浮窗口长宽数据
-        wmParams.width=80;
-        wmParams.height=80;
+        //设置悬浮窗口长宽数据,等宽高
+		Float sizex = 30 * s_fScaleY;
+		Float sizey = 30 * s_fScaleY;
+        wmParams.width=sizex.intValue();
+        wmParams.height=sizey.intValue();
     
         //显示FloatView图像
         wm.addView(myFV, wmParams);
