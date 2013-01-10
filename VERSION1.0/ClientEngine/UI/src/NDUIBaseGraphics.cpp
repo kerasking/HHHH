@@ -67,7 +67,7 @@ namespace NDEngine
 
 		if ( color.r == 0 && color.g == 0 && color.b == 0 && color.a == 0)
 		{
-			return;
+			//return;
 		}
  		ccVertex2F m_pSquareVertices[4];
  		m_pSquareVertices[0].x = rect.origin.x;
@@ -108,16 +108,16 @@ namespace NDEngine
  
  		}
 // 		//≤‚ ‘√Ëœﬂ¥˙¬Î
-// 		ccDrawColor4F(1,1,0,0.5);
-// 		glLineWidth(2);
-// 		ccDrawLine( ccp(rect.origin.x,rect.origin.y), ccp(rect.origin.x+rect.size.width,rect.origin.y+rect.size.height));
-// 		ccDrawColor4F(1,0,0,1);
-// 		glPointSize(4);
-// 		//ccDrawPoint( ccp(rect.origin.x,rect.origin.y) );//r
-// 		ccDrawLine( ccp(rect.origin.x,rect.origin.y+rect.size.height), ccp(rect.origin.x+rect.size.width,rect.origin.y));
-// 		ccDrawColor4F(0,1,0,1);
-// 		//ccDrawPoint( ccp(rect.origin.x+rect.size.width,rect.origin.y+rect.size.height) );//g
-// 		ccDrawLine( ccp(rect.origin.x,rect.origin.y+rect.size.height), ccp(rect.origin.x+rect.size.width,rect.origin.y+rect.size.height));
+//  		ccDrawColor4F(1,1,0,0.5);
+//  		glLineWidth(2);
+//  		ccDrawLine( ccp(rect.origin.x,rect.origin.y), ccp(rect.origin.x+rect.size.width,rect.origin.y+rect.size.height));
+//  		ccDrawColor4F(1,0,0,1);
+//  		glPointSize(4);
+//  		ccDrawPoint( ccp(rect.origin.x,rect.origin.y) );//r
+//  		ccDrawLine( ccp(rect.origin.x,rect.origin.y+rect.size.height), ccp(rect.origin.x+rect.size.width,rect.origin.y));
+//  		ccDrawColor4F(0,1,0,1);
+//  		ccDrawPoint( ccp(rect.origin.x+rect.size.width,rect.origin.y+rect.size.height) );//g
+//  		ccDrawLine( ccp(rect.origin.x,rect.origin.y+rect.size.height), ccp(rect.origin.x+rect.size.width,rect.origin.y+rect.size.height));
 	}
 
 	void DrawPolygon(CCRect rect, ccColor4B color, GLuint lineWidth)

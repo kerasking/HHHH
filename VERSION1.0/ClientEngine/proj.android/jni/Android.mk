@@ -159,6 +159,7 @@ $(LOCAL_PATH)/../../../cocos2d-x/cocos2dx/tileMap_parallax_nodes \
 $(LOCAL_PATH)/../../../cocos2d-x/libpng \
 $(LOCAL_PATH)/../../../luaplus \
 $(LOCAL_PATH)/../../../tinyxml/inc \
+$(LOCAL_PATH)/../../../Json/inc \
 $(LOCAL_PATH)/../../../include/C3/win \
 $(LOCAL_PATH)/../../../ClientLogic/MsgDefine/inc \
 $(LOCAL_PATH)/../../../ClientLogic/Script/inc \
@@ -176,6 +177,7 @@ LOCAL_WHOLE_STATIC_LIBRARIES += luaplus
 LOCAL_WHOLE_STATIC_LIBRARIES += tinyxml
 LOCAL_WHOLE_STATIC_LIBRARIES += NetWork
 LOCAL_WHOLE_STATIC_LIBRARIES += KUtil
+LOCAL_WHOLE_STATIC_LIBRARIES += Json
 
 include $(BUILD_STATIC_LIBRARY)
 
@@ -185,3 +187,4 @@ $(call import-module,CocosDenshion/android)
 $(call import-module,tinyxml/proj.android/jni)
 $(call import-module,NetWork/proj.android/jni)
 $(call import-module,KUtil/proj.android/jni)
+$(call import-module,Json/proj.android/jni)

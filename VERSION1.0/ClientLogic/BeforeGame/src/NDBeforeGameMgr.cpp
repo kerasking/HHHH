@@ -1876,7 +1876,7 @@ bool NDBeforeGameMgr::isWifiNetWork()
     return false;
 }
 
-bool NDBeforeGameMgr::CheckClientVersion( const char* szURL )
+bool NDBeforeGameMgr::CheckClientVersion( const char* szURL,unsigned int uiPort )
 {
 	LOGD("NDBeforeGameMgr::CheckClientVersion");
     static int s_nVersion = 0;
@@ -1902,10 +1902,10 @@ bool NDBeforeGameMgr::CheckClientVersion( const char* szURL )
         fread(szLocalVersion, 1, 4, pkFile);
         fclose(pkFile);
         s_nVersion = atoi(szLocalVersion);
-    }        
+    }
 
     NDDataTransThread::ResetDefaultThread();
-    NDDataTransThread::DefaultThread()->Start( szURL, 9700 );//("192.168.65.77", 9500);//++Guosen
+    NDDataTransThread::DefaultThread()->Start( szURL, uiPort );//("192.168.65.77", 9500);//++Guosen
 
 	if (NDDataTransThread::DefaultThread()->GetThreadStatus() != ThreadStatusRunning)	
 	{

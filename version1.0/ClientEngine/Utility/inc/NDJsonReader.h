@@ -20,16 +20,18 @@ class NDJsonReader:public NDObject
 public:
 
 	NDJsonReader();
-	NDJsonReader(const char* pszFilePath);
 	virtual ~NDJsonReader();
 
-	void setPath(const char* pszFilePath);
+	bool readJsonFile(const char* pszFilePath);
 
 	string readData(const char* pszName);
+	string getGameConfig(const char* pszTextName);
 
 protected:
 
 	char* m_pszFilePath;
+	char* m_pszBuffer;
+	unsigned long m_ulFileSize;
 
 private:
 };

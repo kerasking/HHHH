@@ -48,7 +48,7 @@
 #include "NDScene.h"
 #include "NDDirector.h"
 #include "NDUILoad.h"
-
+#include "NDJsonReader.h"
 
 //@reglua: 没真正注册，只是记录了一堆函数回调，另外地方统一调用
 void NDScriptRegLua::doReg()
@@ -175,6 +175,16 @@ void NDScriptRegLua::doReg()
 	ETMEMBERFUNC("GetParam2",						&NDNode::GetParam2)
 	ETMEMBERFUNC("SetDestroyNotify",				&NDNode::SetDestroyNotify)
 	ETCLASSEND(NDNode)
+
+	/***
+	* Json配置文件讀取類  郭浩
+	*/
+	ETCLASSBEGIN(NDJsonReader)
+	ETCONSTRUCT("createNDJsonReader")
+	ETDESTRUCT("Free")
+	ETMEMBERFUNC("readJsonFile",&NDJsonReader::readJsonFile)
+	ETMEMBERFUNC("readData",&NDJsonReader::readData)
+	ETCLASSEND(NDJsonReader)
 	
 //#pragma mark 导演类导出"NDDirector.h"
 	// 导演类导出
@@ -198,8 +208,6 @@ void NDScriptRegLua::doReg()
 	ETSUBCLASSBEGIN(NDScene, NDNode)
 	ETCFUNC("Scene",								&NDScene::Scene)
 	ETCLASSEND(NDScene)
-	
-
     
 //#pragma mark  UI基类导出"NDUINode.h"
 	// UI基类导出

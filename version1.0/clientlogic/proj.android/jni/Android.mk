@@ -151,6 +151,7 @@ $(LOCAL_PATH)/../../../ClientLogic/Script/inc \
 $(LOCAL_PATH)/../../../ClientLogic/GameScene/inc \
 $(LOCAL_PATH)/../../../NetWork/inc \
 $(LOCAL_PATH)/../../../TinyXML/inc \
+$(LOCAL_PATH)/../../../Json/inc \
 $(LOCAL_PATH)/../../../KUtil/inc
 
 LOCAL_LDLIBS := -L$(call host-path, $(LOCAL_PATH)/../../proj.android/libs/$(TARGET_ARCH_ABI)) \
