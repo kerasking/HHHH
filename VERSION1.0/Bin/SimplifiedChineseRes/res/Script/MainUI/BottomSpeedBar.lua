@@ -396,7 +396,7 @@ function p.OnUIEvent(uiNode, uiEventType, param)
         end
         
         if( p.BtnFunc[1] == tag ) then       --人物
-            PlayerUIAttr.LoadUI();
+            SyndicateBattleSignUpUI.LoadUI();
             --CommonScrollDlg.ShowTipDlg({"由于服务器维护，3点关服，请大家通知大家！",ccc4(255,255,255,255)});
         elseif( p.BtnFunc[2] == tag ) then   --背包
             --p.TestButtonClick(); --删除角色测试 郭浩
