@@ -44,7 +44,10 @@
 using namespace cocos2d;
 
 //抖动容错
-#define MOVE_ERROR (5)
+#define MOVE_ERROR (128*RESOURCE_SCALE)
+
+//按下按钮等同点击
+#define PRESSDOWN_BTN_EQ_CLICK 0
 
 //长按的时间判定太短会导致单击判定无效.
 #define LONG_TOUCH_TIME (0.4f)
@@ -98,6 +101,8 @@ NDUILayer::NDUILayer()
 	m_nIsHVFirstTemp = 0;
 	m_bIsHVContainer = false;
 	m_bPopupDlg = false;
+
+	m_bDispatchBtnClickByPressDown = false;
 }
 
 NDUILayer::~NDUILayer()
@@ -404,8 +409,13 @@ bool NDUILayer::TouchBegin(NDTouch* touch)
 		m_bTouchDwon = true;
 		DispatchTouchBeginEvent(m_kBeginTouch);
 
+		if (m_bDispatchBtnClickByPressDown)
+		{
+			m_bDispatchBtnClickByPressDown = false;
+		}
+
 		// 开始定时器判定长按
-		if (m_pkTouchedNode && m_pkLongTouchTimer)
+		else if (m_pkTouchedNode && m_pkLongTouchTimer)
 		{
 			m_pkLongTouchTimer->SetTimer(this, LONG_TOUCH_TIMER_TAG, LONG_TOUCH_TIME);
 		}
@@ -677,6 +687,9 @@ bool NDUILayer::DispatchTouchBeginEvent(CCPoint beginTouch)
 
 		if (cocos2d::CCRect::CCRectContainsPoint(nodeFrame, beginTouch))
 		{
+			//按钮点击优化：按下时直接响应单击事件
+			if (TryDispatchToButton(uiNode)) return false; //discard.
+
 			//NDUILayer need dispatch event
 			if (uiNode->IsKindOfClass(RUNTIME_CLASS(NDUILayer)))
 			{
@@ -695,6 +708,7 @@ bool NDUILayer::DispatchTouchBeginEvent(CCPoint beginTouch)
 
 			m_pkTouchedNode = uiNode;
 			DealTouchNodeState(true);
+
 			return true;
 		}
 	}
@@ -787,7 +801,8 @@ bool NDUILayer::DispatchTouchEndEvent(CCPoint beginTouch, CCPoint endTouch)
 				 this->AfterEditClickEvent((NDUIEdit*)uiNode);
 				 return true;
 				 }
-				 else*/if (uiNode->IsKindOfClass(RUNTIME_CLASS(NDUIButton)))
+				 else*/
+				if (uiNode->IsKindOfClass(RUNTIME_CLASS(NDUIButton)))
 				{
 					if (((NDUIButton*) uiNode)->IsGray())
 					{
@@ -1960,6 +1975,59 @@ bool NDUILayer::isTouchMoved( const int errorPixels )
 		if (ccpDistanceSQ( m_kBeginTouch, m_kEndTouch ) >= errorPixels*errorPixels)
 			return true;
 	}
+	return false;
+}
+
+//按下按钮等同点击
+bool NDUILayer::TryDispatchToButton( NDUINode* uiNode )
+{
+	if( uiNode && PRESSDOWN_BTN_EQ_CLICK 
+		&& uiNode->IsKindOfClass(RUNTIME_CLASS(NDUIButton))
+		&& stricmp( uiNode->GetRuntimeClass()->className, "NDUIButton") == 0)
+	{
+		do {
+			if (((NDUIButton*) uiNode)->IsGray())
+			{
+				break;
+			}
+			uiNode->DispatchClickOfViewr(uiNode);
+
+			NDUIButtonDelegate* delegate =
+				dynamic_cast<NDUIButtonDelegate*>(uiNode->GetDelegate());
+
+			if (delegate)
+			{
+				delegate->OnButtonClick((NDUIButton*) uiNode);
+				break;
+			}
+
+			NDUITargetDelegate* targetDelegate = uiNode->GetTargetDelegate();
+			if (targetDelegate)
+			{
+				targetDelegate->OnTargetBtnEvent(uiNode, TE_TOUCH_BTN_CLICK);
+				break;
+			}
+
+			if (OnScriptUiEvent(uiNode, TE_TOUCH_BTN_CLICK))
+			{
+				break;
+			}
+		} while (0);
+
+		// reset flags
+		m_bLongTouch = false;
+		m_bTouchMoved = false;
+		m_bDragOutFlag = false;
+		m_bLayerMoved = false;
+		m_kMoveTouch = ccp(0,0);
+		m_bTouchDwon = false;
+		ms_bPressing = false;
+
+		//标记：通过press down派发了一个click事件
+		m_bDispatchBtnClickByPressDown = true;
+		return true;
+	}
+
 	return false;
 }
 
