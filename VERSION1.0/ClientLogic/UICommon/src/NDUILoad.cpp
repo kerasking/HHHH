@@ -508,7 +508,7 @@ bool NDUILoad::IsCloseButton(const UIINFO& uiInfo)
 	}
 
 	//BUTTON_TOPUP ≥‰÷µ
-	if (strstr( p, "BUTTON_TOPUP" ) 
+	if (strstr( p, "BUTTON_TOPUP" ))
 	{
 		return true;
 	}
