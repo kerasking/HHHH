@@ -1229,18 +1229,18 @@ local TipTxt ={
 ]]
 
 local TipTxt ={
-"戰鬥規則:",
-"1.軍團戰分為8強賽、4強賽、半決賽和決","賽，一共4輪",
+GetTxtPri("SYN_D38"),
+GetTxtPri("SYN_D39"),GetTxtPri("SYN_D40"),
 "",
-"2.每輪戰鬥開始，軍團成員自行點擊【參","加戰鬥】進入等待佇列，1分30秒等待時","間過後，系統將開始配對戰鬥（未進入","等待介面的成員將無法參加戰鬥）",
+GetTxtPri("SYN_D41"),GetTxtPri("SYN_D42"),GetTxtPri("SYN_D43"),GetTxtPri("SYN_D44"),
 "",
-"3.配對戰對手由系統隨機分配",
+GetTxtPri("SYN_D45"),
 "",
-"4.戰鬥勝利者獲得勝利獎勵，連勝次數+1","，不回復HP，繼續等待系統匹配（輪空","不記錄連勝）",
+GetTxtPri("SYN_D46"),GetTxtPri("SYN_D47"),
 "",
-"5.戰鬥失敗者獲得戰敗獎勵，退出戰鬥隊","列，等待比賽結束",
+GetTxtPri("SYN_D48"),GetTxtPri("SYN_D49"),
 "",
-"6.連勝5場的軍團成員、被擊敗的軍團成員","將退出戰鬥佇列 (中途掉線的玩家視為被","擊敗)",
+GetTxtPri("SYN_D50"),GetTxtPri("SYN_D51"),GetTxtPri("SYN_D52"),
 "",
 }
 --[[
@@ -1318,9 +1318,11 @@ function p.ShowTip()
 			local pLabelTips = nil;
 			local pLabelScore = nil;
 			
-			
+			--[[
 		  	pLabelTips = _G.CreateColorLabel( TipTxt[nIndex], 13, nWidthLimit );
 			pLabelTips:SetFrameRect(CGRectMake(0, 0, nWidthLimit, 20 * ScaleFactor));
+			]]
+			pLabelTips = _G.CreateLabel( TipTxt[nIndex], CGRectMake(0, 0, nWidthLimit, 20 * ScaleFactor), 13, ccc4(255,255,255,255) );
 	
 			view:AddChild(pLabelTips);
 

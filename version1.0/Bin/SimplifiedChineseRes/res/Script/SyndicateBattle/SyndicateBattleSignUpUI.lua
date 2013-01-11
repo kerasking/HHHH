@@ -310,90 +310,7 @@ GetTxtPri("SYN_D18"),
 GetTxtPri("SYN_D19"),
 GetTxtPri("SYN_D_NULL"),
 }
---[[
-GetTxtPri("SYN_D6"),
-GetTxtPri("SYN_D7"),
-GetTxtPri("SYN_D_NULL"),
-GetTxtPri("SYN_D8"),
-GetTxtPri("SYN_D9"),
-GetTxtPri("SYN_D_NULL"),
-GetTxtPri("SYN_D10"),
-GetTxtPri("SYN_D11"),
-GetTxtPri("SYN_D_NULL"),
-GetTxtPri("SYN_D12"),
-GetTxtPri("SYN_D_NULL"),
-GetTxtPri("SYN_D13"),
-GetTxtPri("SYN_D14"),
-GetTxtPri("SYN_D_NULL"),
-GetTxtPri("SYN_D15"),
-GetTxtPri("SYN_D16"),
-GetTxtPri("SYN_D_NULL"),
-GetTxtPri("SYN_D17"),
-GetTxtPri("SYN_D18"),
-GetTxtPri("SYN_D19"),
-GetTxtPri("SYN_D_NULL"),
-}
-]]
---[[
-local TipTxt ={
-"军团战规则:",       1
-"一、活动条件：",   2
-"	1.军团战每周六22:00开战，需要玩家",   3
-"所在军团等级达到3级",  4
-"",         null
-"	2.报名时间为每周日0:00至周六21:00，", 5
-"由军团长或副军团长进行报名（报名者","需缴纳20W银币报名费用)",  6
-"",        null
-"	3.本周累计贡献前16的军团可以晋级军",  7
-"团战",      8
-"",   null 
-"	4.军团战开战后需要玩家在军团战界面", 9
-"点击【参加战斗】进入战斗队列", 10
-"",     null 
-"战斗奖励:", 11
-"",    null
-"1.每轮战斗结束,战胜方/战败方都可以获", 12
-"得相应的声望,银币奖励",     13
-"",    null
-"2.玩家每击杀一名对方成员可以获得声望,",   14
-"银币奖励",      15
-"",    null 
-"3.决出冠亚军后，奖励将发至对应军团的", 16
-"战利品仓库，军团长可以通过战利品分配", 17
-"功能将战利品分配给军团成员",   18
-"",   null
-}
-]]
---[[
-local TipTxt ={
-"军团战规则:",
-"一、活动条件：",
-"	1.军团战每周六22:00开战，需要玩家",
-"所在军团等级达到3级",
-"",
-"	2.报名时间为每周日0:00至周六21:00，",
-"由军团长或副军团长进行报名（报名者","需缴纳20W银币报名费用)",
-"",
-"	3.本周累计贡献前16的军团可以晋级军",
-"团战",
-"",
-"	4.军团战开战后需要玩家在军团战界面",
-"点击【参加战斗】进入战斗队列",
-"",
-"战斗奖励:",
-"",
-"1.每轮战斗结束,战胜方/战败方都可以获",
-"得相应的声望,银币奖励",
-"",
-"2.玩家每击杀一名对方成员可以获得声望,",
-"银币奖励",
-"",
-"3.决出冠亚军后，奖励将发至对应军团的",
-"战利品仓库，军团长可以通过战利品分配",
-"功能将战利品分配给军团成员",
-"",
-}
-]]
+
 --[[     
 1.军团战每周六22:00开战，需要玩家所在军团等级达到3级
 	2.报名时间为每周日0:00至周六21:00，   由军团长或副军团长进行报名（报名者需缴纳20W银币报名费用)
@@ -454,8 +371,13 @@ function p.ShowTip()
 			local pLabelScore = nil;
 			
 			LogInfo("tzq  tag1111");
+			
+			--[[
 		  	pLabelTips = _G.CreateColorLabel( TipTxt[nIndex], 11, nWidthLimit );
 			pLabelTips:SetFrameRect(CGRectMake(0, 0, nWidthLimit, 20 * ScaleFactor));
+			]]
+			pLabelTips = _G.CreateLabel( TipTxt[nIndex], CGRectMake(0, 0, nWidthLimit, 20 * ScaleFactor), 11, ccc4(255,255,255,255) );
+			
 			view:AddChild(pLabelTips);
 
 		end
