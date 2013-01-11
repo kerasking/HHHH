@@ -28,13 +28,13 @@ public:
 	static const string GetAppPath();
 	static const string GetCashesPath();
 	static const string GetDocumentPath();
-	static const string GetRootResPath();
+	static const string GetRootResPath(bool bPackage = false);
 	
 	// res path
-	static const string GetResPath();
+	static const string GetResPath(bool bPackage = false);
 	static const string GetDBPath();
 	static const string GetResPath(const char* fileName);
-	static const string GetImagePath();  
+	static const string GetImagePath(bool bPackage = false);  
 	static const string GetImage00Path();  
 	static const string GetMapPath();
 	static const string GetMapResPath();
@@ -43,7 +43,7 @@ public:
 	static const string GetSoundPath();
 	static const string GetImgPathBattleUI(const char* fileName);
 	static const string GetImgPathBattleUI();
-	static const string GetImgPath(const char* fileName);
+	static const string GetImgPath(const char* fileName,bool bPackage = false);
 	static const string GetImg00Path(const char* fileName);
 	static const string GetImgPathNew(const char* fileName);
 	static const string GetImgPathNewAdvance(const char* fileName);
@@ -64,8 +64,9 @@ public:
  	static const string GetFullImagepath(const char* fileName);
  	static const string GetUIPath(const char* fileName);
 	static const string GetUIPath();
+	static const string GetGameConfigPath(const char* pszConfFileName,bool bPackage = false);
 	//－－－end
-	static void SetResDirPos( int iPos );//
+	static void SetResDirPos( int iPos );
 	static int GetResDirPos(){ return s_iResDirPos; }
 	static const char* GetRootResDirName();
 

@@ -71,10 +71,16 @@ NDAnimationGroup* NDAnimationGroupPool::addObjectWithSpr(const char*sprFile)
 
 NDAnimationGroup* NDAnimationGroupPool::addObjectWithModelId(int ModelId)
 {
-	char sprFile[256] =
-	{ 0 };
-	sprintf(sprFile, "%smodel_%d.spr", NDPath::GetAnimationPath().c_str(),
-			ModelId);
+	char sprFile[256] = { 0 };
+
+#if 1
+	sprintf(sprFile, "%smodel_%d.spr", NDPath::GetAnimationPath().c_str(), ModelId);
+
+#else  //for test
+	sprintf(sprFile, "%sdengj03.spr", NDPath::GetAnimationPath().c_str());
+#endif
+
+
 	return this->addObjectWithSpr(sprFile);
 }
 

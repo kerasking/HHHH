@@ -509,7 +509,7 @@ public:
 		edit->SetTextSize(info.nTextFontSize);
 		edit->SetTextColor(INTCOLORTOCCC4(info.nTextFontColor));
 		edit->SetImage(GetNormalPicture());
-		edit->SetTextAlignment(GetTextAlign());
+		edit->SetTextAlignment(LabelTextAlignmentLeft);
 		if(!info.strSelectedFile.empty())
 		{
 			edit->SetFocusImage(GetSelectedPicture());

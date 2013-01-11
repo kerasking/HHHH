@@ -175,7 +175,7 @@ function p.OnUIEvent( uiNode, uiEventType, param )
 				StartBGMusic();
 				--SetBgMusicVolume( MUSIC_VOLUME_MAX );
 			else
-				StopBGMusic();
+				DisableBGMusic();
 				--SetBgMusicVolume( 0 );
 			end
 		elseif ( ID_CHECK_PLAY_EFFECT == tag ) then
@@ -288,7 +288,7 @@ function p.LoadData()
 	if ( p.iPlayBGMEnable == 1 ) then
 		SetBgMusicVolume( MUSIC_VOLUME_MAX );
 	else
-		StopBGMusic();
+		DisableBGMusic();
 		--SetBgMusicVolume( 0 );
 	end
     -- 设置音效音量

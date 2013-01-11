@@ -520,7 +520,7 @@ void WorldMapLayer::Goto( int nMapId )
 		
 		SetMove(true);
 		
-		SetRoleDirect(posTarget.x > m_roleNode->GetFrameRect().origin.x*RESOURCE_SCALE_960);
+		SetRoleDirect(posTarget.x > m_roleNode->GetFrameRect().origin.x);
 		
 		m_posTarget = posTarget;
 		

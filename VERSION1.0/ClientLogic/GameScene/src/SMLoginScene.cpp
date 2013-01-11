@@ -33,12 +33,12 @@
 #include "TQPlatform.h"
 #include "UsePointPls.h"
 #include "StringConvert.h"
+#include "NDJsonReader.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #include <jni.h>
 #include <android/log.h>
 #include "android/jni/JniHelper.h"
-#include "NDJsonReader.h"
 
 #define  LOG_TAG    "DaHuaLongJiang"
 #define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
@@ -103,7 +103,6 @@
 #define SZ_CONNECT_SERVER               "LOGIN_SZ_CONNECT_SERVER"   //"连接服务器……"
 #define SZ_SETUP						"LOGIN_SZ_SETUP"			//"配置中……"
 
-
 #define SZ_UPDATE_URL					"192.168.19.169"//更新服务器的地址
 #define SZ_DEL_FILE						"del.txt"//包含待删除文件路径的配置文件/CACHES目录下
 
@@ -122,11 +121,12 @@ CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
     pkScene->SetTag(SMLOGINSCENE_TAG);
 
 	///< 給湯自勤哥展示用法……
-// 	NDJsonReader kReader("assets/conf.json");
+// 	NDJsonReader kReader;
+// 	kReader.readJsonFile("assets/conf.json");
 // 
 // 	string strID = kReader.readData("app_id");
-// 
-// 	LOGD("strID = %s",strID.c_str());
+
+	//LOGD("strID = %s",strID.c_str());
     
 	if ( bShowEntry )
 	{
@@ -160,24 +160,35 @@ CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
 		pkScene->m_pkProgressTextLabel->SetFontColor(kColor);
 
 		pkBackgroundImage->Initialization();
-		pkBackgroundImage->SetFrameRect(CCRectMake(0, 0, kWinSize.width, kWinSize.height));
+
 		NDUIImage* pkUILoadingImage = 0;
 		NDPicture* pkLoadingPic = 0;
 
 #ifdef USE_MGSDK
-		NDPicture* pkPicture = kPool.AddPicture( NDPath::GetImgPath("Res00/Load/mobage_bg.png") );
+		NDPicture* pkPicture = kPool.AddPicture( NDPath::GetImgPath("Res00/Load/Unzipping.png") );
 #elif ((CACHE_MODE == 1) && (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID))
-		NDPicture* pkPicture = kPool.AddPicture("res/drawable/mobage_splash.png");
-		CCImage::changeSystemFont(true);
 
-		if (pkPicture)
+		LOGD("Ready to new pkPicture");
+		unsigned char* pszImageBuffer = 0;
+		unsigned int uiLength = 0;
+		pszImageBuffer = g_pUtil.GetFileBufferFromSimplifiedChineseResZip("SimplifiedChineseRes/res/image/Res00/Load/UnzipLoading.png",&uiLength);
+
+		if (0 == pszImageBuffer)
 		{
-			CCSize kPictureSize = pkPicture->GetSize();
-			CCDirector::sharedDirector()->setGLDefaultValues(1.0f,1.0f,1.0f);
-			pkBackgroundImage->SetFrameRect(CCRectMake(kWinSize.width / 2.0 - kPictureSize.width / 4,
-				kWinSize.height / 2.0f - kPictureSize.height / 4,
-				kPictureSize.width / 2, kPictureSize.height / 2));
+			LOGERROR("pszImageBuffer == 0");
 		}
+		
+		NDPicture* pkPicture = kPool.AddPicture(uiLength,pszImageBuffer);
+		LOGD("Ready to initialize pkPicture");
+
+// 		if ()
+// 		{
+// 			LOGERROR("pkPicture->Initialization failed");
+// 			SAFE_DELETE_ARRAY(pszImageBuffer);
+// 			SAFE_DELETE(pkPicture);
+// 		}
+
+		CCImage::changeSystemFont(true);
 
 		pkLoadingPic = kPool.AddPicture("res/drawable/mbga_mobage_loading.png");
 
@@ -194,11 +205,23 @@ CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
 
 		pkLayer->AddChild(pkScene->m_pkProgressTextLabel,10,0);
 #else
-		NDPicture* pkPicture = kPool.AddPicture( NDPath::GetImg00Path("Res00/Load/bg_load.png") );
+		NDPicture* pkPicture = kPool.AddPicture( NDPath::GetImg00Path("Res00/Load/Unzipping.png") );
 #endif
+
 		if (pkPicture) 
 		{
 			pkBackgroundImage->SetPicture(pkPicture, true);
+			CCSize kPictureSize = pkPicture->GetSize();
+			CCDirector::sharedDirector()->setGLDefaultValues(1.0f,1.0f,1.0f);
+
+			float fScalePic = kPictureSize.width / kPictureSize.height;
+			LOGD("fScalePic = %d",(int)(fScalePic * 100.0f));
+			float fWidth = 0.0f;
+
+			fWidth = kWinSize.height * fScalePic;
+
+			pkBackgroundImage->SetFrameRect(CCRectMake(kWinSize.width / 2.0f - fWidth / 2.0f,
+				0, fWidth, kWinSize.height));
 		}
 
 		pkLayer->AddChild(pkBackgroundImage);
@@ -227,8 +250,8 @@ CSMLoginScene::CSMLoginScene()
 , m_iAccountID(0)
 , m_iState(0)
 , m_pLayerCheckWIFI(NULL)
-,m_bIsLoadingLocalString(false)
-,m_pkProgressTextLabel(0)
+, m_bIsLoadingLocalString(false)
+, m_pkProgressTextLabel(0)
 {
 	INC_NDOBJ_RTCLS
 
@@ -451,7 +474,6 @@ void CSMLoginScene::OnTimer( OBJID idTag )
             NDBeforeGameMgrObj.doNDSdkLogin();
 			CloseWaitingAni();
 			OnProcessUpdate();
-           // ShowWaitingAni();
 		}
 #else
 		NDBeforeGameMgrObj.doNDSdkLogin();
@@ -1188,10 +1210,14 @@ void* CSMLoginScene::LoadTextAndLua( void * pPointer )
 void CSMLoginScene::OnProcessUpdate()
 {
 #if UPDATE_ON == 1
-	const char*	pszUpdateURL = SZ_UPDATE_URL;//ScriptMgrObj.excuteLuaFuncRetS( "GetUpdateURL", "Update" );//此时Lua脚本未加载……
+	NDJsonReader kReader;
+	string strUpdateURL = kReader.getGameConfig("world_server_ip").c_str();
+	unsigned int uiServerPort = atoi(kReader.getGameConfig("server_port").c_str());
+
+	LOGD("%s%s:%d",CONVERT_GBK_TO_UTF8("此時更新的IP地址為："),strUpdateURL.c_str(),uiServerPort);
 	CreateUpdateUILayer();
 
-	if ( !pszUpdateURL )
+	if ( !strUpdateURL.length() )
 	{
 		CloseWaitingAni();
 		StartEntry();
@@ -1204,7 +1230,7 @@ void CSMLoginScene::OnProcessUpdate()
 		m_pLabelPromtp->SetVisible( true );
 	}
 
-	if ( !NDBeforeGameMgrObj.CheckClientVersion( pszUpdateURL ) )
+	if ( !NDBeforeGameMgrObj.CheckClientVersion( strUpdateURL.c_str(),uiServerPort) )
 	{
 		LOGERROR("CheckClientVersion failed");
 		CloseWaitingAni();

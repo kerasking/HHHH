@@ -40,7 +40,7 @@ StringData::StringData( float fvalue )
 
 StringData::StringData( const string& str)
 {
-    buf = str.c_str();;
+    buf = str.c_str();
 }
 
 StringData::StringData( int value )

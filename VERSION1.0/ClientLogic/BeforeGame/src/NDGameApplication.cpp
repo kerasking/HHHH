@@ -237,7 +237,7 @@ bool NDGameApplication::applicationDidFinishLaunching()
 		// use 960*640 resources as design resolution size
 		//CCFileUtils::sharedFileUtils()->setResourceDirectory("iphonehd");
 		//CCEGLView::sharedOpenGLView()->setDesignResolutionSize(480*2, 320*2, kResolutionNoBorder);//@todo
-		CCDirector::sharedDirector()->enableRetinaDisplay(0);	//@retina
+		CCDirector::sharedDirector()->enableRetinaDisplay(true);	//@retina
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 

@@ -145,7 +145,7 @@ void NDUILayer::Initialization()
 	layer->setTouchEnabled(true);
 	layer->setDebugName( m_strDebugName.c_str() );
 
-	this->SetFrameRect(CCRectZero);
+	SetFrameRect(CCRectZero);
 }
 void NDUILayer::SetTouchEnabled(bool bEnabled)
 {
@@ -200,7 +200,7 @@ void NDUILayer::SetBackgroundImage(const char* imageFile)
 
 void NDUILayer::SetBackgroundImageLua(NDPicture *pic)
 {
-	this->SetBackgroundImage(pic, true);
+	SetBackgroundImage(pic, true);
 }
 
 void NDUILayer::SetBackgroundImage(NDPicture *pic,
@@ -218,7 +218,7 @@ void NDUILayer::SetBackgroundImage(NDPicture *pic,
 
 void NDUILayer::SetBackgroundFocusImageLua(NDPicture *pic)
 {
-	this->SetBackgroundFocusImage(pic, true);
+	SetBackgroundFocusImage(pic, true);
 }
 
 void NDUILayer::SetBackgroundFocusImage(NDPicture *pic,
@@ -255,23 +255,23 @@ void NDUILayer::draw()
 
 	NDUINode::draw();
 
-	if (this->IsVisibled())
+	if (IsVisibled())
 	{
 //			if (m_focusNode == NULL)
-//				if (this->GetChildren().size() > 0)
-//					m_focusNode = (NDUINode*)this->GetChildren().at(0);
+//				if (GetChildren().size() > 0)
+//					m_focusNode = (NDUINode*)GetChildren().at(0);
 
 		bool focus = false;
 
-		if (m_pkPicFocus && this->GetParent()
-				&& this->GetParent()->IsKindOfClass(RUNTIME_CLASS(NDUILayer)))
+		if (m_pkPicFocus && GetParent()
+				&& GetParent()->IsKindOfClass(RUNTIME_CLASS(NDUILayer)))
 		{
-			NDUILayer *layer = ((NDUILayer*) (this->GetParent()));
+			NDUILayer *layer = ((NDUILayer*) (GetParent()));
 			if (layer->GetFocus() == this)
 				focus = true;
 		}
 
-		CCRect scrRect = this->GetScreenRect();
+		CCRect scrRect = GetScreenRect();
 
 		NDPicture* pic =
 				focus ? (m_pkPicFocus == NULL ? m_pkPic : m_pkPicFocus) : m_pkPic;
@@ -318,7 +318,7 @@ bool NDUILayer::IsVisibled()
 		return bVisible;
 	}
 
-	NDNode* pNode = this->GetParent();
+	NDNode* pNode = GetParent();
 
 	if (pNode && pNode->IsKindOfClass(RUNTIME_CLASS(NDUILayer)))
 	{
@@ -395,7 +395,7 @@ bool NDUILayer::UITouchDoubleClick(NDTouch* touch)
 
 bool NDUILayer::TouchBegin(NDTouch* touch)
 {
-	if (!this->IsVisibled())
+	if (!IsVisibled())
 	{
 		return false;
 	}
@@ -403,8 +403,12 @@ bool NDUILayer::TouchBegin(NDTouch* touch)
 	m_bDispatchTouchEndEvent = true;
 	m_kBeginTouch = touch->GetLocation();
 
-	if (cocos2d::CCRect::CCRectContainsPoint(this->GetScreenRect(), m_kBeginTouch)
-			&& this->IsVisibled() && this->EventEnabled())
+// 	CCRect kRect(m_kBeginTouch.x - 20,m_kBeginTouch.y - 20,40,40);
+// 	ccColor4B kColor = {100,100,100,255};
+// 	DrawRecttangle(kRect,kColor);
+
+	if (cocos2d::CCRect::CCRectContainsPoint(GetScreenRect(), m_kBeginTouch)
+			&& IsVisibled() && EventEnabled())
 	{
 		m_bTouchDwon = true;
 		DispatchTouchBeginEvent(m_kBeginTouch);
@@ -427,7 +431,7 @@ bool NDUILayer::TouchBegin(NDTouch* touch)
 
 bool NDUILayer::TouchEnd(NDTouch* touch)
 {
-	if (!this->IsVisibled())
+	if (!IsVisibled())
 	{
 		return false;
 	}
@@ -467,7 +471,7 @@ bool NDUILayer::TouchEnd(NDTouch* touch)
 			// 长按会抢了单击事件，导致手机操作感比较差，先兼容一下.
 			if (m_bDispatchTouchEndEvent && !m_bLayerMoved)
 			{
-				this->DispatchTouchEndEvent(m_kBeginTouch, m_kBeginTouch);
+				DispatchTouchEndEvent(m_kBeginTouch, m_kBeginTouch);
 			}
 			return true;
 		}
@@ -477,7 +481,7 @@ bool NDUILayer::TouchEnd(NDTouch* touch)
 	if (m_bDispatchTouchEndEvent && !m_bLayerMoved)
 	//if (m_bDispatchTouchEndEvent && !isTouchMoved(MOVE_ERROR))
 	{
-		if (this->DispatchTouchEndEvent(m_kBeginTouch, m_kBeginTouch))
+		if (DispatchTouchEndEvent(m_kBeginTouch, m_kBeginTouch))
 		{
 			return true;
 		}
@@ -545,7 +549,7 @@ void NDUILayer::TouchCancelled(NDTouch* touch)
 
 bool NDUILayer::TouchMoved(NDTouch* touch)
 {
-	if (!this->IsVisibled())
+	if (!IsVisibled())
 	{
 		return false;
 	}
@@ -614,7 +618,7 @@ bool NDUILayer::TouchMoved(NDTouch* touch)
 
 bool NDUILayer::TouchDoubleClick(NDTouch* touch)
 {
-	if (!this->IsVisibled())
+	if (!IsVisibled())
 	{
 		return false;
 	}
@@ -622,10 +626,10 @@ bool NDUILayer::TouchDoubleClick(NDTouch* touch)
 	m_bDispatchTouchEndEvent = true;
 	m_kBeginTouch = touch->GetLocation();
 
-	if (cocos2d::CCRect::CCRectContainsPoint(this->GetScreenRect(), m_kBeginTouch)
-			&& this->IsVisibled() && this->EventEnabled())
+	if (cocos2d::CCRect::CCRectContainsPoint(GetScreenRect(), m_kBeginTouch)
+			&& IsVisibled() && EventEnabled())
 	{
-		this->DispatchTouchDoubleClickEvent(m_kBeginTouch);
+		DispatchTouchDoubleClickEvent(m_kBeginTouch);
 
 		return true;
 	}
@@ -636,16 +640,16 @@ bool NDUILayer::DispatchTouchBeginEvent(CCPoint beginTouch)
 {
 	m_pkTouchedNode = NULL;
 
-	if (!this->IsVisibled())
+	if (!IsVisibled())
 	{
 		return false;
 	}
 
-	for (int i = this->GetChildren().size() - 1; i >= 0; i--)
+	for (int i = GetChildren().size() - 1; i >= 0; i--)
 	{
 
-		//NDUINode* uiNode = (NDUINode*) this->GetChildren().at(i);//--Guosen 2012.11.21
-		NDNode * pNode = this->GetChildren().at(i);
+		//NDUINode* uiNode = (NDUINode*) GetChildren().at(i);//--Guosen 2012.11.21
+		NDNode * pNode = GetChildren().at(i);
 		if ( !pNode->IsKindOfClass( RUNTIME_CLASS(NDUINode) ) )
 		{
 			continue;
@@ -722,16 +726,16 @@ bool NDUILayer::DispatchTouchEndEvent(CCPoint beginTouch, CCPoint endTouch)
 		DealTouchNodeState(false);
 	}
 
-	if (!this->IsVisibled())
+	if (!IsVisibled())
 	{
 		return false;
 	}
 
-	for (int i = this->GetChildren().size() - 1; i >= 0; i--)
+	for (int i = GetChildren().size() - 1; i >= 0; i--)
 	{
 
-		//NDUINode* uiNode = (NDUINode*) this->GetChildren().at(i);//--Guosen 2012.11.21
-		NDNode * pNode = this->GetChildren().at(i);
+		//NDUINode* uiNode = (NDUINode*) GetChildren().at(i);//--Guosen 2012.11.21
+		NDNode * pNode = GetChildren().at(i);
 		if ( !pNode->IsKindOfClass( RUNTIME_CLASS(NDUINode) ) )
 		{
 			continue;
@@ -795,10 +799,10 @@ bool NDUILayer::DispatchTouchEndEvent(CCPoint beginTouch, CCPoint endTouch)
 				 if (delegate)
 				 {
 				 if (delegate->OnEditClick((NDUIEdit*)uiNode))
-				 this->AfterEditClickEvent((NDUIEdit*)uiNode);
+				 AfterEditClickEvent((NDUIEdit*)uiNode);
 				 }
 				 else
-				 this->AfterEditClickEvent((NDUIEdit*)uiNode);
+				 AfterEditClickEvent((NDUIEdit*)uiNode);
 				 return true;
 				 }
 				 else*/
@@ -953,16 +957,16 @@ bool NDUILayer::DispatchTouchEndEvent(CCPoint beginTouch, CCPoint endTouch)
 
 bool NDUILayer::DispatchTouchDoubleClickEvent(CCPoint beginTouch)
 {
-	if (!this->IsVisibled())
+	if (!IsVisibled())
 	{
 		return false;
 	}
 
-	for (int i = this->GetChildren().size() - 1; i >= 0; i--)
+	for (int i = GetChildren().size() - 1; i >= 0; i--)
 	{
 
-		//NDUINode* uiNode = (NDUINode*) this->GetChildren().at(i);//--Guosen 2012.11.21
-		NDNode * pNode = this->GetChildren().at(i);
+		//NDUINode* uiNode = (NDUINode*) GetChildren().at(i);//--Guosen 2012.11.21
+		NDNode * pNode = GetChildren().at(i);
 		if ( !pNode->IsKindOfClass( RUNTIME_CLASS(NDUINode) ) )
 		{
 			continue;
@@ -1111,16 +1115,16 @@ bool NDUILayer::DispatchLongTouchClickEvent(CCPoint beginTouch,
 		DealTouchNodeState(false);
 	}
 
-	if (!this->IsVisibled())
+	if (!IsVisibled())
 	{
 		return false;
 	}
 
-	for (int i = this->GetChildren().size() - 1; i >= 0; i--)
+	for (int i = GetChildren().size() - 1; i >= 0; i--)
 	{
 
-		//NDUINode* uiNode = (NDUINode*) this->GetChildren().at(i);//--Guosen 2012.11.21
-		NDNode * pNode = this->GetChildren().at(i);
+		//NDUINode* uiNode = (NDUINode*) GetChildren().at(i);//--Guosen 2012.11.21
+		NDNode * pNode = GetChildren().at(i);
 		if ( !pNode->IsKindOfClass( RUNTIME_CLASS(NDUINode) ) )
 		{
 			continue;
@@ -1200,7 +1204,7 @@ bool NDUILayer::DispatchLongTouchEvent(CCPoint beginTouch, bool touch)
 
 	NDUINode* uiNode = m_pkTouchedNode;
 
-	if (!this->IsVisibled())
+	if (!IsVisibled())
 	{
 		return false;
 	}
@@ -1273,7 +1277,7 @@ bool NDUILayer::DispatchDragOutEvent(CCPoint beginTouch, CCPoint moveTouch,
 	if (!m_pkTouchedNode)
 		return false;
 
-	if (!this->IsVisibled())
+	if (!IsVisibled())
 	{
 		return false;
 	}
@@ -1358,7 +1362,7 @@ bool NDUILayer::DispatchDragOutCompleteEvent(CCPoint beginTouch,
 
 	NDUINode* uiNode = m_pkTouchedNode;
 
-	if (!this->IsVisibled())
+	if (!IsVisibled())
 	{
 		return false;
 	}
@@ -1416,16 +1420,16 @@ bool NDUILayer::DispatchDragOutCompleteEvent(CCPoint beginTouch,
 bool NDUILayer::DispatchDragInEvent(NDUINode* dragOutNode, CCPoint beginTouch,
 		CCPoint endTouch, bool longTouch, bool dealByDefault/*=false*/)
 {
-	if (!this->IsVisibled())
+	if (!IsVisibled())
 	{
 		return false;
 	}
 
-	for (int i = this->GetChildren().size() - 1; i >= 0; i--)
+	for (int i = GetChildren().size() - 1; i >= 0; i--)
 	{
 
-		//NDUINode* uiNode = (NDUINode*) this->GetChildren().at(i);//--Guosen 2012.11.21
-		NDNode * pNode = this->GetChildren().at(i);
+		//NDUINode* uiNode = (NDUINode*) GetChildren().at(i);//--Guosen 2012.11.21
+		NDNode * pNode = GetChildren().at(i);
 		if ( !pNode->IsKindOfClass( RUNTIME_CLASS(NDUINode) ) )
 		{
 			continue;
@@ -1514,7 +1518,7 @@ bool NDUILayer::DispatchDragOverEvent(CCPoint beginTouch, CCPoint moveTouch,
 	if (!m_bEnableDragOver)
 		return false;
 
-	if (!this->IsVisibled())
+	if (!IsVisibled())
 	{
 		return false;
 	}
@@ -1540,11 +1544,11 @@ bool NDUILayer::DispatchDragOverEvent(CCPoint beginTouch, CCPoint moveTouch,
 		}
 	}
 
-	for (int i = this->GetChildren().size() - 1; i >= 0; i--)
+	for (int i = GetChildren().size() - 1; i >= 0; i--)
 	{
 
-		//NDUINode* uiNode = (NDUINode*) this->GetChildren().at(i);//--Guosen 2012.11.21
-		NDNode * pNode = this->GetChildren().at(i);
+		//NDUINode* uiNode = (NDUINode*) GetChildren().at(i);//--Guosen 2012.11.21
+		NDNode * pNode = GetChildren().at(i);
 		if ( !pNode->IsKindOfClass( RUNTIME_CLASS(NDUINode) ) )
 		{
 			continue;
@@ -1614,7 +1618,7 @@ bool NDUILayer::DispatchDragOverEvent(CCPoint beginTouch, CCPoint moveTouch,
 	if (m_bSwallowDragOver)
 		return true;
 
-//		NDNode *pNode = this->GetParent();
+//		NDNode *pNode = GetParent();
 //		
 //		if (pNode && pNode->IsKindOfClass(RUNTIME_CLASS(NDUILayer)))
 //		{
@@ -1627,22 +1631,22 @@ bool NDUILayer::DispatchDragOverEvent(CCPoint beginTouch, CCPoint moveTouch,
 bool NDUILayer::DispatchLayerMoveEvent(CCPoint beginPoint, NDTouch *moveTouch)
 {
 	if (!m_bMoveOutListener
-			&& !cocos2d::CCRect::CCRectContainsPoint(this->GetScreenRect(),
+			&& !cocos2d::CCRect::CCRectContainsPoint(GetScreenRect(),
 					moveTouch->GetLocation()))
 	{
 		return false;
 	}
 
-	if (!this->IsVisibled())
+	if (!IsVisibled())
 	{
 		return false;
 	}
 
-	for (int i = this->GetChildren().size() - 1; i >= 0; i--)
+	for (int i = GetChildren().size() - 1; i >= 0; i--)
 	{
 
-		//NDUINode* uiNode = (NDUINode*) this->GetChildren().at(i);//--Guosen 2012.11.21
-		NDNode * pNode = this->GetChildren().at(i);
+		//NDUINode* uiNode = (NDUINode*) GetChildren().at(i);//--Guosen 2012.11.21
+		NDNode * pNode = GetChildren().at(i);
 		if ( !pNode->IsKindOfClass( RUNTIME_CLASS(NDUINode) ) )
 		{
 			continue;
@@ -1703,7 +1707,7 @@ bool NDUILayer::DispatchLayerMoveEvent(CCPoint beginPoint, NDTouch *moveTouch)
 
 	// slef deal
 	NDUILayerDelegate* delegate =
-			dynamic_cast<NDUILayerDelegate*>(this->GetDelegate());
+			dynamic_cast<NDUILayerDelegate*>(GetDelegate());
 	if (!delegate)
 	{
 		return false;
@@ -1726,7 +1730,7 @@ bool NDUILayer::DispatchLayerMoveEvent(CCPoint beginPoint, NDTouch *moveTouch)
 
  	if(m_bIsHVContainer)
  	{
- 		NDNode *pNode = this->GetParent()->GetParent();
+ 		NDNode *pNode = GetParent()->GetParent();
  		if(pNode->IsKindOfClass(RUNTIME_CLASS(CUIScrollViewContainerM)))
  		{
  			CUIScrollViewContainerM *svc = (CUIScrollViewContainerM*)pNode;

@@ -83,12 +83,21 @@ void KHttp::setNotifyCallback(NotifyCallback callback, void* param, int percent)
 	m_iNotifyPercent = percent;
 }
 
+void Trim(string &strString)
+{
+	int nStart = strString.find_first_not_of(" \t");
+	int nEnd = strString.find_last_not_of(" \t");
+	strString = strString.substr(nStart,nEnd - nStart + 1);
+}
+
 int KHttp::getHttpFile(const KData& fullUrl, const KData& savefile,
 		int startpos)
 {
+	string strPath = fullUrl;
+	Trim(strPath);
 	KData dtServer;
 	KData dtFile;
-	KData kDTFullUrl = fullUrl;
+	KData kDTFullUrl = strPath;
 
 	LOGD("kDTFullUrl is %s",kDTFullUrl.getDataBuf());
 

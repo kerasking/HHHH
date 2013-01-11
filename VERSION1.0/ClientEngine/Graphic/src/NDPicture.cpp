@@ -19,7 +19,7 @@
 #include "CCCommon.h"
 #include "CCPlatformConfig.h"
 #include "ObjectTracker.h"
-
+#include "MD5checksum.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #include <jni.h>
@@ -35,6 +35,7 @@
 #endif
 
 using namespace cocos2d;
+using namespace Encrypt;
 
 NS_NDENGINE_BGN
 
@@ -83,7 +84,7 @@ void NDPicture::Initialization(const char* imageFile)
 {
 	if (!imageFile) return;
 
-	this->destroy();
+	destroy();
     
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || !ENABLE_PAL_MODE)
 	CCImage image;
@@ -272,41 +273,52 @@ void NDPicture::Initialization(vector<const char*>& vImgFiles)
 
 void NDPicture::Initialization(vector<const char*>& vImgFiles, vector<CCRect>& vImgCustomRect, vector<CCPoint>&vOffsetPoint)
 {
-// 	if (vImgFiles.size() < 1 || vImgCustomRect.size() < 1 || vOffsetPoint.size() < 1
-// 		|| vImgFiles.size() != vImgCustomRect.size() || vImgFiles.size() != vOffsetPoint.size())
-// 		return;
-// 	
-// 	m_pkTexture->release();
-// 	
-// 	vector<CCTexture2D*> vImgs;
-// 	for (unsigned int i = 0; i < vImgFiles.size(); i++) {
-// 		CCTexture2D* img = [[UIImage alloc] initWithContentsOfFile:[NSString stringWithUTF8String:vImgFiles.at(i)]];
-// 		CCTexture2D* imgCut = [img getSubImageFromWithRect:vImgCustomRect[i]];
-// 		vImgs.push_back(imgCut);
-// 		
-// 		if (0 == i) {
-// 			UIGraphicsBeginImageContext(imgCut.size);
-// 		}
-// 		
-// 		[img release];
-// 	}
-// 	
-// 	for (unsigned int i = 0; i < vImgs.size(); i++) {
-// 		UIImage* img = vImgs.at(i);
-// 		[img drawInRect:CCRectMake(vOffsetPoint[i].x, vOffsetPoint[i].y, img.size.width, img.size.height)];
-// 		//[img release];
-// 	}
-// 	
-// 	UIImage *resultImg = UIGraphicsGetImageFromCurrentImageContext();
-// 	
-// 	UIGraphicsEndImageContext();
-// 	
-// 	m_texture = [[CCTexture2D alloc] initWithImage:resultImg];
-// 	
-// 	m_cutRect = CCRectMake(0, 0, m_texture->getContentSizeInPixels().width, m_texture->getContentSizeInPixels().height);
-// 	SetCoorinates();		
-// 	SetColor(ccc4(255, 255, 255, 255));	
 	
+}
+
+void NDPicture::Initialization( unsigned char* pszBuffer,unsigned int uiSize )
+{
+	if (0 == pszBuffer || 0 == uiSize)
+	{
+		return;
+	}
+
+	//if (!imageFile) return;
+
+	destroy();
+    
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || !ENABLE_PAL_MODE)
+	CCImage kImage;
+
+	if (!kImage.initWithImageData((void*)pszBuffer,uiSize))
+	{
+		//LOGERROR("picture [%s] not exist", imageFile);
+	}
+#endif
+
+	//m_pkTexture = new CCTexture2D;
+	m_pkTexture = CCTexture2D::create();
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || !ENABLE_PAL_MODE)
+	m_pkTexture->initWithImage(&kImage);
+#else
+	m_pkTexture->initWithPalettePNG(imageFile);
+#endif
+
+	LOGD("m_pkTexture->getContentSizeInPixels().width is %d,m_pkTexture->getContentSizeInPixels().height is %d",
+		m_pkTexture->getContentSizeInPixels().width,m_pkTexture->getContentSizeInPixels().height);
+
+	m_kCutRect = CCRectMake(0, 0, 
+		m_pkTexture->getContentSizeInPixels().width,
+			m_pkTexture->getContentSizeInPixels().height);
+
+	SetCoorinates();
+	SetColor(ccc4(255, 255, 255, 255));
+
+// 	if (imageFile)
+// 	{
+// 		m_strfile = imageFile;
+// 	}
 }
 
 //@shader
@@ -846,6 +858,52 @@ NDPicture* NDPicturePool::AddPicture(const char* imageFile, int hrizontalPixel,
 	}
 
 	return pic->Copy();
+}
+
+NDPicture* NDPicturePool::AddPicture(unsigned int uiSize,
+									 unsigned char* pszBuffer,
+									 bool bGray /*= false*/ )
+{
+	if (0 == pszBuffer || !*pszBuffer || 0 == uiSize)
+	{
+		return 0;
+	}
+
+	CMD5Checksum kMD5;
+	string strMD5;
+
+	strMD5 = kMD5.GetMD5(pszBuffer,uiSize);
+
+	LOGD("Get the buffer MD5 value:%s",strMD5.c_str());
+
+	NDPicture* pkPicture = (NDPicture *) m_pkPicturesDict->Object(strMD5.c_str());
+
+	if (!pkPicture)
+	{
+		pkPicture = new NDPicture(bGray);
+		pkPicture->Initialization(pszBuffer,uiSize);
+		m_pkPicturesDict->SetObject(pkPicture, strMD5.c_str());
+
+		CCTexture2D* pkTexture = pkPicture->GetTexture();
+		m_mapTexture.insert(std::map<CCTexture2D*,
+			std::string>::value_type(pkTexture,strMD5.c_str()));
+	}
+
+	return pkPicture->Copy();
+}
+
+NDPicture* NDPicturePool::AddPicture( const string& imageFile,
+									 bool gray /*= false*/ )
+{
+	return AddPicture(imageFile.c_str(), gray);
+}
+
+NDPicture* NDPicturePool::AddPicture( const string& imageFile,
+									 int hrizontalPixel,
+									 int verticalPixel /*= 0*/,
+									 bool gray /*= false*/ )
+{
+	return 	AddPicture(imageFile.c_str(), hrizontalPixel, verticalPixel, gray );
 }
 
 //Í¨¹ýtexÉ¾³ýpic

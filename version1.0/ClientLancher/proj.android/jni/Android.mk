@@ -75,6 +75,7 @@ $(LOCAL_PATH)/../../../ClientLogic/Script/inc \
 $(LOCAL_PATH)/../../../ClientLogic/GameScene/inc \
 $(LOCAL_PATH)/../../../NetWork/inc \
 $(LOCAL_PATH)/../../../TinyXML/inc \
+$(LOCAL_PATH)/../../../Json/inc \
 $(LOCAL_PATH)/../../../NDUtility/inc \
 $(LOCAL_PATH)/../../../Sqlite3/inc
 

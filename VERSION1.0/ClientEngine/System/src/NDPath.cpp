@@ -20,8 +20,15 @@ NS_NDENGINE_BGN
 ///////////////////////////<<<
 
 #define SZ_ROOT_SOURCE_DIR					"SimplifiedChineseRes/"	//按语种划分资源根目录名
+#define SZ_CONF_FILE_DIR					"config/"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#include <jni.h>
+#include <android/log.h>
+
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
+#define  LOGERROR(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
 //#define NDPath_ResPath		      "/sdcard/dhlj/SimplifiedChineseRes/res/"
 //#define NDPath_ImgPath			 "/sdcard/dhlj/SimplifiedChineseRes/res/Image/"
 //#define NDPath_ImgPath_BattleUI	 "/sdcard/dhlj/SimplifiedChineseRes/res/Image/battle_ui/"
@@ -32,6 +39,10 @@ NS_NDENGINE_BGN
 //#define NDPath_UIPath			 "/sdcard/dhlj/SimplifiedChineseRes/res/UI/"
 //#define NDPath_ScriptPath		 "/sdcard/dhlj/SimplifiedChineseRes/res/Script/"
 #define NDPath_LogPath			 "/sdcard/dhlj/log"
+#else
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)
+#define  LOGERROR(...)
 #endif
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 //#define NDPath_ResPath			 "../../Bin/SimplifiedChineseRes/res/"
@@ -118,7 +129,7 @@ const string NDPath::GetDocumentPath()
 
 //===========================================================================
 //获取资源根路径
-const string NDPath::GetRootResPath()
+const string NDPath::GetRootResPath(bool bPackage)
 {
     string ret;
 	if ( s_iResDirPos == 0 )
@@ -127,7 +138,15 @@ const string NDPath::GetRootResPath()
 	}
 	else
 	{
-		ret = NDPath::GetCashesPath() + SZ_ROOT_SOURCE_DIR;
+		if (bPackage)
+		{
+			LOGD("Entry bPackage");
+			ret = string(SZ_ROOT_SOURCE_DIR);
+		}
+		else
+		{
+			ret = NDPath::GetCashesPath() + SZ_ROOT_SOURCE_DIR;
+		}
 	}
     return ret;
 }
@@ -149,9 +168,9 @@ const string NDPath::GetLogPath()
 
 //===========================================================================
 //获取普通资源路径
-const string NDPath::GetResPath()
+const string NDPath::GetResPath(bool bPackage)
 {
-	return NDPath::GetRootResPath() + "res/";
+	return NDPath::GetRootResPath(bPackage) + "res/";
 }
 
 const string NDPath::GetResPath(const char* fileName)
@@ -161,33 +180,33 @@ const string NDPath::GetResPath(const char* fileName)
 	return ret;
 }
 
-const string NDPath::GetImagePath()
+const string NDPath::GetImagePath(bool bPackage)
 {
-    return GetResPath()+string("image/");
+    return GetResPath(bPackage) + string("image/");
 }
 const string NDPath::GetImage00Path()
 {
-	return GetResPath()+string("image00/");
+	return GetResPath() + string("image00/");
 }
 
 const string NDPath::GetMapPath()
 {
-    return GetResPath()+string("map/");
+    return GetResPath() + string("map/");
 }
 
 const string NDPath::GetSoundPath()
 {
-    return GetResPath()+string("sound/");
+    return GetResPath() + string("sound/");
 }
 
 const string NDPath::GetAnimationPath()
 {
-    return GetResPath()+string("animation/");
+    return GetResPath() + string("animation/");
 }
 
 const string NDPath::GetUIPath()
 {
-    return GetResPath()+string("UI/");
+    return GetResPath() + string("UI/");
 }
 
 const string NDPath::GetUIPath( const char* fileName )
@@ -205,10 +224,10 @@ const string NDPath::GetFullImagepath(const char* pszFileName)
 	return GetImgPath(pszFileName);
 }
 
-const string NDPath::GetImgPath(const char* filename)
+const string NDPath::GetImgPath(const char* filename,bool bPackage)
 {
 	static string ret;
-	return ret = GetImagePath() + filename;
+	return ret = GetImagePath(bPackage) + filename;
 }
 const string NDPath::GetImg00Path(const char* filename)
 {
@@ -299,6 +318,20 @@ const string NDPath::GetDBPath()
 #else
 	return "";
 #endif
+}
+
+const string NDPath::GetGameConfigPath( const char* pszConfFileName,bool bPackage )
+{
+	string strRet = "";
+
+	if (0 == pszConfFileName || !*pszConfFileName)
+	{
+		return strRet;
+	}
+
+	strRet = GetRootResPath(bPackage) + SZ_CONF_FILE_DIR + string(pszConfFileName);
+
+	return strRet;
 }
 
 ///////////////////////////>>>
