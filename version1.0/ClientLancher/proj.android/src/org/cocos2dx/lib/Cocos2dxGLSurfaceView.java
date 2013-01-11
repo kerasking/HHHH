@@ -351,7 +351,7 @@ public class Cocos2dxGLSurfaceView extends GLSurfaceView
 	{
 		switch (pKeyCode)
 		{
-		case KeyEvent.KEYCODE_BACK:
+//		case KeyEvent.KEYCODE_BACK://cocos2dx中暂不用回退键，用于游戏退出
 		case KeyEvent.KEYCODE_MENU:
 			this.queueEvent(new Runnable()
 			{

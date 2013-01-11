@@ -2003,7 +2003,6 @@ bool NDBeforeGameMgr::CheckFirstTimeRuning()
  	{
  		bFirstTime = true;
  	    LOGERROR( "\"Library/Caches/SimplifiedChineseRes/version.ini\" is not exist" );
-		CopyRes();
  	}
 	else
 	{
@@ -2034,7 +2033,6 @@ bool NDBeforeGameMgr::CheckFirstTimeRuning()
         if ( atol(szCopyResVersion) < atol(strInstallResVersion.c_str()))
         {
             bFirstTime = true;
-            CopyRes();
         }
 
 		NDBeforeGameMgr::ms_nCopyStatus = 1;

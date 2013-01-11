@@ -320,7 +320,8 @@ const string NDPath::GetDBPath()
 #endif
 }
 
-const string NDPath::GetGameConfigPath( const char* pszConfFileName,bool bPackage )
+const string NDPath::GetGameConfigPath( const char* pszConfFileName,
+									   bool bPackage )
 {
 	string strRet = "";
 
@@ -329,7 +330,8 @@ const string NDPath::GetGameConfigPath( const char* pszConfFileName,bool bPackag
 		return strRet;
 	}
 
-	strRet = GetRootResPath(bPackage) + SZ_CONF_FILE_DIR + string(pszConfFileName);
+	strRet = GetRootResPath(bPackage) + SZ_CONF_FILE_DIR +
+		string(pszConfFileName);
 
 	return strRet;
 }

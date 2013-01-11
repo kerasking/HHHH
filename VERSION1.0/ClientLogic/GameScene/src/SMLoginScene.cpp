@@ -154,7 +154,6 @@ CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
 		pkScene->m_pkProgressTextLabel = new NDUILabel();
 		pkScene->m_pkProgressTextLabel->Initialization();
 		pkScene->m_pkProgressTextLabel->SetRenderTimes(1);
-	//	pkScene->m_pkProgressTextLabel->SetText(strText.c_str());
 		pkScene->m_pkProgressTextLabel->SetTag(0);
 		pkScene->m_pkProgressTextLabel->SetFontSize(15);
 		pkScene->m_pkProgressTextLabel->SetFontColor(kColor);
@@ -170,8 +169,20 @@ CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
 
 		LOGD("Ready to new pkPicture");
 		unsigned char* pszImageBuffer = 0;
-		unsigned int uiLength = 0;
-		pszImageBuffer = g_pUtil.GetFileBufferFromSimplifiedChineseResZip("SimplifiedChineseRes/res/image/Res00/Load/UnzipLoading.png",&uiLength);
+		unsigned long uiLength = 0;
+
+		if (NDBeforeGameMgrObj.CheckFirstTimeRuning())
+		{
+			pszImageBuffer = g_pUtil.GetFileBufferFromSimplifiedChineseResZip(
+				"SimplifiedChineseRes/res/image/Res00/Load/UnzipLoading.png",(unsigned int *)&uiLength);
+		}
+		else
+		{
+
+			LOGD("%s",CONVERT_GBK_TO_UTF8("準備讀取卡上的預加載圖"));
+			pszImageBuffer = CCFileUtils::sharedFileUtils()->getFileData(
+				"/sdcard/dhlj/SimplifiedChineseRes/res/image/Res00/Load/UnzipLoading.png","rb",&uiLength);
+		}
 
 		if (0 == pszImageBuffer)
 		{
@@ -181,27 +192,7 @@ CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
 		NDPicture* pkPicture = kPool.AddPicture(uiLength,pszImageBuffer);
 		LOGD("Ready to initialize pkPicture");
 
-// 		if ()
-// 		{
-// 			LOGERROR("pkPicture->Initialization failed");
-// 			SAFE_DELETE_ARRAY(pszImageBuffer);
-// 			SAFE_DELETE(pkPicture);
-// 		}
-
 		CCImage::changeSystemFont(true);
-
-		pkLoadingPic = kPool.AddPicture("res/drawable/mbga_mobage_loading.png");
-
-		if (pkLoadingPic)
-		{
-			CCSize kPicSize = pkLoadingPic->GetSize();
-
-			pkUILoadingImage = new NDUIImage;
-			pkUILoadingImage->Initialization();
-			pkUILoadingImage->SetFrameRect(CCRectMake(kWinSize.width / 2.0f, kWinSize.height / 2.0f,
-				kPicSize.width, kPicSize.height));
-			pkUILoadingImage->SetPicture(pkLoadingPic,true);
-		}
 
 		pkLayer->AddChild(pkScene->m_pkProgressTextLabel,10,0);
 #else
@@ -215,24 +206,20 @@ CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
 			CCDirector::sharedDirector()->setGLDefaultValues(1.0f,1.0f,1.0f);
 
 			float fScalePic = kPictureSize.width / kPictureSize.height;
-			LOGD("fScalePic = %d",(int)(fScalePic * 100.0f));
+			float fHeight = 0.0f;
 			float fWidth = 0.0f;
 
-			fWidth = kWinSize.height * fScalePic;
+			fHeight = kWinSize.height * 1.2f;
+			fWidth = fHeight * fScalePic;
 
 			pkBackgroundImage->SetFrameRect(CCRectMake(kWinSize.width / 2.0f - fWidth / 2.0f,
-				0, fWidth, kWinSize.height));
+				(kWinSize.height - fHeight) / 2.0f, fWidth, fHeight));
 		}
 
 		pkLayer->AddChild(pkBackgroundImage);
-		
-		if (pkUILoadingImage)
-		{
-			LOGD("pkUILoadingImage != null");
-			//pkLayer->AddChild(pkUILoadingImage);
-		}
 
 		CCLog( "@@login01: open CSMLoginScene\r\n" );
+		
 		LOGD("TAG_TIMER_FIRST_RUN is register");
 		pkScene->m_pTimer->SetTimer( pkScene, TAG_TIMER_FIRST_RUN,0.5f );
     }
@@ -419,7 +406,7 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 					CCSize kWinSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 
 					m_pkProgressTextLabel->SetFrameRect(CCRectMake(kWinSize.width / 2.0f - kTextSize.width / 3.0f,
-						kWinSize.height - kTextSize.height * 2.0f, kTextSize.width, kTextSize.height));
+						kWinSize.height - kTextSize.height * 1.1f, kTextSize.width, kTextSize.height));
 
 					//LOGD("kTextSize.width is %d,kTextSize.height is %d",(int)kTextSize.width,(int)kTextSize.height);
 
@@ -459,6 +446,8 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 #if CACHE_MODE == 1
     	if ( NDBeforeGameMgrObj.CheckFirstTimeRuning() )
         {
+			NDBeforeGameMgrObj.CopyRes();
+
         	if ( m_pLabelPromtp )
             {
         		m_pLabelPromtp->SetText( NDCommonCString2(SZ_FIRST_INSTALL).c_str() );
