@@ -20,6 +20,7 @@ local TAG_DESC_LAYER = {
 	"destiny/Destiny_L_11.ini",
 	"destiny/Destiny_L_12.ini",
 	"destiny/Destiny_L_13.ini",
+	"destiny/Destiny_L_14.ini",
 }
 
 p.nCurrPetId = nil;

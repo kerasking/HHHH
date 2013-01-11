@@ -89,8 +89,11 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	private static float s_fScaleX;
 	private static float s_fScaleY;
 	private View rootView = null;
+
 	private static boolean m_bIsStartingVideo = false;
 	private final static boolean playVideoInActivity = true; //是否在独立的activity中播放视频
+	private static boolean m_bVideoPlayed; //is video already played once.
+
 	private static Context s_context;
 	private static LinearLayout s_balancelayout;
 
@@ -420,6 +423,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	{
 		Log.d("test", "@@ DaHuaLongJiang.notifyIMEOpenClose(): " + (bImeOpen ? "open" : "close"));
 		
+		isFullScreenIME();
 		//refreshLayout( bOpen );
 		if (true)// || isFullScreenIME() == 0)
 		{
@@ -611,6 +615,12 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	{
 		Log.d("video", "@@ playVideo: " + strFile);
 		
+		if (ms_pkDHLJ.m_bVideoPlayed)
+		{
+			Log.d("video", "@@ video already played once, skip." + strFile);
+			return 0;
+		}
+
 		pauseAllBackgroundMusic();
 
 		if (playVideoInActivity)
@@ -622,6 +632,8 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 			m_bIsStartingVideo = true;
 			VideoViewHandler.post(mShowVideoView);
 		}
+
+		m_bVideoPlayed = true;
 
 		return 0;
 	}
