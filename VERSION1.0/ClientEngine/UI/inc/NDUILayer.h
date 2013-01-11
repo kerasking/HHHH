@@ -209,6 +209,7 @@ public:
 			bool longTouch = false);
 
 	virtual bool TryDispatchToButton( NDUINode* uiNode );
+	virtual bool IsTouchOnButton( const CCPoint& touch );
 
 private:
 
