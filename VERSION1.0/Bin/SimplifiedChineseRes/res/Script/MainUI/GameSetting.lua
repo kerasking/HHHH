@@ -225,7 +225,7 @@ end
 function p.OnBtnCallGM()
 	--p.CloseUI();
 	--GMProblemUI.LoadUI();
-    p.TestButtonClick();
+    --p.TestButtonClick();
     
 end
 

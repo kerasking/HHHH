@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest package="tw.mobage.g23000052"
       android:installLocation="auto"
-      android:versionCode="7000"
-      android:versionName="7.0.0.0" xmlns:android="http://schemas.android.com/apk/res/android">
+      android:versionCode="7001"
+      android:versionName="7.0.0.1" xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="8"/>
     <uses-permission android:name="android.permission.INTERNET"/>

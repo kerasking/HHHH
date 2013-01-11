@@ -1102,6 +1102,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\config\GameConfig.json"
+				>
+			</File>
+			<File
 				RelativePath="..\Bin\SimplifiedChineseRes\res\Login.strings"
 				>
 			</File>

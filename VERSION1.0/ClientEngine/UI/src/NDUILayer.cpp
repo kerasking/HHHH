@@ -44,7 +44,7 @@
 using namespace cocos2d;
 
 //抖动容错
-#define MOVE_ERROR (128*RESOURCE_SCALE)
+#define MOVE_ERROR (64*RESOURCE_SCALE)
 
 //按下按钮等同点击
 #define PRESSDOWN_BTN_EQ_CLICK 0
