@@ -44,7 +44,7 @@
 using namespace cocos2d;
 
 //抖动容错
-#define MOVE_ERROR (128*RESOURCE_SCALE)
+#define MOVE_ERROR (64*RESOURCE_SCALE)
 
 //按下按钮等同点击
 #define PRESSDOWN_BTN_EQ_CLICK 0
@@ -559,7 +559,9 @@ bool NDUILayer::TouchMoved(NDTouch* touch)
 	// if really moved, android like to send move event even when not moved.
 	if (m_bDispatchTouchEndEvent)
 	{
-		if (ccpDistanceSQ( m_kBeginTouch, kMoveTouch ) < MOVE_ERROR*MOVE_ERROR )
+		//如果点在按钮上则允许抖动容错，否则不容错（任何微小移动都视为拖动）
+		if (this->IsTouchOnButton( kMoveTouch )
+			&& ccpDistanceSQ( m_kBeginTouch, kMoveTouch ) < MOVE_ERROR*MOVE_ERROR )
 		{
 			return true; //consume it.
 		}
@@ -2032,6 +2034,38 @@ bool NDUILayer::TryDispatchToButton( NDUINode* uiNode )
 		return true;
 	}
 
+	return false;
+}
+
+//是否触摸在按钮上
+bool NDUILayer::IsTouchOnButton( const CCPoint& touch )
+{
+	if (!IsVisibled())
+	{
+		return false;
+	}
+
+	for (int i = GetChildren().size() - 1; i >= 0; i--)
+	{
+		NDNode * pNode = GetChildren().at(i);
+		if ( !pNode || !pNode->IsKindOfClass( RUNTIME_CLASS(NDUINode) ) )
+		{
+			continue;
+		}
+		NDUINode* uiNode = (NDUINode*)pNode;
+
+		if (uiNode->IsVisibled()
+			&& uiNode->EventEnabled()
+			&& uiNode->IsKindOfClass(RUNTIME_CLASS(NDUIButton)))
+		{
+			CCRect nodeFrame = uiNode->GetBoundRect();
+
+			if (cocos2d::CCRect::CCRectContainsPoint(nodeFrame, touch))
+			{
+				return true;
+			}
+		}
+	}
 	return false;
 }
 
