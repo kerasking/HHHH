@@ -369,7 +369,7 @@ int KHttp::getHttpFile(const KData& server, const KData& httpfile,
 
 			if (nLength <= 0)
 			{
-				delete[] pBuff;
+				delete [] pBuff;
 				return m_iWriteLen;
 			}
 

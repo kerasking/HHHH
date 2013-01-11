@@ -126,6 +126,7 @@ unsigned char* NDUtil::GetFileBufferFromSimplifiedChineseResZip( const char* psz
 	}
 
 	CloseZip(hZip);
+	SAFE_DELETE_ARRAY(pszZipBuffer);
 	return pszResult;
 }
 
