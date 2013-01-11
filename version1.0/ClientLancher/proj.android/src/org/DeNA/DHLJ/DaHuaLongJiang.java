@@ -35,6 +35,7 @@ import org.DeNA.DHLJ.SocialUtils;
 import android.app.AlertDialog;
 import android.app.Service;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -91,7 +92,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	private View rootView = null;
 
 	private static boolean m_bIsStartingVideo = false;
-	private final static boolean playVideoInActivity = true; //ÊÇ·ñÔÚ¶ÀÁ¢µÄactivityÖĞ²¥·ÅÊÓÆµ
+	private final static boolean playVideoInActivity = true; //æ˜¯å¦åœ¨ç‹¬ç«‹çš„activityä¸­æ’­æ”¾è§†é¢‘
 	private static boolean m_bVideoPlayed; //is video already played once.
 
 	private static Context s_context;
@@ -219,10 +220,6 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 			menubar.setMenubarVisibility(View.VISIBLE);
 			menubar.setMenuIconGravity(Gravity.TOP | Gravity.LEFT);
 
-			Rect rect = new Rect(0, 0, 160, 90);
-			balancebutton = com.mobage.android.social.common.Service
-					.getBalanceButton(rect);
-
 //			 testbutton = new Button(this);
 //			 testbutton.setText("aaaaaaaaa".toCharArray(), 1, 6);
 //			 FrameLayout.LayoutParams pkParamsButton = new
@@ -342,6 +339,9 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		layoutParams.width = sizex.intValue();
 		layoutParams.height = sizey.intValue();
 
+		Rect rect = new Rect(0, 0, 160, 90);
+		balancebutton = com.mobage.android.social.common.Service
+				.getBalanceButton(rect);
 		s_balancelayout.addView(balancebutton, layoutParams);
 
 		menubar.addView(s_balancelayout);
@@ -358,7 +358,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		// set menu bar visible
 		menubar.setMenubarVisibility(View.VISIBLE);
 		
-		createFloatView();
+		//createFloatView();//ç¹ä½“SDKä¸æ”¯æŒ
 	}
 
 	private static void dump_menubar()
@@ -672,12 +672,26 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 
 	public boolean onKeyDown(int keyCode, KeyEvent event)
 	{
-		if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0)
-		{
-			event.startTracking();
-			return true;
-		}
 		return super.onKeyDown(keyCode, event);
+	}
+	
+	public void onBackPressed()
+	{
+		DialogInterface.OnClickListener onYes = new DialogInterface.OnClickListener() {  
+            
+		     public void onClick(DialogInterface dialog, int which) {  
+		        dialog.dismiss();  
+				android.os.Process.killProcess(android.os.Process.myPid());
+		     }  
+		  };
+		new AlertDialog.Builder(this)   
+		.setTitle("ç¢ºèª")  
+		.setMessage("ç¢ºå®šè¦é€€å‡ºéŠæˆ²å—ï¼Ÿ")  
+		.setPositiveButton("æ˜¯", onYes)  
+		.setNegativeButton("å¦", null)  
+		.show();
+
+//		onLogout();
 	}
 
 	public boolean onTouchEvent(MotionEvent event)
@@ -742,36 +756,36 @@ public class DaHuaLongJiang extends Cocos2dxActivity
     	myFV=new FloatView(getApplicationContext());
     	//myFV.setImageResource(tw.mobage.g23000052.R.drawable.icon);
     	myFV.setBackgroundResource(tw.mobage.g23000052.R.drawable.icon);
-    	//»ñÈ¡WindowManager
+    	//è·å–WindowManager
     	wm=(WindowManager)getApplicationContext().getSystemService("window");
-        //ÉèÖÃLayoutParams(È«¾Ö±äÁ¿£©Ïà¹Ø²ÎÊı
+        //è®¾ç½®LayoutParams(å…¨å±€å˜é‡ï¼‰ç›¸å…³å‚æ•°
     	wmParams = getMywmParams();
-        wmParams.type=WindowManager.LayoutParams.TYPE_PHONE;   //ÉèÖÃwindow type
-        wmParams.format=PixelFormat.RGBA_8888;   //ÉèÖÃÍ¼Æ¬¸ñÊ½£¬Ğ§¹ûÎª±³¾°Í¸Ã÷
+        wmParams.type=WindowManager.LayoutParams.TYPE_PHONE;   //è®¾ç½®window type
+        wmParams.format=PixelFormat.RGBA_8888;   //è®¾ç½®å›¾ç‰‡æ ¼å¼ï¼Œæ•ˆæœä¸ºèƒŒæ™¯é€æ˜
 
-        //ÉèÖÃWindow flag
+        //è®¾ç½®Window flag
         wmParams.flags=WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
                               | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
-        wmParams.gravity=Gravity.LEFT|Gravity.TOP;   //µ÷ÕûĞü¸¡´°¿ÚÖÁ×óÏÂ½Ç
-        //ÒÔÆÁÄ»×óÉÏ½ÇÎªÔ­µã£¬ÉèÖÃx¡¢y³õÊ¼Öµ
+        wmParams.gravity=Gravity.LEFT|Gravity.TOP;   //è°ƒæ•´æ‚¬æµ®çª—å£è‡³å·¦ä¸‹è§’
+        //ä»¥å±å¹•å·¦ä¸Šè§’ä¸ºåŸç‚¹ï¼Œè®¾ç½®xã€yåˆå§‹å€¼
 
 		DisplayMetrics dm = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(dm);
         wmParams.x=0;
         wmParams.y=dm.heightPixels-10;
         
-        //ÉèÖÃĞü¸¡´°¿Ú³¤¿íÊı¾İ,µÈ¿í¸ß
+        //è®¾ç½®æ‚¬æµ®çª—å£é•¿å®½æ•°æ®,ç­‰å®½é«˜
 		Float sizex = 30 * s_fScaleY;
 		Float sizey = 30 * s_fScaleY;
         wmParams.width=sizex.intValue();
         wmParams.height=sizey.intValue();
     
-        //ÏÔÊ¾FloatViewÍ¼Ïñ
+        //æ˜¾ç¤ºFloatViewå›¾åƒ
         wm.addView(myFV, wmParams);
         timer.schedule(task, 0, 50);
     }
     	  
-	// ÊÇ·ñ¹ÅÀÏÏµÍ³
+	// æ˜¯å¦å¤è€ç³»ç»Ÿ
 	public static int isVerOlder(int n)
 	{
 		String osVer = android.os.Build.VERSION.RELEASE;
@@ -801,4 +815,6 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	private static native void onLoginComplete(int userid, String DeviceToken);
 
 	private static native void onLoginError(String error);
+	
+	private static native void onLogout();
 }

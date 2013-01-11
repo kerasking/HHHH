@@ -67,7 +67,7 @@ namespace NDEngine
 
 		if ( color.r == 0 && color.g == 0 && color.b == 0 && color.a == 0)
 		{
-			//return;
+			return; //这里return掉是正确的，下面这些draw代码有问题，出来的效果是错误的！
 		}
  		ccVertex2F m_pSquareVertices[4];
  		m_pSquareVertices[0].x = rect.origin.x;

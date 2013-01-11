@@ -104,7 +104,7 @@ struct UTF8
 	//charLen是字符占用的字节数（1~6个字节）
 	static char* getNextChar( const char*& text, int* charLen = 0 )
 	{
-		if (!text) return 0;
+		if (!text || *text == 0) return 0;
 
 		static char word[10] = { 0x0 };
 		memset(word, 0, sizeof(word));

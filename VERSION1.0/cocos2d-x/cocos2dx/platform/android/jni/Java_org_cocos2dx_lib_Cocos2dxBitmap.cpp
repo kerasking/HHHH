@@ -55,6 +55,7 @@ extern "C"
 			t.env->ReleaseStringUTFChars(retFromJava, str);
 			t.env->DeleteLocalRef(stringArg1);
 			t.env->DeleteLocalRef(t.classID);
+			t.env->DeleteLocalRef(retFromJava);
 		}
 		return ret;
 	}

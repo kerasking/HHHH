@@ -436,7 +436,7 @@ void Fighter::LoadRole(int nLookFace, int lev, const string& name)
 	m_pkRole->SetName( name );
 	m_pkRole->m_nLevel = lev;
 	role->SetNonRole(false);
-	m_nRoleInitialHeight = m_pkRole->GetHeight();
+	m_nRoleInitialHeight = m_pkRole->GetHeight()*RESOURCE_SCALE_960;
 	if( this->m_kInfo.group == BATTLE_GROUP_ATTACK )
 	{
 		m_iIconsXOffset = -HP_BAR_WIDTH/2 - STATUS_ICON_WIDTH;//-m_role->GetWidth()/2 - STATUS_ICON_WIDTH;
@@ -462,7 +462,7 @@ void Fighter::LoadMonster(int nLookFace, int lev, const string& name)
 	m_pkRole->m_nLevel = lev;
 
 	//this->m_kInfo.bRoleMonster = role->m_bRoleMonster;
-	m_nRoleInitialHeight = m_pkRole->GetHeight();
+	m_nRoleInitialHeight = m_pkRole->GetHeight()*RESOURCE_SCALE_960;
 	if( this->m_kInfo.group == BATTLE_GROUP_ATTACK )
 	{
 		m_iIconsXOffset = -HP_BAR_WIDTH/2 - STATUS_ICON_WIDTH;//-m_role->GetWidth()/2 - STATUS_ICON_WIDTH;

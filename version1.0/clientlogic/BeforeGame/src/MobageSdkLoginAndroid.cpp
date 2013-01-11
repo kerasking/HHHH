@@ -15,6 +15,7 @@
 #include "NDBeforeGameMgr.h"
 #include "SMLoginScene.h"
 #include "SMGameScene.h"
+#include "NDDataTransThread.h"
 
 #include "platform/android/jni/JniHelper.h"
 #include <jni.h>
@@ -35,3 +36,6 @@ void MobageSdkLoginAndroid::onLoginError() {
     
 }
 
+void MobageSdkLoginAndroid::onLogout() {
+    quitGame();
+}

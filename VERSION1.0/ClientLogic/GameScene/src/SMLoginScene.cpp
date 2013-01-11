@@ -219,6 +219,7 @@ CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
 		pkLayer->AddChild(pkBackgroundImage);
 
 		CCLog( "@@login01: open CSMLoginScene\r\n" );
+		
 		LOGD("TAG_TIMER_FIRST_RUN is register");
 		pkScene->m_pTimer->SetTimer( pkScene, TAG_TIMER_FIRST_RUN,0.5f );
     }
@@ -425,7 +426,10 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 		//CreateUpdateUILayer();
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
- 		CCLog( "@@login02: to call OnEvent_LoginOKNormal()\r\n" );		m_iAccountID = NDBeforeGameMgrObj.GetCurrentUser();		OnEvent_LoginOKNormal(m_iAccountID);
+ 		CCLog( "@@login02: to call OnEvent_LoginOKNormal()\r\n" );
+		m_iAccountID = NDBeforeGameMgrObj.GetCurrentUser();
+		OnEvent_LoginOKNormal(m_iAccountID);
+
 #else
 
 #ifdef USE_MGSDK
@@ -1247,6 +1251,7 @@ std::string CSMLoginScene::getTextFromStringXML_JNI( int nTextID )
 
 		t.env->ReleaseStringUTFChars(retFromJava, str);
 		t.env->DeleteLocalRef(t.classID);
+		t.env->DeleteLocalRef(retFromJava);
 	}
 	else
 	{
