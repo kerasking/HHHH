@@ -5349,7 +5349,7 @@ ZRESULT TUnzip::Get(int index, ZIPENTRY *ze)
 	int nLength = strlen(sfn);
 	nLength = nLength < MAX_PATH ? nLength + 1 : MAX_PATH;
 
-	LOGD("nLength is %d",nLength);
+	//LOGD("nLength is %d",nLength);
 
 	//_tcsncpy(ze->name, sfn,MAX_PATH);
 	strncpy(ze->name, sfn, nLength);
