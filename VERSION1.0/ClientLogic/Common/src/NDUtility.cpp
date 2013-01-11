@@ -211,11 +211,11 @@ bool VerifyUnsignedNum(const std::string strnum)
 // 	int y2 = y + height - 1, x2 = x + width - 1;
 // 	
 // 	ccColor4B clr = INTCOLORTOCCC4(borderColor);
-// 	DrawRecttangle(CCRectMake(x - 1, y - 1, 4, 4), clr); // 左上角框
-// 	DrawRecttangle(CCRectMake(x2 - 3, y - 1, 4, 4), clr); // 右上角框
+// 	DrawRecttangle(CCRectMake(x - 1, y - 1, 4, 4), clr);
+// 	DrawRecttangle(CCRectMake(x2 - 3, y - 1, 4, 4), clr);
 // 	
-// 	DrawRecttangle(CCRectMake(x - 1, y2 - 3, 4, 4), clr); // 左下角框
-// 	DrawRecttangle(CCRectMake(x2 - 3, y2 - 3, 4, 4), clr); // 右下角框
+// 	DrawRecttangle(CCRectMake(x - 1, y2 - 3, 4, 4), clr);
+// 	DrawRecttangle(CCRectMake(x2 - 3, y2 - 3, 4, 4), clr);
 // 	
 // 	DrawLine(CCPointMake(x, y + 5), CCPointMake(x + 5, y + 5), clr, 1);
 // 	DrawLine(CCPointMake(x + 5, y), CCPointMake(x + 5, y + 5), clr, 1);
