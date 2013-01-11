@@ -205,6 +205,7 @@ void CUIChatText::SetContent(int speakerID, int channel, const char* speaker,
 // 			text += 3;
 // 		}
 		char* word = UTF8::getNextChar( text );
+		if (!word) break;
 
 		if (type == ChatItem)
 		{
