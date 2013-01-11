@@ -13,4 +13,5 @@ class MobageSdkLoginAndroid
 public:
     static void onLoginComplete(int userId);
     static void onLoginError();
+    static void onLogout();
 };
