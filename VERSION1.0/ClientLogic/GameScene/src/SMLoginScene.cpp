@@ -170,8 +170,20 @@ CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
 
 		LOGD("Ready to new pkPicture");
 		unsigned char* pszImageBuffer = 0;
-		unsigned int uiLength = 0;
-		pszImageBuffer = g_pUtil.GetFileBufferFromSimplifiedChineseResZip("SimplifiedChineseRes/res/image/Res00/Load/UnzipLoading.png",&uiLength);
+		unsigned long uiLength = 0;
+
+		if (NDBeforeGameMgrObj.CheckFirstTimeRuning())
+		{
+			pszImageBuffer = g_pUtil.GetFileBufferFromSimplifiedChineseResZip(
+				"SimplifiedChineseRes/res/image/Res00/Load/UnzipLoading.png",(unsigned int *)&uiLength);
+		}
+		else
+		{
+
+			LOGD("%s",CONVERT_GBK_TO_UTF8("準備讀取卡上的預加載圖"));
+			pszImageBuffer = CCFileUtils::sharedFileUtils()->getFileData(
+				"/sdcard/dhlj/SimplifiedChineseRes/res/image/Res00/Load/UnzipLoading.png","rb",&uiLength);
+		}
 
 		if (0 == pszImageBuffer)
 		{
@@ -456,6 +468,8 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 #if CACHE_MODE == 1
     	if ( NDBeforeGameMgrObj.CheckFirstTimeRuning() )
         {
+			NDBeforeGameMgrObj.CopyRes();
+
         	if ( m_pLabelPromtp )
             {
         		m_pLabelPromtp->SetText( NDCommonCString2(SZ_FIRST_INSTALL).c_str() );
