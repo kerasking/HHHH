@@ -1396,6 +1396,8 @@ function p.GameDataPetInfoRefresh(nPetId)
 		return;
 	end
 	p.UpdatePetAttrById(nPetId);
+	
+	p.refreshPetattr();
 end
 
 function p.GameDataPetAttrRefresh(datalist)
@@ -1441,6 +1443,11 @@ end
 
 local TAG_E_TMONEY      = 243;  --
 local TAG_E_TEMONEY     = 242;  --
+
+function p.refreshPetattr()
+	p.ChangePetAttr(ChosedPetId);
+end	
+
 --刷新金钱
 function p.refreshMoney()
     LogInfo("p.refreshMoney BEGIN");
