@@ -718,12 +718,14 @@ bool CIniFile::DecryptAssetIniFile(char *strBuf, int iBufSize)
 	if (0 == nResultNum)
 	{
 		LOGERROR("DecryptString failed!");
+		SAFE_DELETE_ARRAY(pszData);
 		return false;
 	}
 
 	LOGD("nResultNum is %d,Read data is %s",nResultNum,(const char*)pszData);
 
 	memcpy(strBuf,pszData,ulSize);
+	SAFE_DELETE_ARRAY(pszData);
 
 	return true;
 }
