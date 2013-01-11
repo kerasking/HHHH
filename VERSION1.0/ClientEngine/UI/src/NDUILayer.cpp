@@ -2051,20 +2051,21 @@ bool NDUILayer::IsTouchOnButton( const CCPoint& touch )
 		NDNode * pNode = GetChildren().at(i);
 		if ( !pNode ) continue;
 
-		if (pNode->IsKindOfClass( RUNTIME_CLASS(NDUINode)) 
-			|| pNode->IsKindOfClass( RUNTIME_CLASS(CUIEdit)))
+		if (pNode->IsKindOfClass( RUNTIME_CLASS(NDUINode)))
 		{
 			NDUINode* uiNode = (NDUINode*)pNode;
 
-			if (uiNode->IsVisibled()
-				&& uiNode->EventEnabled()
-				&& uiNode->IsKindOfClass(RUNTIME_CLASS(NDUIButton)))
+			if (uiNode->IsVisibled() && uiNode->EventEnabled())
 			{
-				CCRect nodeFrame = uiNode->GetBoundRect();
-
-				if (cocos2d::CCRect::CCRectContainsPoint(nodeFrame, touch))
+				if (uiNode->IsKindOfClass(RUNTIME_CLASS(NDUIButton)) 
+					|| pNode->IsKindOfClass( RUNTIME_CLASS(CUIEdit)))
 				{
-					return true;
+					CCRect nodeFrame = uiNode->GetBoundRect();
+
+					if (cocos2d::CCRect::CCRectContainsPoint(nodeFrame, touch))
+					{
+						return true;
+					}
 				}
 			}
 		}
