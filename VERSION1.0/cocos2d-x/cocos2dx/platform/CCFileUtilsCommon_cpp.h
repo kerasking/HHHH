@@ -343,7 +343,9 @@ CCArray* ccFileUtils_arrayWithContentsOfFileThreadSafe(const char* pFileName)
     return tMaker.arrayWithContentsOfFile(pFileName);
 }
 
-unsigned char* CCFileUtils::getFileDataFromZip(const char* pszZipFilePath, const char* pszFileName, unsigned long * pSize)
+unsigned char* CCFileUtils::getFileDataFromZip(const char* pszZipFilePath,
+											   const char* pszFileName,
+											   unsigned long * pSize)
 {
 	LOGD("Entry getFileDataFromZip,pszZipFilePath = %s,pszFileName = %s",pszZipFilePath,pszFileName);
 

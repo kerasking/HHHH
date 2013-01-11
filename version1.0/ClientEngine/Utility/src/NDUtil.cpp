@@ -96,6 +96,7 @@ unsigned char* NDUtil::GetFileBufferFromSimplifiedChineseResZip( const char* psz
 
 	if (0 == hZip)
 	{
+		SAFE_DELETE_ARRAY(pszZipBuffer);
 		LOGERROR("hZip is null");
 		return 0;
 	}
@@ -104,6 +105,8 @@ unsigned char* NDUtil::GetFileBufferFromSimplifiedChineseResZip( const char* psz
 
 	if (kZipEntry.unc_size == 0)
 	{
+		CloseZip(hZip);
+		SAFE_DELETE_ARRAY(pszZipBuffer);
 		LOGERROR("FindZipItem failed,Path is %s",pszPath);
 		return 0;
 	}
@@ -117,9 +120,13 @@ unsigned char* NDUtil::GetFileBufferFromSimplifiedChineseResZip( const char* psz
 
 	if (0 == pszResult)
 	{
+		CloseZip(hZip);
+		SAFE_DELETE_ARRAY(pszZipBuffer);
 		LOGD("pszResult is Null");
 	}
 
+	CloseZip(hZip);
+	SAFE_DELETE_ARRAY(pszZipBuffer);
 	return pszResult;
 }
 

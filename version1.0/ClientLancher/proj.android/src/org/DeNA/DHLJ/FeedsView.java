@@ -33,7 +33,7 @@ public class FeedsView extends LinearLayout{
 		int count = 3;
 		String str[] = {"我在玩《大話龍將》，很好玩的遊戲哦～","快來體驗《大話龍將》，三國巨作，高畫質～","《大話龍將》高清Q版RPG，與三國武將們並肩作戰，體驗三國豪情～"};
 		int r = new Random().nextInt(count);
-		Feed feed = new Feed("大話龍將" , str[r] , "" , "");
+		Feed feed = new Feed("大話龍將" , str[r] , "http://54.248.82.174/ft_png/dhlj_icon.png" , "");
 		com.mobage.android.social.cn.Feeds.openActivityFeeds(feed);
 	}
 	

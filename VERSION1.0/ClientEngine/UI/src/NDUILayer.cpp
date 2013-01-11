@@ -40,6 +40,7 @@
 #include "NDUIScrollViewMulHand.h"
 #include "ObjectTracker.h"
 #include "NDUIChatText.h"
+#include "UIEdit.h"
 
 using namespace cocos2d;
 
@@ -335,7 +336,7 @@ bool NDUILayer::UITouchBegin(NDTouch* touch)
 //			return false;
 //		}
 
-	if(m_bDragOutFlag)
+	if(ms_bPressing)
 		return false;
 
 	StartDispatchEvent();
@@ -1411,7 +1412,6 @@ bool NDUILayer::DispatchDragOutCompleteEvent(CCPoint beginTouch,
 
 		if (OnScriptUiEvent(uiNode, TE_TOUCH_BTN_DRAG_OUT_COMPLETE))
 		{
-			m_bDragOutFlag = false;
 			return true;
 		}
 	}
@@ -2037,7 +2037,7 @@ bool NDUILayer::TryDispatchToButton( NDUINode* uiNode )
 	return false;
 }
 
-//是否触摸在按钮上
+//是否触摸在按钮上（或者编辑框）
 bool NDUILayer::IsTouchOnButton( const CCPoint& touch )
 {
 	if (!IsVisibled())
@@ -2048,21 +2048,24 @@ bool NDUILayer::IsTouchOnButton( const CCPoint& touch )
 	for (int i = GetChildren().size() - 1; i >= 0; i--)
 	{
 		NDNode * pNode = GetChildren().at(i);
-		if ( !pNode || !pNode->IsKindOfClass( RUNTIME_CLASS(NDUINode) ) )
-		{
-			continue;
-		}
-		NDUINode* uiNode = (NDUINode*)pNode;
+		if ( !pNode ) continue;
 
-		if (uiNode->IsVisibled()
-			&& uiNode->EventEnabled()
-			&& uiNode->IsKindOfClass(RUNTIME_CLASS(NDUIButton)))
+		if (pNode->IsKindOfClass( RUNTIME_CLASS(NDUINode)))
 		{
-			CCRect nodeFrame = uiNode->GetBoundRect();
+			NDUINode* uiNode = (NDUINode*)pNode;
 
-			if (cocos2d::CCRect::CCRectContainsPoint(nodeFrame, touch))
+			if (uiNode->IsVisibled() && uiNode->EventEnabled())
 			{
-				return true;
+				if (uiNode->IsKindOfClass(RUNTIME_CLASS(NDUIButton)) 
+					|| pNode->IsKindOfClass( RUNTIME_CLASS(CUIEdit)))
+				{
+					CCRect nodeFrame = uiNode->GetBoundRect();
+
+					if (cocos2d::CCRect::CCRectContainsPoint(nodeFrame, touch))
+					{
+						return true;
+					}
+				}
 			}
 		}
 	}

@@ -1970,6 +1970,7 @@ bool NDBeforeGameMgr::CheckFirstTimeRuning()
 	if (0 == pZip)
 	{
 		LOGERROR("pZip is null!The file can't find:%s","assets/SimplifiedChineseRes.zip");
+		SAFE_DELETE_ARRAY(pszData);
 		return false;
 	}
 
@@ -1988,6 +1989,7 @@ bool NDBeforeGameMgr::CheckFirstTimeRuning()
 
 	SAFE_DELETE_ARRAY(pSimplifiedChineseResBuffer);
 	SAFE_DELETE_ARRAY(pVersionINIBuffer);
+	SAFE_DELETE_ARRAY(pszData);
 
  	CloseZip(pZip);
 
@@ -2001,7 +2003,6 @@ bool NDBeforeGameMgr::CheckFirstTimeRuning()
  	{
  		bFirstTime = true;
  	    LOGERROR( "\"Library/Caches/SimplifiedChineseRes/version.ini\" is not exist" );
-		CopyRes();
  	}
 	else
 	{
@@ -2032,7 +2033,6 @@ bool NDBeforeGameMgr::CheckFirstTimeRuning()
         if ( atol(szCopyResVersion) < atol(strInstallResVersion.c_str()))
         {
             bFirstTime = true;
-            CopyRes();
         }
 
 		NDBeforeGameMgr::ms_nCopyStatus = 1;
@@ -2071,6 +2071,7 @@ void* CopyLoginResThread(void* ptr)
 
 	if (0 == pszZipData)
 	{
+		SAFE_DELETE_ARRAY(pszZipData);
 		LOGERROR("0 == pszZipData");
 		return 0;
 	}
@@ -2080,12 +2081,14 @@ void* CopyLoginResThread(void* ptr)
 	if (0 == pZipHandle)
 	{
 		LOGERROR("0 == pZipHandle");
+		SAFE_DELETE_ARRAY(pszZipData);
 		return 0;
 	}
 
 	if (ZR_OK != GetZipItem(pZipHandle,-1,&kZipEntry))
 	{
 		LOGERROR("ZR_OK != GetZipItem(pZipHandle,-1,&kZipEntry)");
+		SAFE_DELETE_ARRAY(pszZipData);
 		return 0;
 	}
 
@@ -2104,6 +2107,7 @@ void* CopyLoginResThread(void* ptr)
 	}
 
 	CloseZip(pZipHandle);
+	SAFE_DELETE_ARRAY(pszZipData);
 	NDBeforeGameMgr::ms_nCopyLoginResStatus = 1;
 
 #else
@@ -2139,6 +2143,7 @@ void* CopyResThread(void* ptr)
 
 	pszZipData = CCFileUtils::sharedFileUtils()->getFileDataFromZip(strApkPath.c_str(),
 		"assets/SimplifiedChineseRes.zip",&ulZipLength);
+	LOGD("pszZipData is create!Size is %d",(int)ulZipLength);
 
 	if (0 == pszZipData)
 	{
@@ -2150,12 +2155,15 @@ void* CopyResThread(void* ptr)
 
 	if (0 == pZipHandle)
 	{
+		SAFE_DELETE_ARRAY(pszZipData);
 		LOGERROR("0 == pZipHandle");
 		return 0;
 	}
 
 	if (ZR_OK != GetZipItem(pZipHandle,-1,&kZipEntry))
 	{
+		CloseZip(pZipHandle);
+		SAFE_DELETE_ARRAY(pszZipData);
 		LOGERROR("ZR_OK != GetZipItem(pZipHandle,-1,&kZipEntry)");
 		return 0;
 	}
@@ -2181,6 +2189,7 @@ void* CopyResThread(void* ptr)
 	NDBeforeGameMgr::ms_nCopyStatus = 100;
 
 	CloseZip(pZipHandle);
+	SAFE_DELETE_ARRAY(pszZipData);
 
 #else
 #endif

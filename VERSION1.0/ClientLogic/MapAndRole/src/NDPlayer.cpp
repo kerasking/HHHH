@@ -686,8 +686,8 @@ void NDPlayer::Update(unsigned long ulDiff)
 	if (
 		(int(m_kTargetPos.x) != 0)
 		&& (int(m_kTargetPos.y) != 0)
-		&& (int(pos.x-DISPLAY_POS_X_OFFSET) % 32 == 0 ) //@todo.这里硬编码32了，以后修改！
-		&& (int(pos.y-DISPLAY_POS_Y_OFFSET) % 32 == 0 ))
+		&& (int(pos.x-DISPLAY_POS_X_OFFSET) % ((int)(32*RESOURCE_SCALE_960)) == 0 ) //@todo.这里硬编码32了，以后修改！
+		&& (int(pos.y-DISPLAY_POS_Y_OFFSET) % ((int)(32*RESOURCE_SCALE_960)) == 0 ))
 	{
 		//if (this->GetParent()) 
 		//			{

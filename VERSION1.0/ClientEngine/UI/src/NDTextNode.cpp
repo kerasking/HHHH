@@ -397,6 +397,7 @@ NDUIText* NDUITextBuilder::Build(const char* pszText, unsigned int uiFontSize,
 // 			pszText += 3;
 // 		}
 		char* szWord = UTF8::getNextChar( pszText );
+		if (!szWord) break;
 
 		if (eRule == BuildRuleItem)
 		{
@@ -501,6 +502,7 @@ unsigned int NDUITextBuilder::StringWidthAfterFilter(const char* text,
 // 				text += 3;
 // 			}
 			char* word = UTF8::getNextChar( text );
+			if (!word) break;
 
 			unsigned int temp = getStringSize(word, fontSize*FONT_SCALE).width;
 			if (curWidth + temp > textWidth)
@@ -572,6 +574,7 @@ unsigned int NDUITextBuilder::StringHeightAfterFilter(const char* text,
 // 				text += 3;
 // 			}
 			char* word = UTF8::getNextChar( text );
+			if (!word) break;
 
 			unsigned int temp = getStringSize(word, fontSize*FONT_SCALE).width;
 			if (curWidth + temp > textWidth)

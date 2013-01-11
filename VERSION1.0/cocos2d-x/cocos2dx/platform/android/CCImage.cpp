@@ -266,6 +266,7 @@ bool CCImage::getStringSize( const char *    in_utf8,
         t.env->DeleteLocalRef(stringArg1);
         t.env->DeleteLocalRef(stringArg2);
         t.env->DeleteLocalRef(t.classID);
+        t.env->DeleteLocalRef(ret);
     }
 }
 
