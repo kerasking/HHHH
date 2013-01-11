@@ -48,7 +48,7 @@ function p.RefreshUI(sName, pNum, nTimes)
      local name = "["..sName.."]"..GetTxtPri("LLUI2_T1");
      SetLabel(layer, p.ctrId.txtName, name);
      SetLabel(layer, p.ctrId.txtNum, SafeN2S(pNum));  
-     SetLabel(layer, p.ctrId.txtTime, string.format(GetTxtPri("LLUI2_T1"),nTimes));    
+     SetLabel(layer, p.ctrId.txtTime, string.format(GetTxtPri("LLUI2_T2"),nTimes));    
      
      if nTimes > 0 then
         p.tbTimer.CountDownNum = nTimes;
