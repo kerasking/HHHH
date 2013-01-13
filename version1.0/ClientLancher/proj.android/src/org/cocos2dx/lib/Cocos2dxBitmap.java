@@ -286,7 +286,7 @@ public class Cocos2dxBitmap {
 					i = lastIndexOfSpace;
 				} else {
 					/* Should not exceed the width. */
-					if (tempWidth > pMaxWidth) {
+					if (tempWidth > pMaxWidth && i>1) {//若第一个字都放不了的话，那整行也放不了，直接放吧
 						strList.add(pString.substring(start, i - 1));
 						/* Compute from previous char. */
 						--i;
@@ -295,9 +295,10 @@ public class Cocos2dxBitmap {
 					}
 				}
 
-				//ND_MOD 此处不能把i++放入循环内，上面的代码会死循环
+				//ND_MOD 
 				/* Remove spaces at the beginning of a new line. */
-				while (pString.indexOf(i++) == ' ') {
+				while (pString.indexOf(i) == ' ') {
+					i++;
 				}
 
 				start = i;
