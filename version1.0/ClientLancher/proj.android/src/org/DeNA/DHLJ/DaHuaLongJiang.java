@@ -1,4 +1,4 @@
-package org.DeNA.DHLJ;
+﻿package org.DeNA.DHLJ;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -92,8 +92,8 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	private View rootView = null;
 
 	private static boolean m_bIsStartingVideo = false;
-	private final static boolean playVideoInActivity = true; //是否在独立的activity中播放视频
-	private static boolean m_bVideoPlayed; //is video already played once.
+	private final static boolean playVideoInActivity = true; //鏄惁鍦ㄧ嫭绔嬬殑activity涓挱鏀捐棰??
+	private static boolean m_bVideoPlayed; //is video already played once.道
 
 	private static Context s_context;
 	private static LinearLayout s_balancelayout;
@@ -358,7 +358,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		// set menu bar visible
 		menubar.setMenubarVisibility(View.VISIBLE);
 		
-		//createFloatView();//繁体SDK不支持
+		//createFloatView();//绻佷綋SDK涓嶆敮鎸??
 	}
 
 	private static void dump_menubar()
@@ -756,36 +756,36 @@ public class DaHuaLongJiang extends Cocos2dxActivity
     	myFV=new FloatView(getApplicationContext());
     	//myFV.setImageResource(tw.mobage.g23000052.R.drawable.icon);
     	myFV.setBackgroundResource(tw.mobage.g23000052.R.drawable.icon);
-    	//获取WindowManager
+    	//鑾峰彇WindowManager
     	wm=(WindowManager)getApplicationContext().getSystemService("window");
-        //设置LayoutParams(全局变量）相关参数
+        //璁剧疆LayoutParams(鍏ㄥ眬鍙橀噺锛夌浉鍏冲弬鏁??
     	wmParams = getMywmParams();
-        wmParams.type=WindowManager.LayoutParams.TYPE_PHONE;   //设置window type
-        wmParams.format=PixelFormat.RGBA_8888;   //设置图片格式，效果为背景透明
+        wmParams.type=WindowManager.LayoutParams.TYPE_PHONE;   //璁剧疆window type
+        wmParams.format=PixelFormat.RGBA_8888;   //璁剧疆鍥剧墖鏍煎紡锛屾晥鏋滀负鑳屾櫙閫忔槑
 
-        //设置Window flag
+        //璁剧疆Window flag
         wmParams.flags=WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
                               | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
-        wmParams.gravity=Gravity.LEFT|Gravity.TOP;   //调整悬浮窗口至左下角
-        //以屏幕左上角为原点，设置x、y初始值
+        wmParams.gravity=Gravity.LEFT|Gravity.TOP;   //璋冩暣鎮诞绐楀彛鑷冲乏涓嬭
+        //浠ュ睆骞曞乏涓婅涓哄師鐐癸紝璁剧疆x銆亂鍒濆鍊??
 
 		DisplayMetrics dm = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(dm);
         wmParams.x=0;
         wmParams.y=dm.heightPixels-10;
         
-        //设置悬浮窗口长宽数据,等宽高
+        //璁剧疆鎮诞绐楀彛闀垮鏁版嵁,绛夊楂??
 		Float sizex = 30 * s_fScaleY;
 		Float sizey = 30 * s_fScaleY;
         wmParams.width=sizex.intValue();
         wmParams.height=sizey.intValue();
     
-        //显示FloatView图像
+        //鏄剧ずFloatView鍥惧儚
         wm.addView(myFV, wmParams);
         timer.schedule(task, 0, 50);
     }
     	  
-	// 是否古老系统
+	// 鏄惁鍙よ??佺郴缁??
 	public static int isVerOlder(int n)
 	{
 		String osVer = android.os.Build.VERSION.RELEASE;
