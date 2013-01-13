@@ -232,6 +232,7 @@ int getFileDescriptor_LJ(const char * filename, off_t & start, off_t & length)
 		t.env->ReleaseStringUTFChars(retFromJava, str);
 		t.env->DeleteLocalRef(stringArg1);
 		t.env->DeleteLocalRef(t.classID);
+		t.env->DeleteLocalRef(retFromJava);
 
 		if (ok)
 		{

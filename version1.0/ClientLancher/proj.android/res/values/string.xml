@@ -2,5 +2,14 @@
 <resources>
     <string name="app_name">大話龍將</string>
     <string name="unzip_text">首次運行,初始化配置中</string>
+    <string name="dialog_exit_title_text">確認</string>
+    <string name="dialog_exit_content__text">確定要退出遊戲嗎？</string>
+    <string name="dialog_exit_yes__text">是</string>
+    <string name="dialog_exit_no__text">否</string>
+    <string name="dialog_share_text1">我在玩《大話龍將》，很好玩的遊戲哦～</string>
+    <string name="dialog_share_text2">快來體驗《大話龍將》，三國巨作，高畫質～</string>
+    <string name="dialog_share_text3">《大話龍將》高清Q版RPG，與三國武將們並肩作戰，體驗三國豪情～</string>
+    <string name="dialog_share_success">分享成功</string>
+    <string name="dialog_share_fail">分享失敗</string>
     
 </resources>

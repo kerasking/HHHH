@@ -49,21 +49,25 @@ NS_CC_BEGIN
 #if ND_MOD
 
 static bool gs_bIsSystemFont = false;
+static int  gs_isVerOlder = -1;
 
 struct FONT_UTIL
 {
 	static bool isVerOlder()
 	{
-		JniMethodInfo t;
-		if (JniHelper::getStaticMethodInfo(t, "org/DeNA/DHLJ/DaHuaLongJiang",
-			"isVerOlder",
-			"(I)I"))
-		{
-			jint isOldVer = (jint) t.env->CallStaticObjectMethod(t.classID, t.methodID);
-			t.env->DeleteLocalRef(t.classID);
-			return (isOldVer == 1);
-		}
-		return false;
+        if(gs_isVerOlder == -1)
+        {
+            JniMethodInfo t;
+            if (JniHelper::getStaticMethodInfo(t, "org/DeNA/DHLJ/DaHuaLongJiang",
+                                               "isVerOlder",
+                                               "(I)I"))
+            {
+                jint isOldVer = (jint) t.env->CallStaticObjectMethod(t.classID, t.methodID);
+                t.env->DeleteLocalRef(t.classID);
+                gs_isVerOlder = isOldVer;
+            }
+        }
+        return (gs_isVerOlder == 1);
 	}
 
 	static bool isPureAscii( const string& text )
@@ -89,7 +93,7 @@ struct FONT_UTIL
 	}
 
 	//对应低版本的android系统（主版本号为2），若字符串为纯数字或纯字母，则强制使用Arial字体.
-	static const char* changeFontName( const char* fontName, const jstring& jstrText ) 
+	static const char* changeFontName( const char* fontName, const jstring& jstrText )
 	{	
 		static const char arialFontName[] = "Arial-BoldMT";
 
@@ -221,7 +225,7 @@ bool CCImage::initWithString(
         bRet = true;
     } while (0);
 
-    return bRet;
+    return bRet;  
 }
 
 #if ND_MOD
