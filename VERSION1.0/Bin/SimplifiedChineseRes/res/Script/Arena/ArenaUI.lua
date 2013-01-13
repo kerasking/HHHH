@@ -160,11 +160,7 @@ end
 function p.onCommonDlg2(nId, param)
         LogInfo("++++++++++remove_cd_Dlg_id++++++");
         if ( CommonDlgNew.BtnOk == nId ) then
-			local n=p.cdTime%60;
-			local cost=getIntPart(p.cdTime/60);
-			if n>0 then
-				cost=cost+1;
-			end
+			local cost = getIntPart( (p.cdTime+59) / 60 ); 
 			if cost > 0 then
 				local nPlayerId = GetPlayerId();
 				if nil == nPlayerId then
@@ -172,13 +168,12 @@ function p.onCommonDlg2(nId, param)
 					return;
 				end
 	
-                local emoney = GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_MONEY);
-				--local emoney = GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_ADVANCE_MONEY);
-				if emoney >= cost then
-                     LogInfo("++++++++++SendClearTime++++++");
+                local emoney = GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_EMONEY);
+				if cost < emoney then
+                     LogInfo("++++++++++SendClearTime++++++ cost:" ..cost..", emoney:"..emoney );
 					_G.MsgArena.SendClearTime();
 				else
-					CommonDlg.ShowWithConfirm(GetTxtPri("JinBiBuZhu"), p.onCommonDlg);
+					CommonDlg.ShowWithConfirm(GetTxtPub("JinBiBuZhu"), p.onCommonDlg);
 				end
 			end
 		end
@@ -212,7 +207,7 @@ function p.OnUIEvent(uiNode,uiEventType,param)
             local money = GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_EMONEY);
 			local cost=(addedCount+1)*2;
             if money<cost then
-                CommonDlg.ShowWithConfirm(GetTxtPri("JinBiBuZhu"), p.onCommonDlg);
+                CommonDlg.ShowWithConfirm(GetTxtPub("JinBiBuZhu"), p.onCommonDlg);
             else
                 --add_Time_Dlg_id=CommonDlg.ShowNoPrompt("是否花费"..SafeN2S(cost).."金币，增加1次挑战次数？", p.onCommonDlg1, true);
                 CommonDlgNew.ShowYesOrNoDlg("是否花费"..SafeN2S(cost).."金币，增加1次挑战次数？", p.onCommonDlg1, true);
@@ -226,26 +221,26 @@ function p.OnUIEvent(uiNode,uiEventType,param)
                 end
             local money = GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_EMONEY);
 			local cost=(addedCount+1)*2;
-            if money<cost then
-                CommonDlg.ShowWithConfirm(GetTxtPri("JinBiBuZhu"), p.onCommonDlg);
-            end
-            if restFightCount == 0 then
-				local cost=(addedCount+1)*2;
-                CommonDlgNew.ShowYesOrNoDlg(string.format(GetTxtPri("AREAUI_T1"),SafeN2S(cost)), p.onCommonDlg1, true);
+            --if money<cost then
+            --    CommonDlg.ShowWithConfirm(GetTxtPub("JinBiBuZhu"), p.onCommonDlg);
+            --else
+	            if restFightCount == 0 then
+					local cost=(addedCount+1)*2;
+			        CommonDlgNew.ShowYesOrNoDlg(string.format(GetTxtPri("AREAUI_T1"),SafeN2S(cost)), p.onCommonDlg1, true);
                 
-			elseif p.cdTime>0 then
-				local n= p.cdTime%60;
-				local cost=getIntPart(p.cdTime/60);
-				if n>0 then
-					cost=cost+1;
+				elseif p.cdTime>0 then
+					local n= p.cdTime%60;
+					local cost=getIntPart(p.cdTime/60);
+					if n>0 then
+						cost=cost+1;
+					end
+					if cost > 0 then
+						--remove_cd_Dlg_id=CommonDlg.ShowNoPrompt("竞技场尚在冷却中，是否花费"..SafeN2S(cost).."金币取消冷却？", 
+						--p.onCommonDlg2, true);
+                         CommonDlgNew.ShowYesOrNoDlg(string.format(GetTxtPri("AREAUI_T2"), SafeN2S(cost)), p.onCommonDlg2);
+					end
 				end
-				if cost > 0 then
-					--remove_cd_Dlg_id=CommonDlg.ShowNoPrompt("竞技场尚在冷却中，是否花费"..SafeN2S(cost).."金币取消冷却？", 
-                    --p.onCommonDlg2, true);
-                             CommonDlgNew.ShowYesOrNoDlg(string.format(GetTxtPri("AREAUI_T2"), SafeN2S(cost)), p.onCommonDlg2, true);
-                
-				end
-			end
+			--end
 
 		elseif ID_ARENA_CTRL_BUTTON_HERO == tag then
 			_G.MsgArena.SendFrontRank();
