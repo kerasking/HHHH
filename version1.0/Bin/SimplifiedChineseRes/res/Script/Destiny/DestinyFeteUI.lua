@@ -8,13 +8,63 @@ local p = DestinyFeteUI;
 
 --是否消费提示
 p.bFlagConfirm = false;
-
+--[[
 local DesInfos = {
     "◇ 每天可以免费占星一次，0点更新，之后可以花费银币进行占星，无次数限制\n◇ 每选择一次占星，只会获得一个星运\n◇ 占星由低级到高级分为：龟甲卜算、周易八卦、洛书河图、奇门遁甲、七星祭天。初始只能选择“龟甲卜算”。\n◇ 每选择一种占星后，都有几率开启下一级的占星，或返回“龟甲卜算”\n◇ 开启高级占星后，依然可以点击“龟甲卜算”，可同时开启多个不同等级的占星。\n◇ 可获得星运类型如下：\n \n<ce47012武曲星/e： 初始力量500点,之后每级增加力量470点\n<ce47012文曲星/e： 初始智力500点,之后每级增加智力470点\n<ce47012禄存星/e： 初始敏捷500点,之后每级增加敏捷470点\n<ce47012廉贞星/e： 初始生命2000点,之后每级增加生命2500点",
 	"<ce47012紫微星/e： 100级可获得，初始控制概率增幅基础值的4%,之后每级控制概率增幅基础值的6%\n<ce47012巨门星/e： 100级可获得，初始控制抗性增幅基础值的4%,之后每级控制抗性增幅基础值的6%\n<ce47012破军星/e： 100级可获得，初始减扣士气效果增加基础值的4%,之后每级减扣士气效果增加基础值的6%\n<ce47012贪狼星/e： 100级可获得，初始减扣士气抗性增幅基础值的4%,之后每级减扣士气抗性增幅基础值的6%\n<cff00fc天枢星/e： 初始力量320点,之后每级增加力量240点\n<cff00fc天璇星/e： 初始敏捷320点,之后每级增加敏捷240点\n<cff00fc天权星/e： 初始智力320点,之后每级增加智力240点\n<cff00fc玉衡星/e： 初始生命1280点,之后每级增加生命1000点\n<cff00fc开阳星/e： 80级可获得，初始韧性9%,之后每级增加韧性3.5%\n<cff00fc摇光星/e： 80级可获得，初始增加9%暴击,之后每级增加暴击3.5%",
     "<c179bfc天府星/e： 初始力量180点,之后每级增加力量135点\n<c179bfc天梁星/e： 初始敏捷180点,之后每级增加敏捷135点\n<c179bfc天机星/e： 初始智力180点,之后每级增加智力135点\n<c179bfc天同星/e： 初始生命900点,之后每级增加生命700点\n<c179bfc天衡星/e： 初始命中9%,之后每级增加命中3.5%\n<c179bfc天罡星/e： 初始增加9%闪避,之后每级增加闪避3.5%\n<c179bfc天相星/e： 初始增加9%格挡,之后每级增加格挡3.5%\n<c179bfc天杀星/e： 初始增加9%破击,之后每级增加破击3.5%\n<c1ced5d太阳星/e： 初始力量90点,之后每级增加力量70点\n<c1ced5d太阴星/e： 初始敏捷90点,之后每级增加敏捷70点\n<c1ced5d少阳星/e： 初始智力90点,之后每级增加智力70点\n<c1ced5d少阴星/e： 初始生命500点,之后每级增加生命400点\n<cff0f0f福星/e： 增加星运经验1200点"
 };
+]]
 
+
+
+local DesInfos2 = {
+	GetTxtPri("DF_T1"),
+	GetTxtPri("DF_T2"),
+	GetTxtPri("DF_T3"),
+	GetTxtPri("DF_T4"),
+	GetTxtPri("DF_T5"),
+	GetTxtPri("DF_T6"),
+	GetTxtPri("DF_T7"),
+	GetTxtPri("DF_T8"),
+	GetTxtPri("DF_T9"),
+	GetTxtPri("DF_T10"),
+	GetTxtPri("DF_T11"),
+	"",
+	GetTxtPri("DF_T12"),
+	GetTxtPri("DF_T13"),
+	GetTxtPri("DF_T14"),
+	GetTxtPri("DF_T15"),
+	GetTxtPri("DF_T16"),
+	GetTxtPri("DF_T17"),
+	GetTxtPri("DF_T18"),
+	GetTxtPri("DF_T19"),
+	GetTxtPri("DF_T20"),
+	GetTxtPri("DF_T21"),
+	GetTxtPri("DF_T22"),
+	GetTxtPri("DF_T23"),
+	GetTxtPri("DF_T24"),
+	GetTxtPri("DF_T25"),
+	GetTxtPri("DF_T26"),
+	GetTxtPri("DF_T27"),
+	GetTxtPri("DF_T28"),
+	GetTxtPri("DF_T29"),
+	GetTxtPri("DF_T30"),
+	GetTxtPri("DF_T31"),
+	GetTxtPri("DF_T32"),
+	GetTxtPri("DF_T33"),
+	GetTxtPri("DF_T34"),
+	GetTxtPri("DF_T35"),
+	GetTxtPri("DF_T36"),
+	GetTxtPri("DF_T37"),
+	GetTxtPri("DF_T38"),
+	GetTxtPri("DF_T39"),
+	GetTxtPri("DF_T40"),
+	GetTxtPri("DF_T41"),
+	GetTxtPri("DF_T42"),
+	GetTxtPri("DF_T43"),
+	GetTxtPri("DF_T44"),
+}
 
 local TAG_DESC_LAYER = {
 	"destiny/Destiny_L_11.ini",
@@ -346,8 +396,9 @@ function p.CreateDescLayer()
     containter:RemoveAllView();
     containter:EnableScrollBar(true);
     local size = containter:GetFrameRect().size;
-    containter:SetViewSize(size);
-    for i,v in ipairs(TAG_DESC_LAYER) do
+    containter:SetViewSize(CGSizeMake(size.w,14*CoordScaleY));
+    --for i,v in ipairs(TAG_DESC_LAYER) do
+	for i,v in ipairs(DesInfos2) do
         local view = createUIScrollView();
         view:Init(false);
         view:SetScrollStyle(UIScrollStyle.Verical);
@@ -358,34 +409,19 @@ function p.CreateDescLayer()
         view:SetContainer(containter);
         containter:AddView(view);
 		
-        --[[
-        local layerd = createNDUINode();
-		layerd:Init();
-		layerd:SetFrameRect(CGRectMake(0,0,size.w,size.h));
-		view:AddChild(layerd);
-		
-		local uiLoad = createNDUILoad();
-		if not CheckP(uiLoad) then
-			return false;
-		end
-		uiLoad:Load(v, layerd, nil, 0, 0);
-		uiLoad:Free();
-		]]
-		
-		
+		--[[
 		local uiLoad = createNDUILoad();
 		if not CheckP(uiLoad) then
 			return false;
 		end
 		uiLoad:Load(v, view, nil, 0, 0);
 		uiLoad:Free();
+        ]]
         
-        
-        --[[
         local pLabelTips = _G.CreateColorLabel( v, 12, size.w );
-        pLabelTips:SetFrameRect(CGRectMake(0,0,size.w,size.h));
+        --pLabelTips:SetFrameRect(CGSizeMake(size.w,14*CoordScaleY));
         view:AddChild(pLabelTips);
-		]]
+		
     end
 end
 
