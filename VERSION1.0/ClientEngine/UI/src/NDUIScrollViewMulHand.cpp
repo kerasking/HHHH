@@ -321,10 +321,10 @@ int ContainerClientLayerM::WhichViewToScroll()
 }
 
 bool ContainerClientLayerM::TouchMoved(NDTouch* touch){
-	if (!this->IsVisibled())
-	{
-		return false;
-	}
+// 	if (!this->IsVisibled()) //@zd 必须注释掉，不然会影响滚动控件的拖动
+// 	{
+// 		return false;
+// 	}
 
     CCPoint prePos = touch->GetPreviousLocation();
     CCPoint curPos = touch->GetLocation();
