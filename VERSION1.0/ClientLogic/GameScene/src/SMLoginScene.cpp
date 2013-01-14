@@ -174,14 +174,14 @@ CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
 		if (NDBeforeGameMgrObj.CheckFirstTimeRuning())
 		{
 			pszImageBuffer = g_pUtil.GetFileBufferFromSimplifiedChineseResZip(
-				"SimplifiedChineseRes/res/image/Res00/Load/UnzipLoading.png",(unsigned int *)&uiLength);
+				"SimplifiedChineseRes/res/image/Res00/Load/bg_load.png",(unsigned int *)&uiLength);//UnzipLoading.png
 		}
 		else
 		{
 
 			LOGD("%s",CONVERT_GBK_TO_UTF8("準備讀取卡上的預加載圖"));
 			pszImageBuffer = CCFileUtils::sharedFileUtils()->getFileData(
-				"/sdcard/dhlj/SimplifiedChineseRes/res/image/Res00/Load/UnzipLoading.png","rb",&uiLength);
+				"/sdcard/dhlj/SimplifiedChineseRes/res/image/Res00/Load/bg_load.png","rb",&uiLength);
 		}
 
 		if (0 == pszImageBuffer)
