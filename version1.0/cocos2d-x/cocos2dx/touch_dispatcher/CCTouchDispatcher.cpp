@@ -387,6 +387,10 @@ void CCTouchDispatcher::touches(CCSet *pTouches, CCEvent *pEvent, unsigned int u
 {
     CCAssert(uIndex >= 0 && uIndex < 4, "");
 
+	if(pTouches->count() > 1)
+	{
+		return;
+	}
     CCSet *pMutableTouches;
     m_bLocked = true;
 
