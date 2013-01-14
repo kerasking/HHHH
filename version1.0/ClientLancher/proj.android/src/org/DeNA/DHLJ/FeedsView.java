@@ -1,10 +1,12 @@
 package org.DeNA.DHLJ;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Random;
 
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -28,6 +30,20 @@ public class FeedsView extends LinearLayout{
 	@Override
 	protected void onFinishInflate() {
 	}
+	public String changeCharset(String str, String newCharset)
+    {
+		  try {
+				if (str != null) {
+					//用默认字符编码解码字符串〄1�7
+					byte[] bs = str.getBytes();
+					//用新的字符编码生成字符串
+					return new String(bs, newCharset);
+				}
+		  } catch (UnsupportedEncodingException e) {
+              	Log.e(TAG, "Failed to open AlertDialog", e);
+		  }
+		return str;
+    }
 
 	public static void openActivityFeeds() {
 		int count = 3;

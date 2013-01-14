@@ -3,6 +3,7 @@
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -92,8 +93,8 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	private View rootView = null;
 
 	private static boolean m_bIsStartingVideo = false;
-	private final static boolean playVideoInActivity = true; //鏄惁鍦ㄧ嫭绔嬬殑activity涓挱鏀捐棰??
-	private static boolean m_bVideoPlayed; //is video already played once.道
+	private final static boolean playVideoInActivity = true; //是否在独立的activity中播放视频	
+	private static boolean m_bVideoPlayed; //is video already played once.
 
 	private static Context s_context;
 	private static LinearLayout s_balancelayout;
@@ -358,7 +359,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		// set menu bar visible
 		menubar.setMenubarVisibility(View.VISIBLE);
 		
-		//createFloatView();//绻佷綋SDK涓嶆敮鎸??
+		//createFloatView();//繁体SDK不支持	
 	}
 
 	private static void dump_menubar()
@@ -675,6 +676,21 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		return super.onKeyDown(keyCode, event);
 	}
 	
+	public String changeCharset(String str, String newCharset)
+    {
+		  try {
+				if (str != null) {
+					//用默认字符编码解码字符串〄1�7
+					byte[] bs = str.getBytes();
+					//用新的字符编码生成字符串
+					return new String(bs, newCharset);
+				}
+		  } catch (UnsupportedEncodingException e) {
+              	Log.e(TAG, "Failed to open AlertDialog", e);
+		  }
+		return str;
+    }
+	
 	public void onBackPressed()
 	{
 		DialogInterface.OnClickListener onYes = new DialogInterface.OnClickListener() {  
@@ -684,12 +700,13 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 				android.os.Process.killProcess(android.os.Process.myPid());
 		     }  
 		  };
-		new AlertDialog.Builder(this)   
-		.setTitle("確認")  
-		.setMessage("確定要退出遊戲嗎？")  
-		.setPositiveButton("是", onYes)  
-		.setNegativeButton("否", null)  
-		.show();
+
+          new AlertDialog.Builder(this)
+          .setTitle(changeCharset("確認", "UTF-8"))
+          .setMessage(changeCharset("確定要退出遊戲嗎？", "UTF-8"))
+          .setPositiveButton(changeCharset("是", "UTF-8"), onYes)
+          .setNegativeButton(changeCharset("否", "UTF-8"), null)
+          .show();
 
 //		onLogout();
 	}
@@ -758,7 +775,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
     	myFV.setBackgroundResource(tw.mobage.g23000052.R.drawable.icon);
     	//鑾峰彇WindowManager
     	wm=(WindowManager)getApplicationContext().getSystemService("window");
-        //璁剧疆LayoutParams(鍏ㄥ眬鍙橀噺锛夌浉鍏冲弬鏁??
+        //设置LayoutParams(全局变量）相关参数   
     	wmParams = getMywmParams();
         wmParams.type=WindowManager.LayoutParams.TYPE_PHONE;   //璁剧疆window type
         wmParams.format=PixelFormat.RGBA_8888;   //璁剧疆鍥剧墖鏍煎紡锛屾晥鏋滀负鑳屾櫙閫忔槑
@@ -766,16 +783,16 @@ public class DaHuaLongJiang extends Cocos2dxActivity
         //璁剧疆Window flag
         wmParams.flags=WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
                               | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
-        wmParams.gravity=Gravity.LEFT|Gravity.TOP;   //璋冩暣鎮诞绐楀彛鑷冲乏涓嬭
-        //浠ュ睆骞曞乏涓婅涓哄師鐐癸紝璁剧疆x銆亂鍒濆鍊??
 
+        wmParams.gravity=Gravity.LEFT|Gravity.TOP;   //调整悬浮窗口至左下角
+        //以屏幕左上角为原点，设置x、y初始值
 		DisplayMetrics dm = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(dm);
         wmParams.x=0;
         wmParams.y=dm.heightPixels-10;
         
-        //璁剧疆鎮诞绐楀彛闀垮鏁版嵁,绛夊楂??
-		Float sizex = 30 * s_fScaleY;
+        //设置悬浮窗口长宽数据,等宽高		
+        Float sizex = 30 * s_fScaleY;
 		Float sizey = 30 * s_fScaleY;
         wmParams.width=sizex.intValue();
         wmParams.height=sizey.intValue();
