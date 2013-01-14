@@ -561,7 +561,8 @@ bool NDUILayer::TouchMoved(NDTouch* touch)
 	if (m_bDispatchTouchEndEvent)
 	{
 		//如果点在按钮上则允许抖动容错，否则不容错（任何微小移动都视为拖动）
-		if (this->IsTouchOnButton( kMoveTouch )
+		if ((!m_bLongTouch)
+			&& this->IsTouchOnButton( kMoveTouch )
 			&& ccpDistanceSQ( m_kBeginTouch, kMoveTouch ) < MOVE_ERROR*MOVE_ERROR )
 		{
 			return true; //consume it.
