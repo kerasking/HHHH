@@ -1093,7 +1093,7 @@ function p.InviteCallBackOnlyGold(nEvent, param )
 			_G.MsgRolePet.SendBuyPetWithGold( nPetType );
 		else
 			--金币不足-充值什么的
-			CommonDlgNew.ShowYesOrNoDlg( "您的金币不足，先去充值？", p.InviteCallBackRecharge );
+			CommonDlgNew.ShowYesOrNoDlg( GetTxtPri("Common_JinBiBuZhu2"), p.InviteCallBackRecharge );
 		end
 	end
 end

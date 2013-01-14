@@ -1,4 +1,4 @@
-package org.DeNA.DHLJ;
+﻿package org.DeNA.DHLJ;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -773,16 +773,17 @@ public class DaHuaLongJiang extends Cocos2dxActivity
     	myFV=new FloatView(getApplicationContext());
     	//myFV.setImageResource(tw.mobage.g23000052.R.drawable.icon);
     	myFV.setBackgroundResource(tw.mobage.g23000052.R.drawable.icon);
-    	//获取WindowManager
+    	//鑾峰彇WindowManager
     	wm=(WindowManager)getApplicationContext().getSystemService("window");
-        //设置LayoutParams(全局变量）相关参数    	
+        //设置LayoutParams(全局变量）相关参数   
     	wmParams = getMywmParams();
-        wmParams.type=WindowManager.LayoutParams.TYPE_PHONE;   //设置window type
-        wmParams.format=PixelFormat.RGBA_8888;   //设置图片格式，效果为背景透明
+        wmParams.type=WindowManager.LayoutParams.TYPE_PHONE;   //璁剧疆window type
+        wmParams.format=PixelFormat.RGBA_8888;   //璁剧疆鍥剧墖鏍煎紡锛屾晥鏋滀负鑳屾櫙閫忔槑
 
         //璁剧疆Window flag
         wmParams.flags=WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
                               | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
+
         wmParams.gravity=Gravity.LEFT|Gravity.TOP;   //调整悬浮窗口至左下角
         //以屏幕左上角为原点，设置x、y初始值
 		DisplayMetrics dm = new DisplayMetrics();
@@ -796,12 +797,12 @@ public class DaHuaLongJiang extends Cocos2dxActivity
         wmParams.width=sizex.intValue();
         wmParams.height=sizey.intValue();
     
-        //显示FloatView图像
+        //鏄剧ずFloatView鍥惧儚
         wm.addView(myFV, wmParams);
         timer.schedule(task, 0, 50);
     }
     	  
-	// 是否古老系统
+	// 鏄惁鍙よ??佺郴缁??
 	public static int isVerOlder(int n)
 	{
 		String osVer = android.os.Build.VERSION.RELEASE;

@@ -237,7 +237,7 @@ void CUIItemButton::ChangeItemCount(unsigned int unItemCount)
 		
 		pLabel		= new NDUILabel;
 		pLabel->Initialization();
-		pLabel->SetFontSize(14);
+		pLabel->SetFontSize(14*COORD_SCALE_Y_960);
 		pLabel->SetFontColor(ccc4(255, 204, 120, 255));
 		pLabel->SetTag(TAG_ITEM_COUNT);
 		pLabel->SetTextAlignment(LabelTextAlignmentRight);
