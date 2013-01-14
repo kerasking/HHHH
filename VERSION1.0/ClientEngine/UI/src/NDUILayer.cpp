@@ -41,6 +41,9 @@
 #include "ObjectTracker.h"
 #include "NDUIChatText.h"
 #include "UIEdit.h"
+#include "UICheckBox.h"
+#include "NDUICheckBox.h"
+#include "NDUIHyperLink.h"
 
 using namespace cocos2d;
 
@@ -2058,7 +2061,13 @@ bool NDUILayer::IsTouchOnButton( const CCPoint& touch )
 			if (uiNode->IsVisibled() && uiNode->EventEnabled())
 			{
 				if (uiNode->IsKindOfClass(RUNTIME_CLASS(NDUIButton)) 
-					|| pNode->IsKindOfClass( RUNTIME_CLASS(CUIEdit)))
+					|| pNode->IsKindOfClass( RUNTIME_CLASS(CUIEdit))
+					|| pNode->IsKindOfClass( RUNTIME_CLASS(NDUICheckBox))
+					|| pNode->IsKindOfClass( RUNTIME_CLASS(CUICheckBox))
+					|| pNode->IsKindOfClass( RUNTIME_CLASS(CUIHyperlinkButton))
+					|| pNode->IsKindOfClass( RUNTIME_CLASS(CUIHyperlinkText))
+					//|| pNode->IsKindOfClass( RUNTIME_CLASS(CUISpriteNode))
+					)
 				{
 					CCRect nodeFrame = uiNode->GetBoundRect();
 
