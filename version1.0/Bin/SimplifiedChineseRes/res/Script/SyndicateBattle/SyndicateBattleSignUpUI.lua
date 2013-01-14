@@ -374,7 +374,7 @@ function p.ShowTip()
 			
 		  	pLabelTips = _G.CreateColorLabel( TipTxt[nIndex], 11, nWidthLimit );
 			pLabelTips:SetFrameRect(CGRectMake(0, 0, nWidthLimit, 20 * ScaleFactor));
-
+			
 			--pLabelTips = _G.CreateLabel( TipTxt[nIndex], CGRectMake(0, 0, nWidthLimit, 20 * ScaleFactor), 11, ccc4(255,255,255,255) );
 			
 			view:AddChild(pLabelTips);
