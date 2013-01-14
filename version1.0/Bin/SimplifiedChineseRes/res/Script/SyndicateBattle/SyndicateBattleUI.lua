@@ -1237,6 +1237,7 @@ GetTxtPri("SYN_D41"),GetTxtPri("SYN_D42"),GetTxtPri("SYN_D43"),GetTxtPri("SYN_D4
 GetTxtPri("SYN_D45"),
 "",
 GetTxtPri("SYN_D46"),GetTxtPri("SYN_D47"),
+GetTxtPri("SYN_D46"),GetTxtPri("SYN_D53"),
 "",
 GetTxtPri("SYN_D48"),GetTxtPri("SYN_D49"),
 "",
@@ -1318,11 +1319,11 @@ function p.ShowTip()
 			local pLabelTips = nil;
 			local pLabelScore = nil;
 			
-			--[[
+			
 		  	pLabelTips = _G.CreateColorLabel( TipTxt[nIndex], 13, nWidthLimit );
 			pLabelTips:SetFrameRect(CGRectMake(0, 0, nWidthLimit, 20 * ScaleFactor));
-			]]
-			pLabelTips = _G.CreateLabel( TipTxt[nIndex], CGRectMake(0, 0, nWidthLimit, 20 * ScaleFactor), 13, ccc4(255,255,255,255) );
+			
+			--pLabelTips = _G.CreateLabel( TipTxt[nIndex], CGRectMake(0, 0, nWidthLimit, 20 * ScaleFactor), 13, ccc4(255,255,255,255) );
 	
 			view:AddChild(pLabelTips);
 
