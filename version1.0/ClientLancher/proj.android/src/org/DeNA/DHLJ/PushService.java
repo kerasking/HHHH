@@ -3,6 +3,7 @@ package org.DeNA.DHLJ;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
+import tw.mobage.g23000052.MainActivity;
 import tw.mobage.g23000052.R;
 
 import com.ibm.mqtt.IMqttClient;
@@ -441,7 +442,7 @@ public class PushService extends Service
 		 n.defaults = Notification.DEFAULT_ALL;
 		 n.icon = tw.mobage.g23000052.R.drawable.dhlj_icon;
 		 n.when = System.currentTimeMillis();
-		 Intent intent = new Intent(this, DaHuaLongJiang.class); 
+		 Intent intent = new Intent(this, MainActivity.class); 
 		 intent.addCategory(Intent.CATEGORY_LAUNCHER); 
 		 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		 PendingIntent pi = PendingIntent.getActivity(this, 0, intent, 0);
