@@ -3,6 +3,8 @@ package org.DeNA.DHLJ;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
+import tw.mobage.g23000052.R;
+
 import com.ibm.mqtt.IMqttClient;
 import com.ibm.mqtt.MqttClient;
 import com.ibm.mqtt.MqttException;
@@ -94,7 +96,7 @@ public class PushService extends Service
 	public static final String		PREF_RETRY = "retryInterval";
 
 	// Notification title
-	public static String			NOTIF_TITLE = "大話龍將"; 	
+//	public static String			NOTIF_TITLE = getString(R.string.app_name); 	
 	// Notification id
 	private static final int		NOTIF_CONNECTED = 0;	
 		
@@ -434,7 +436,7 @@ public class PushService extends Service
 		 Notification n = new Notification();
 		 n.flags |= Notification.FLAG_SHOW_LIGHTS;
 		 n.flags |= Notification.FLAG_AUTO_CANCEL;
-		 n.flags |= Notification.FLAG_ONGOING_EVENT; // 璁剧疆甯搁┗ Flag
+		 n.flags |= Notification.FLAG_ONGOING_EVENT; // 设置常驻 Flag
 
 		 n.defaults = Notification.DEFAULT_ALL;
 		 n.icon = tw.mobage.g23000052.R.drawable.dhlj_icon;
@@ -444,7 +446,7 @@ public class PushService extends Service
 		 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		 PendingIntent pi = PendingIntent.getActivity(this, 0, intent, 0);
 		 //String text1 = this.changeCharset(text, "UTF-8");
-		 n.setLatestEventInfo(this, NOTIF_TITLE, text, pi);
+		 n.setLatestEventInfo(this, getString(R.string.app_name), text, pi);
 		 mNotifMan.notify(NOTIF_CONNECTED, n);
 	}
 	

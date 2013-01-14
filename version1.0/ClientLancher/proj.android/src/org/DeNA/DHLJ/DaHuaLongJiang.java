@@ -79,6 +79,7 @@ import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import android.widget.VideoView;
+import tw.mobage.g23000052.R;
 
 public class DaHuaLongJiang extends Cocos2dxActivity
 {
@@ -93,7 +94,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	private View rootView = null;
 
 	private static boolean m_bIsStartingVideo = false;
-	private final static boolean playVideoInActivity = true; //是否在独立的activity中播放视频	
+	private final static boolean playVideoInActivity = true; //是否在独立的activity中播放视频
 	private static boolean m_bVideoPlayed; //is video already played once.
 
 	private static Context s_context;
@@ -359,7 +360,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		// set menu bar visible
 		menubar.setMenubarVisibility(View.VISIBLE);
 		
-		//createFloatView();//繁体SDK不支持	
+		//createFloatView();//繁体SDK不支持
 	}
 
 	private static void dump_menubar()
@@ -702,10 +703,10 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		  };
 
           new AlertDialog.Builder(this)
-          .setTitle(changeCharset("確認", "UTF-8"))
-          .setMessage(changeCharset("確定要退出遊戲嗎？", "UTF-8"))
-          .setPositiveButton(changeCharset("是", "UTF-8"), onYes)
-          .setNegativeButton(changeCharset("否", "UTF-8"), null)
+          .setTitle(getString(R.string.dialog_exit_title_text))
+          .setMessage(getString(R.string.dialog_exit_content_text))
+          .setPositiveButton(getString(R.string.dialog_exit_yes_text), onYes)
+          .setNegativeButton(getString(R.string.dialog_exit_no_text), null)
           .show();
 
 //		onLogout();
@@ -773,36 +774,36 @@ public class DaHuaLongJiang extends Cocos2dxActivity
     	myFV=new FloatView(getApplicationContext());
     	//myFV.setImageResource(tw.mobage.g23000052.R.drawable.icon);
     	myFV.setBackgroundResource(tw.mobage.g23000052.R.drawable.icon);
-    	//鑾峰彇WindowManager
+    	//获取WindowManager
     	wm=(WindowManager)getApplicationContext().getSystemService("window");
-        //设置LayoutParams(全局变量）相关参数   
+        //设置LayoutParams(全局变量）相关参数
     	wmParams = getMywmParams();
-        wmParams.type=WindowManager.LayoutParams.TYPE_PHONE;   //璁剧疆window type
-        wmParams.format=PixelFormat.RGBA_8888;   //璁剧疆鍥剧墖鏍煎紡锛屾晥鏋滀负鑳屾櫙閫忔槑
+        wmParams.type=WindowManager.LayoutParams.TYPE_PHONE;   //设置window type
+        wmParams.format=PixelFormat.RGBA_8888;   //设置图片格式，效果为背景透明
 
-        //璁剧疆Window flag
+        //设置Window flag
         wmParams.flags=WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
                               | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
-
         wmParams.gravity=Gravity.LEFT|Gravity.TOP;   //调整悬浮窗口至左下角
         //以屏幕左上角为原点，设置x、y初始值
+
 		DisplayMetrics dm = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(dm);
         wmParams.x=0;
         wmParams.y=dm.heightPixels-10;
         
-        //设置悬浮窗口长宽数据,等宽高		
-        Float sizex = 30 * s_fScaleY;
+        //设置悬浮窗口长宽数据,等宽高
+		Float sizex = 30 * s_fScaleY;
 		Float sizey = 30 * s_fScaleY;
         wmParams.width=sizex.intValue();
         wmParams.height=sizey.intValue();
     
-        //鏄剧ずFloatView鍥惧儚
+        //显示FloatView图像
         wm.addView(myFV, wmParams);
         timer.schedule(task, 0, 50);
     }
     	  
-	// 鏄惁鍙よ??佺郴缁??
+	// 是否古老系统
 	public static int isVerOlder(int n)
 	{
 		String osVer = android.os.Build.VERSION.RELEASE;
