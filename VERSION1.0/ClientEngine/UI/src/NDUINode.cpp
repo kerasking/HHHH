@@ -230,14 +230,14 @@ namespace NDEngine
 					m_kFrameRect.size.width*m_fBoundScale, 
 					m_kFrameRect.size.height*m_fBoundScale);
 
-				if(this->IsKindOfClass(RUNTIME_CLASS(CUICheckBox)))
-				{
-					return CCRectMake(
-						CRectret.origin.x - 30*COORD_SCALE_X_960, 
-						CRectret.origin.y - 15*COORD_SCALE_Y_960, 
-						CRectret.size.width + 60*COORD_SCALE_X_960, 
-						CRectret.size.height + 30*COORD_SCALE_Y_960);
-				}
+// 				if(this->IsKindOfClass(RUNTIME_CLASS(CUICheckBox)))
+// 				{
+// 					return CCRectMake(
+// 						CRectret.origin.x - 30*COORD_SCALE_X_960, 
+// 						CRectret.origin.y - 15*COORD_SCALE_Y_960, 
+// 						CRectret.size.width + 60*COORD_SCALE_X_960, 
+// 						CRectret.size.height + 30*COORD_SCALE_Y_960);
+// 				}
 
 				return CRectret;
 			}
