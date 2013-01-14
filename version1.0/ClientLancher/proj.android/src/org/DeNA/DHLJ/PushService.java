@@ -410,18 +410,6 @@ public class PushService extends Service
 		}
 	};
 	
-	public String changeCharset(String str, String newCharset)
-			   throws UnsupportedEncodingException 
-	{
-		if (str != null) {
-			//用默认字符编码解码字符串〄1�7
-			byte[] bs = str.getBytes();
-			//用新的字符编码生成字符串
-			return new String(bs, newCharset);
-		}
-		return null;
-	}
-	
 	// Display the topbar notification
 	private void showNotification(String text) throws UnsupportedEncodingException {
 //		Notification n = new Notification();
@@ -446,7 +434,7 @@ public class PushService extends Service
 		 Notification n = new Notification();
 		 n.flags |= Notification.FLAG_SHOW_LIGHTS;
 		 n.flags |= Notification.FLAG_AUTO_CANCEL;
-		 n.flags |= Notification.FLAG_ONGOING_EVENT; // 设置常驻 Flag
+		 n.flags |= Notification.FLAG_ONGOING_EVENT; // 璁剧疆甯搁┗ Flag
 
 		 n.defaults = Notification.DEFAULT_ALL;
 		 n.icon = tw.mobage.g23000052.R.drawable.dhlj_icon;

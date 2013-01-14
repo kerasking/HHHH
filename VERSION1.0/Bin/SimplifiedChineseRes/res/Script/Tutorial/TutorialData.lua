@@ -4216,7 +4216,7 @@ p.DataInfo = {
             
             {Dir={index=TutorialType.DOWN,x=274,y=0}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T22")}, Begin=TutorialData.Stage812Begin, End=TutorialData.Stage812End, IsComplete=TutorialData.Stage812IsComplete, ExitCond = TutorialData.Stage812ExitCond},
             
-            {Dir={index=TutorialType.DOWN,x=430,y=330}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T21")}, Begin=TutorialData.Stage813Begin, End=TutorialData.Stage813End, IsComplete=TutorialData.Stage813IsComplete, ExitCond = TutorialData.Stage813ExitCond},
+            {Dir={index=TutorialType.DOWN,x=350,y=330}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T21")}, Begin=TutorialData.Stage813Begin, End=TutorialData.Stage813End, IsComplete=TutorialData.Stage813IsComplete, ExitCond = TutorialData.Stage813ExitCond},
             
             
             
