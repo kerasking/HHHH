@@ -515,7 +515,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 			{
 				//bring editView to top
 				menubar.bringChildToFront(edittext);
-				bringLayoutToFront();
+				//bringLayoutToFront();
 			}
 			else 
 			{
