@@ -102,6 +102,7 @@ extern "C"
 
 	void Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeInit(JNIEnv*  env, jobject thiz, jint w, jint h)
 	{
+		CCLog( "@@ nativeInit() of Cocos2dxRenderer, GameMain\r\n" );
 		LOGD("Starting nativeInit");
 
 		if (!CCDirector::sharedDirector()->getOpenGLView())
@@ -112,6 +113,8 @@ extern "C"
 			
 			view->setFrameSize(w, h);
 			LOGD("ready set frame size,w = %d,h = %d",w,h);
+			
+			CCLog( "@@ to create NDGameApplication and run\r\n" );
 			NDSharedPtr<NDGameApplication> spApp = new NDGameApplication;
 			LOGD("Starting CApplication run");
 			CCApplication::sharedApplication()->run();
@@ -138,6 +141,7 @@ extern "C"
     
 	void Java_org_DeNA_DHLJ_DaHuaLongJiang_onLoginComplete(JNIEnv*  env, jobject thiz, jint userid, jstring DeviceToken)
 	{
+		CCLog( "@@ onLoginComplete(), gameMain\r\n" );
 		LOGD("Enter Java_org_DeNA_DHLJ_DaHuaLongJiang_onLoginComplete,value is %d",(int)userid);
         MobageSdkLoginAndroid::onLoginComplete(userid);
         NDBeforeGameMgrObj.SetDeviceToken(JniHelper::jstring2string(DeviceToken).c_str());

@@ -174,14 +174,14 @@ CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
 		if (NDBeforeGameMgrObj.CheckFirstTimeRuning())
 		{
 			pszImageBuffer = g_pUtil.GetFileBufferFromSimplifiedChineseResZip(
-				"SimplifiedChineseRes/res/image/Res00/Load/UnzipLoading.png",(unsigned int *)&uiLength);
+				"SimplifiedChineseRes/res/image/Res00/Load/bg_load.png",(unsigned int *)&uiLength);//UnzipLoading.png
 		}
 		else
 		{
 
 			LOGD("%s",CONVERT_GBK_TO_UTF8("準備讀取卡上的預加載圖"));
 			pszImageBuffer = CCFileUtils::sharedFileUtils()->getFileData(
-				"/sdcard/dhlj/SimplifiedChineseRes/res/image/Res00/Load/UnzipLoading.png","rb",&uiLength);
+				"/sdcard/dhlj/SimplifiedChineseRes/res/image/Res00/Load/bg_load.png","rb",&uiLength);
 		}
 
 		if (0 == pszImageBuffer)
@@ -202,21 +202,26 @@ CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
 		if (pkPicture) 
 		{
 			pkBackgroundImage->SetPicture(pkPicture, true);
-			CCSize kPictureSize = pkPicture->GetSize();
-			CCDirector::sharedDirector()->setGLDefaultValues(1.0f,1.0f,1.0f);
+			
+//备注：下面这段SetFrameRect()写法有误
+// 			CCSize kPictureSize = pkPicture->GetSize();
+// 			CCDirector::sharedDirector()->setGLDefaultValues(1.0f,1.0f,1.0f);
+// 
+// 			float fScalePic = kPictureSize.width / kPictureSize.height;
+// 			float fHeight = 0.0f;
+// 			float fWidth = 0.0f;
+// 
+// 			fHeight = kWinSize.height * 1.2f;
+// 			fWidth = fHeight * fScalePic;
+//
+// 			pkBackgroundImage->SetFrameRect(CCRectMake(kWinSize.width / 2.0f - fWidth / 2.0f,
+// 				(kWinSize.height - fHeight) / 2.0f, fWidth, fHeight));
 
-			float fScalePic = kPictureSize.width / kPictureSize.height;
-			float fHeight = 0.0f;
-			float fWidth = 0.0f;
+			CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
+			pkBackgroundImage->SetFrameRect( CCRectMake(0, 0, winSize.width, winSize.height ));
 
-			fHeight = kWinSize.height * 1.2f;
-			fWidth = fHeight * fScalePic;
-
-			pkBackgroundImage->SetFrameRect(CCRectMake(kWinSize.width / 2.0f - fWidth / 2.0f,
-				(kWinSize.height - fHeight) / 2.0f, fWidth, fHeight));
+			pkLayer->AddChild(pkBackgroundImage);
 		}
-
-		pkLayer->AddChild(pkBackgroundImage);
 
 		CCLog( "@@login01: open CSMLoginScene\r\n" );
 		
@@ -405,8 +410,10 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 					CCSize kTextSize = getStringSize(pstrString->getCString(), 20 * FONT_SCALE);
 					CCSize kWinSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 
-					m_pkProgressTextLabel->SetFrameRect(CCRectMake(kWinSize.width / 2.0f - kTextSize.width / 3.0f,
-						kWinSize.height - kTextSize.height * 1.1f, kTextSize.width, kTextSize.height));
+// 					m_pkProgressTextLabel->SetFrameRect(CCRectMake(kWinSize.width / 2.0f - kTextSize.width / 3.0f,
+// 						kWinSize.height - kTextSize.height * 1.1f, kTextSize.width, kTextSize.height));
+
+					m_pkProgressTextLabel->SetFrameRect(CCRectMake(0, 0, kWinSize.width, kWinSize.height));
 
 					//LOGD("kTextSize.width is %d,kTextSize.height is %d",(int)kTextSize.width,(int)kTextSize.height);
 
@@ -446,6 +453,8 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 #if CACHE_MODE == 1
     	if ( NDBeforeGameMgrObj.CheckFirstTimeRuning() )
         {
+			CCLog( "@@ first time running!!!\r\n");
+
 			NDBeforeGameMgrObj.CopyRes();
 
         	if ( m_pLabelPromtp )
@@ -653,6 +662,8 @@ void CSMLoginScene::ReflashPercent(int percent, int pos, int filelen )
 //===========================================================================
 void CSMLoginScene::DidDownloadStatus( DownloadStatus status )
 {
+	CCLog( "@@ CSMLoginScene::DidDownloadStatus(): %d\r\n", int(status));
+
 	if (status == DownloadStatusResNotFound) 
 	{
 		//m_label->SetText( "抱歉，下载资源未找到，请联系GM" );
@@ -819,6 +830,7 @@ void CSMLoginScene::CloseUpdateUILayer()
 //===========================================================================
 void CSMLoginScene::OnMsg_ClientVersion(NDTransData& kData)
 {
+	CCLog( "@@ CSMLoginScene::OnMsg_ClientVersion()\r\n" );
 	LOGD("Entry OnMsg_ClientVersion");
 
 	bool bUpdate = false;
@@ -905,6 +917,7 @@ void CSMLoginScene::OnMsg_ClientVersion(NDTransData& kData)
 	}
 
 	LOGD("Leave OnMsg_ClientVersion");
+	CCLog("@@ Leave OnMsg_ClientVersion");
 }
 
 //===========================================================================

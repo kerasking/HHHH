@@ -41,7 +41,7 @@ public class PushService extends Service
 	public static final String		TAG = "DHLJPushService";
 
 	// the IP address, where your MQTT broker is running.
-	private static final String		MQTT_HOST = "test.mosquitto.org";
+	private static final String		MQTT_HOST = "dhlj.tw02.91dena.com";
 	// the port at which the broker is running. 
 	private static int				MQTT_BROKER_PORT_NUM      = 1883;
 	// Let's not use the MQTT persistence.

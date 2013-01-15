@@ -402,7 +402,7 @@ void NDDataTransThread::NotBlockDeal()
 			}
 			else if (readedLen)
 			{
-                if (readedLen != 0 && !NDBaseNetMsgPoolObj.AddNetRawData(buffer, readedLen))	//???????????????
+                if (readedLen != 0 && !NDBaseNetMsgPoolObj.AddNetRawData(buffer, readedLen))
                 {
                     m_operate = ThreadStatusStoped;
                 }

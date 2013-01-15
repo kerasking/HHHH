@@ -132,11 +132,14 @@ public class SocialUtils {
 				mSplashCompleted = false;
 				mLoginCompleted = false;
 
+				Log.d( "init", "@@ Mobage.hideSplashScreen()");
 				Mobage.hideSplashScreen();
 			}
 
 			public void onLoginComplete(String userId) {
+				Log.d( "init", "@@ SocialUtils.onLoginComplete()" );
 				Log.i(TAG, "Login completed:" + userId);
+
 				mLoginCompleted = true;
 				mUserId = userId;
 
