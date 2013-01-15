@@ -25,11 +25,23 @@ package org.cocos2dx.lib;
 
 import org.DeNA.DHLJ.DaHuaLongJiang;
 
+import tw.mobage.g23000052.R;
+
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
+import android.graphics.Paint;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.opengl.GLSurfaceView;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -71,7 +83,7 @@ public class Cocos2dxGLSurfaceView extends GLSurfaceView
 		super(context);
 
 		this.setEGLContextClientVersion(2);
-
+		
 		this.initView();
 	}
 
@@ -86,6 +98,24 @@ public class Cocos2dxGLSurfaceView extends GLSurfaceView
 
 	protected void initView()
 	{
+		Drawable srcb=getResources().getDrawable(R.drawable.mobage_splash);
+		
+		DisplayMetrics dm = new DisplayMetrics();
+		DaHuaLongJiang.ms_pkDHLJ.getWindowManager().getDefaultDisplay().getMetrics(dm);
+		
+	    Paint paint = new Paint();
+	    Bitmap bg = Bitmap.createBitmap( dm.widthPixels, dm.heightPixels, Bitmap.Config.ARGB_8888 );//创建一个新的和SRC长度宽度一样的位图  
+	    for(int i = 0; i < dm.widthPixels; ++i)
+	    	for(int j = 0; j < dm.heightPixels; ++j)
+	    bg.setPixel(i, j, 0xFFFFFFFF);
+
+	    Canvas cv = new Canvas( bg );  
+	    Bitmap srcbitmap =  ((BitmapDrawable)srcb).getBitmap(); 
+	    
+	    cv.drawBitmap( srcbitmap, (dm.widthPixels-srcbitmap.getWidth())/2, (dm.heightPixels-srcbitmap.getHeight())/2, paint	 );//在 x，y坐标开始画入src  
+
+	    this.setBackgroundDrawable(new BitmapDrawable(bg));
+
 		this.setFocusableInTouchMode(true);
 
 		Cocos2dxGLSurfaceView.mCocos2dxGLSurfaceView = this;
