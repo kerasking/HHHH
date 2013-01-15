@@ -3,6 +3,9 @@ package org.DeNA.DHLJ;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
+import tw.mobage.g23000052.MainActivity;
+import tw.mobage.g23000052.R;
+
 import com.ibm.mqtt.IMqttClient;
 import com.ibm.mqtt.MqttClient;
 import com.ibm.mqtt.MqttException;
@@ -38,7 +41,7 @@ public class PushService extends Service
 	public static final String		TAG = "DHLJPushService";
 
 	// the IP address, where your MQTT broker is running.
-	private static final String		MQTT_HOST = "test.mosquitto.org";
+	private static final String		MQTT_HOST = "dhljtw.91dena.com";
 	// the port at which the broker is running. 
 	private static int				MQTT_BROKER_PORT_NUM      = 1883;
 	// Let's not use the MQTT persistence.
@@ -94,7 +97,7 @@ public class PushService extends Service
 	public static final String		PREF_RETRY = "retryInterval";
 
 	// Notification title
-	public static String			NOTIF_TITLE = "大話龍將"; 	
+//	public static String			NOTIF_TITLE = getString(R.string.app_name); 	
 	// Notification id
 	private static final int		NOTIF_CONNECTED = 0;	
 		
@@ -410,18 +413,6 @@ public class PushService extends Service
 		}
 	};
 	
-	public String changeCharset(String str, String newCharset)
-			   throws UnsupportedEncodingException 
-	{
-		if (str != null) {
-			//用默认字符编码解码字符串〄1�7
-			byte[] bs = str.getBytes();
-			//用新的字符编码生成字符串
-			return new String(bs, newCharset);
-		}
-		return null;
-	}
-	
 	// Display the topbar notification
 	private void showNotification(String text) throws UnsupportedEncodingException {
 //		Notification n = new Notification();
@@ -451,12 +442,12 @@ public class PushService extends Service
 		 n.defaults = Notification.DEFAULT_ALL;
 		 n.icon = tw.mobage.g23000052.R.drawable.dhlj_icon;
 		 n.when = System.currentTimeMillis();
-		 Intent intent = new Intent(this, DaHuaLongJiang.class); 
+		 Intent intent = new Intent(this, MainActivity.class); 
 		 intent.addCategory(Intent.CATEGORY_LAUNCHER); 
 		 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		 PendingIntent pi = PendingIntent.getActivity(this, 0, intent, 0);
 		 //String text1 = this.changeCharset(text, "UTF-8");
-		 n.setLatestEventInfo(this, NOTIF_TITLE, text, pi);
+		 n.setLatestEventInfo(this, getString(R.string.app_name), text, pi);
 		 mNotifMan.notify(NOTIF_CONNECTED, n);
 	}
 	

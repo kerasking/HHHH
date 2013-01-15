@@ -50,7 +50,7 @@ USING_NS_CC;
 #define FONT_SCALE_INT		int(FONT_SCALE)												//基于480*320
 
 #define FONT_SCALE_X		(COORD_SCALE_X)											//基于480*320（字体缩放以X方向为基准）
-#define FONT_SCALE_DRAMA	(FONT_SCALE_X)												//基于480*320
+#define FONT_SCALE_DRAMA	(FONT_SCALE_X > 2 ? 2 : FONT_SCALE_X)					//基于480*320
 
 //-----------------------------------------------------------------------------------------------------------
 

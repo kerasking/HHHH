@@ -14,6 +14,7 @@
 #include "NDDebugOpt.h"
 #include "UsePointPls.h"
 #include "ObjectTracker.h"
+#include "UICheckBox.h"
 
 namespace NDEngine
 {	
@@ -216,18 +217,31 @@ namespace NDEngine
 
 		if (node) 
 		{
-			if (node->IsKindOfClass(RUNTIME_CLASS(NDUINode))) 
+
+
+			if (node->IsKindOfClass(RUNTIME_CLASS(NDUINode)))
 			{
 				NDUINode* node = (NDUINode*)this->GetParent();
 
 				CCRect nodeRect = node->GetScreenRect();
-
-				return CCRectMake(
+				CCRect CRectret = CCRectMake(
 					nodeRect.origin.x + m_kFrameRect.origin.x - (m_fBoundScale - 1)*m_kFrameRect.size.width*0.5, 
 					nodeRect.origin.y + m_kFrameRect.origin.y - (m_fBoundScale - 1)*m_kFrameRect.size.height*0.5, 
 					m_kFrameRect.size.width*m_fBoundScale, 
 					m_kFrameRect.size.height*m_fBoundScale);
+
+// 				if(this->IsKindOfClass(RUNTIME_CLASS(CUICheckBox)))
+// 				{
+// 					return CCRectMake(
+// 						CRectret.origin.x - 30*COORD_SCALE_X_960, 
+// 						CRectret.origin.y - 15*COORD_SCALE_Y_960, 
+// 						CRectret.size.width + 60*COORD_SCALE_X_960, 
+// 						CRectret.size.height + 30*COORD_SCALE_Y_960);
+// 				}
+
+				return CRectret;
 			}
+	
 			return m_kFrameRect;
 		}	
 		return m_kFrameRect;

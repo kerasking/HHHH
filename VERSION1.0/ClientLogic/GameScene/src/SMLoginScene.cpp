@@ -54,8 +54,8 @@
 
 #define UPDATE_TIP_TEXT_ANDROID 0x7f080039	///< 安卓解壓介面提示文字，對應安卓String.xml里的unzip_text 郭浩
 
-#define UPDATE_ON		0	//0关闭下载，1开启下载
-#define CACHE_MODE 		0  //发布模式//0关闭拷贝；1开启将资源拷贝至cache目录来访问
+#define UPDATE_ON		1	//0关闭下载，1开启下载
+#define CACHE_MODE 		1  //发布模式//0关闭拷贝；1开启将资源拷贝至cache目录来访问
 //--------------------//
 
 #define TAG_INSTALL_SUCCESS			1
@@ -174,14 +174,14 @@ CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
 		if (NDBeforeGameMgrObj.CheckFirstTimeRuning())
 		{
 			pszImageBuffer = g_pUtil.GetFileBufferFromSimplifiedChineseResZip(
-				"SimplifiedChineseRes/res/image/Res00/Load/UnzipLoading.png",(unsigned int *)&uiLength);
+				"SimplifiedChineseRes/res/image/Res00/Load/bg_load.png",(unsigned int *)&uiLength);//UnzipLoading.png
 		}
 		else
 		{
 
 			LOGD("%s",CONVERT_GBK_TO_UTF8("準備讀取卡上的預加載圖"));
 			pszImageBuffer = CCFileUtils::sharedFileUtils()->getFileData(
-				"/sdcard/dhlj/SimplifiedChineseRes/res/image/Res00/Load/UnzipLoading.png","rb",&uiLength);
+				"/sdcard/dhlj/SimplifiedChineseRes/res/image/Res00/Load/bg_load.png","rb",&uiLength);
 		}
 
 		if (0 == pszImageBuffer)

@@ -1051,7 +1051,26 @@ end
 ---------------------------------------------------
 -- 刷新收件列表
 function p.RefreshReceivedMailList()
-	return p.FillInboxList();
+	p.FillInboxList();
+	local uiNode	= GetUiNode(  p.pLayerInbox, ID_BTN_CHOOSE_ALL );
+	local pSelectAll = ConverToCheckBox( uiNode );
+	if ( pSelectAll:IsSelect() ) then
+		local pListReceivedMails = GetScrollViewContainer( p.pLayerInbox, ID_LIST_MAILS );
+		if ( nil ~= pListReceivedMails ) then
+			local nListItemAmount = pListReceivedMails:GetViewCount();
+			if ( 0 ~= nListItemAmount ) then
+				for i = 1, nListItemAmount do
+					local pListItem = pListReceivedMails:GetView( i-1 );
+					if ( nil ~= pListItem ) then
+						local pCheckBox = ConverToCheckBox( GetUiNode ( pListItem, ID_ITEM_BTN_CHOOSE ) );
+						if ( nil ~= pCheckBox ) then
+							pCheckBox:SetSelect( true );
+						end	
+					end
+				end
+			end
+		end
+	end
 end
 
 ---------------------------------------------------

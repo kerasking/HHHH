@@ -41,6 +41,9 @@
 #include "ObjectTracker.h"
 #include "NDUIChatText.h"
 #include "UIEdit.h"
+#include "UICheckBox.h"
+#include "NDUICheckBox.h"
+#include "NDUIHyperLink.h"
 
 using namespace cocos2d;
 
@@ -336,7 +339,7 @@ bool NDUILayer::UITouchBegin(NDTouch* touch)
 //			return false;
 //		}
 
-	if(m_bDragOutFlag)
+	if(ms_bPressing)
 		return false;
 
 	StartDispatchEvent();
@@ -561,7 +564,8 @@ bool NDUILayer::TouchMoved(NDTouch* touch)
 	if (m_bDispatchTouchEndEvent)
 	{
 		//如果点在按钮上则允许抖动容错，否则不容错（任何微小移动都视为拖动）
-		if (this->IsTouchOnButton( kMoveTouch )
+		if ((!m_bLongTouch)
+			&& this->IsTouchOnButton( kMoveTouch )
 			&& ccpDistanceSQ( m_kBeginTouch, kMoveTouch ) < MOVE_ERROR*MOVE_ERROR )
 		{
 			return true; //consume it.
@@ -1412,7 +1416,6 @@ bool NDUILayer::DispatchDragOutCompleteEvent(CCPoint beginTouch,
 
 		if (OnScriptUiEvent(uiNode, TE_TOUCH_BTN_DRAG_OUT_COMPLETE))
 		{
-			m_bDragOutFlag = false;
 			return true;
 		}
 	}
@@ -2058,7 +2061,13 @@ bool NDUILayer::IsTouchOnButton( const CCPoint& touch )
 			if (uiNode->IsVisibled() && uiNode->EventEnabled())
 			{
 				if (uiNode->IsKindOfClass(RUNTIME_CLASS(NDUIButton)) 
-					|| pNode->IsKindOfClass( RUNTIME_CLASS(CUIEdit)))
+					|| pNode->IsKindOfClass( RUNTIME_CLASS(CUIEdit))
+					|| pNode->IsKindOfClass( RUNTIME_CLASS(NDUICheckBox))
+					|| pNode->IsKindOfClass( RUNTIME_CLASS(CUICheckBox))
+					|| pNode->IsKindOfClass( RUNTIME_CLASS(CUIHyperlinkButton))
+					|| pNode->IsKindOfClass( RUNTIME_CLASS(CUIHyperlinkText))
+					//|| pNode->IsKindOfClass( RUNTIME_CLASS(CUISpriteNode))
+					)
 				{
 					CCRect nodeFrame = uiNode->GetBoundRect();
 

@@ -436,7 +436,7 @@ function p.OnUIEvent(uiNode, uiEventType, param)
         elseif( p.BtnFunc[18] == tag ) then  --GM问题
             GMProblemUI.LoadUI();
         elseif( p.BtnFunc[19] == tag ) then  --删号
-            p.TestButtonClick();
+            --p.TestButtonClick();
         elseif( p.BtnFunc[20] == tag ) then  --退出
             QuitGame();
         elseif( p.BtnFunc[21] == tag ) then  --神秘商人

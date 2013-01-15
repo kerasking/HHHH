@@ -1,8 +1,9 @@
-package org.DeNA.DHLJ;
+﻿package org.DeNA.DHLJ;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -78,6 +79,7 @@ import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import android.widget.VideoView;
+import tw.mobage.g23000052.R;
 
 public class DaHuaLongJiang extends Cocos2dxActivity
 {
@@ -675,6 +677,21 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		return super.onKeyDown(keyCode, event);
 	}
 	
+	public String changeCharset(String str, String newCharset)
+    {
+		  try {
+				if (str != null) {
+					//用默认字符编码解码字符串〄1�7
+					byte[] bs = str.getBytes();
+					//用新的字符编码生成字符串
+					return new String(bs, newCharset);
+				}
+		  } catch (UnsupportedEncodingException e) {
+              	Log.e(TAG, "Failed to open AlertDialog", e);
+		  }
+		return str;
+    }
+	
 	public void onBackPressed()
 	{
 		DialogInterface.OnClickListener onYes = new DialogInterface.OnClickListener() {  
@@ -684,12 +701,13 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 				android.os.Process.killProcess(android.os.Process.myPid());
 		     }  
 		  };
-		new AlertDialog.Builder(this)   
-		.setTitle("確認")  
-		.setMessage("確定要退出遊戲嗎？")  
-		.setPositiveButton("是", onYes)  
-		.setNegativeButton("否", null)  
-		.show();
+
+          new AlertDialog.Builder(this)
+          .setTitle(getString(R.string.dialog_exit_title_text))
+          .setMessage(getString(R.string.dialog_exit_content_text))
+          .setPositiveButton(getString(R.string.dialog_exit_yes_text), onYes)
+          .setNegativeButton(getString(R.string.dialog_exit_no_text), null)
+          .show();
 
 //		onLogout();
 	}
