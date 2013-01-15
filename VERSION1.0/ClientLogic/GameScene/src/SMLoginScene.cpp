@@ -203,23 +203,23 @@ CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
 		{
 			pkBackgroundImage->SetPicture(pkPicture, true);
 			
-//备注：下面这段SetFrameRect()写法有误
-// 			CCSize kPictureSize = pkPicture->GetSize();
-// 			CCDirector::sharedDirector()->setGLDefaultValues(1.0f,1.0f,1.0f);
-// 
-// 			float fScalePic = kPictureSize.width / kPictureSize.height;
-// 			float fHeight = 0.0f;
-// 			float fWidth = 0.0f;
-// 
-// 			fHeight = kWinSize.height * 1.2f;
-// 			fWidth = fHeight * fScalePic;
-//
-// 			pkBackgroundImage->SetFrameRect(CCRectMake(kWinSize.width / 2.0f - fWidth / 2.0f,
-// 				(kWinSize.height - fHeight) / 2.0f, fWidth, fHeight));
+#if 0 //大图才用，已经改成黑色地图了，暂时不需要
+			CCSize kPictureSize = pkPicture->GetSize();
+			CCDirector::sharedDirector()->setGLDefaultValues(1.0f,1.0f,1.0f);
 
+			float fScalePic = kPictureSize.width / kPictureSize.height;
+			float fHeight = 0.0f;
+			float fWidth = 0.0f;
+
+			fHeight = kWinSize.height * 1.2f;
+			fWidth = fHeight * fScalePic;
+
+			pkBackgroundImage->SetFrameRect(CCRectMake(kWinSize.width / 2.0f - fWidth / 2.0f,
+				(kWinSize.height - fHeight) / 2.0f, fWidth, fHeight));
+#else
 			CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 			pkBackgroundImage->SetFrameRect( CCRectMake(0, 0, winSize.width, winSize.height ));
-
+#endif
 			pkLayer->AddChild(pkBackgroundImage);
 		}
 
@@ -410,11 +410,12 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 					CCSize kTextSize = getStringSize(pstrString->getCString(), 20 * FONT_SCALE);
 					CCSize kWinSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 
-// 					m_pkProgressTextLabel->SetFrameRect(CCRectMake(kWinSize.width / 2.0f - kTextSize.width / 3.0f,
-// 						kWinSize.height - kTextSize.height * 1.1f, kTextSize.width, kTextSize.height));
-
+#if 1
+ 					m_pkProgressTextLabel->SetFrameRect(CCRectMake(kWinSize.width / 2.0f - kTextSize.width / 3.0f,
+ 						kWinSize.height - kTextSize.height * 1.1f, kTextSize.width, kTextSize.height));
+#else
 					m_pkProgressTextLabel->SetFrameRect(CCRectMake(0, 0, kWinSize.width, kWinSize.height));
-
+#endif
 					//LOGD("kTextSize.width is %d,kTextSize.height is %d",(int)kTextSize.width,(int)kTextSize.height);
 
 					m_pkProgressTextLabel->SetText(pstrString->getCString());

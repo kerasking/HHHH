@@ -7,6 +7,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.ArrayList;
 import java.util.Stack;
 import java.util.TimerTask;
 
@@ -514,13 +515,14 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 			{
 				//bring editView to top
 				menubar.bringChildToFront(edittext);
+				//bringLayoutToFront();
 			}
 			else 
 			{
 				//bring surface view to top
 				menubar.bringChildToFront(getView());
+				//menubar.bringToFront();
 				bringLayoutToFront();
-				menubar.bringToFront();
 				menubar.postInvalidate();
 				dump_menubar();
 			}
@@ -531,32 +533,25 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	{
 		Log.d("test","@@ bringLayoutToFront()");
 		
-		View vLinearLayout = null;
-		View vRelativeLayout = null;
-		
+		ArrayList<View> viewList = new ArrayList<View>(); 
+				
 		int n = menubar.getChildCount();
 		for (int i = 0; i < n; i++)
 		{
 			View v = menubar.getChildAt(i);
-			if (v.toString().indexOf("LinearLayout") != -1)
+			if ((v.toString().indexOf("LinearLayout") != -1) ||
+				(v.toString().indexOf("RelativeLayout") != -1))
 			{
-				vLinearLayout = v;
+				viewList.add(v);
 			}
-			else if (v.toString().indexOf("RelativeLayout") != -1)
-			{
-				vRelativeLayout = v;
-			}			
 		}
 		
-		if (vLinearLayout != null)
-			menubar.bringChildToFront(vLinearLayout);
-		
-		if (vRelativeLayout != null)
-			menubar.bringChildToFront(vRelativeLayout);		
-		
-		if (s_balancelayout != null)
-			menubar.bringChildToFront(s_balancelayout);		
+		for (int i = 0; i < viewList.size(); i++)
+		{
+			menubar.bringChildToFront( (View)viewList.get(i));
+		}
 	}
+	
 	public void LoginComplete(int userid)
 	{
 		onLoginComplete(userid, mDeviceID);
