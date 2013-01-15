@@ -85,6 +85,14 @@ public:
      @param pszFilePath The path of the background music file,or the FileName of T_SoundResInfo
      */
     void preloadBackgroundMusic(const char* pszFilePath);
+
+//#if ND_MOD
+
+	void setMusicStream(bool bMusicStream);
+	void raiseMusicStream();
+	void lowerMusicStream();
+
+//#endif
     
     /**
     @brief Play background music

@@ -34,6 +34,9 @@
 #include "UsePointPls.h"
 #include "StringConvert.h"
 #include "NDJsonReader.h"
+#include "../CocosDenshion/include/SimpleAudioEngine.h"
+
+using namespace CocosDenshion;
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #include <jni.h>
@@ -150,6 +153,9 @@ CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
 		string strText = CONVERT_GBK_TO_UTF8("正在準備中……");
 		CCSize kTextSize = getStringSize("正在準備中……", 20 * FONT_SCALE);
 		ccColor4B kColor = {100,100,100,255};
+
+		SimpleAudioEngine::sharedEngine()->setMusicStream(true);
+		SimpleAudioEngine::sharedEngine()->raiseMusicStream();
 
 		pkScene->m_pkProgressTextLabel = new NDUILabel();
 		pkScene->m_pkProgressTextLabel->Initialization();
