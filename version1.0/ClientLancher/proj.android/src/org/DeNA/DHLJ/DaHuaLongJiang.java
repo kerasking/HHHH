@@ -286,7 +286,8 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		Log.e(TAG, "onDestroy called");
 		super.onDestroy();
 		Mobage.onStop();
-    	wm.removeView(myFV);
+		if(myFV != null)
+			wm.removeView(myFV);
 	}
 
 	@Override
