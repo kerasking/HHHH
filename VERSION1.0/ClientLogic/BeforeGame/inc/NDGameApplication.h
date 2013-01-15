@@ -42,6 +42,7 @@ protected:
 
 private:
 	virtual void MyInit(); //after applicationDidFinishLaunching() called.
+	void hideSplash();
 };
 
 NS_NDENGINE_END

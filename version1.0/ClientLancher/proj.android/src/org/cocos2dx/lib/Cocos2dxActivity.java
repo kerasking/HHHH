@@ -73,6 +73,8 @@ public abstract class Cocos2dxActivity extends Activity implements
 	@Override
 	protected void onCreate(final Bundle savedInstanceState)
 	{
+		Log.d( "init", "@@ Cocos2dxActivity.onCreate()" );
+
 		super.onCreate(savedInstanceState);
 
 		this.mHandler = new Cocos2dxHandler(this);
@@ -153,9 +155,12 @@ public abstract class Cocos2dxActivity extends Activity implements
 	// ===========================================================
 	public void init()
 	{
+		Log.d( "init", "@@ Cocos2dxActivity.init()" );
+
 		// Cocos2dxGLSurfaceView
 		this.mGLSurfaceView = this.onCreateView();
 
+		Log.d( "init", "@@ to create Cocos2dxRenderer" );
 		mGLSurfaceView.setCocos2dxRenderer(new Cocos2dxRenderer());
 
 		NDVideoControl pkVideoControl = new NDVideoControl(

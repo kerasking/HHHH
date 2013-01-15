@@ -45,6 +45,7 @@ static NDBaseDirector s_NDBaseDirector;
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #include <jni.h>
+#include "android/jni/JniHelper.h"
 #include <android/log.h>
 
 #define  LOG_TAG    "DaHuaLongJiang"
@@ -181,9 +182,11 @@ NDGameApplication::NDGameApplication()
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 	NDConsole::instance().RegisterConsoleHandler(this,"script ");
 #endif
+	CCLog( "@@ NDGameApplication::ctor()\r\n");
 }
 NDGameApplication::~NDGameApplication()
 {
+	CCLog( "@@ NDGameApplication::dtor()\r\n");
 }
 
 bool NDGameApplication::applicationDidFinishLaunching()
@@ -265,7 +268,25 @@ bool NDGameApplication::applicationDidFinishLaunching()
 	MyInit();
 #endif
 
+//	hideSplash();
+
 	return true;
+}
+
+//@init
+void NDGameApplication::hideSplash()
+{
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+
+	JniMethodInfo t;
+	if (JniHelper::getStaticMethodInfo(t, "org/DeNA/DHLJ/DaHuaLongJiang",
+		"showSplash",
+		"(I)V"))
+	{
+		t.env->CallStaticObjectMethod(t.classID, t.methodID, jint(0));
+		t.env->DeleteLocalRef(t.classID);
+	}
+#endif
 }
 
 //@init
@@ -273,7 +294,7 @@ void NDGameApplication::MyInit()
 {
 	SimpleAudioEngine::sharedEngine()->setEffectsVolume(7.0f);
 
-	CCLOG( "@@ NDGameApplication::MyInit()\r\n" );
+	CCLog( "@@ NDGameApplication::MyInit()\r\n" );
 	LOGD("Start MyInit");
 
 	REGISTER_CLASS(NDBaseBattle,BattleUILayer);
@@ -314,6 +335,7 @@ void NDGameApplication::MyInit()
     NDBeforeGameMgrObj.InitAccountTable();
 //---init
 
+	CCLog( "@@ now to run CSMLoginScene\r\n" );
 	pkDirector->RunScene(CSMLoginScene::Scene(true));
 
 	LOGD("pkDirector->RunScene(CSMLoginScene::Scene()); Over");
@@ -323,7 +345,7 @@ void NDGameApplication::MyInit()
 	//NDDebugOpt::setDrawDebugEnabled(1);
 	//-------------------------------------------------------------
 
-	CCLOG( "@@ NDGameApplication::MyInit() -- done.\r\n" );
+	CCLog( "@@ NDGameApplication::MyInit() -- done.\r\n" );
 }
 
 void NDGameApplication::applicationDidEnterBackground()
