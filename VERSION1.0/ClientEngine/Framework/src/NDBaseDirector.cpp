@@ -17,7 +17,11 @@
 #include "NDDebugOpt.h"
 #include "CCScheduler.h"
 #include "NDBaseMsgDefine.h"
-
+#include "StringConvert.h"
+#include "NDDataTransThread.h"
+#include "CCPlatformConfig.h"
+#include "NDConstant.h"
+#include "NDUtil.h"
 
 // 甯ф暟闄愬埗寮??鍏??
 #define FRAME_LIMIT_SWITCH 1
@@ -39,6 +43,19 @@
 		} while (0)
 #else
 #define FRAME_CACULATION
+#endif
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#include <jni.h>
+#include <android/log.h>
+
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
+#define  LOGERROR(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
+#else
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)
+#define  LOGERROR(...)
 #endif
 
 #define PERFORMANCE_DEBUG_SWITCH 0
@@ -77,6 +94,15 @@ void NDBaseDirector::mainLoop(void)
 		if (NDDebugOpt::getNetworkEnabled())
 		{
 			this->DispatchOneMessage();
+		}
+
+		if (NDDataTransThread::DefaultThread()->GetQuitGame())
+		{
+			LOGERROR("%s",CONVERT_GBK_TO_UTF8("已經與服務器失去連接！"));
+			if (NDDirector::DefaultDirector()->GetSceneByTag(SMGAMESCENE_TAG))
+			{
+				g_pUtil.QuitGameToServerList();
+			}
 		}
 
 		//NDDirector::DefaultDirector()->DisibleScissor(); // 暂时先注释掉
