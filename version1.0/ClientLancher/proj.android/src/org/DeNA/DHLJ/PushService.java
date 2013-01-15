@@ -41,7 +41,7 @@ public class PushService extends Service
 	public static final String		TAG = "DHLJPushService";
 
 	// the IP address, where your MQTT broker is running.
-	private static final String		MQTT_HOST = "dhljtw.91dena.com";
+	private static final String		MQTT_HOST = "dhlj.tw02.91dena.com";
 	// the port at which the broker is running. 
 	private static int				MQTT_BROKER_PORT_NUM      = 1883;
 	// Let's not use the MQTT persistence.
@@ -479,6 +479,9 @@ public class PushService extends Service
 				// Subscribe to an initial topic, which is combination of client ID and device ID.
 				initTopic = MQTT_CLIENT_ID + "/" + initTopic;
 				subscribeToTopic(initTopic);
+				
+				String strChanelBroadcast = MQTT_CLIENT_ID + "/worldbc";
+				subscribeToTopic(strChanelBroadcast);
 		
 				log("Connection established to " + brokerHostName + " on topic " + initTopic);
 		
