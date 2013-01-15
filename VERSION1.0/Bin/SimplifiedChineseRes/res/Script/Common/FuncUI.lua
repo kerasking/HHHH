@@ -226,7 +226,12 @@ function CloseMainUI()
             and i ~= "GMProblemBtn"
             and i ~= "TestDelPlayer" 
             and i ~= "OLGiftBtn" 
-            and i ~= "RechargeGiftBtn" then
+            and i ~= "RechargeGiftBtn" 
+            and i ~= "MonsterReward"
+            and i ~= "BattleFail" 
+            and i ~= "ArenaFightReplayUI" 
+            and i ~= "RaidersLoad" 
+            then
             
             
 			if CloseUI(v) then

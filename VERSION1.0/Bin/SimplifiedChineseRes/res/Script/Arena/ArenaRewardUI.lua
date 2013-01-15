@@ -115,10 +115,8 @@ function p.SetResult(result,money,repute,soph,emoney)
         LogInfo("repute:[%d]",repute);
         local str = nil;
         if result ==1 then --胜利
-            --str = string.format("你消灭了boss, 获得银币: %d, 获得将魂: %d", money, repute);
-            
             if(repute>0) then
-                str = string.format(GetTxtPri("ARU2_T1"), money,soph, ItemFunc.GetName(repute));
+                str = string.format(GetTxtPri("ARU2_T1"), money, ItemFunc.GetName(repute));
             else
                 str = string.format(GetTxtPri("ARU2_T2"), money,soph);
             end
@@ -128,9 +126,9 @@ function p.SetResult(result,money,repute,soph,emoney)
             --str = string.format("战斗失败, 获得银币: %d, 获得将魂: %d", money, repute);
             
             if(repute>0) then
-                str = string.format(GetTxtPri("ARU2_T3"), money,soph, ItemFunc.GetName(repute));
+                str = string.format(GetTxtPri("ARU2_T3"), money, ItemFunc.GetName(repute));
             else
-                str = string.format(GetTxtPri("ARU2_T4"), money,soph);
+                str = string.format(GetTxtPri("ARU2_T4"), money);
             end
             
             
