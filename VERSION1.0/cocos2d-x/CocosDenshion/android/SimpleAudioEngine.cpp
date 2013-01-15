@@ -35,7 +35,7 @@ THE SOFTWARE.
 #define  LOG_TAG     "Device Model"
 #define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
 
-static bool s_bI9100 = true;
+static bool s_bI9100 = false;
 //static bool s_bI9100 = true; //ND_MOD
 
 /**********************************************************************************
