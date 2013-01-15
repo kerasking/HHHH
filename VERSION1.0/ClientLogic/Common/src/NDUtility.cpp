@@ -312,9 +312,6 @@ void quitGame(bool bTipNet/*=false*/)
 	BattleUILayer::ResetLastTurnBattleAction();
 	DramaObj.QuitGame();
 	
-	/*BeatHeartMgrObj.Stop();*/
-	//NDMapMgrObj.quitGame(); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-	
 	BattleMgrObj.ReleaseAllBattleSkill();
 	NDMapMgrObj.ClearManualRole();
 	NDMapMgrObj.ClearNPC();
