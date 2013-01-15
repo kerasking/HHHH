@@ -179,6 +179,7 @@ NDUINode* NDUILoad::LoadCtrl( CUIData& uiData, const int ctrlIndex, NDUINode *pa
 
 	if (!uiData.getCtrlData((char*)str.c_str()))
 	{
+		LOGERROR("uiData.getCtrlData((char*)str.c_str()) failed");
 		NDAsssert(0);
 		return false;
 	}
@@ -201,6 +202,7 @@ NDUINode* NDUILoad::LoadCtrl( CUIData& uiData, const int ctrlIndex, NDUINode *pa
 
 	if (!node)
 	{
+		LOGERROR("@@ CreateCtrl() failed: type=%d\r\n", uiInfo.nType);
 		CCLog( "@@ CreateCtrl() failed: type=%d\r\n", uiInfo.nType );
 		//NDAsssert(0);
 		return false;

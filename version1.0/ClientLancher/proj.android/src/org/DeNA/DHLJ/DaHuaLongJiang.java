@@ -67,6 +67,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -80,6 +81,9 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import android.widget.VideoView;
 import tw.mobage.g23000052.R;
+import android.widget.ImageView;
+import android.graphics.BitmapFactory;
+import android.graphics.Bitmap;
 
 public class DaHuaLongJiang extends Cocos2dxActivity
 {
@@ -102,6 +106,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 
 	private static Cocos2dxEditText edittext; //@ime
 	private static Button testbutton;
+	private static ImageView imgSplash;
 
 	private WindowManager wm=null;
 	private static FloatView myFV=null;
@@ -181,6 +186,8 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 
 	protected void onCreate(Bundle savedInstanceState)
 	{
+		Log.d( "init", "@@ DaHuaLongJiang.onCreate()" );
+
 		if (isSDCardCanUse())
 		{
 			ms_pkDHLJ = this;
@@ -286,7 +293,8 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		Log.e(TAG, "onDestroy called");
 		super.onDestroy();
 		Mobage.onStop();
-    	wm.removeView(myFV);
+		if(myFV != null)
+			wm.removeView(myFV);
 	}
 
 	@Override
@@ -307,7 +315,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 
 	public void setMain()
 	{
-		Log.d(TAG, "DaHuaLongJiang::setMain()");
+		Log.d(TAG, "@@ DaHuaLongJiang::setMain()");
 
 		// remove all views
 		rootView = (View) getView();
@@ -326,6 +334,9 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		// menubar.addView(m_pkView);
 		menubar.addView(rootView);
 
+		// add splash image (fullscreen)
+		showSplash(1);
+		
 		s_balancelayout = new LinearLayout(s_context);
 		s_balancelayout.setOrientation(LinearLayout.VERTICAL);
 
@@ -360,7 +371,77 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		// set menu bar visible
 		menubar.setMenubarVisibility(View.VISIBLE);
 		
-		//createFloatView();//繁体SDK不支持
+		//createFloatView();//繁体SDK不支持	
+	}
+
+	//@init: not used.
+	private static Handler imsgSplashHandler = new Handler();
+	public static void showSplash( int flag )
+	{
+/*	
+		if (true) return;
+		Log.d("init", "@@ dhlj, showSplash(), flag:" + flag);
+		
+		if (flag != 0)
+		{			
+			if (true)
+			{
+				//filled with splash image
+				imgSplash = new ImageView( ms_pkDHLJ );
+				String fileName = "/sdcard/dhlj/SimplifiedChineseRes/res/image00/Res00/Load/Unzipping.png"; 
+				Bitmap bmp = BitmapFactory.decodeFile(fileName);
+				
+				if (bmp != null)
+				{
+					Log.d("init", "@@ dhlj, showSplash(), load img ok" );
+				
+					ViewGroup.LayoutParams param = new ViewGroup.LayoutParams(
+							ViewGroup.LayoutParams.FILL_PARENT,
+							ViewGroup.LayoutParams.FILL_PARENT);
+					
+					imgSplash.setImageBitmap(bmp);
+					imgSplash.setScaleType(ImageView.ScaleType.FIT_XY);
+					imgSplash.setLayoutParams(param);
+					menubar.addView(imgSplash);
+					//imgSplash.bringToFront();
+				}
+				else
+				{
+					Log.d("init", "@@ dhlj, showSplash(), load img failed" );
+				}
+			}
+			else
+			{
+				//filled with back ground color (white)
+				imgSplash = new ImageView( ms_pkDHLJ );
+				imgSplash.setBackgroundColor(Color.WHITE);
+				menubar.addView(imgSplash);				
+			}
+		}
+		else
+		{
+			if (imgSplash != null)
+			{
+				Log.d("init", "@@ dhlj, showSplash(), hide it!");
+				
+				//ms_pkDHLJ.getView().bringToFront();
+				//bringLayoutToFront();
+				
+				// without the post method, the main UI crashes if the view is removed 
+		        imsgSplashHandler.post(new Runnable(){
+					public void run(){
+    					FrameLayout parent = (FrameLayout) imgSplash.getParent();
+    					if (parent != null)
+    					{
+    						//parent.removeView(imgSplash);
+    						//menubar.removeView(parent);
+							imgSplash.setVisibility(View.INVISIBLE);
+    					}
+					}
+				});
+			}
+		}
+*/
 	}
 
 	private static void dump_menubar()
