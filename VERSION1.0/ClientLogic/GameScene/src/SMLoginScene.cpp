@@ -1039,6 +1039,14 @@ void CSMLoginScene::StartEntry()
 #endif
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	m_iAccountID = NDBeforeGameMgrObj.GetCurrentUser();
+    JniMethodInfo t;
+    if (JniHelper::getStaticMethodInfo(t, "org/DeNA/DHLJ/DaHuaLongJiang",
+                                       "clearSplash",
+                                       "()V"))
+    {
+        t.env->CallStaticObjectMethod(t.classID, t.methodID);
+        t.env->DeleteLocalRef(t.classID);
+    }
 #endif
 
 	ScriptMgrPtr->excuteLuaFunc( "ShowUI", "Entry", m_iAccountID );
