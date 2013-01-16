@@ -165,11 +165,12 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		public void run()
 		{
 			View rootView = ms_pkDHLJ.getView();
-			rootView.setBackgroundResource(0);
 			if(tv != null && s_TextViewlayout != null && menubar != null)
 			{
+				rootView.setBackgroundResource(0);
 				s_TextViewlayout.removeView(tv);
 				menubar.removeView(s_TextViewlayout);
+				tv = null;
 			}
 		};
 	};
