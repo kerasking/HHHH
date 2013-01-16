@@ -232,11 +232,6 @@ const char* NDConsole::GetSpecialCommand( const char* pszCommand )
 	string strCmd = pszCommand;
 	const char* pszRes = (*m_pkStringMap)[strCmd];
 
-	if (pszRes && *pszRes)
-	{
-		int a = 10;
-	}
-
 	return pszRes;
 }
 
