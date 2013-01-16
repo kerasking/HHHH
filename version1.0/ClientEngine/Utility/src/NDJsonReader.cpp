@@ -29,7 +29,7 @@ m_pszFilePath(0),
 m_pszBuffer(0),
 m_ulFileSize(0)
 {
-	int a = 10;
+
 }
 
 NDJsonReader::~NDJsonReader()

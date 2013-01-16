@@ -814,9 +814,9 @@ IMPLEMENT_CLASS(NDUtility,NDUtil)
 
 void showDialog( const char* title, const char* content )
 {
-	NDUIDialog *dialog = new NDUIDialog;
-	dialog->Initialization();
-	dialog->Show(title, content, NULL, NULL);
+	NDUIDialog* pkDialog = new NDUIDialog;
+	pkDialog->Initialization();
+	pkDialog->Show(title, content, NULL, NULL);
 }
 
 void showDialog( const char* content )

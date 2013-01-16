@@ -187,6 +187,21 @@ void SimpleAudioEngine::stopBackgroundMusic(bool bReleaseData)
     static_stopBackgroundMusic();
 }
 
+void SimpleAudioEngine::setMusicStream( bool bMusicStream )
+{
+
+}
+
+void SimpleAudioEngine::raiseMusicStream()
+{
+
+}
+
+void SimpleAudioEngine::lowerMusicStream()
+{
+
+}
+
 void SimpleAudioEngine::pauseBackgroundMusic()
 {
     static_pauseBackgroundMusic();
