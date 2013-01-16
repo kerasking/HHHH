@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ConverToMK", "ConverToMK\proj.win32\ConverToMK.vcproj", "{19CFCF2D-E997-4435-A361-557317926D6F}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libPackage", "libPackage\proj.win32\libPackage.vcproj", "{2E84179C-9DBD-4870-881D-4F2CAA16D6DF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -13,6 +15,10 @@ Global
 		{19CFCF2D-E997-4435-A361-557317926D6F}.Debug|Win32.Build.0 = Debug|Win32
 		{19CFCF2D-E997-4435-A361-557317926D6F}.Release|Win32.ActiveCfg = Release|Win32
 		{19CFCF2D-E997-4435-A361-557317926D6F}.Release|Win32.Build.0 = Release|Win32
+		{2E84179C-9DBD-4870-881D-4F2CAA16D6DF}.Debug|Win32.ActiveCfg = Debug|Win32
+		{2E84179C-9DBD-4870-881D-4F2CAA16D6DF}.Debug|Win32.Build.0 = Debug|Win32
+		{2E84179C-9DBD-4870-881D-4F2CAA16D6DF}.Release|Win32.ActiveCfg = Release|Win32
+		{2E84179C-9DBD-4870-881D-4F2CAA16D6DF}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
