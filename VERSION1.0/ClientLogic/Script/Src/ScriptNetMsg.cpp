@@ -53,11 +53,6 @@ int RegisterNetMsgHandler(LuaState* pkLuaState)
 		
 		return 1;
 	}
-
-	if (loId.GetNumber() == 2028)
-	{
-		int a = 10;
-	}
 	
 	mapNetMsgHandler.insert(
 	std::pair<MSGID, LuaObject>(

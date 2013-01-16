@@ -232,20 +232,6 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 
 			nativeInit(480, 320);
 
-			if (AudioManager.STREAM_MUSIC == getVolumeControlStream())
-			{
-				int a = 10;
-				int b = a;
-			} else if (AudioManager.STREAM_RING == getVolumeControlStream())
-			{
-				int a = 10;
-				int b = a;
-			} else
-			{
-				int a = 10;
-				int b = a;
-			}
-
 			Mobage.checkLoginStatus();
 			Mobage.onCreate();
 
