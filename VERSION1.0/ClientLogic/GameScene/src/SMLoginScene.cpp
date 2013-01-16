@@ -172,31 +172,7 @@ CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
 #ifdef USE_MGSDK
 		NDPicture* pkPicture = kPool.AddPicture( NDPath::GetImgPath("Res00/Load/Unzipping.png") );
 #elif ((CACHE_MODE == 1) && (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID))
-
-		LOGD("Ready to new pkPicture");
-		unsigned char* pszImageBuffer = 0;
-		unsigned long uiLength = 0;
-
-		if (NDBeforeGameMgrObj.CheckFirstTimeRuning())
-		{
-			pszImageBuffer = g_pUtil.GetFileBufferFromSimplifiedChineseResZip(
-				"SimplifiedChineseRes/res/image00/Res00/Load/bg_load.png",(unsigned int *)&uiLength);//UnzipLoading.png
-		}
-		else
-		{
-
-			LOGD("%s",CONVERT_GBK_TO_UTF8("準備讀取卡上的預加載圖"));
-			pszImageBuffer = CCFileUtils::sharedFileUtils()->getFileData(
-				"/sdcard/dhlj/SimplifiedChineseRes/res/image00/Res00/Load/bg_load.png","rb",&uiLength);
-		}
-
-		if (0 == pszImageBuffer)
-		{
-			LOGERROR("pszImageBuffer == 0");
-		}
-		
-		NDPicture* pkPicture = kPool.AddPicture(uiLength,pszImageBuffer);
-		LOGD("Ready to initialize pkPicture");
+		NDPicture* pkPicture = NULL;
 
 		CCImage::changeSystemFont(true);
 
@@ -231,16 +207,6 @@ CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
 
 		CCLog( "@@login01: open CSMLoginScene\r\n" );
 		
-		#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-        JniMethodInfo t;
-        if (JniHelper::getStaticMethodInfo(t, "org/DeNA/DHLJ/DaHuaLongJiang",
-                                           "clearSplash",
-                                           "()V"))
-        {
-            t.env->CallStaticObjectMethod(t.classID, t.methodID);
-            t.env->DeleteLocalRef(t.classID);
-        }
-		#endif
 		LOGD("TAG_TIMER_FIRST_RUN is register");
 		pkScene->m_pTimer->SetTimer( pkScene, TAG_TIMER_FIRST_RUN,0.5f );
     }
@@ -289,6 +255,18 @@ void CSMLoginScene::Initialization(void)
 	//m_resPath = NDPath::GetResPath();
 	PackageCount = 0;
 	m_pTimer = new NDTimer();
+}
+
+void notifyProcess(int nPercent)
+{
+    JniMethodInfo methodInfo;
+    if (JniHelper::getStaticMethodInfo(methodInfo, "org/DeNA/DHLJ/DaHuaLongJiang", "drawText",
+                                       "(I)V"))
+    {
+        methodInfo.env->CallStaticVoidMethod(methodInfo.classID, methodInfo.methodID, nPercent);
+        
+        methodInfo.env->DeleteLocalRef(methodInfo.classID);
+    }
 }
 
 //===========================================================================
@@ -405,7 +383,11 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 					m_pkProgressTextLabel->SetVisible(false);
 					NDBeforeGameMgrObj.doNDSdkLogin();
 					ShowWaitingAni();
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) || (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) 
+                    notifyProcess(100);
+					usleep(200);
+#endif
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 					usleep(200);
 #endif
 					OnProcessUpdate();
@@ -414,27 +396,28 @@ void CSMLoginScene::OnTimer( OBJID idTag )
             default:
 				{
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-					string strTempText = getTextFromStringXML_JNI(UPDATE_TIP_TEXT_ANDROID);
-					CCString* pstrString = CCString::stringWithFormat("%s%d%%...",strTempText.c_str(),nCopyStatus);
+					CCString* pstrString = NULL;
+                    notifyProcess(nCopyStatus);
 #elif(CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 					CCString* pstrString = CCString::stringWithFormat("解壓資源……已經解壓了%d%%",nCopyStatus);
-#elif(CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-					CCAssert(0);///< 未实现 郭浩
-#endif
 					//string strText = CONVERT_GBK_TO_UTF8(pstrString->getCString());
 					
 					CCSize kTextSize = getStringSize(pstrString->getCString(), 20 * FONT_SCALE);
 					CCSize kWinSize = CCDirector::sharedDirector()->getWinSizeInPixels();
-
+                    
 #if 1
  					m_pkProgressTextLabel->SetFrameRect(CCRectMake(kWinSize.width / 2.0f - kTextSize.width / 3.0f,
- 						kWinSize.height - kTextSize.height * 1.1f, kTextSize.width, kTextSize.height));
+                                                                   kWinSize.height - kTextSize.height * 1.1f, kTextSize.width, kTextSize.height));
 #else
 					m_pkProgressTextLabel->SetFrameRect(CCRectMake(0, 0, kWinSize.width, kWinSize.height));
 #endif
 					//LOGD("kTextSize.width is %d,kTextSize.height is %d",(int)kTextSize.width,(int)kTextSize.height);
-
-					m_pkProgressTextLabel->SetText(pstrString->getCString());
+                    
+                    if(pstrString)
+                        m_pkProgressTextLabel->SetText(pstrString->getCString());
+#elif(CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+					CCAssert(0);///< 未实现 郭浩
+#endif
 				}
                 break;
         }
@@ -1064,9 +1047,22 @@ void CSMLoginScene::StartEntry()
 	//if ( m_iAccountID == 0 )
 	m_iAccountID = ScriptMgrPtr->excuteLuaFuncRetN( "GetAccountID", "Login_ServerUI" );
 #endif
-
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) || (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	m_iAccountID = NDBeforeGameMgrObj.GetCurrentUser();
+#endif
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	m_iAccountID = NDBeforeGameMgrObj.GetCurrentUser();
+    
+    JniMethodInfo t;
+    if (JniHelper::getStaticMethodInfo(t, "org/DeNA/DHLJ/DaHuaLongJiang",
+                                       "clearSplash",
+                                       "()V"))
+    {
+        t.env->CallStaticObjectMethod(t.classID, t.methodID);
+        t.env->DeleteLocalRef(t.classID);
+    }
 #endif
 
 	ScriptMgrPtr->excuteLuaFunc( "ShowUI", "Entry", m_iAccountID );
