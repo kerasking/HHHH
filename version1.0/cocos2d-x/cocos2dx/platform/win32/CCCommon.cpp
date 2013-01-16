@@ -44,7 +44,7 @@ NS_CC_BEGIN
 
 void CCLog(const char * pszFormat, ...)
 {
-	return;
+	//return;
 #if ND_MOD 
 	static char szBuf[MAX_LEN] = {0};
 
@@ -57,41 +57,40 @@ void CCLog(const char * pszFormat, ...)
 	OutputDebugStringA("\n");
 	LOGD(szBuf);
 #else
-    char szBuf[MAX_LEN];
+	char szBuf[MAX_LEN];
 
-    va_list ap;
-    va_start(ap, pszFormat);
-    vsnprintf_s(szBuf, MAX_LEN, MAX_LEN, pszFormat, ap);
-    va_end(ap);
+	va_list ap;
+	va_start(ap, pszFormat);
+	vsnprintf_s(szBuf, MAX_LEN, MAX_LEN, pszFormat, ap);
+	va_end(ap);
 
-    WCHAR wszBuf[MAX_LEN] = {0};
-    MultiByteToWideChar(CP_UTF8, 0, szBuf, -1, wszBuf, sizeof(wszBuf));
-    OutputDebugStringW(wszBuf);
-    OutputDebugStringA("\n");
+	WCHAR wszBuf[MAX_LEN] = {0};
+	MultiByteToWideChar(CP_UTF8, 0, szBuf, -1, wszBuf, sizeof(wszBuf));
+	OutputDebugStringW(wszBuf);
+	OutputDebugStringA("\n");
 
-    WideCharToMultiByte(CP_ACP, 0, wszBuf, sizeof(wszBuf), szBuf, sizeof(szBuf), NULL, FALSE);
-    printf("%s\n", szBuf);
+	WideCharToMultiByte(CP_ACP, 0, wszBuf, sizeof(wszBuf), szBuf, sizeof(szBuf), NULL, FALSE);
+	printf("%s\n", szBuf);
 #endif
 }
 
 void CCMessageBox(const char * pszMsg, const char * pszTitle)
 {
-    MessageBoxA(NULL, pszMsg, pszTitle, MB_OK);
+	MessageBoxA(NULL, pszMsg, pszTitle, MB_OK);
 }
 
 void CCLuaLog(const char *pszMsg)
 {
-    int bufflen = MultiByteToWideChar(CP_UTF8, 0, pszMsg, -1, NULL, 0);
-    ++bufflen;
-    WCHAR* buff = new WCHAR[bufflen];
-    memset(buff, 0, sizeof(WCHAR) * bufflen);
-    MultiByteToWideChar(CP_UTF8, 0, pszMsg, -1, buff, bufflen - 1);
+	int bufflen = MultiByteToWideChar(CP_UTF8, 0, pszMsg, -1, NULL, 0);
+	++bufflen;
+	WCHAR* buff = new WCHAR[bufflen];
+	memset(buff, 0, sizeof(WCHAR) * bufflen);
+	MultiByteToWideChar(CP_UTF8, 0, pszMsg, -1, buff, bufflen - 1);
 
-    OutputDebugStringW(buff);
-    OutputDebugStringA("\n");
+	OutputDebugStringW(buff);
+	OutputDebugStringA("\n");
 
-    puts(pszMsg);
+	puts(pszMsg);
 }
 
 NS_CC_END
-

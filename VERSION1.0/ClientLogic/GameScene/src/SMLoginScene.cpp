@@ -231,6 +231,16 @@ CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
 
 		CCLog( "@@login01: open CSMLoginScene\r\n" );
 		
+		#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+        JniMethodInfo t;
+        if (JniHelper::getStaticMethodInfo(t, "org/DeNA/DHLJ/DaHuaLongJiang",
+                                           "clearSplash",
+                                           "()V"))
+        {
+            t.env->CallStaticObjectMethod(t.classID, t.methodID);
+            t.env->DeleteLocalRef(t.classID);
+        }
+		#endif
 		LOGD("TAG_TIMER_FIRST_RUN is register");
 		pkScene->m_pTimer->SetTimer( pkScene, TAG_TIMER_FIRST_RUN,0.5f );
     }

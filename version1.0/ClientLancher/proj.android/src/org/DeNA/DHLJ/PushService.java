@@ -3,6 +3,9 @@ package org.DeNA.DHLJ;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+
 import tw.mobage.g23000052.MainActivity;
 import tw.mobage.g23000052.R;
 
@@ -12,6 +15,8 @@ import com.ibm.mqtt.MqttException;
 import com.ibm.mqtt.MqttPersistence;
 import com.ibm.mqtt.MqttPersistenceException;
 import com.ibm.mqtt.MqttSimpleCallback;
+import com.mobage.android.Mobage;
+import com.mobage.android.Mobage.MarketCode;
 
 import android.app.AlarmManager;
 import android.app.Notification;
@@ -24,6 +29,11 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.res.Resources;
+import android.content.res.XmlResourceParser;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.IBinder;
@@ -225,12 +235,12 @@ public class PushService extends Service
 			Log.i(TAG, message);			
 		}
 		
-		if (mLog != null)
-		{
-			try {
-				mLog.println(message);
-			} catch (IOException ex) {}
-		}		
+//		if (mLog != null)
+//		{
+//			try {
+//				mLog.println(message);
+//			} catch (IOException ex) {}
+//		}		
 	}
 	
 	// Reads whether or not the service has been started from the preferences
@@ -460,6 +470,19 @@ public class PushService extends Service
 		return info.isConnected();
 	}
 	
+	private int getVersionCode()
+	{
+		int versionNumber = 0;
+		try {
+		        PackageInfo pinfo = getPackageManager().getPackageInfo("tw.mobage.g23000052", PackageManager.GET_CONFIGURATIONS);
+		        String versionCode = pinfo.versionName;
+		        versionNumber = pinfo.versionCode;
+		} catch (NameNotFoundException e) {
+
+		}
+		return versionNumber;
+	}
+	
 	// This inner class is a wrapper on top of MQTT client.
 	private class MQTTConnection implements MqttSimpleCallback {
 		IMqttClient mqttClient = null;
@@ -482,6 +505,14 @@ public class PushService extends Service
 				
 				String strChanelBroadcast = MQTT_CLIENT_ID + "/worldbc";
 				subscribeToTopic(strChanelBroadcast);
+				
+				String strChanelID = MQTT_CLIENT_ID + "/channel" + GetMarket();//String.valueOf(ChannelCode);
+				subscribeToTopic(strChanelID);
+				log("Connection established to " + brokerHostName + " on topic " + strChanelID);
+
+				int nVersionCode = getVersionCode();
+				String strVersionlID = MQTT_CLIENT_ID + "/version" + String.valueOf(nVersionCode);
+				subscribeToTopic(strVersionlID);
 		
 				log("Connection established to " + brokerHostName + " on topic " + initTopic);
 		
@@ -490,7 +521,41 @@ public class PushService extends Service
 				// Star the keep-alives
 				startKeepAlives();				        
 		}
-		
+		public String GetMarket() {  
+            //设置定时器  
+               int counter = 0;  
+               //实例化StringBuilder  
+               StringBuilder sb = new StringBuilder("");  
+               //得到Resources资源  
+               Resources r = getResources();  
+               //通过Resources，获得XmlResourceParser实例  
+               XmlResourceParser xrp = r.getXml(R.xml.market);  
+               try {  
+                   //如果没有到文件尾继续执行  
+                while (xrp.getEventType() != XmlResourceParser.END_DOCUMENT) {   
+                    //如果是开始标签  
+                         if (xrp.getEventType() == XmlResourceParser.START_TAG) {  
+                             //获取标签名称  
+                              String name = xrp.getName();  
+                              //判断标签名称是否等于friend  
+                              if(name.equals("market")){  
+                                  counter++;  
+                                  //<market affcode="10000000" version="7.0.0.0" channelid="100" sdk_version = "1.3.1"/>
+                                  return xrp.getAttributeValue(2);  
+                              }  
+                         } else if (xrp.getEventType() == XmlPullParser.END_TAG) {   
+                         } else if (xrp.getEventType() == XmlPullParser.TEXT) {   
+                         }   
+                         //下一个标签  
+                         xrp.next();   
+                    }  
+               } catch (XmlPullParserException e) {  
+            	   e.printStackTrace();  
+               } catch (IOException e) {  
+            	   e.printStackTrace();  
+               }  
+               return "";
+        }  
 		// Disconnect
 		public void disconnect() {
 			try {			

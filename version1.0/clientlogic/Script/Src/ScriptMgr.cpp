@@ -178,11 +178,12 @@ void ScriptMgr::DebugOutPut(const char* str)
 
 void ScriptMgr::WriteLog(const char* fmt, ...)
 {
+	//return;
+
 	if (!fmt)
 	{
 		return;
 	}
-
 	va_list argumentList;
 	char buffer[1024] = "";
 	va_start(argumentList, fmt);
@@ -192,9 +193,9 @@ void ScriptMgr::WriteLog(const char* fmt, ...)
 
 	if(strstr(buffer, "tzq") != NULL && m_fTest)
 	{
-		fwrite(buffer, 1, strlen(buffer) + 1, m_fTest);
-		fwrite("\n", 1, 1, m_fTest);
-		fflush(m_fTest);
+		//fwrite(buffer, 1, strlen(buffer) + 1, m_fTest);
+		//fwrite("\n", 1, 1, m_fTest);
+		//fflush(m_fTest);
 	}
 
 	CCLog( "%s\r\n", buffer );

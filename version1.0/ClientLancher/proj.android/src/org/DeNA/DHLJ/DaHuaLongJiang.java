@@ -123,6 +123,16 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		return ms_pkDHLJ.wmParams;
 	}
 
+	private static Handler clearSplashHandler = new Handler();
+	private static Runnable mClearSplash = new Runnable()
+	{
+		public void run()
+		{
+			View rootView = ms_pkDHLJ.getView();
+			rootView.setBackgroundResource(0);
+		};
+	};
+
 	private static Handler VideoViewHandler = new Handler();
 	private static Handler RootViewHandler = new Handler();
 	private static Runnable mHideBalance = new Runnable()
@@ -464,6 +474,10 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		}
 */
 	}
+	public static void clearSplash( )
+	{
+		clearSplashHandler.post(mClearSplash);
+	}	
 
 	private static void dump_menubar()
 	{
