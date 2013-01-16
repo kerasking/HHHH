@@ -21,4 +21,5 @@ NDCommonProtocol::NDCommonProtocol()
 NDCommonProtocol::~NDCommonProtocol()
 {
 }
+
 }

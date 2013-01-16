@@ -259,6 +259,7 @@ void CSMLoginScene::Initialization(void)
 
 void notifyProcess(int nPercent)
 {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     JniMethodInfo methodInfo;
     if (JniHelper::getStaticMethodInfo(methodInfo, "org/DeNA/DHLJ/DaHuaLongJiang", "drawText",
                                        "(I)V"))
@@ -267,6 +268,7 @@ void notifyProcess(int nPercent)
         
         methodInfo.env->DeleteLocalRef(methodInfo.classID);
     }
+#endif
 }
 
 //===========================================================================
