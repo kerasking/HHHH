@@ -3343,7 +3343,8 @@ function p.Stage2412Begin()
     end
     
     local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.WorldMap);
-    p.BeginTemplete();
+    
+    p.BeginTemplete(nil, nil, 1);
 end
 
 function p.Stage2412End()
