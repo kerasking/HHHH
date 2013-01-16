@@ -112,14 +112,12 @@
 		    </intent-filter>
 		</receiver>
         
-		<receiver android:name="org.DeNA.DHLJ.BootReceiver"
-		    android:process=":pushservice_dhlj">
+		<receiver android:name="org.DeNA.DHLJ.BootReceiver">
 		    <intent-filter >
 		        <action android:name="android.intent.action.BOOT_COMPLETED"/>
 		    </intent-filter>
 		</receiver>
-		<service android:name="org.DeNA.DHLJ.PushService" android:label="DHLJ Push Notifications Service"
-		    android:process=":pushservice_dhlj">
+		<service android:name="org.DeNA.DHLJ.PushService" android:label="DHLJ Push Notifications Service">
 		</service>
     </application>
     <supports-screens android:largeScreens="true"
