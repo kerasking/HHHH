@@ -137,7 +137,10 @@ CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
 		{
 			pkScene->setIsLoadLocalString(true);
 		}
-
+		SimpleAudioEngine::sharedEngine()->setMusicStream(true);
+		SimpleAudioEngine::sharedEngine()->raiseMusicStream();
+        
+#if (CC_TARGET_PLATFORM != CC_PLATFORM_ANDROID)
 		CCSize kWinSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 
 		NDUILayer* pkLayer = new NDUILayer();
@@ -150,12 +153,7 @@ CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
 		NDPicturePool& kPool = *(NDPicturePool::DefaultPool());
 		NDUIImage* pkBackgroundImage = new NDUIImage;
 
-		string strText = CONVERT_GBK_TO_UTF8("正在準備中……");
-		CCSize kTextSize = getStringSize("正在準備中……", 20 * FONT_SCALE);
 		ccColor4B kColor = {100,100,100,255};
-
-		SimpleAudioEngine::sharedEngine()->setMusicStream(true);
-		SimpleAudioEngine::sharedEngine()->raiseMusicStream();
 
 		pkScene->m_pkProgressTextLabel = new NDUILabel();
 		pkScene->m_pkProgressTextLabel->Initialization();
@@ -168,42 +166,21 @@ CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
 
 		NDUIImage* pkUILoadingImage = 0;
 		NDPicture* pkLoadingPic = 0;
-
-#ifdef USE_MGSDK
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 		NDPicture* pkPicture = kPool.AddPicture( NDPath::GetImgPath("Res00/Load/Unzipping.png") );
-#elif ((CACHE_MODE == 1) && (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID))
-		NDPicture* pkPicture = NULL;
-
-		CCImage::changeSystemFont(true);
-
-		pkLayer->AddChild(pkScene->m_pkProgressTextLabel,10,0);
-#else
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 		NDPicture* pkPicture = kPool.AddPicture( NDPath::GetImg00Path("Res00/Load/Unzipping.png") );
 #endif
-
-		if (pkPicture) 
+		if (pkPicture)
 		{
 			pkBackgroundImage->SetPicture(pkPicture, true);
-			
-#if 0 //大图才用，已经改成黑色地图了，暂时不需要
-			CCSize kPictureSize = pkPicture->GetSize();
-			CCDirector::sharedDirector()->setGLDefaultValues(1.0f,1.0f,1.0f);
-
-			float fScalePic = kPictureSize.width / kPictureSize.height;
-			float fHeight = 0.0f;
-			float fWidth = 0.0f;
-
-			fHeight = kWinSize.height * 1.2f;
-			fWidth = fHeight * fScalePic;
-
-			pkBackgroundImage->SetFrameRect(CCRectMake(kWinSize.width / 2.0f - fWidth / 2.0f,
-				(kWinSize.height - fHeight) / 2.0f, fWidth, fHeight));
-#else
-			CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
-			pkBackgroundImage->SetFrameRect( CCRectMake(0, 0, winSize.width, winSize.height ));
+        }
+        
+        CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
+        pkBackgroundImage->SetFrameRect( CCRectMake(0, 0, winSize.width, winSize.height ));
+        
+        pkLayer->AddChild(pkBackgroundImage);
 #endif
-			pkLayer->AddChild(pkBackgroundImage);
-		}
 
 		CCLog( "@@login01: open CSMLoginScene\r\n" );
 		
@@ -267,6 +244,17 @@ void notifyProcess(int nPercent)
         methodInfo.env->CallStaticVoidMethod(methodInfo.classID, methodInfo.methodID, nPercent);
         
         methodInfo.env->DeleteLocalRef(methodInfo.classID);
+    }
+    if(nPercent >= 100)
+    {
+        JniMethodInfo t;
+        if (JniHelper::getStaticMethodInfo(t, "org/DeNA/DHLJ/DaHuaLongJiang",
+                                           "clearSplash",
+                                           "()V"))
+        {
+            t.env->CallStaticObjectMethod(t.classID, t.methodID);
+            t.env->DeleteLocalRef(t.classID);
+        }
     }
 #endif
 }
@@ -382,12 +370,13 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 					LOGD("Copy files succeeded!");
 					CCDirector::sharedDirector()->setGLDefaultValues();
 					m_pTimer->KillTimer( this, TAG_TIMER_CHECK_COPY );
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 					m_pkProgressTextLabel->SetVisible(false);
 					NDBeforeGameMgrObj.doNDSdkLogin();
 					ShowWaitingAni();
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) 
+#endif
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
                     notifyProcess(100);
-					usleep(200);
 #endif
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 					usleep(200);
@@ -406,13 +395,10 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 					
 					CCSize kTextSize = getStringSize(pstrString->getCString(), 20 * FONT_SCALE);
 					CCSize kWinSize = CCDirector::sharedDirector()->getWinSizeInPixels();
-                    
-#if 1
+
  					m_pkProgressTextLabel->SetFrameRect(CCRectMake(kWinSize.width / 2.0f - kTextSize.width / 3.0f,
                                                                    kWinSize.height - kTextSize.height * 1.1f, kTextSize.width, kTextSize.height));
-#else
-					m_pkProgressTextLabel->SetFrameRect(CCRectMake(0, 0, kWinSize.width, kWinSize.height));
-#endif
+
 					//LOGD("kTextSize.width is %d,kTextSize.height is %d",(int)kTextSize.width,(int)kTextSize.height);
                     
                     if(pstrString)
@@ -438,10 +424,9 @@ void CSMLoginScene::OnTimer( OBJID idTag )
  		CCLog( "@@login02: to call OnEvent_LoginOKNormal()\r\n" );
 		m_iAccountID = NDBeforeGameMgrObj.GetCurrentUser();
 		OnEvent_LoginOKNormal(m_iAccountID);
+#endif
 
-#else
-
-#ifdef USE_MGSDK
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 		NDUIImage * pImage = (NDUIImage *)m_pLayerUpdate->GetChild( TAG_CTRL_PIC_BG);
 		if ( pImage )
 		{
@@ -449,7 +434,6 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 			pPicture->Initialization( NDPath::GetUIImgPath( SZ_MOBAGE_BG_PNG_PATH ).c_str() );
 			pImage->SetPicture( pPicture, true );
 		}
-#endif
 #endif
 
 #if CACHE_MODE == 1
@@ -1053,18 +1037,8 @@ void CSMLoginScene::StartEntry()
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	m_iAccountID = NDBeforeGameMgrObj.GetCurrentUser();
 #endif
-
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	m_iAccountID = NDBeforeGameMgrObj.GetCurrentUser();
-    
-    JniMethodInfo t;
-    if (JniHelper::getStaticMethodInfo(t, "org/DeNA/DHLJ/DaHuaLongJiang",
-                                       "clearSplash",
-                                       "()V"))
-    {
-        t.env->CallStaticObjectMethod(t.classID, t.methodID);
-        t.env->DeleteLocalRef(t.classID);
-    }
 #endif
 
 	ScriptMgrPtr->excuteLuaFunc( "ShowUI", "Entry", m_iAccountID );

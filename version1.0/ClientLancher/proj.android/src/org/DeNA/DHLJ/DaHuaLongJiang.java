@@ -53,6 +53,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.util.DisplayMetrics;
+import android.util.FloatMath;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -74,6 +75,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -135,7 +137,25 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		public void run()
 		{
 			if(tv != null)
+			{
+				DisplayMetrics dm = new DisplayMetrics();
+				ms_pkDHLJ.getWindowManager().getDefaultDisplay().getMetrics(dm);
+
+				int pFontSize = 16;
+
+		        int kAlignCenter        = 0x33; ///< Horizontal center and vertical center.
+		        int kAlignLeft          = 0x31; ///< Horizontal left and vertical center
+				final Paint paint = Cocos2dxBitmap.newPaint("Arial-BoldMT", pFontSize, kAlignLeft);
+				float nTextWidth = FloatMath.ceil(paint.measureText(textString));
+				Float TextWidth = nTextWidth * dm.scaledDensity;
+				LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT);
+				layoutParams.leftMargin = (dm.widthPixels-TextWidth.intValue())/2;
+				layoutParams.topMargin = dm.heightPixels*7/8;
+				layoutParams.width = dm.widthPixels;
+				layoutParams.height = 100;
 				tv.setText(textString);
+				tv.setLayoutParams(layoutParams);
+			}
 		};
 	};
 	
@@ -661,22 +681,20 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	{
 		Log.v(TAG, "begin addTextView");
 
-		DisplayMetrics dm = new DisplayMetrics();
-		getWindowManager().getDefaultDisplay().getMetrics(dm);
-		
 		s_TextViewlayout = new LinearLayout(s_context);
-		s_TextViewlayout.setOrientation(LinearLayout.HORIZONTAL);
-		LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT);
-		layoutParams.leftMargin = (dm.widthPixels-340)/2;
-		layoutParams.topMargin = dm.heightPixels*7/8;
-		layoutParams.width = dm.widthPixels;
-		layoutParams.height = 100;
+		s_TextViewlayout.setOrientation(LinearLayout.VERTICAL);
+		textString = ms_pkDHLJ.getResources().getString(R.string.unzip_text) + "...";
+
+		int pFontSize = 16;
+
         tv = new TextView(this);
-        tv.setText(ms_pkDHLJ.getResources().getString(R.string.unzip_text) + "...");
-        tv.setTextSize(16);
+        tv.setText(textString);
+        tv.setTextSize(pFontSize);
         tv.setTextColor(Color.BLACK);
-        s_TextViewlayout.addView(tv, layoutParams);
+        s_TextViewlayout.addView(tv);
         menubar.addView(s_TextViewlayout);
+        
+		UpdateTextHandler.post(mUpdateText);
 	}
 
 	private static void showBalanceButton()
