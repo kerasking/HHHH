@@ -50,8 +50,7 @@ public:
 		{
 			std::stringstream kStringStream;
 			int nSize = PicMemoryUsingLogOut(true);
-			kStringStream << nSize / 1024 << "K," << nSize / (1024 * 1024)
-					<< "M";
+			kStringStream << nSize / 1024 << "K," << nSize / (1024 * 1024) << "M";
 			m_pkCurTextureSizeLabel->SetText(kStringStream.str().c_str());
 			m_pkCurTextureSizeLabel->SetVisible(false);
 		}
