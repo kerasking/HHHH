@@ -13,6 +13,7 @@ import java.util.TimerTask;
 
 import org.cocos2dx.lib.Cocos2dxActivity;
 
+import org.cocos2dx.lib.Cocos2dxBitmap;
 import org.cocos2dx.lib.Cocos2dxEditText;
 import org.cocos2dx.lib.Cocos2dxGLSurfaceView;
 import org.json.JSONException;
@@ -65,9 +66,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
@@ -104,10 +107,13 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 
 	private static Context s_context;
 	private static LinearLayout s_balancelayout;
+	private static LinearLayout s_TextViewlayout;
 
 	private static Cocos2dxEditText edittext; //@ime
 	private static Button testbutton;
 	private static ImageView imgSplash;
+	private static TextView  tv=null;
+	private static String textString;
 
 	private WindowManager wm=null;
 	private static FloatView myFV=null;
@@ -119,6 +125,15 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	public static WindowManager.LayoutParams getMywmParams(){
 		return ms_pkDHLJ.wmParams;
 	}
+	private static Handler UpdateTextHandler = new Handler();
+	private static Runnable mUpdateText = new Runnable()
+	{
+		public void run()
+		{
+			if(tv != null)
+				tv.setText(textString);
+		};
+	};
 	private static Handler clearSplashHandler = new Handler();
 	private static Runnable mClearSplash = new Runnable()
 	{
@@ -126,6 +141,11 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		{
 			View rootView = ms_pkDHLJ.getView();
 			rootView.setBackgroundResource(0);
+			if(tv != null && s_TextViewlayout != null && menubar != null)
+			{
+				s_TextViewlayout.removeView(tv);
+				menubar.removeView(s_TextViewlayout);
+			}
 		};
 	};
 	private static Handler VideoViewHandler = new Handler();
@@ -322,7 +342,11 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	{
 		super.onConfigurationChanged(newConfig);
 	}
-
+	public static void drawText(int nProcess )
+	{
+		textString = ms_pkDHLJ.getResources().getString(R.string.unzip_text_firstrun) + String.valueOf(nProcess) + "%...";
+		UpdateTextHandler.post(mUpdateText);
+	}
 	public void setMain()
 	{
 		Log.d(TAG, "@@ DaHuaLongJiang::setMain()");
@@ -343,6 +367,8 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		m_pkView.setVisibility(View.INVISIBLE);
 		// menubar.addView(m_pkView);
 		menubar.addView(rootView);
+
+		addTextView();
 
 		// add splash image (fullscreen)
 		showSplash(1);
@@ -584,6 +610,29 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 
 		s_fScaleX = 2.0f * dm.widthPixels / 960.0f;
 		s_fScaleY = 2.0f * dm.heightPixels / 640.0f;
+	}
+	
+
+	private void addTextView()
+	{
+		Log.v(TAG, "begin addTextView");
+
+		DisplayMetrics dm = new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(dm);
+		
+		s_TextViewlayout = new LinearLayout(s_context);
+		s_TextViewlayout.setOrientation(LinearLayout.HORIZONTAL);
+		LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT);
+		layoutParams.leftMargin = (dm.widthPixels-340)/2;
+		layoutParams.topMargin = dm.heightPixels*7/8;
+		layoutParams.width = dm.widthPixels;
+		layoutParams.height = 100;
+        tv = new TextView(this);
+        tv.setText(ms_pkDHLJ.getResources().getString(R.string.unzip_text) + "...");
+        tv.setTextSize(16);
+        tv.setTextColor(Color.BLACK);
+        s_TextViewlayout.addView(tv, layoutParams);
+        menubar.addView(s_TextViewlayout);
 	}
 
 	private static void showBalanceButton()
