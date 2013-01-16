@@ -1,203 +1,96 @@
-#include "CCApplication.h"
-#include "CCEGLView.h"
-#include "CCDirector.h"
-#include <algorithm>
+/****************************************************************************
+Copyright (c) 2010 cocos2d-x.org
 
-/**
-@brief    This function change the PVRFrame show/hide setting in register.
-@param  bEnable If true show the PVRFrame window, otherwise hide.
-*/
-static void PVRFrameEnableControlWindow(bool bEnable);
+http://www.cocos2d-x.org
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+****************************************************************************/
+#include <Windows.h>
+#include "platform/CCCommon.h"
+#include "CCStdC.h"
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#include <jni.h>
+#include <android/log.h>
+
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
+#define  LOGERROR(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
+#else
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)
+#define  LOGERROR(...)
+#endif
 
 NS_CC_BEGIN
 
-// sharedApplication pointer
-CCApplication * CCApplication::sm_pSharedApplication = 0;
+#define MAX_LEN         (cocos2d::kMaxLogLen + 1)
 
-CCApplication::CCApplication()
-: m_hInstance(NULL)
-, m_hAccelTable(NULL)
+void CCLog(const char * pszFormat, ...)
 {
-    m_hInstance    = GetModuleHandle(NULL);
-    m_nAnimationInterval.QuadPart = 0;
-    CC_ASSERT(! sm_pSharedApplication);
-    sm_pSharedApplication = this;
-}
+	//return;
+#if ND_MOD 
+	static char szBuf[MAX_LEN] = {0};
 
-CCApplication::~CCApplication()
-{
-    CC_ASSERT(this == sm_pSharedApplication);
-    sm_pSharedApplication = NULL;
-}
+	va_list ap;
+	va_start(ap, pszFormat);
+	vsnprintf_s(szBuf, MAX_LEN, MAX_LEN, pszFormat, ap);
+	va_end(ap);
 
-int CCApplication::run()
-{
-    PVRFrameEnableControlWindow(false);
-
-    // Main message loop:
-    MSG msg;
-    LARGE_INTEGER nFreq;
-    LARGE_INTEGER nLast;
-    LARGE_INTEGER nNow;
-
-    QueryPerformanceFrequency(&nFreq);
-    QueryPerformanceCounter(&nLast);
-
-    // Initialize instance and cocos2d.
-    if (!applicationDidFinishLaunching())
-    {
-        return 0;
-    }
-
-    CCEGLView* pMainWnd = CCEGLView::sharedOpenGLView();
-    pMainWnd->centerWindow();
-    ShowWindow(pMainWnd->getHWnd(), SW_SHOW);
-
-    while (1)
-    {
-        if (! PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
-        {
-            // Get current time tick.
-            QueryPerformanceCounter(&nNow);
-
-            // If it's the time to draw next frame, draw it, else sleep a while.
-            if (nNow.QuadPart - nLast.QuadPart > m_nAnimationInterval.QuadPart)
-            {
-                nLast.QuadPart = nNow.QuadPart;
-                CCDirector::sharedDirector()->mainLoop();
-            }
-            else
-            {
-#if ND_MOD
-				Sleep(1);
+	OutputDebugStringA(szBuf);
+	OutputDebugStringA("\n");
+	LOGD(szBuf);
 #else
-                Sleep(0);
+	char szBuf[MAX_LEN];
+
+	va_list ap;
+	va_start(ap, pszFormat);
+	vsnprintf_s(szBuf, MAX_LEN, MAX_LEN, pszFormat, ap);
+	va_end(ap);
+
+	WCHAR wszBuf[MAX_LEN] = {0};
+	MultiByteToWideChar(CP_UTF8, 0, szBuf, -1, wszBuf, sizeof(wszBuf));
+	OutputDebugStringW(wszBuf);
+	OutputDebugStringA("\n");
+
+	WideCharToMultiByte(CP_ACP, 0, wszBuf, sizeof(wszBuf), szBuf, sizeof(szBuf), NULL, FALSE);
+	printf("%s\n", szBuf);
 #endif
-            }
-            continue;
-        }
-
-        if (WM_QUIT == msg.message)
-        {
-            // Quit message loop.
-            break;
-        }
-
-        // Deal with windows message.
-        if (! m_hAccelTable || ! TranslateAccelerator(msg.hwnd, m_hAccelTable, &msg))
-        {
-            TranslateMessage(&msg);
-            DispatchMessage(&msg);
-        }
-    }
-
-    return (int) msg.wParam;
 }
 
-void CCApplication::setAnimationInterval(double interval)
+void CCMessageBox(const char * pszMsg, const char * pszTitle)
 {
-    LARGE_INTEGER nFreq;
-    QueryPerformanceFrequency(&nFreq);
-    m_nAnimationInterval.QuadPart = (LONGLONG)(interval * nFreq.QuadPart);
+	MessageBoxA(NULL, pszMsg, pszTitle, MB_OK);
 }
 
-//////////////////////////////////////////////////////////////////////////
-// static member function
-//////////////////////////////////////////////////////////////////////////
-CCApplication* CCApplication::sharedApplication()
+void CCLuaLog(const char *pszMsg)
 {
-    CC_ASSERT(sm_pSharedApplication);
-    return sm_pSharedApplication;
-}
+	int bufflen = MultiByteToWideChar(CP_UTF8, 0, pszMsg, -1, NULL, 0);
+	++bufflen;
+	WCHAR* buff = new WCHAR[bufflen];
+	memset(buff, 0, sizeof(WCHAR) * bufflen);
+	MultiByteToWideChar(CP_UTF8, 0, pszMsg, -1, buff, bufflen - 1);
 
-ccLanguageType CCApplication::getCurrentLanguage()
-{
-    ccLanguageType ret = kLanguageEnglish;
+	OutputDebugStringW(buff);
+	OutputDebugStringA("\n");
 
-    LCID localeID = GetUserDefaultLCID();
-    unsigned short primaryLanguageID = localeID & 0xFF;
-    
-    switch (primaryLanguageID)
-    {
-        case LANG_CHINESE:
-            ret = kLanguageChinese;
-            break;
-        case LANG_FRENCH:
-            ret = kLanguageFrench;
-            break;
-        case LANG_ITALIAN:
-            ret = kLanguageItalian;
-            break;
-        case LANG_GERMAN:
-            ret = kLanguageGerman;
-            break;
-        case LANG_SPANISH:
-            ret = kLanguageSpanish;
-            break;
-        case LANG_RUSSIAN:
-            ret = kLanguageRussian;
-            break;
-    }
-
-    return ret;
-}
-
-TargetPlatform CCApplication::getTargetPlatform()
-{
-    return kTargetWindows;
-}
-
-void CCApplication::setResourceRootPath(const std::string& rootResDir)
-{
-    m_resourceRootPath = rootResDir;
-    std::replace(m_resourceRootPath.begin(), m_resourceRootPath.end(), '\\', '/');
-    if (m_resourceRootPath[m_resourceRootPath.length() - 1] != '/')
-    {
-        m_resourceRootPath += '/';
-    }
-}
-
-void CCApplication::setStartupScriptFilename(const std::string& startupScriptFile)
-{
-    m_startupScriptFilename = startupScriptFile;
-    std::replace(m_startupScriptFilename.begin(), m_startupScriptFilename.end(), '\\', '/');
+	puts(pszMsg);
 }
 
 NS_CC_END
-
-//////////////////////////////////////////////////////////////////////////
-// Local function
-//////////////////////////////////////////////////////////////////////////
-static void PVRFrameEnableControlWindow(bool bEnable)
-{
-    HKEY hKey = 0;
-
-    // Open PVRFrame control key, if not exist create it.
-    if(ERROR_SUCCESS != RegCreateKeyExW(HKEY_CURRENT_USER,
-        L"Software\\Imagination Technologies\\PVRVFRame\\STARTUP\\",
-        0,
-        0,
-        REG_OPTION_NON_VOLATILE,
-        KEY_ALL_ACCESS,
-        0,
-        &hKey,
-        NULL))
-    {
-        return;
-    }
-
-    const WCHAR* wszValue = L"hide_gui";
-    const WCHAR* wszNewData = (bEnable) ? L"NO" : L"YES";
-    WCHAR wszOldData[256] = {0};
-    DWORD   dwSize = sizeof(wszOldData);
-    LSTATUS status = RegQueryValueExW(hKey, wszValue, 0, NULL, (LPBYTE)wszOldData, &dwSize);
-    if (ERROR_FILE_NOT_FOUND == status              // the key not exist
-        || (ERROR_SUCCESS == status                 // or the hide_gui value is exist
-        && 0 != wcscmp(wszNewData, wszOldData)))    // but new data and old data not equal
-    {
-        dwSize = sizeof(WCHAR) * (wcslen(wszNewData) + 1);
-        RegSetValueEx(hKey, wszValue, 0, REG_SZ, (const BYTE *)wszNewData, dwSize);
-    }
-
-    RegCloseKey(hKey);
-}
