@@ -178,7 +178,7 @@ void ScriptMgr::DebugOutPut(const char* str)
 
 void ScriptMgr::WriteLog(const char* fmt, ...)
 {
-	return;
+	//return;
 
 	if (!fmt)
 	{
