@@ -16,6 +16,8 @@ public:
 
 	NDMainLogic* sharedMainLogic();
 
+	bool zipDirectory(const char* pszSrcFolder,const char* pszTargetPath,const char* pszTargetFilename);
+
 protected:
 
 	static NDMainLogic* ms_pkMainLogic;
