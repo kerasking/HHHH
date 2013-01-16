@@ -15,6 +15,7 @@ import org.cocos2dx.lib.Cocos2dxActivity;
 
 import org.cocos2dx.lib.Cocos2dxEditText;
 import org.cocos2dx.lib.Cocos2dxGLSurfaceView;
+import org.cocos2dx.lib.Cocos2dxHelper;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.xmlpull.v1.XmlPullParserException;
@@ -42,6 +43,7 @@ import android.content.Intent;
 import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
+import android.media.AudioManager;
 import android.net.ParseException;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
@@ -99,26 +101,28 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	private View rootView = null;
 
 	private static boolean m_bIsStartingVideo = false;
-	private final static boolean playVideoInActivity = true; //是否在独立的activity中播放视频
-	private static boolean m_bVideoPlayed; //is video already played once.
+	private final static boolean playVideoInActivity = true; // 是否在独立的activity中播放视频
+	private static boolean m_bVideoPlayed; // is video already played once.
 
 	private static Context s_context;
 	private static LinearLayout s_balancelayout;
 
-	private static Cocos2dxEditText edittext; //@ime
+	private static Cocos2dxEditText edittext; // @ime
 	private static Button testbutton;
 	private static ImageView imgSplash;
 
-	private WindowManager wm=null;
-	private static FloatView myFV=null;
-	private static int FVAlpha=255;
+	private WindowManager wm = null;
+	private static FloatView myFV = null;
+	private static int FVAlpha = 255;
 
-	private WindowManager.LayoutParams wmParams=new WindowManager.LayoutParams();
+	private WindowManager.LayoutParams wmParams = new WindowManager.LayoutParams();
 	java.util.Timer timer = new java.util.Timer(true);
 
-	public static WindowManager.LayoutParams getMywmParams(){
+	public static WindowManager.LayoutParams getMywmParams()
+	{
 		return ms_pkDHLJ.wmParams;
 	}
+
 	private static Handler VideoViewHandler = new Handler();
 	private static Handler RootViewHandler = new Handler();
 	private static Runnable mHideBalance = new Runnable()
@@ -184,7 +188,6 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		};
 	};
 
-
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		Log.d( "init", "@@ DaHuaLongJiang.onCreate()" );
@@ -200,7 +203,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 			s_context = context;
 
 			Mobage.registerMobageResource(this, "tw.mobage.g23000052.R");
-//			RemoteNotificationView.DisableRemoteNotification();
+			// RemoteNotificationView.DisableRemoteNotification();
 			SocialUtils.initializeMobage(this);
 			mPlatformListener = SocialUtils.createPlatformListener(true);
 			Mobage.addPlatformListener(mPlatformListener);
@@ -219,6 +222,20 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 
 			nativeInit(480, 320);
 
+			if (AudioManager.STREAM_MUSIC == getVolumeControlStream())
+			{
+				int a = 10;
+				int b = a;
+			} else if (AudioManager.STREAM_RING == getVolumeControlStream())
+			{
+				int a = 10;
+				int b = a;
+			} else
+			{
+				int a = 10;
+				int b = a;
+			}
+
 			Mobage.checkLoginStatus();
 			Mobage.onCreate();
 
@@ -230,28 +247,28 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 			menubar.setMenubarVisibility(View.VISIBLE);
 			menubar.setMenuIconGravity(Gravity.TOP | Gravity.LEFT);
 
-//			 testbutton = new Button(this);
-//			 testbutton.setText("aaaaaaaaa".toCharArray(), 1, 6);
-//			 FrameLayout.LayoutParams pkParamsButton = new
-//			 FrameLayout.LayoutParams(200,200);
-//			 pkParamsButton.topMargin = 100;
-//			 pkParamsButton.leftMargin = 10;
-//			 testbutton.setLayoutParams(pkParamsButton);
-//			
-//			 testbutton.setOnClickListener(new OnClickListener() {
-//			 @Override
-//			 public void onClick(View view) {
-//				 menubar.setRankButtonVisibility(View.INVISIBLE);
-//			 //FeedsView.openActivityFeeds();
-//			 // RemoteNotificationView.SendRemoteNotification("500002013");
-//			 // RemoteNotificationView.SendRemoteNotification("500001919");
-//			 // PeopleView.getFriendsWithGame();
-//			 // PeopleView.getFriends();
-//			 // PeopleView.getUsers();
-//			 // PeopleView.getCurrentUser();
-//			 // PeopleView.getUser();
-//			 }
-//			 });
+			// testbutton = new Button(this);
+			// testbutton.setText("aaaaaaaaa".toCharArray(), 1, 6);
+			// FrameLayout.LayoutParams pkParamsButton = new
+			// FrameLayout.LayoutParams(200,200);
+			// pkParamsButton.topMargin = 100;
+			// pkParamsButton.leftMargin = 10;
+			// testbutton.setLayoutParams(pkParamsButton);
+			//
+			// testbutton.setOnClickListener(new OnClickListener() {
+			// @Override
+			// public void onClick(View view) {
+			// menubar.setRankButtonVisibility(View.INVISIBLE);
+			// //FeedsView.openActivityFeeds();
+			// // RemoteNotificationView.SendRemoteNotification("500002013");
+			// // RemoteNotificationView.SendRemoteNotification("500001919");
+			// // PeopleView.getFriendsWithGame();
+			// // PeopleView.getFriends();
+			// // PeopleView.getUsers();
+			// // PeopleView.getCurrentUser();
+			// // PeopleView.getUser();
+			// }
+			// });
 		} else
 		{
 			AlertDialog alertDialog = new AlertDialog.Builder(this).create();
@@ -284,7 +301,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		Log.e(TAG, "onStop called");
 		super.onStop();
 
-		if(myFV != null)
+		if (myFV != null)
 			myFV.setVisibility(View.INVISIBLE);
 	}
 
@@ -294,8 +311,11 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		Log.e(TAG, "onDestroy called");
 		super.onDestroy();
 		Mobage.onStop();
+
 		if(myFV != null)
+		{
 			wm.removeView(myFV);
+		}
 	}
 
 	@Override
@@ -304,7 +324,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		Log.e(TAG, "onRestart called");
 		super.onRestart();
 		Mobage.onRestart();
-		if(myFV != null)
+		if (myFV != null)
 			myFV.setVisibility(View.VISIBLE);
 	}
 
@@ -341,8 +361,10 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		s_balancelayout = new LinearLayout(s_context);
 		s_balancelayout.setOrientation(LinearLayout.VERTICAL);
 
-		LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT);
-		
+		LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+				ViewGroup.LayoutParams.FILL_PARENT,
+				ViewGroup.LayoutParams.FILL_PARENT);
+
 		setScaleX();
 		Float x = 200 * s_fScaleX;
 		Float y = 70 * s_fScaleY;
@@ -360,8 +382,8 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 
 		menubar.addView(s_balancelayout);
 		s_balancelayout.setVisibility(View.INVISIBLE);
-		
-//		menubar.addView(testbutton);
+
+		// menubar.addView(testbutton);
 
 		// set content view
 		ViewGroup.LayoutParams pkParams = new ViewGroup.LayoutParams(
@@ -371,8 +393,6 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 
 		// set menu bar visible
 		menubar.setMenubarVisibility(View.VISIBLE);
-		
-		//createFloatView();//繁体SDK不支持	
 	}
 
 	//@init: not used.
@@ -451,10 +471,44 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		for (int i = 0; i < n; i++)
 		{
 			View v = menubar.getChildAt(i);
-			Log.d("test", "@@ menubar.child["+i+"]="+v.toString() + ",vis=" + v.getVisibility());
-		}		
+			Log.d("test", "@@ menubar.child[" + i + "]=" + v.toString()
+					+ ",vis=" + v.getVisibility());
+		}
 	}
-	
+
+	public static void setMusicStream(boolean bMusic)
+	{
+		if (bMusic)
+		{
+			ms_pkDHLJ.setVolumeControlStream(AudioManager.STREAM_MUSIC);
+		} else
+		{
+			ms_pkDHLJ.setVolumeControlStream(AudioManager.STREAM_RING);
+		}
+	}
+
+	public static void raiseMusicStream()
+	{
+		if (AudioManager.STREAM_MUSIC == ms_pkDHLJ.getVolumeControlStream())
+		{
+			AudioManager pkAudioManager = (AudioManager) ms_pkDHLJ
+					.getSystemService(Context.AUDIO_SERVICE);
+			pkAudioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC,
+					AudioManager.ADJUST_RAISE, AudioManager.FLAG_SHOW_UI);
+		}
+	}
+
+	public static void lowerMusicStream()
+	{
+		if (AudioManager.STREAM_MUSIC == ms_pkDHLJ.getVolumeControlStream())
+		{
+			AudioManager pkAudioManager = (AudioManager) ms_pkDHLJ
+					.getSystemService(Context.AUDIO_SERVICE);
+			pkAudioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC,
+					AudioManager.ADJUST_LOWER, AudioManager.FLAG_SHOW_UI);
+		}
+	}
+
 	// @ime
 	public void addEditView()
 	{
@@ -483,16 +537,17 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		}
 	}
 
-	//@ime
-	//1=yes, 0=no, -1=unknown.
+	// @ime
+	// 1=yes, 0=no, -1=unknown.
 	private int isFullScreenIME()
 	{
 		int ret = -1;
 		if (getView() != null)
 		{
-			final InputMethodManager imm = (InputMethodManager) 
-					getView().getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-			
+			final InputMethodManager imm = (InputMethodManager) getView()
+					.getContext()
+					.getSystemService(Context.INPUT_METHOD_SERVICE);
+
 			if (imm != null)
 			{
 				ret = imm.isFullscreenMode() ? 1 : 0;
@@ -502,24 +557,25 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		return ret;
 	}
 
-	//@ime
-	public void notifyIMEOpenClose( boolean bImeOpen ) 
+	// @ime
+	public void notifyIMEOpenClose(boolean bImeOpen)
 	{
-		Log.d("test", "@@ DaHuaLongJiang.notifyIMEOpenClose(): " + (bImeOpen ? "open" : "close"));
-		
+		Log.d("test", "@@ DaHuaLongJiang.notifyIMEOpenClose(): "
+				+ (bImeOpen ? "open" : "close"));
+
 		isFullScreenIME();
-		//refreshLayout( bOpen );
+		// refreshLayout( bOpen );
 		if (true)// || isFullScreenIME() == 0)
 		{
-			if (bImeOpen) 
+			if (bImeOpen)
 			{
-				//bring editView to top
+				// bring editView to top
 				menubar.bringChildToFront(edittext);
 				//bringLayoutToFront();
 			}
-			else 
+			else
 			{
-				//bring surface view to top
+				// bring surface view to top
 				menubar.bringChildToFront(getView());
 				//menubar.bringToFront();
 				bringLayoutToFront();
@@ -551,7 +607,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 			menubar.bringChildToFront( (View)viewList.get(i));
 		}
 	}
-	
+
 	public void LoginComplete(int userid)
 	{
 		onLoginComplete(userid, mDeviceID);
@@ -603,11 +659,6 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		String strLine = null;
 
 		strReadBuffer.append(strBuffer);
-//			BufferedReader kReader = new BufferedReader(strBuffer);
-//			while ((strLine = kReader.readLine()) != null)
-//			{
-//				
-//			}
 
 		try
 		{
@@ -633,8 +684,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		} catch (ParseException e)
 		{
 			e.printStackTrace();
-		}
-		catch (JSONException e1)
+		} catch (JSONException e1)
 		{
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -687,12 +737,12 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 
 		return false;
 	}
-	
-	//@video
+
+	// @video
 	public static int playVideo(final String strFile)
 	{
 		Log.d("video", "@@ playVideo: " + strFile);
-		
+
 		if (ms_pkDHLJ.m_bVideoPlayed)
 		{
 			Log.d("video", "@@ video already played once, skip." + strFile);
@@ -704,8 +754,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		if (playVideoInActivity)
 		{
 			ms_pkDHLJ.startVideoActivity();
-		}
-		else
+		} else
 		{
 			m_bIsStartingVideo = true;
 			VideoViewHandler.post(mShowVideoView);
@@ -716,18 +765,18 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		return 0;
 	}
 
-	//@video
+	// @video
 	private void startVideoActivity()
 	{
-		Log.d( "video", "@@ startVideoActivity()");
+		Log.d("video", "@@ startVideoActivity()");
 
-        Intent intent = new Intent(getApplication(), VideoActivity.class);
-        startActivity(intent);
-        
-        Log.d( "video", "@@ startVideoActivity() -- done");
+		Intent intent = new Intent(getApplication(), VideoActivity.class);
+		startActivity(intent);
+
+		Log.d("video", "@@ startVideoActivity() -- done");
 	}
 
-	//@video
+	// @video
 	public static int stopVideo(final String strFile)
 	{
 		return 0;
@@ -750,42 +799,72 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 
 	public boolean onKeyDown(int keyCode, KeyEvent event)
 	{
+		switch (keyCode)
+		{
+
+		case KeyEvent.KEYCODE_VOLUME_DOWN:
+		{
+			setVolumeControlStream(AudioManager.STREAM_MUSIC);
+			AudioManager pkAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+			pkAudioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC,
+					AudioManager.ADJUST_LOWER, AudioManager.FLAG_SHOW_UI);
+		}
+			return true;
+
+		case KeyEvent.KEYCODE_VOLUME_UP:
+		{
+			setVolumeControlStream(AudioManager.STREAM_MUSIC);
+			AudioManager pkAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+			pkAudioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC,
+					AudioManager.ADJUST_RAISE, AudioManager.FLAG_SHOW_UI);
+		}
+
+			return true;
+
+		}
+
 		return super.onKeyDown(keyCode, event);
 	}
-	
+
 	public String changeCharset(String str, String newCharset)
-    {
-		  try {
-				if (str != null) {
-					//用默认字符编码解码字符串〄1�7
-					byte[] bs = str.getBytes();
-					//用新的字符编码生成字符串
-					return new String(bs, newCharset);
-				}
-		  } catch (UnsupportedEncodingException e) {
-              	Log.e(TAG, "Failed to open AlertDialog", e);
-		  }
+	{
+		try
+		{
+			if (str != null)
+			{
+				// 用默认字符编码解码字符串〄1�7
+				byte[] bs = str.getBytes();
+				// 用新的字符编码生成字符串
+				return new String(bs, newCharset);
+			}
+		} catch (UnsupportedEncodingException e)
+		{
+			Log.e(TAG, "Failed to open AlertDialog", e);
+		}
 		return str;
-    }
-	
+	}
+
 	public void onBackPressed()
 	{
-		DialogInterface.OnClickListener onYes = new DialogInterface.OnClickListener() {  
-            
-		     public void onClick(DialogInterface dialog, int which) {  
-		        dialog.dismiss();  
+		DialogInterface.OnClickListener onYes = new DialogInterface.OnClickListener()
+		{
+
+			public void onClick(DialogInterface dialog, int which)
+			{
+				dialog.dismiss();
 				android.os.Process.killProcess(android.os.Process.myPid());
-		     }  
-		  };
+			}
+		};
 
-          new AlertDialog.Builder(this)
-          .setTitle(getString(R.string.dialog_exit_title_text))
-          .setMessage(getString(R.string.dialog_exit_content_text))
-          .setPositiveButton(getString(R.string.dialog_exit_yes_text), onYes)
-          .setNegativeButton(getString(R.string.dialog_exit_no_text), null)
-          .show();
+		new AlertDialog.Builder(this)
+				.setTitle(getString(R.string.dialog_exit_title_text))
+				.setMessage(getString(R.string.dialog_exit_content_text))
+				.setPositiveButton(getString(R.string.dialog_exit_yes_text),
+						onYes)
+				.setNegativeButton(getString(R.string.dialog_exit_no_text),
+						null).show();
 
-//		onLogout();
+		// onLogout();
 	}
 
 	public boolean onTouchEvent(MotionEvent event)
@@ -822,63 +901,71 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 			return 1;
 		return 0;
 	}
-	public static void FVClicked() {
+
+	public static void FVClicked()
+	{
 		FVAlpha = 255;
-		myFV.getBackground().setAlpha(FVAlpha);  
+		myFV.getBackground().setAlpha(FVAlpha);
 	}
+
 	private static Handler FloatViewHandler = new Handler();
 	private static Runnable mFloatViewRuner = new Runnable()
 	{
 		public void run()
 		{
-    		//myFV.setBackgroundDrawable(drawable);
-			if(myFV != null) {
-				if(FVAlpha > 20) {
-					FVAlpha = FVAlpha-2;
-					myFV.getBackground().setAlpha(FVAlpha);  
+			// myFV.setBackgroundDrawable(drawable);
+			if (myFV != null)
+			{
+				if (FVAlpha > 20)
+				{
+					FVAlpha = FVAlpha - 2;
+					myFV.getBackground().setAlpha(FVAlpha);
 				}
 			}
 		};
 	};
-    TimerTask task = new TimerTask() {   
-    	public void run() {  
-    		FloatViewHandler.post(mFloatViewRuner); 
-    	}   
-    };   
-	
-    private void createFloatView(){
-    	myFV=new FloatView(getApplicationContext());
-    	//myFV.setImageResource(tw.mobage.g23000052.R.drawable.icon);
-    	myFV.setBackgroundResource(tw.mobage.g23000052.R.drawable.icon);
-    	//获取WindowManager
-    	wm=(WindowManager)getApplicationContext().getSystemService("window");
-        //设置LayoutParams(全局变量）相关参数
-    	wmParams = getMywmParams();
-        wmParams.type=WindowManager.LayoutParams.TYPE_PHONE;   //设置window type
-        wmParams.format=PixelFormat.RGBA_8888;   //设置图片格式，效果为背景透明
+	TimerTask task = new TimerTask()
+	{
+		public void run()
+		{
+			FloatViewHandler.post(mFloatViewRuner);
+		}
+	};
 
-        //设置Window flag
-        wmParams.flags=WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
-                              | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
-        wmParams.gravity=Gravity.LEFT|Gravity.TOP;   //调整悬浮窗口至左下角
-        //以屏幕左上角为原点，设置x、y初始值
+	private void createFloatView()
+	{
+		myFV = new FloatView(getApplicationContext());
+		// myFV.setImageResource(tw.mobage.g23000052.R.drawable.icon);
+		myFV.setBackgroundResource(tw.mobage.g23000052.R.drawable.icon);
+		// 获取WindowManager
+		wm = (WindowManager) getApplicationContext().getSystemService("window");
+		// 设置LayoutParams(全局变量）相关参数
+		wmParams = getMywmParams();
+		wmParams.type = WindowManager.LayoutParams.TYPE_PHONE; // 设置window type
+		wmParams.format = PixelFormat.RGBA_8888; // 设置图片格式，效果为背景透明
+
+		// 设置Window flag
+		wmParams.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+				| WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
+		wmParams.gravity = Gravity.LEFT | Gravity.TOP; // 调整悬浮窗口至左下角
+		// 以屏幕左上角为原点，设置x、y初始值
 
 		DisplayMetrics dm = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(dm);
-        wmParams.x=0;
-        wmParams.y=dm.heightPixels-10;
-        
-        //设置悬浮窗口长宽数据,等宽高
+		wmParams.x = 0;
+		wmParams.y = dm.heightPixels - 10;
+
+		// 设置悬浮窗口长宽数据,等宽高
 		Float sizex = 30 * s_fScaleY;
 		Float sizey = 30 * s_fScaleY;
-        wmParams.width=sizex.intValue();
-        wmParams.height=sizey.intValue();
-    
-        //显示FloatView图像
-        wm.addView(myFV, wmParams);
-        timer.schedule(task, 0, 50);
-    }
-    	  
+		wmParams.width = sizex.intValue();
+		wmParams.height = sizey.intValue();
+
+		// 显示FloatView图像
+		wm.addView(myFV, wmParams);
+		timer.schedule(task, 0, 50);
+	}
+
 	// 是否古老系统
 	public static int isVerOlder(int n)
 	{
@@ -909,6 +996,6 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	private static native void onLoginComplete(int userid, String DeviceToken);
 
 	private static native void onLoginError(String error);
-	
+
 	private static native void onLogout();
 }

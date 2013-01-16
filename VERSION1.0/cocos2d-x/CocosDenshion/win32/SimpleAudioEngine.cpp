@@ -249,6 +249,21 @@ void SimpleAudioEngine::setEffectsVolume(float volume)
 {
 }
 
+void SimpleAudioEngine::setMusicStream( bool bMusicStream )
+{
+
+}
+
+void SimpleAudioEngine::raiseMusicStream()
+{
+
+}
+
+void SimpleAudioEngine::lowerMusicStream()
+{
+
+}
+
 //////////////////////////////////////////////////////////////////////////
 // static function
 //////////////////////////////////////////////////////////////////////////

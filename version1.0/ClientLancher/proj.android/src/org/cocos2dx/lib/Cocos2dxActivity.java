@@ -82,7 +82,6 @@ public abstract class Cocos2dxActivity extends Activity implements
 		this.init();
 
 		Cocos2dxHelper.init(this, this);
-		TextView textView = new TextView(this);
 	}
 
 	// ===========================================================

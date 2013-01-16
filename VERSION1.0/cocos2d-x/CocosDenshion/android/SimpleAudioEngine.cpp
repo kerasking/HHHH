@@ -32,7 +32,9 @@ THE SOFTWARE.
 #include <jni.h>
 
 #define  I9100_MODEL "GT-I9100"
-#define  LOG_TAG     "Device Model"
+#define  LT26i_MODEL "LT26i"
+#define  LT26ii_MODEL "LT26ii"
+#define  LOG_TAG     "DaHuaLongJiang"
 #define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
 
 static bool s_bI9100 = false;
@@ -147,6 +149,8 @@ static SimpleAudioEngine *s_pEngine = 0;
 
 SimpleAudioEngine::SimpleAudioEngine()
 {
+	LOGD("Entry SimpleAudioEngine");
+
 	JniMethodInfo methodInfo;
 	jstring jstr;
 	if (getStaticMethodInfo(methodInfo, METHOD_NAME, "()Ljava/lang/String;"))
@@ -157,9 +161,11 @@ SimpleAudioEngine::SimpleAudioEngine()
 	
 	const char* deviceModel = methodInfo.env->GetStringUTFChars(jstr, NULL);
 
-	LOGD(deviceModel);
+	LOGD("Current device is %s:",deviceModel);
 
-	if (strcmp(I9100_MODEL, deviceModel) == 0)
+	if (strcmp(I9100_MODEL, deviceModel) == 0 ||
+		strcmp(LT26i_MODEL, deviceModel) == 0 ||
+		strcmp(LT26ii_MODEL, deviceModel) == 0)
 	{
 		LOGD("i9100 model\nSwitch to OpenSLES");
 		s_bI9100 = true;
@@ -247,6 +253,49 @@ float SimpleAudioEngine::getBackgroundMusicVolume()
 void SimpleAudioEngine::setBackgroundMusicVolume(float volume)
 {
     setBackgroundMusicVolumeJNI(volume);
+}
+
+void SimpleAudioEngine::setMusicStream( bool bMusicStream )
+{
+// 	JniMethodInfo methodInfo;
+// 	jboolean ret = bMusicStream;
+// 
+// 	if (JniHelper::getStaticMethodInfo(methodInfo,
+// 		"org/DeNA/DHLJ/DaHuaLongJiang","isBackgroundMusicPlaying", "(Z)V"))
+// 	{
+// 		methodInfo.env->CallStaticBooleanMethod(methodInfo.classID, methodInfo.methodID,ret);
+// 		methodInfo.env->DeleteLocalRef(methodInfo.classID);
+// 	}
+}
+
+void SimpleAudioEngine::raiseMusicStream()
+{
+// 	JniMethodInfo t;
+// 
+// 	if (JniHelper::getStaticMethodInfo(t
+// 		, "org/DeNA/DHLJ/DaHuaLongJiang"
+// 		, "raiseMusicStream"
+// 		, "()V"))
+// 
+// 	{
+// 		t.env->CallStaticObjectMethod(t.classID, t.methodID);
+// 		t.env->DeleteLocalRef(t.classID);
+// 	}
+}
+
+void SimpleAudioEngine::lowerMusicStream()
+{
+// 	JniMethodInfo t;
+// 
+// 	if (JniHelper::getStaticMethodInfo(t
+// 		, "org/DeNA/DHLJ/DaHuaLongJiang"
+// 		, "lowerMusicStream"
+// 		, "()V"))
+// 
+// 	{
+// 		t.env->CallStaticObjectMethod(t.classID, t.methodID);
+// 		t.env->DeleteLocalRef(t.classID);
+// 	}
 }
 
 float SimpleAudioEngine::getEffectsVolume()
