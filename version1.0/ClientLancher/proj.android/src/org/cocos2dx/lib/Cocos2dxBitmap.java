@@ -117,7 +117,7 @@ public class Cocos2dxBitmap {
 		Cocos2dxBitmap.initNativeObject(bitmap);
 	}
 
-	private static Paint newPaint(final String pFontName, final int pFontSize, final int pHorizontalAlignment) {
+	public static Paint newPaint(final String pFontName, final int pFontSize, final int pHorizontalAlignment) {
 		final Paint paint = new Paint();
 		paint.setColor(Color.WHITE);
 		paint.setTextSize(pFontSize);
