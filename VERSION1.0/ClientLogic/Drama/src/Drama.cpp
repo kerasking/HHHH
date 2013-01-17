@@ -9,6 +9,7 @@
 
 #include "Drama.h"
 #include "ObjectTracker.h"
+#include "ScriptGameData_New.h"
 
 #define TAG_DRAMA_UPDATE (1)
 
@@ -33,7 +34,7 @@ void Drama::Start()
 
 void Drama::AddCommond(DramaCommandBase* command)
 {
-	m_queueCommond.push_back(command);
+	m_kQueueCommond.push_back(command);
 }
 
 void Drama::QuitGame()
@@ -51,17 +52,17 @@ void Drama::End()
 
 void Drama::StartUpdate()
 {
-	m_timer.SetTimer(this, TAG_DRAMA_UPDATE, 0.04f);
+	m_kTimer.SetTimer(this, TAG_DRAMA_UPDATE, 0.04f);
 }
 
 void Drama::EndUpdate()
 {
-	m_timer.KillTimer(this, TAG_DRAMA_UPDATE);
+	m_kTimer.KillTimer(this, TAG_DRAMA_UPDATE);
 }
 
 void Drama::Update()
 {
-	if (m_queueCommondExcute.empty())
+	if (m_kQueueCommondExcute.empty())
 	{
 		if (!FillExcuteQueue())
 		{
@@ -70,33 +71,33 @@ void Drama::Update()
 		}
 	}
 
-	if (m_queueCommondExcute.empty())
+	if (m_kQueueCommondExcute.empty())
 	{
 		End();
 		return;
 	}
 
 	bool bFinish = true;
-	for (COMMANDQUE_IT it = m_queueCommondExcute.begin();
-			it != m_queueCommondExcute.end();)
+	for (COMMANDQUE_IT it = m_kQueueCommondExcute.begin();
+			it != m_kQueueCommondExcute.end();)
 	{
-		DramaCommandBase* command = *it;
-		if (!command)
+		DramaCommandBase* pkCommand = *it;
+		if (!pkCommand)
 		{
 			continue;
 		}
 
-		command->SetPreCommandsFinish(bFinish);
-		command->excute();
-		if (!command->IsFinish() && bFinish)
+		pkCommand->SetPreCommandsFinish(bFinish);
+		pkCommand->excute();
+		if (!pkCommand->IsFinish() && bFinish)
 		{
 			bFinish = false;
 		}
 
-		if (command->IsFinish())
+		if (pkCommand->IsFinish())
 		{
-			delete command;
-			it = m_queueCommondExcute.erase(it);
+			SAFE_DELETE(pkCommand);
+			it = m_kQueueCommondExcute.erase(it);
 		}
 		else
 		{
@@ -122,17 +123,17 @@ void Drama::OnTimer(OBJID tag)
 
 bool Drama::FillExcuteQueue()
 {
-	if (m_queueCommond.empty())
+	if (m_kQueueCommond.empty())
 	{
 		return false;
 	}
 
 	DramaCommandBase* command = NULL;
 
-	while (0 < m_queueCommond.size() && (command = m_queueCommond.front()))
+	while (0 < m_kQueueCommond.size() && (command = m_kQueueCommond.front()))
 	{
-		m_queueCommondExcute.push_back(command);
-		m_queueCommond.pop_front();
+		m_kQueueCommondExcute.push_back(command);
+		m_kQueueCommond.pop_front();
 
 		if (!command->CanExcuteNextCommand())
 		{
@@ -147,25 +148,25 @@ bool Drama::ReleaseQueue(bool bExcute)
 {
 	if (bExcute)
 	{
-		for (COMMANDQUE_IT it = m_queueCommondExcute.begin();
-				it != m_queueCommondExcute.end(); it++)
+		for (COMMANDQUE_IT it = m_kQueueCommondExcute.begin();
+				it != m_kQueueCommondExcute.end(); it++)
 		{
 			DramaCommandBase* command = *it;
 			delete command;
 		}
 
-		m_queueCommondExcute.clear();
+		m_kQueueCommondExcute.clear();
 	}
 	else
 	{
-		for (COMMANDQUE_IT it = m_queueCommond.begin();
-				it != m_queueCommond.end(); it++)
+		for (COMMANDQUE_IT it = m_kQueueCommond.begin();
+				it != m_kQueueCommond.end(); it++)
 		{
 			DramaCommandBase* command = *it;
 			delete command;
 		}
 
-		m_queueCommond.clear();
+		m_kQueueCommond.clear();
 	}
 
 	return true;
