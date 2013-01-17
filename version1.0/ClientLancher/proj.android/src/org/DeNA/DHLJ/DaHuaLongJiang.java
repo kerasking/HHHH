@@ -116,7 +116,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	private static Cocos2dxEditText edittext; // @ime
 	private static Button testbutton;
 	private static ImageView imgSplash;
-	private static TextView  tv=null;
+	private static TextView tv = null;
 	private static String textString;
 
 	private WindowManager wm = null;
@@ -136,21 +136,27 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	{
 		public void run()
 		{
-			if(tv != null)
+			if (tv != null)
 			{
 				DisplayMetrics dm = new DisplayMetrics();
 				ms_pkDHLJ.getWindowManager().getDefaultDisplay().getMetrics(dm);
 
 				int pFontSize = 16;
 
-		        int kAlignCenter        = 0x33; ///< Horizontal center and vertical center.
-		        int kAlignLeft          = 0x31; ///< Horizontal left and vertical center
-				final Paint paint = Cocos2dxBitmap.newPaint("Arial-BoldMT", pFontSize, kAlignLeft);
-				float nTextWidth = FloatMath.ceil(paint.measureText(textString));
+				int kAlignCenter = 0x33; // /< Horizontal center and vertical
+											// center.
+				int kAlignLeft = 0x31; // /< Horizontal left and vertical center
+				final Paint paint = Cocos2dxBitmap.newPaint("Arial-BoldMT",
+						pFontSize, kAlignLeft);
+				float nTextWidth = FloatMath
+						.ceil(paint.measureText(textString));
 				Float TextWidth = nTextWidth * dm.scaledDensity;
-				LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT);
-				layoutParams.leftMargin = (dm.widthPixels-TextWidth.intValue())/2;
-				layoutParams.topMargin = dm.heightPixels*7/8;
+				LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+						ViewGroup.LayoutParams.FILL_PARENT,
+						ViewGroup.LayoutParams.FILL_PARENT);
+				layoutParams.leftMargin = (dm.widthPixels - TextWidth
+						.intValue()) / 2;
+				layoutParams.topMargin = dm.heightPixels * 7 / 8;
 				layoutParams.width = dm.widthPixels;
 				layoutParams.height = 100;
 				tv.setText(textString);
@@ -158,14 +164,14 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 			}
 		};
 	};
-	
+
 	private static Handler clearSplashHandler = new Handler();
 	private static Runnable mClearSplash = new Runnable()
 	{
 		public void run()
 		{
 			View rootView = ms_pkDHLJ.getView();
-			if(tv != null && s_TextViewlayout != null && menubar != null)
+			if (tv != null && s_TextViewlayout != null && menubar != null)
 			{
 				rootView.setBackgroundResource(0);
 				s_TextViewlayout.removeView(tv);
@@ -242,7 +248,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 
 	protected void onCreate(Bundle savedInstanceState)
 	{
-		Log.d( "init", "@@ DaHuaLongJiang.onCreate()" );
+		Log.d("init", "@@ DaHuaLongJiang.onCreate()");
 
 		if (isSDCardCanUse())
 		{
@@ -350,7 +356,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		super.onDestroy();
 		Mobage.onStop();
 
-		if(myFV != null)
+		if (myFV != null)
 		{
 			wm.removeView(myFV);
 		}
@@ -371,11 +377,15 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	{
 		super.onConfigurationChanged(newConfig);
 	}
-	public static void drawText(int nProcess )
+
+	public static void drawText(int nProcess)
 	{
-		textString = ms_pkDHLJ.getResources().getString(R.string.unzip_text_firstrun) + String.valueOf(nProcess) + "%...";
+		textString = ms_pkDHLJ.getResources().getString(
+				R.string.unzip_text_firstrun)
+				+ String.valueOf(nProcess) + "%...";
 		UpdateTextHandler.post(mUpdateText);
 	}
+
 	public void setMain()
 	{
 		Log.d(TAG, "@@ DaHuaLongJiang::setMain()");
@@ -401,7 +411,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 
 		// add splash image (fullscreen)
 		showSplash(1);
-		
+
 		s_balancelayout = new LinearLayout(s_context);
 		s_balancelayout.setOrientation(LinearLayout.VERTICAL);
 
@@ -439,79 +449,52 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		menubar.setMenubarVisibility(View.VISIBLE);
 	}
 
-	//@init: not used.
+	// @init: not used.
 	private static Handler imsgSplashHandler = new Handler();
-	public static void showSplash( int flag )
+
+	public static void showSplash(int flag)
 	{
-/*	
-		if (true) return;
-		Log.d("init", "@@ dhlj, showSplash(), flag:" + flag);
-		
-		if (flag != 0)
-		{			
-			if (true)
-			{
-				//filled with splash image
-				imgSplash = new ImageView( ms_pkDHLJ );
-				String fileName = "/sdcard/dhlj/SimplifiedChineseRes/res/image00/Res00/Load/Unzipping.png"; 
-				Bitmap bmp = BitmapFactory.decodeFile(fileName);
-				
-				if (bmp != null)
-				{
-					Log.d("init", "@@ dhlj, showSplash(), load img ok" );
-				
-					ViewGroup.LayoutParams param = new ViewGroup.LayoutParams(
-							ViewGroup.LayoutParams.FILL_PARENT,
-							ViewGroup.LayoutParams.FILL_PARENT);
-					
-					imgSplash.setImageBitmap(bmp);
-					imgSplash.setScaleType(ImageView.ScaleType.FIT_XY);
-					imgSplash.setLayoutParams(param);
-					menubar.addView(imgSplash);
-					//imgSplash.bringToFront();
-				}
-				else
-				{
-					Log.d("init", "@@ dhlj, showSplash(), load img failed" );
-				}
-			}
-			else
-			{
-				//filled with back ground color (white)
-				imgSplash = new ImageView( ms_pkDHLJ );
-				imgSplash.setBackgroundColor(Color.WHITE);
-				menubar.addView(imgSplash);				
-			}
-		}
-		else
-		{
-			if (imgSplash != null)
-			{
-				Log.d("init", "@@ dhlj, showSplash(), hide it!");
-				
-				//ms_pkDHLJ.getView().bringToFront();
-				//bringLayoutToFront();
-				
-				// without the post method, the main UI crashes if the view is removed 
-		        imsgSplashHandler.post(new Runnable(){
-					public void run(){
-    					FrameLayout parent = (FrameLayout) imgSplash.getParent();
-    					if (parent != null)
-    					{
-    						//parent.removeView(imgSplash);
-    						//menubar.removeView(parent);
-							imgSplash.setVisibility(View.INVISIBLE);
-    					}
-					}
-				});
-			}
-		}
-*/
+		/*
+		 * if (true) return; Log.d("init", "@@ dhlj, showSplash(), flag:" +
+		 * flag);
+		 * 
+		 * if (flag != 0) { if (true) { //filled with splash image imgSplash =
+		 * new ImageView( ms_pkDHLJ ); String fileName =
+		 * "/sdcard/dhlj/SimplifiedChineseRes/res/image00/Res00/Load/Unzipping.png"
+		 * ; Bitmap bmp = BitmapFactory.decodeFile(fileName);
+		 * 
+		 * if (bmp != null) { Log.d("init", "@@ dhlj, showSplash(), load img ok"
+		 * );
+		 * 
+		 * ViewGroup.LayoutParams param = new ViewGroup.LayoutParams(
+		 * ViewGroup.LayoutParams.FILL_PARENT,
+		 * ViewGroup.LayoutParams.FILL_PARENT);
+		 * 
+		 * imgSplash.setImageBitmap(bmp);
+		 * imgSplash.setScaleType(ImageView.ScaleType.FIT_XY);
+		 * imgSplash.setLayoutParams(param); menubar.addView(imgSplash);
+		 * //imgSplash.bringToFront(); } else { Log.d("init",
+		 * "@@ dhlj, showSplash(), load img failed" ); } } else { //filled with
+		 * back ground color (white) imgSplash = new ImageView( ms_pkDHLJ );
+		 * imgSplash.setBackgroundColor(Color.WHITE);
+		 * menubar.addView(imgSplash); } } else { if (imgSplash != null) {
+		 * Log.d("init", "@@ dhlj, showSplash(), hide it!");
+		 * 
+		 * //ms_pkDHLJ.getView().bringToFront(); //bringLayoutToFront();
+		 * 
+		 * // without the post method, the main UI crashes if the view is
+		 * removed imsgSplashHandler.post(new Runnable(){ public void run(){
+		 * FrameLayout parent = (FrameLayout) imgSplash.getParent(); if (parent
+		 * != null) { //parent.removeView(imgSplash);
+		 * //menubar.removeView(parent);
+		 * imgSplash.setVisibility(View.INVISIBLE); } } }); } }
+		 */
 	}
-	public static void clearSplash( )
+
+	public static void clearSplash()
 	{
 		clearSplashHandler.post(mClearSplash);
-	}	
+	}
 
 	private static void dump_menubar()
 	{
@@ -619,13 +602,12 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 			{
 				// bring editView to top
 				menubar.bringChildToFront(edittext);
-				//bringLayoutToFront();
-			}
-			else
+				// bringLayoutToFront();
+			} else
 			{
 				// bring surface view to top
 				menubar.bringChildToFront(getView());
-				//menubar.bringToFront();
+				// menubar.bringToFront();
 				bringLayoutToFront();
 				menubar.postInvalidate();
 				dump_menubar();
@@ -635,24 +617,24 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 
 	private static void bringLayoutToFront()
 	{
-		Log.d("test","@@ bringLayoutToFront()");
-		
-		ArrayList<View> viewList = new ArrayList<View>(); 
-				
+		Log.d("test", "@@ bringLayoutToFront()");
+
+		ArrayList<View> viewList = new ArrayList<View>();
+
 		int n = menubar.getChildCount();
 		for (int i = 0; i < n; i++)
 		{
 			View v = menubar.getChildAt(i);
-			if ((v.toString().indexOf("LinearLayout") != -1) ||
-				(v.toString().indexOf("RelativeLayout") != -1))
+			if ((v.toString().indexOf("LinearLayout") != -1)
+					|| (v.toString().indexOf("RelativeLayout") != -1))
 			{
 				viewList.add(v);
 			}
 		}
-		
+
 		for (int i = 0; i < viewList.size(); i++)
 		{
-			menubar.bringChildToFront( (View)viewList.get(i));
+			menubar.bringChildToFront((View) viewList.get(i));
 		}
 	}
 
@@ -676,7 +658,6 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		s_fScaleX = 2.0f * dm.widthPixels / 960.0f;
 		s_fScaleY = 2.0f * dm.heightPixels / 640.0f;
 	}
-	
 
 	private void addTextView()
 	{
@@ -684,17 +665,18 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 
 		s_TextViewlayout = new LinearLayout(s_context);
 		s_TextViewlayout.setOrientation(LinearLayout.VERTICAL);
-		textString = ms_pkDHLJ.getResources().getString(R.string.unzip_text) + "...";
+		textString = ms_pkDHLJ.getResources().getString(R.string.unzip_text)
+				+ "...";
 
 		int pFontSize = 16;
 
-        tv = new TextView(this);
-        tv.setText(textString);
-        tv.setTextSize(pFontSize);
-        tv.setTextColor(Color.BLACK);
-        s_TextViewlayout.addView(tv);
-        menubar.addView(s_TextViewlayout);
-        
+		tv = new TextView(this);
+		tv.setText(textString);
+		tv.setTextSize(pFontSize);
+		tv.setTextColor(Color.BLACK);
+		s_TextViewlayout.addView(tv);
+		menubar.addView(s_TextViewlayout);
+
 		UpdateTextHandler.post(mUpdateText);
 	}
 
@@ -734,22 +716,6 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 			JSONObject kJsonObject;
 			kJsonObject = new JSONObject(strReadBuffer.toString());
 			strRet = kJsonObject.getString(strTextName);
-			// JSONArray provinces = jsonObject.getJSONArray("provinces");
-			// String name = null;
-			// StringBuffer jsonFileInfo = new StringBuffer();
-			// JSONArray citys = null;
-			// for (int i = 0; i < provinces.length(); i++)
-			// {
-			// name = provinces.getJSONObject(i).getString("name");
-			// jsonFileInfo.append("/nname:" + name + "/n" + "citys:");
-			// citys = provinces.getJSONObject(i).getJSONArray("citys");
-			// for (int j = 0; j < citys.length(); j++)
-			// {
-			// jsonFileInfo.append(citys.getString(j) + "/t");
-			// }
-			// }
-			//
-			// System.out.println(jsonFileInfo);
 		} catch (ParseException e)
 		{
 			e.printStackTrace();
