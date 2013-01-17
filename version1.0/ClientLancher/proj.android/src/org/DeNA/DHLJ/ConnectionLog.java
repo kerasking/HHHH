@@ -26,7 +26,7 @@ public class ConnectionLog
 	  throws IOException
 	{
 		File sdcard = Environment.getExternalStorageDirectory();
-        File logDir = new File(sdcard, "DHLJ/log/");
+        File logDir = new File(sdcard, "dhlj/log/");
         if (!logDir.exists()) {
         	logDir.mkdirs();
         	// do not allow media scan

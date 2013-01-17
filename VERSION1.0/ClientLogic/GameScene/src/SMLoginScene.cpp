@@ -34,6 +34,9 @@
 #include "UsePointPls.h"
 #include "StringConvert.h"
 #include "NDJsonReader.h"
+#include "../CocosDenshion/include/SimpleAudioEngine.h"
+
+using namespace CocosDenshion;
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #include <jni.h>
@@ -54,8 +57,8 @@
 
 #define UPDATE_TIP_TEXT_ANDROID 0x7f080039	///< 安卓解壓介面提示文字，對應安卓String.xml里的unzip_text 郭浩
 
-#define UPDATE_ON		1	//0关闭下载，1开启下载
-#define CACHE_MODE 		1  //发布模式//0关闭拷贝；1开启将资源拷贝至cache目录来访问
+#define UPDATE_ON		0	//0关闭下载，1开启下载
+#define CACHE_MODE 		0  //发布模式//0关闭拷贝；1开启将资源拷贝至cache目录来访问
 //--------------------//
 
 #define TAG_INSTALL_SUCCESS			1
@@ -134,7 +137,10 @@ CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
 		{
 			pkScene->setIsLoadLocalString(true);
 		}
-
+		SimpleAudioEngine::sharedEngine()->setMusicStream(true);
+		SimpleAudioEngine::sharedEngine()->raiseMusicStream();
+        
+#if (CC_TARGET_PLATFORM != CC_PLATFORM_ANDROID)
 		CCSize kWinSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 
 		NDUILayer* pkLayer = new NDUILayer();
@@ -147,8 +153,6 @@ CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
 		NDPicturePool& kPool = *(NDPicturePool::DefaultPool());
 		NDUIImage* pkBackgroundImage = new NDUIImage;
 
-		string strText = CONVERT_GBK_TO_UTF8("正在準備中……");
-		CCSize kTextSize = getStringSize("正在準備中……", 20 * FONT_SCALE);
 		ccColor4B kColor = {100,100,100,255};
 
 		pkScene->m_pkProgressTextLabel = new NDUILabel();
@@ -162,66 +166,21 @@ CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
 
 		NDUIImage* pkUILoadingImage = 0;
 		NDPicture* pkLoadingPic = 0;
-
-#ifdef USE_MGSDK
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 		NDPicture* pkPicture = kPool.AddPicture( NDPath::GetImgPath("Res00/Load/Unzipping.png") );
-#elif ((CACHE_MODE == 1) && (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID))
-
-		LOGD("Ready to new pkPicture");
-		unsigned char* pszImageBuffer = 0;
-		unsigned long uiLength = 0;
-
-		if (NDBeforeGameMgrObj.CheckFirstTimeRuning())
-		{
-			pszImageBuffer = g_pUtil.GetFileBufferFromSimplifiedChineseResZip(
-				"SimplifiedChineseRes/res/image/Res00/Load/bg_load.png",(unsigned int *)&uiLength);//UnzipLoading.png
-		}
-		else
-		{
-
-			LOGD("%s",CONVERT_GBK_TO_UTF8("準備讀取卡上的預加載圖"));
-			pszImageBuffer = CCFileUtils::sharedFileUtils()->getFileData(
-				"/sdcard/dhlj/SimplifiedChineseRes/res/image/Res00/Load/bg_load.png","rb",&uiLength);
-		}
-
-		if (0 == pszImageBuffer)
-		{
-			LOGERROR("pszImageBuffer == 0");
-		}
-		
-		NDPicture* pkPicture = kPool.AddPicture(uiLength,pszImageBuffer);
-		LOGD("Ready to initialize pkPicture");
-
-		CCImage::changeSystemFont(true);
-
-		pkLayer->AddChild(pkScene->m_pkProgressTextLabel,10,0);
-#else
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 		NDPicture* pkPicture = kPool.AddPicture( NDPath::GetImg00Path("Res00/Load/Unzipping.png") );
 #endif
-
-		if (pkPicture) 
+		if (pkPicture)
 		{
 			pkBackgroundImage->SetPicture(pkPicture, true);
-			
-#if 0 //大图才用，已经改成黑色地图了，暂时不需要
-			CCSize kPictureSize = pkPicture->GetSize();
-			CCDirector::sharedDirector()->setGLDefaultValues(1.0f,1.0f,1.0f);
-
-			float fScalePic = kPictureSize.width / kPictureSize.height;
-			float fHeight = 0.0f;
-			float fWidth = 0.0f;
-
-			fHeight = kWinSize.height * 1.2f;
-			fWidth = fHeight * fScalePic;
-
-			pkBackgroundImage->SetFrameRect(CCRectMake(kWinSize.width / 2.0f - fWidth / 2.0f,
-				(kWinSize.height - fHeight) / 2.0f, fWidth, fHeight));
-#else
-			CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
-			pkBackgroundImage->SetFrameRect( CCRectMake(0, 0, winSize.width, winSize.height ));
+        }
+        
+        CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
+        pkBackgroundImage->SetFrameRect( CCRectMake(0, 0, winSize.width, winSize.height ));
+        
+        pkLayer->AddChild(pkBackgroundImage);
 #endif
-			pkLayer->AddChild(pkBackgroundImage);
-		}
 
 		CCLog( "@@login01: open CSMLoginScene\r\n" );
 		
@@ -273,6 +232,34 @@ void CSMLoginScene::Initialization(void)
 	//m_resPath = NDPath::GetResPath();
 	PackageCount = 0;
 	m_pTimer = new NDTimer();
+}
+
+void clearSplash()
+{
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    JniMethodInfo t;
+    if (JniHelper::getStaticMethodInfo(t, "org/DeNA/DHLJ/DaHuaLongJiang",
+                                       "clearSplash",
+                                       "()V"))
+    {
+        t.env->CallStaticObjectMethod(t.classID, t.methodID);
+        t.env->DeleteLocalRef(t.classID);
+    }
+#endif
+}
+
+void notifyProcess(int nPercent)
+{
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    JniMethodInfo methodInfo;
+    if (JniHelper::getStaticMethodInfo(methodInfo, "org/DeNA/DHLJ/DaHuaLongJiang", "drawText",
+                                       "(I)V"))
+    {
+        methodInfo.env->CallStaticVoidMethod(methodInfo.classID, methodInfo.methodID, nPercent);
+        
+        methodInfo.env->DeleteLocalRef(methodInfo.classID);
+    }
+#endif
 }
 
 //===========================================================================
@@ -386,10 +373,15 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 					LOGD("Copy files succeeded!");
 					CCDirector::sharedDirector()->setGLDefaultValues();
 					m_pTimer->KillTimer( this, TAG_TIMER_CHECK_COPY );
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 					m_pkProgressTextLabel->SetVisible(false);
 					NDBeforeGameMgrObj.doNDSdkLogin();
 					ShowWaitingAni();
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) || (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#endif
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+                    notifyProcess(100);
+#endif
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 					usleep(200);
 #endif
 					OnProcessUpdate();
@@ -398,27 +390,25 @@ void CSMLoginScene::OnTimer( OBJID idTag )
             default:
 				{
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-					string strTempText = getTextFromStringXML_JNI(UPDATE_TIP_TEXT_ANDROID);
-					CCString* pstrString = CCString::stringWithFormat("%s%d%%...",strTempText.c_str(),nCopyStatus);
+					CCString* pstrString = NULL;
+                    notifyProcess(nCopyStatus);
 #elif(CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 					CCString* pstrString = CCString::stringWithFormat("解壓資源……已經解壓了%d%%",nCopyStatus);
-#elif(CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-					CCAssert(0);///< 未实现 郭浩
-#endif
 					//string strText = CONVERT_GBK_TO_UTF8(pstrString->getCString());
 					
 					CCSize kTextSize = getStringSize(pstrString->getCString(), 20 * FONT_SCALE);
 					CCSize kWinSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 
-#if 1
  					m_pkProgressTextLabel->SetFrameRect(CCRectMake(kWinSize.width / 2.0f - kTextSize.width / 3.0f,
- 						kWinSize.height - kTextSize.height * 1.1f, kTextSize.width, kTextSize.height));
-#else
-					m_pkProgressTextLabel->SetFrameRect(CCRectMake(0, 0, kWinSize.width, kWinSize.height));
-#endif
-					//LOGD("kTextSize.width is %d,kTextSize.height is %d",(int)kTextSize.width,(int)kTextSize.height);
+                                                                   kWinSize.height - kTextSize.height * 1.1f, kTextSize.width, kTextSize.height));
 
-					m_pkProgressTextLabel->SetText(pstrString->getCString());
+					//LOGD("kTextSize.width is %d,kTextSize.height is %d",(int)kTextSize.width,(int)kTextSize.height);
+                    
+                    if(pstrString)
+                        m_pkProgressTextLabel->SetText(pstrString->getCString());
+#elif(CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+					CCAssert(0);///< 未实现 郭浩
+#endif
 				}
                 break;
         }
@@ -437,10 +427,9 @@ void CSMLoginScene::OnTimer( OBJID idTag )
  		CCLog( "@@login02: to call OnEvent_LoginOKNormal()\r\n" );
 		m_iAccountID = NDBeforeGameMgrObj.GetCurrentUser();
 		OnEvent_LoginOKNormal(m_iAccountID);
+#endif
 
-#else
-
-#ifdef USE_MGSDK
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 		NDUIImage * pImage = (NDUIImage *)m_pLayerUpdate->GetChild( TAG_CTRL_PIC_BG);
 		if ( pImage )
 		{
@@ -448,7 +437,6 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 			pPicture->Initialization( NDPath::GetUIImgPath( SZ_MOBAGE_BG_PNG_PATH ).c_str() );
 			pImage->SetPicture( pPicture, true );
 		}
-#endif
 #endif
 
 #if CACHE_MODE == 1
@@ -1048,9 +1036,14 @@ void CSMLoginScene::StartEntry()
 	//if ( m_iAccountID == 0 )
 	m_iAccountID = ScriptMgrPtr->excuteLuaFuncRetN( "GetAccountID", "Login_ServerUI" );
 #endif
-
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) || (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	m_iAccountID = NDBeforeGameMgrObj.GetCurrentUser();
+#endif
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	m_iAccountID = NDBeforeGameMgrObj.GetCurrentUser();
+    
+    clearSplash();
 #endif
 
 	ScriptMgrPtr->excuteLuaFunc( "ShowUI", "Entry", m_iAccountID );
@@ -1222,6 +1215,8 @@ void CSMLoginScene::OnProcessUpdate()
 
 	LOGD("%s%s:%d",CONVERT_GBK_TO_UTF8("此時更新的IP地址為："),strUpdateURL.c_str(),uiServerPort);
 	CreateUpdateUILayer();
+    
+    clearSplash();
 
 	if ( !strUpdateURL.length() )
 	{

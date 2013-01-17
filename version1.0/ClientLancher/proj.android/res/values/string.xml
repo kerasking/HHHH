@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">大話龍將</string>
-    <string name="unzip_text">首次運行,初始化配置中</string>
+    <string name="unzip_text_firstrun">首次運行,初始化配置中</string>
+    <string name="unzip_text">資源包檢查中</string>
     <string name="dialog_exit_title_text">確認</string>
     <string name="dialog_exit_content_text">確定要退出遊戲嗎？</string>
     <string name="dialog_exit_yes_text">是</string>

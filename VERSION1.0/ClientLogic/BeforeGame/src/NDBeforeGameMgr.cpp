@@ -1643,7 +1643,6 @@ bool NDBeforeGameMgr::SwichKeyToServer(const char* pszIp, int nPort,
 // 	if (!VideoMgrPtr->PlayVideo("/sdcard/dhlj/SimplifiedChineseRes/res/Video/480_0.mp4"))
 // 	{
 // 		LOGD("PlayVideo failed!!");
-// 		int a = 10;
 // 	}
 
 	LOGD("PlayVideo succeeded!!");
