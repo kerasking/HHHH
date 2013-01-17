@@ -286,7 +286,7 @@ public class Cocos2dxBitmap {
 					i = lastIndexOfSpace;
 				} else {
 					/* Should not exceed the width. */
-					if (tempWidth > pMaxWidth && i>1) {//若第一个字都放不了的话，那整行也放不了，直接放吧
+					if (tempWidth > pMaxWidth && ((i-1)>start)) {//若第一个字都放不了的话，那整行也放不了，直接放吧
 						strList.add(pString.substring(start, i - 1));
 						/* Compute from previous char. */
 						--i;
