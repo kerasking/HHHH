@@ -107,10 +107,20 @@ CCPoint ConvertUtil::convertCellToDisplay( const int cellX, const int cellY )
 }
 
 //显示坐标 -> 格子坐标
-CCPoint ConvertUtil::convertDisplayToCell( const CCPoint& display )
+CCPoint ConvertUtil::convertDisplayToCell( const CCPoint& display, bool bAligned /*= false*/ )
 {
-	return ccp( (display.x - DISPLAY_POS_X_OFFSET) / MAP_UNITSIZE_X,
-				(display.y - DISPLAY_POS_Y_OFFSET) / MAP_UNITSIZE_Y);
+	CCPoint cellPos = ccp( 
+		(display.x - DISPLAY_POS_X_OFFSET) / MAP_UNITSIZE_X,
+		(display.y - DISPLAY_POS_Y_OFFSET) / MAP_UNITSIZE_Y);
+
+// #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+// 	if (bAligned)
+// 	{
+// 		cellPos.x = int(cellPos.x + 0.5f);
+// 		cellPos.y = int(cellPos.y + 0.5f);
+// 	}
+// #endif
+	return cellPos;
 }
 
 //格子坐标 -> 屏幕坐标
@@ -159,6 +169,60 @@ CCPoint ConvertUtil::getAndroidScale()
 float ConvertUtil::getIosScale()
 {
 	return NDDirector::DefaultDirector()->getIosScale();
+}
+
+//格子大小是否整除的
+bool ConvertUtil::isCellSizeOK() 
+{
+	return 
+		TAbs(MAP_UNITSIZE_X - int(MAP_UNITSIZE_X)) < 0.0001 &&
+		TAbs(MAP_UNITSIZE_Y - int(MAP_UNITSIZE_Y)) < 0.0001;
+}
+
+//屏幕位置是否对齐
+bool ConvertUtil::isScreenPosAligned( const CCPoint& posScreen ) 
+{
+	if (isCellSizeOK())
+	{
+#if (CC_TARGET_PLATFORM != CC_PLATFORM_ANDROID)
+		if (((int(posScreen.x) % int(MAP_UNITSIZE_X)) == 0) && 
+			((int(posScreen.y) % int(MAP_UNITSIZE_Y)) == 0))
+		{ 
+			return true;
+		}
+#else
+		if (((int(posScreen.x) % int(MAP_UNITSIZE_X)) < 1) &&
+			((int(posScreen.y) % int(MAP_UNITSIZE_Y)) < 1))
+		{ 
+			return true;
+		}
+#endif
+	}
+	else
+	{
+		//这个分支可能出现在android奇异分辨率的情况，如AINOL平板1024*552，一个格子对应的像素不是整数.
+		float xCell = posScreen.x / MAP_UNITSIZE_X;
+		float yCell = posScreen.y / MAP_UNITSIZE_Y;
+
+		const float cellErr = 0.3f; //允许格子误差
+		int xCellRound = int(xCell + 0.5f);
+		int yCellRound = int(yCell + 0.5f);
+		if (TAbs(xCell - xCellRound) < cellErr &&
+			TAbs(yCell - yCellRound) < cellErr)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+//角色位置是否对齐
+bool ConvertUtil::isPlayerPosAligned( const CCPoint& kCurrentPosition )
+{
+	CCPoint screenPos = ccpSub( kCurrentPosition, 
+		ccp(DISPLAY_POS_X_OFFSET,DISPLAY_POS_Y_OFFSET));
+	
+	return isScreenPosAligned(screenPos);
 }
 
 NS_NDENGINE_END
