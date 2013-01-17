@@ -234,6 +234,20 @@ void CSMLoginScene::Initialization(void)
 	m_pTimer = new NDTimer();
 }
 
+void clearSplash()
+{
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    JniMethodInfo t;
+    if (JniHelper::getStaticMethodInfo(t, "org/DeNA/DHLJ/DaHuaLongJiang",
+                                       "clearSplash",
+                                       "()V"))
+    {
+        t.env->CallStaticObjectMethod(t.classID, t.methodID);
+        t.env->DeleteLocalRef(t.classID);
+    }
+#endif
+}
+
 void notifyProcess(int nPercent)
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
@@ -244,17 +258,6 @@ void notifyProcess(int nPercent)
         methodInfo.env->CallStaticVoidMethod(methodInfo.classID, methodInfo.methodID, nPercent);
         
         methodInfo.env->DeleteLocalRef(methodInfo.classID);
-    }
-    if(nPercent >= 100)
-    {
-        JniMethodInfo t;
-        if (JniHelper::getStaticMethodInfo(t, "org/DeNA/DHLJ/DaHuaLongJiang",
-                                           "clearSplash",
-                                           "()V"))
-        {
-            t.env->CallStaticObjectMethod(t.classID, t.methodID);
-            t.env->DeleteLocalRef(t.classID);
-        }
     }
 #endif
 }
@@ -1039,14 +1042,8 @@ void CSMLoginScene::StartEntry()
 #endif
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	m_iAccountID = NDBeforeGameMgrObj.GetCurrentUser();
-    JniMethodInfo t;
-    if (JniHelper::getStaticMethodInfo(t, "org/DeNA/DHLJ/DaHuaLongJiang",
-                                       "clearSplash",
-                                       "()V"))
-    {
-        t.env->CallStaticObjectMethod(t.classID, t.methodID);
-        t.env->DeleteLocalRef(t.classID);
-    }
+    
+    clearSplash();
 #endif
 
 	ScriptMgrPtr->excuteLuaFunc( "ShowUI", "Entry", m_iAccountID );
@@ -1218,6 +1215,8 @@ void CSMLoginScene::OnProcessUpdate()
 
 	LOGD("%s%s:%d",CONVERT_GBK_TO_UTF8("此時更新的IP地址為："),strUpdateURL.c_str(),uiServerPort);
 	CreateUpdateUILayer();
+    
+    clearSplash();
 
 	if ( !strUpdateURL.length() )
 	{
