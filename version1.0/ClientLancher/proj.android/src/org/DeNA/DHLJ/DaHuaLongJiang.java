@@ -233,12 +233,15 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		if (isSDCardCanUse())
 		{
 			ms_pkDHLJ = this;
-			super.onCreate(savedInstanceState);
+			Context context = getApplication().getApplicationContext();
+			s_context = context;
+			mDeviceID = Secure.getString(this.getContentResolver(),
+					Secure.ANDROID_ID);
+			PushService.actionStart(context);
+			
 			Log.e(TAG, "onCreate called");
 
-			Context context = getApplication().getApplicationContext();
 			CookieSyncManager.createInstance(this);
-			s_context = context;
 
 			Mobage.registerMobageResource(this, "tw.mobage.g23000052.R");
 			// RemoteNotificationView.DisableRemoteNotification();
@@ -258,19 +261,15 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 				}
 			});
 
-			nativeInit(480, 320);
-
 			Mobage.checkLoginStatus();
 			Mobage.onCreate();
-
-			mDeviceID = Secure.getString(this.getContentResolver(),
-					Secure.ANDROID_ID);
-			PushService.actionStart(context);
 
 			menubar = new DynamicMenuBar(this);
 			menubar.setMenubarVisibility(View.VISIBLE);
 			menubar.setMenuIconGravity(Gravity.TOP | Gravity.LEFT);
 
+			nativeInit(480, 320);
+			super.onCreate(savedInstanceState);
 			// testbutton = new Button(this);
 			// testbutton.setText("aaaaaaaaa".toCharArray(), 1, 6);
 			// FrameLayout.LayoutParams pkParamsButton = new
@@ -365,31 +364,9 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 				+ String.valueOf(nProcess) + "%...";
 		UpdateTextHandler.post(mUpdateText);
 	}
-
-	public void setMain()
+	
+	public void addBalanceView()
 	{
-		Log.d(TAG, "@@ DaHuaLongJiang::setMain()");
-
-		// remove all views
-		rootView = (View) getView();
-		FrameLayout parent = (FrameLayout) rootView.getParent();
-		if (parent != null)
-		{
-			parent.removeView(rootView);
-		}
-		menubar.removeAllViews();
-
-		// add edit view
-		addEditView();
-
-		// add surface view
-		menubar.addView(rootView);
-
-		addTextView();
-
-		// add splash image (fullscreen)
-		showSplash(1);
-
 		s_balancelayout = new LinearLayout(s_context);
 		s_balancelayout.setOrientation(LinearLayout.VERTICAL);
 
@@ -414,6 +391,33 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 
 		menubar.addView(s_balancelayout);
 		s_balancelayout.setVisibility(View.INVISIBLE);
+	}
+
+	public void setMain()
+	{
+		Log.d(TAG, "@@ DaHuaLongJiang::setMain()");
+
+		// remove all views
+		rootView = (View) getView();
+		FrameLayout parent = (FrameLayout) rootView.getParent();
+		if (parent != null)
+		{
+			parent.removeView(rootView);
+		}
+		menubar.removeAllViews();
+
+		// add edit view
+		addEditView();
+
+		// add surface view
+		menubar.addView(rootView);
+
+		addTextView();
+
+		// add splash image (fullscreen)
+		showSplash(1);
+		
+		addBalanceView();
 
 		// menubar.addView(testbutton);
 
