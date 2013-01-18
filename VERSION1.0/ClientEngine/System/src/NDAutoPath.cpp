@@ -218,7 +218,9 @@ void NDAutoPath::GetPath()
 
 	do
 	{
-		//int iTimes = MAP_UNITSIZE_X / m_nStep;  //@注意：android分辨率奇怪，可能不会整除！
+#if 0
+		int iTimes = MAP_UNITSIZE_X / m_nStep;  //@注意：android分辨率奇怪，可能不会整除！
+#else
 		//modified by ZhangDi
 		float tmpFactor = 1.0*MAP_UNITSIZE_X / m_nStep; //@注意：android分辨率奇怪，可能不会整除！
 		int iTimes = (int)tmpFactor;
@@ -226,6 +228,7 @@ void NDAutoPath::GetPath()
 			iTimes = 1;
 		else if(tmpFactor < 2.0 && tmpFactor > 1.1)  
 			iTimes = 2;
+#endif
 
 		CCPoint kPos;
 		NodeInfo* pkNode = kPath[0];

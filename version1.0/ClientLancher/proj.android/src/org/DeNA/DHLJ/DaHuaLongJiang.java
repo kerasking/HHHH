@@ -194,20 +194,6 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	{
 		public void run()
 		{
-			LinearLayout pkLinearLayout = new LinearLayout(ms_pkDHLJ);
-			pkLinearLayout.addView(m_pkView);
-			pkLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
-			LinearLayout.LayoutParams pkParams = new LinearLayout.LayoutParams(
-					ViewGroup.LayoutParams.FILL_PARENT,
-					ViewGroup.LayoutParams.FILL_PARENT);
-			pkParams.gravity = Gravity.CENTER;
-			ms_pkDHLJ.setContentView(pkLinearLayout, pkParams);
-			m_pkView.setLayoutParams(pkParams);
-			// ms_pkDHLJ.rootView.setVisibility(View.INVISIBLE);
-			// ms_pkDHLJ.balancebutton.setVisibility(View.INVISIBLE);
-			// menubar.setVisibility(View.INVISIBLE);
-			m_pkView.start();
-			m_pkView.setVisibility(View.VISIBLE);
 		};
 	};
 
@@ -215,17 +201,11 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	{
 		public void run()
 		{
-			// ms_pkDHLJ.setMain();
 			ViewGroup.LayoutParams pkParams = new ViewGroup.LayoutParams(
 					ViewGroup.LayoutParams.FILL_PARENT,
 					ViewGroup.LayoutParams.FILL_PARENT);
-			// ms_pkDHLJ.nativeInit(100, 200);
 			ms_pkDHLJ.setContentView(menubar, pkParams);
 			ms_pkDHLJ.rootView.setVisibility(View.VISIBLE);
-			// ms_pkDHLJ.balancebutton.setVisibility(View.INVISIBLE);
-			// menubar.setVisibility(View.INVISIBLE);
-			// m_pkView.start();
-			// m_pkView.setVisibility(View.INVISIBLE);
 		};
 	};
 
@@ -403,8 +383,6 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		addEditView();
 
 		// add surface view
-		m_pkView.setVisibility(View.INVISIBLE);
-		// menubar.addView(m_pkView);
 		menubar.addView(rootView);
 
 		addTextView();
@@ -805,12 +783,8 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		if (playVideoInActivity)
 		{
 			ms_pkDHLJ.startVideoActivity();
-		} else
-		{
-			m_bIsStartingVideo = true;
-			VideoViewHandler.post(mShowVideoView);
 		}
-
+		
 		m_bVideoPlayed = true;
 
 		return 0;
@@ -918,7 +892,6 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	{
 		if (m_bIsStartingVideo)
 		{
-			m_pkView.stopPlayback();
 			continueRootView();
 		}
 

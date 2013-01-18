@@ -2378,6 +2378,8 @@ void NDMapMgr::processDisappear(NDTransData* pkData, int nLength)
 
 void NDMapMgr::processKickBack(NDTransData* pkData, int nLength)
 {
+	CCLog( "@@ !! NDMapMgr::processKickBack() !!\r\n ");
+
 	if (!pkData || nLength == 0)
 		return;
 

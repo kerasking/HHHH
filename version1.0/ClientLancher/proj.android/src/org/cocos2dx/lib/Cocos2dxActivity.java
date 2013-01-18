@@ -62,7 +62,6 @@ public abstract class Cocos2dxActivity extends Activity implements
 
 	public Cocos2dxGLSurfaceView mGLSurfaceView;
 	private Cocos2dxHandler mHandler;
-	public static NDVideoView m_pkView = null;
 
 	public FrameLayout m_pkFrameView = null;
 
@@ -162,25 +161,10 @@ public abstract class Cocos2dxActivity extends Activity implements
 		Log.d("init", "@@ to create Cocos2dxRenderer");
 		mGLSurfaceView.setCocos2dxRenderer(new Cocos2dxRenderer());
 
-		NDVideoControl pkVideoControl = new NDVideoControl(
-				Cocos2dxActivity.this);
-
-		pkVideoControl.setCocos2dxActivity(this);
-		pkVideoControl.hide();
-		//
-		// ViewGroup.LayoutParams tp = new
-		// LinearLayout(this.getApplicationContext());
-		// ViewGroup.LayoutParams pkLayoutParams = new ViewGroup.LayoutParams(
-		// LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
-
-		m_pkView = new NDVideoView(this.getApplicationContext());
-		m_pkView.setVideoPath("/sdcard/dhlj/SimplifiedChineseRes/res/Video/480_0.mp4");
-		m_pkView.setBackgroundColor(0);
-		// m_pkView.setMediaController(pkVideoControl);
-		m_pkView.setOnCompletionListener(pkVideoControl);
-		m_pkView.requestFocus();
-		// m_pkView.start();
-		// setContentView(m_pkView,pkLayoutParams);
+// 		ViewGroup.LayoutParams pkLayoutParams = new ViewGroup.LayoutParams(
+// 				LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+//
+//		 setContentView(mGLSurfaceView,pkLayoutParams);
 	}
 
 	public Cocos2dxGLSurfaceView onCreateView()

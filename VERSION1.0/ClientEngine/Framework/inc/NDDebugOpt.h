@@ -7,6 +7,8 @@
 //	功能：调试开关
 //-------------------------------------------------------------------------
 
+#pragma once
+
 #include "NDObject.h"
 
 NS_NDENGINE_BGN
@@ -45,6 +47,7 @@ class NDDebugOpt : private NDObject
 
 	DECL_STATIC_PROPERTY(bool, bLightEffect,DrawLightEffectEnabled);
 	DECL_STATIC_PROPERTY(bool, bDebugDraw,DrawDebugEnabled);
+	DECL_STATIC_PROPERTY(bool, bTraceClickMap,TraceClickMapEnabled);
 };
 
 NS_NDENGINE_END

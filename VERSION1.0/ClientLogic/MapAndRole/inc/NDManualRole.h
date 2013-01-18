@@ -226,8 +226,15 @@ public:
 	//const NDBattlePet* GetShowPet();
 	void ResetShowPetPosition();
 	void ResetShowPet();
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	int GetPathDir(float oldX, float oldY, float newX, float newY);
+	bool GetXYByDir(float oldX, float oldY, int dir, float& newX, float& newY);
+#else
 	int GetPathDir(int oldX, int oldY, int newX, int newY);
 	bool GetXYByDir(int oldX, int oldY, int dir, int& newX, int& newY);
+#endif
+
 	bool IsDirFaceRight(int nDir);
 	bool AddSMEffect( const std::string& strEffectPath, int nSMEffectAlignment, int nDrawOrder);
 	bool RemoveSMEffect( const std::string& strEffectPath);
