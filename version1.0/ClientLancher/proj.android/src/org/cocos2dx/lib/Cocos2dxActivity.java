@@ -73,7 +73,7 @@ public abstract class Cocos2dxActivity extends Activity implements
 	@Override
 	protected void onCreate(final Bundle savedInstanceState)
 	{
-		Log.d( "init", "@@ Cocos2dxActivity.onCreate()" );
+		Log.d("init", "@@ Cocos2dxActivity.onCreate()");
 
 		super.onCreate(savedInstanceState);
 
@@ -154,12 +154,12 @@ public abstract class Cocos2dxActivity extends Activity implements
 	// ===========================================================
 	public void init()
 	{
-		Log.d( "init", "@@ Cocos2dxActivity.init()" );
+		Log.d("init", "@@ Cocos2dxActivity.init()");
 
 		// Cocos2dxGLSurfaceView
 		this.mGLSurfaceView = this.onCreateView();
 
-		Log.d( "init", "@@ to create Cocos2dxRenderer" );
+		Log.d("init", "@@ to create Cocos2dxRenderer");
 		mGLSurfaceView.setCocos2dxRenderer(new Cocos2dxRenderer());
 
 		NDVideoControl pkVideoControl = new NDVideoControl(
@@ -170,8 +170,8 @@ public abstract class Cocos2dxActivity extends Activity implements
 		//
 		// ViewGroup.LayoutParams tp = new
 		// LinearLayout(this.getApplicationContext());
-// 		ViewGroup.LayoutParams pkLayoutParams = new ViewGroup.LayoutParams(
-// 				LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+		// ViewGroup.LayoutParams pkLayoutParams = new ViewGroup.LayoutParams(
+		// LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
 
 		m_pkView = new NDVideoView(this.getApplicationContext());
 		m_pkView.setVideoPath("/sdcard/dhlj/SimplifiedChineseRes/res/Video/480_0.mp4");

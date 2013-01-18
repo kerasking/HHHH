@@ -716,6 +716,22 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 			JSONObject kJsonObject;
 			kJsonObject = new JSONObject(strReadBuffer.toString());
 			strRet = kJsonObject.getString(strTextName);
+			// JSONArray provinces = jsonObject.getJSONArray("provinces");
+			// String name = null;
+			// StringBuffer jsonFileInfo = new StringBuffer();
+			// JSONArray citys = null;
+			// for (int i = 0; i < provinces.length(); i++)
+			// {
+			// name = provinces.getJSONObject(i).getString("name");
+			// jsonFileInfo.append("/nname:" + name + "/n" + "citys:");
+			// citys = provinces.getJSONObject(i).getJSONArray("citys");
+			// for (int j = 0; j < citys.length(); j++)
+			// {
+			// jsonFileInfo.append(citys.getString(j) + "/t");
+			// }
+			// }
+			//
+			// System.out.println(jsonFileInfo);
 		} catch (ParseException e)
 		{
 			e.printStackTrace();
@@ -803,12 +819,8 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	// @video
 	private void startVideoActivity()
 	{
-		Log.d("video", "@@ startVideoActivity()");
-
 		Intent intent = new Intent(getApplication(), VideoActivity.class);
 		startActivity(intent);
-
-		Log.d("video", "@@ startVideoActivity() -- done");
 	}
 
 	// @video
