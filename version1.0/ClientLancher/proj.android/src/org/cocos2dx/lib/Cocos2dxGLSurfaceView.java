@@ -110,7 +110,11 @@ public class Cocos2dxGLSurfaceView extends GLSurfaceView
 	    bg.setPixel(i, j, 0xFFFFFFFF);
 
 	    Canvas cv = new Canvas( bg );  
-	    Bitmap srcbitmap =  ((BitmapDrawable)srcb).getBitmap(); 
+	    Bitmap srcbitmap0 =  ((BitmapDrawable)srcb).getBitmap(); 
+	    
+	    int size = (int) (dm.scaledDensity*360);
+
+	    Bitmap srcbitmap = Bitmap.createScaledBitmap(srcbitmap0, size, size, true);
 	    
 	    cv.drawBitmap( srcbitmap, (dm.widthPixels-srcbitmap.getWidth())/2, (dm.heightPixels-srcbitmap.getHeight())/2, paint	 );//在 x，y坐标开始画入src  
 
