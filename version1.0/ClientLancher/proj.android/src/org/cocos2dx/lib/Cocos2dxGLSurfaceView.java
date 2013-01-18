@@ -112,7 +112,7 @@ public class Cocos2dxGLSurfaceView extends GLSurfaceView
 	    Canvas cv = new Canvas( bg );  
 	    Bitmap srcbitmap0 =  ((BitmapDrawable)srcb).getBitmap(); 
 	    
-	    int size = (int) (dm.scaledDensity*360);
+	    int size = (int) dm.heightPixels;
 
 	    Bitmap srcbitmap = Bitmap.createScaledBitmap(srcbitmap0, size, size, true);
 	    
