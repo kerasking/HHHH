@@ -316,6 +316,7 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 		if(kDeqUpdateUrl.size() > 0)
 		{
 		    kDeqUpdateUrl.pop_front();
+			m_CurDownNum++;
 		}
 
 		PackageCount++;
@@ -532,6 +533,7 @@ bool CSMLoginScene::StartUpdate()
 	std::string strURL = *kDeqUpdateUrl.begin();
 	m_strUpdateURL	= strURL;
 	m_pTimer->SetTimer( this, TAG_TIMER_UPDATE, 0.5f );	
+	m_CurDownNum = 1;
 	StartDownload();
 	return true;
 }
@@ -637,10 +639,12 @@ void CSMLoginScene::ReflashPercent(int percent, int pos, int filelen )
 	*/ 
 	if ( m_pLabelPromtp )
 	{
+		int iTotalDownNum = kDeqUpdateUrl.size() + m_CurDownNum - 1;
 		std::stringstream str;
 		char buff[10] = {0};
 		sprintf(buff,"%.2f",filelen/(1024*1024.0));
-		str << "("<<buff<< "MB)" << NDCommonCString2(SZ_DOWNLOADING);
+
+		str << "("<<buff<< "MB)" << CCString::stringWithFormat(NDCommonCString2(SZ_DOWNLOADING).c_str(), m_CurDownNum, iTotalDownNum)->getCString();
 
 		m_pLabelPromtp->SetText( str.str().c_str() );
 		m_pLabelPromtp->SetVisible( true );
@@ -967,10 +971,13 @@ void CSMLoginScene::OnEvent_LoginError( int iError )
 void CSMLoginScene::StartDownload()
 {
 	LOGD("Entry StartDownload");
+	
+	//獲取要下載的總的數量
+	int iTotalDownNum = kDeqUpdateUrl.size() + m_CurDownNum - 1;
 
 	if ( m_pLabelPromtp )
 	{
-		m_pLabelPromtp->SetText( NDCommonCString2(SZ_DOWNLOADING).c_str() );
+		m_pLabelPromtp->SetText( CCString::stringWithFormat(NDCommonCString2(SZ_DOWNLOADING).c_str(), m_CurDownNum, iTotalDownNum)->getCString());
 		m_pLabelPromtp->SetVisible( true );
 	}
 	if ( m_pCtrlProgress )

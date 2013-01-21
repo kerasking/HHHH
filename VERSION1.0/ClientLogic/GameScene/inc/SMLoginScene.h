@@ -85,6 +85,7 @@ private:
 public:// twt
     typedef deque<string> DEQSTR;
     DEQSTR kDeqUpdateUrl;
+	 int m_CurDownNum;
     vector<string> split(std::string& src, std::string delimit);
     std::string trim(std::string &s);
 	std::string m_strSavePath;

@@ -89,7 +89,18 @@ using namespace NDEngine;
 
 //--
 #define SZ_VERINI_PATH					"version.ini"//版本文件相对路径/（"SimplifiedChineseRes"目录下）
+
+enum
+{
+	MOBILE_TYPE_NONE = 0,
+	MOBILE_TYPE_IPHONE_APPSTORE_CH = 1,		//IOS简体
+	MOBILE_TYPE_IPHONE_APPSTORE_CHS = 2,	//IOS繁体
+	MOBILE_TYPE_ANDROID_MOBAGE_CH = 3,		//android简体
+	MOBILE_TYPE_ANDROID_MOBAGE_CHS = 4,		//android繁体
+	MOBILE_TYPE_IPHONE_91_CH = 5,			//IOS简体91版
+};
 //资源类型
+#if 0
 enum 
 {
   RES_TYPE_IPHONE	= 1,
@@ -97,8 +108,11 @@ enum
   RES_TYPE_NEWPAD	= 3,
   RES_TYPE_ANDROID	= 4, 
 };
+#endif
 //资源类型开关
-#define RES_TYPE	RES_TYPE_IPHONE;
+#define RES_TYPE	MOBILE_TYPE_ANDROID_MOBAGE_CHS;
+
+
 
 /////////////////////////////////////////////////////////////////////
 // 帐号注册
