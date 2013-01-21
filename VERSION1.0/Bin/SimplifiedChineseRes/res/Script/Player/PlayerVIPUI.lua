@@ -202,7 +202,8 @@ local scene = GetSMGameScene();
 	btn12:EnalbeGray( true );
 	
 
-	
+	local btn111 = RecursiveButton(layer, {89});
+	btn111:SetVisible( false );
 	
 	--local nVIPRank = p.GetPlayerVipRank();
 	local nPlayerId = GetPlayerId();
