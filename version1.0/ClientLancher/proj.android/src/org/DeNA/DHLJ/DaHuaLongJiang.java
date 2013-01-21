@@ -170,6 +170,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	{
 		public void run()
 		{
+			Log.d(TAG, "Clear Splash");
 			View rootView = ms_pkDHLJ.getView();
 			if (tv != null && s_TextViewlayout != null && menubar != null)
 			{

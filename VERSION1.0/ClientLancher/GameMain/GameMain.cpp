@@ -115,7 +115,7 @@ extern "C"
 			LOGD("ready set frame size,w = %d,h = %d",w,h);
 			
 			CCLog( "@@ to create NDGameApplication and run\r\n" );
-			NDSharedPtr<NDGameApplication> spApp = new NDGameApplication;
+			NDGameApplication* spApp = new NDGameApplication;
 			LOGD("Starting CApplication run");
 			CCApplication::sharedApplication()->run();
 		}
