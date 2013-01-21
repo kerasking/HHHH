@@ -241,6 +241,8 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 			PushService.actionStart(context);
 			
 			Log.e(TAG, "onCreate called");
+			nativeInit(480, 320);
+			super.onCreate(savedInstanceState);
 
 			CookieSyncManager.createInstance(this);
 
@@ -250,18 +252,6 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 			mPlatformListener = SocialUtils.createPlatformListener(true);
 			Mobage.addPlatformListener(mPlatformListener);
 
-			RemoteNotification.setListener(new RemoteNotificationListener()
-			{
-				@Override
-				public void handleReceive(Context context, Intent intent)
-				{
-					// You can use static method which performing a notification
-					// in status bar.
-					C2DMBaseReceiver.displayStatusBarNotification(context,
-							intent);
-				}
-			});
-
 			Mobage.checkLoginStatus();
 			Mobage.onCreate();
 
@@ -269,8 +259,6 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 			menubar.setMenubarVisibility(View.VISIBLE);
 			menubar.setMenuIconGravity(Gravity.TOP | Gravity.LEFT);
 
-			nativeInit(480, 320);
-			super.onCreate(savedInstanceState);
 			// testbutton = new Button(this);
 			// testbutton.setText("aaaaaaaaa".toCharArray(), 1, 6);
 			// FrameLayout.LayoutParams pkParamsButton = new
