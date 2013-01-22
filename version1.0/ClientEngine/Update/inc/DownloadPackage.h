@@ -21,7 +21,7 @@ using namespace NDEngine;
 
 bool isWifiNetWork();//判断wifi是否处于工作状态
 KData getHttpProxy();//获取http代理
-
+#define  RECONNECTCOUNT  5;
 typedef enum
 {
 	DownloadStatusResNotFound,	//下载资源不存在
@@ -56,7 +56,8 @@ public:
 	void ToPath(const char* path);
 	//下载操作
 	void Download();
-
+    //获取文件大小
+	int GetFileSize(const char* filepath);
 public:
 
 	int m_nFileLen;

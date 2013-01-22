@@ -112,7 +112,7 @@ void DownloadPackage::DownloadThreadExcute()
  	if (m_strDownloadURL.empty() || m_strDownloadPath.empty()) 
  	{
 		LOGERROR("DownloadStatusFailed!!");
- 		DidDownloadStatus(DownloadStatusFailed);
+ 		DidDownloadStatus(DownloadStatusResNotFound);
  		return;
  	}
 
@@ -131,14 +131,30 @@ void DownloadPackage::DownloadThreadExcute()
  			DidDownloadStatus(DownloadStatusFailed);
  			return;
  		}
- 	}	
- 	
+ 	}		
  	m_pkHttp->setTimeout(60 * 1000);
+	//获取已经下载文件的大小,如果已经存在，则进行续传
+    int startpos = GetFileSize(m_strDownloadPath.c_str());
  	int nDoneLength = m_pkHttp->getHttpFile(m_strDownloadURL.c_str(),
-		m_strDownloadPath.c_str(), 0);
-
+		m_strDownloadPath.c_str(), startpos);
+	//网络连接失败,进行重新连接尝试
+	int nReconnectCount = RECONNECTCOUNT;
+	if (nDoneLength == -1 || ((nDoneLength < m_nFileLen) && (nDoneLength > 0)))
+	{
+		while (nReconnectCount)
+		{
+			nReconnectCount--;
+			sleep(10000);
+			startpos = GetFileSize(m_strDownloadPath.c_str());
+			nDoneLength = m_pkHttp->getHttpFile(m_strDownloadURL.c_str(),
+				m_strDownloadPath.c_str(), startpos);
+			if (nDoneLength >= m_nFileLen)
+			{
+				break;
+			}
+		}
+	}
 	LOGD("Download length is %d,File length is %d",nDoneLength,m_nFileLen);
- 	
  	if (m_pkHttp->getStatusCode() == 404) 
  	{
 		LOGERROR("Download DownloadStatusResNotFound!");
@@ -162,4 +178,16 @@ void DownloadPackage::Download()
 	LOGD("Entry Download");
 	pthread_t kPId = {0};
 	pthread_create(&kPId, NULL, threadExcute, this);	
+}
+
+int DownloadPackage::GetFileSize(const char* filepath)
+{
+	FILE* file = fopen(filepath, "rb");
+	if (file)
+	{
+		int size = filelength(fileno(file));
+		fclose(file);
+		return size;
+	}
+	return 0;
 }
