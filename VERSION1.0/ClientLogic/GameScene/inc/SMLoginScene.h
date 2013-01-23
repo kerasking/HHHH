@@ -94,6 +94,7 @@ public:// twt
     void InitDownload( std::string & szUpdatePath );
     int  PackageCount ;
     bool ReadFile( const char* file, int begin, int end, char* buf );
+	char* GetPathFileName(char* src, char delitmit);
     
 public:
     //++Guosen
