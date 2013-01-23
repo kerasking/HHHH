@@ -513,6 +513,7 @@ private:
 	int m_iCurDlgNpcID;
 	int m_nCampType[CAMP_TYPE_END];
 
+	void getDeviceVersionInfo_JNI();
 public: //½ÇÉ«Ïà¹Ø
 	map_manualrole	m_mapManualRole;
 	monster_info	m_mapMonsterInfo;
