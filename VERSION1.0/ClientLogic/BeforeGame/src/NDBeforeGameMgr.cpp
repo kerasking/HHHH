@@ -428,6 +428,7 @@ NDBeforeGameMgr::NDBeforeGameMgr()
 
 	m_CurrentUser_id = 0;
 	//m_sdkLogin = NULL;
+    m_bLoginTry = false;
 }
 
 NDBeforeGameMgr::~NDBeforeGameMgr()

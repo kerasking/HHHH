@@ -943,12 +943,13 @@ void CSMLoginScene::OnEvent_LoginOKNormal( int iAccountID )
 			pPicture->Initialization( NDPath::GetUIImgPath( str.c_str() ).c_str() );
 			pImage->SetPicture( pPicture, true );
 		}
-}
+    }
 #endif
 	
 #if (UPDATE_ON == 0 && CACHE_MODE == 0)
- 		CloseWaitingAni();
- 		StartEntry();
+    CloseWaitingAni();
+    StartEntry();
+    clearSplash();
 #endif
 #if UPDATE_ON == 1
 #endif
@@ -1062,8 +1063,12 @@ void CSMLoginScene::StartEntry()
 #endif
     
 	CCLog( "@@login041: StartEntry(%u)\r\n" , m_iAccountID);
-    if(m_iAccountID != 0)
+    if(m_iAccountID != 0) {
+        NDBeforeGameMgrObj.SetLoginTry(false);
         ScriptMgrPtr->excuteLuaFunc( "ShowUI", "Entry", m_iAccountID );
+    }
+    else
+        NDBeforeGameMgrObj.SetLoginTry(true);
 	//    ScriptMgrObj.excuteLuaFunc("ProecssLocalNotification", "MsgLoginSuc");
 
 #else //多线程不会有什么好处，反而是崩溃和不稳定，
