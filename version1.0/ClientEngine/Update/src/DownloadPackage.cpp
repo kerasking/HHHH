@@ -16,6 +16,7 @@
 #ifdef ANDROID
 #include <jni.h>
 #include <android/log.h>
+#include <sys/stat.h>
 
 #define  LOG_TAG    "DaHuaLongJiang"
 #define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
@@ -182,12 +183,30 @@ void DownloadPackage::Download()
 
 int DownloadPackage::GetFileSize(const char* filepath)
 {
+	//int size = 0;
+  //  #ifdef WIN32
 	FILE* file = fopen(filepath, "rb");
-	if (file)
+	if(file)
 	{
-		int size = filelength(fileno(file));
+		fseek(file, 0L, SEEK_END);
+		return ftell(file); 
+	}
+	return 0;
+#if 0
+
+ #ifdef WIN32
+if (file)
+	{
+		size = filelength(fileno(file));
 		fclose(file);
 		return size;
 	}
-	return 0;
+	#else
+		struct stat info;  
+		stat(filepath, &info);  
+		size = info.st_size;  
+		return size;
+	#endif
+#endif
+
 }
