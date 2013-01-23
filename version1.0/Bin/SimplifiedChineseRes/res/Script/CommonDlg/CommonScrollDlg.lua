@@ -162,17 +162,24 @@ function p.CreateMsgUI(nIndex)
     local szAniPath = NDPath_GetAnimationPath();
     animate:ChangeSprite(szAniPath.."scroll01.spr");
     
+    local recc = animate:GetFrameRect();
+    LogInfo("rect a.x:[%05f],y:[%05f],w:[%05f],h:[%05f]",recc.origin.x,recc.origin.y,recc.size.w,recc.size.h);
+    
     local winsize = GetWinSize(); 
     
     local svc = RecursiveScrollContainer(layer,{TAG_TXT});
     local rect = svc:GetFrameRect();
-    
+    LogInfo("rect.x:[%05f],y:[%05f],w:[%05f],h:[%05f]",rect.origin.x,rect.origin.y,rect.size.w,rect.size.h);
     
     LogInfo("txtlen:[%d]",string.len(sTip));
     local label = CreateLabel(sTip,CGRectMake(rect.size.w, 0, 14*CoordScaleX*string.len(sTip), rect.size.h),14,sFontColor);
+    LogInfo("label:x[%05f]:y[%05f]:w[%05f]:h:[%05f]",rect.size.w,0,14*CoordScaleX*string.len(sTip),rect.size.h);
     label:SetTextAlignment(UITextAlignment.Left);
     label:SetTag(TAG_SCROLL_TXT);
     svc:AddChild(label);
+    
+    
+    
     
     --设置层的位置
     local rect = animate:GetFrameRect();
