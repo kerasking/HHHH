@@ -47,6 +47,12 @@
 #include "android/jni/Java_org_cocos2dx_lib_Cocos2dxHelper.h"
 #include <jni.h>
 #include <android/log.h>
+#include <stdio.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <dirent.h>
+#include <fcntl.h>
+#include <string.h>
 #define  LOG_TAG    "DaHuaLongJiang"
 #define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
 #define  LOGERROR(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
@@ -2064,6 +2070,41 @@ bool NDBeforeGameMgr::CheckFirstTimeRuning()
 	return bFirstTime;
 }
 
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+static void removefiles(char* fold){
+    DIR *dp;
+    struct dirent *dirp;
+    struct stat statbuf;
+    char c[100]="/0";
+    char *w,*y,*z,*x;
+    int countfold=0;
+    dp=opendir(fold);
+    
+    while((dirp=readdir(dp))!=NULL)
+    {
+        if((strcmp(dirp->d_name,".")!=0) && (strcmp(dirp->d_name,"..")!=0))
+        {
+            strcpy(c,"./");
+            x=strcat(c,fold);
+            w=strcat(x,"/");
+            y=dirp->d_name;
+            z=strcat(w,y);
+            
+            lstat(dirp->d_name,&statbuf);
+            
+            if(S_ISREG(statbuf.st_mode)) remove(z);
+            else if (S_ISLNK(statbuf.st_mode))remove(z); 
+            else if(S_ISDIR(statbuf.st_mode)){
+                if(remove(z)>0); // folder is empty.
+                else removefiles(z);
+            }
+        }
+    }
+    rmdir(fold);
+}
+#endif
+
+
 void* CopyLoginResThread(void* ptr)
 {
 	LOGD("Entry CopyResThread");
@@ -2074,6 +2115,8 @@ void* CopyLoginResThread(void* ptr)
 	pkUnzip->UnZipFile("../SimplifiedChineseRes.zip","dhlj/");
 	NDBeforeGameMgr::ms_nCopyStatus = 1;
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    
+    removefiles("/sdcard/dhlj");
 
 	unsigned char* pszZipData = 0;
 	unsigned long ulZipLength = 0;
