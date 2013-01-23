@@ -28,7 +28,11 @@ public class MainActivity extends Activity {
 	public static void onExit()
 	{
 //		android.os.Process.killProcess(pid);
-		mActivity.finish();
-		System.exit(0);
+		if(mActivity != null) {
+			mActivity.finish();
+			mActivity = null;
+			System.exit(0);
+		}
 	}
+
 }

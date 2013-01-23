@@ -93,6 +93,8 @@ import tw.mobage.g23000052.R;
 import android.widget.ImageView;
 import android.graphics.BitmapFactory;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 
 public class DaHuaLongJiang extends Cocos2dxActivity
 {
@@ -116,7 +118,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 
 	private static Cocos2dxEditText edittext; // @ime
 	private static Button testbutton;
-	private static ImageView imgSplash;
+	private static ImageView imgSplash;	
 	private static TextView tv = null;
 	private static String textString;
 
@@ -171,14 +173,15 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	{
 		public void run()
 		{
-			Log.d(TAG, "Clear Splash");
-			View rootView = ms_pkDHLJ.getView();
 			if (tv != null && s_TextViewlayout != null && menubar != null)
 			{
-				rootView.setBackgroundResource(0);
+				Log.d(TAG, "Clear Splash");
 				s_TextViewlayout.removeView(tv);
 				menubar.removeView(s_TextViewlayout);
 				tv = null;
+			}
+			else {
+				Log.d(TAG, "Clear Splash2");
 			}
 		};
 	};
@@ -240,25 +243,13 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 			mDeviceID = Secure.getString(this.getContentResolver(),
 					Secure.ANDROID_ID);
 			PushService.actionStart(context);
-			
+
+			MobageLogin();
+			addTextView();
+
 			Log.e(TAG, "onCreate called");
 			nativeInit(480, 320);
 			super.onCreate(savedInstanceState);
-
-			CookieSyncManager.createInstance(this);
-
-			Mobage.registerMobageResource(this, "tw.mobage.g23000052.R");
-			// RemoteNotificationView.DisableRemoteNotification();
-			SocialUtils.initializeMobage(this);
-			mPlatformListener = SocialUtils.createPlatformListener(true);
-			Mobage.addPlatformListener(mPlatformListener);
-
-			Mobage.checkLoginStatus();
-			Mobage.onCreate();
-
-			menubar = new DynamicMenuBar(this);
-			menubar.setMenubarVisibility(View.VISIBLE);
-			menubar.setMenuIconGravity(Gravity.TOP | Gravity.LEFT);
 
 			// testbutton = new Button(this);
 			// testbutton.setText("aaaaaaaaa".toCharArray(), 1, 6);
@@ -346,12 +337,30 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	{
 		super.onConfigurationChanged(newConfig);
 	}
+	
+	public void MobageLogin()
+	{
+		CookieSyncManager.createInstance(this);
+
+		Mobage.registerMobageResource(this, "tw.mobage.g23000052.R");
+		// RemoteNotificationView.DisableRemoteNotification();
+		SocialUtils.initializeMobage(this);
+		mPlatformListener = SocialUtils.createPlatformListener(true);
+		Mobage.addPlatformListener(mPlatformListener);
+
+		Mobage.checkLoginStatus();
+		Mobage.onCreate();
+
+		menubar = new DynamicMenuBar(this);
+		menubar.setMenubarVisibility(View.VISIBLE);
+		menubar.setMenuIconGravity(Gravity.TOP | Gravity.LEFT);
+	}
 
 	public static void drawText(int nProcess)
-	{
+	{		
 		textString = ms_pkDHLJ.getResources().getString(
-				R.string.unzip_text_firstrun)
-				+ String.valueOf(nProcess) + "%...";
+			R.string.unzip_text_firstrun)
+			+ String.valueOf(nProcess) + "%...";
 		UpdateTextHandler.post(mUpdateText);
 	}
 	
@@ -382,7 +391,11 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		menubar.addView(s_balancelayout);
 		s_balancelayout.setVisibility(View.INVISIBLE);
 	}
-
+	public void addRootView()
+	{
+		// add surface view
+		menubar.addView(rootView);
+	}
 	public void setMain()
 	{
 		Log.d(TAG, "@@ DaHuaLongJiang::setMain()");
@@ -399,13 +412,9 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		// add edit view
 		addEditView();
 
-		// add surface view
-		menubar.addView(rootView);
-
+		addRootView();
+		
 		addTextView();
-
-		// add splash image (fullscreen)
-		showSplash(1);
 		
 		addBalanceView();
 
@@ -424,43 +433,29 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	// @init: not used.
 	private static Handler imsgSplashHandler = new Handler();
 
-	public static void showSplash(int flag)
+	public void setTextViewBg()
 	{
-		/*
-		 * if (true) return; Log.d("init", "@@ dhlj, showSplash(), flag:" +
-		 * flag);
-		 * 
-		 * if (flag != 0) { if (true) { //filled with splash image imgSplash =
-		 * new ImageView( ms_pkDHLJ ); String fileName =
-		 * "/sdcard/dhlj/SimplifiedChineseRes/res/image00/Res00/Load/Unzipping.png"
-		 * ; Bitmap bmp = BitmapFactory.decodeFile(fileName);
-		 * 
-		 * if (bmp != null) { Log.d("init", "@@ dhlj, showSplash(), load img ok"
-		 * );
-		 * 
-		 * ViewGroup.LayoutParams param = new ViewGroup.LayoutParams(
-		 * ViewGroup.LayoutParams.FILL_PARENT,
-		 * ViewGroup.LayoutParams.FILL_PARENT);
-		 * 
-		 * imgSplash.setImageBitmap(bmp);
-		 * imgSplash.setScaleType(ImageView.ScaleType.FIT_XY);
-		 * imgSplash.setLayoutParams(param); menubar.addView(imgSplash);
-		 * //imgSplash.bringToFront(); } else { Log.d("init",
-		 * "@@ dhlj, showSplash(), load img failed" ); } } else { //filled with
-		 * back ground color (white) imgSplash = new ImageView( ms_pkDHLJ );
-		 * imgSplash.setBackgroundColor(Color.WHITE);
-		 * menubar.addView(imgSplash); } } else { if (imgSplash != null) {
-		 * Log.d("init", "@@ dhlj, showSplash(), hide it!");
-		 * 
-		 * //ms_pkDHLJ.getView().bringToFront(); //bringLayoutToFront();
-		 * 
-		 * // without the post method, the main UI crashes if the view is
-		 * removed imsgSplashHandler.post(new Runnable(){ public void run(){
-		 * FrameLayout parent = (FrameLayout) imgSplash.getParent(); if (parent
-		 * != null) { //parent.removeView(imgSplash);
-		 * //menubar.removeView(parent);
-		 * imgSplash.setVisibility(View.INVISIBLE); } } }); } }
-		 */
+		Drawable srcb=getResources().getDrawable(R.drawable.mobage_splash);
+		
+		DisplayMetrics dm = new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(dm);
+		
+	    Paint paint = new Paint();
+	    Bitmap bg = Bitmap.createBitmap( dm.widthPixels, dm.heightPixels, Bitmap.Config.ARGB_8888 );//创建一个新的和SRC长度宽度一样的位图  
+	    for(int i = 0; i < dm.widthPixels; ++i)
+	    	for(int j = 0; j < dm.heightPixels; ++j)
+	    bg.setPixel(i, j, 0xFFFFFFFF);
+
+	    Canvas cv = new Canvas( bg );  
+	    Bitmap srcbitmap0 =  ((BitmapDrawable)srcb).getBitmap(); 
+	    
+	    int size = (int) dm.heightPixels;
+
+	    Bitmap srcbitmap = Bitmap.createScaledBitmap(srcbitmap0, size, size, true);
+	    
+	    cv.drawBitmap( srcbitmap, (dm.widthPixels-srcbitmap.getWidth())/2, (dm.heightPixels-srcbitmap.getHeight())/2, paint	 );//在 x，y坐标开始画入src  
+
+	    s_TextViewlayout.setBackgroundDrawable(new BitmapDrawable(bg));
 	}
 
 	public static void clearSplash()
@@ -634,19 +629,26 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	private void addTextView()
 	{
 		Log.v(TAG, "begin addTextView");
-
-		s_TextViewlayout = new LinearLayout(s_context);
-		s_TextViewlayout.setOrientation(LinearLayout.VERTICAL);
-		textString = ms_pkDHLJ.getResources().getString(R.string.unzip_text)
+		if(s_TextViewlayout == null) {
+			s_TextViewlayout = new LinearLayout(s_context);
+			s_TextViewlayout.setOrientation(LinearLayout.VERTICAL);
+			textString = ms_pkDHLJ.getResources().getString(R.string.unzip_text)
 				+ "...";
 
-		int pFontSize = 16;
+			int pFontSize = 16;
 
-		tv = new TextView(this);
-		tv.setText(textString);
-		tv.setTextSize(pFontSize);
-		tv.setTextColor(Color.BLACK);
-		s_TextViewlayout.addView(tv);
+			tv = new TextView(this);
+			tv.setText(textString);
+			tv.setTextSize(pFontSize);
+			tv.setTextColor(Color.BLACK);
+			setTextViewBg();
+			s_TextViewlayout.addView(tv);
+		}
+		FrameLayout parent = (FrameLayout) s_TextViewlayout.getParent();
+		if (parent != null)
+		{
+			parent.removeView(s_TextViewlayout);
+		}
 		menubar.addView(s_TextViewlayout);
 
 		UpdateTextHandler.post(mUpdateText);

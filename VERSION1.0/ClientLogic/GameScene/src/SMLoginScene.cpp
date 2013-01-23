@@ -1026,7 +1026,6 @@ void CSMLoginScene::StartEntry()
 {
 	WriteCon( "@@ CSMLoginScene::StartEntry()\r\n" );
 	CCLog( "@@login04: StartEntry()\r\n" );
-
 #if 1
 	if (m_pLabelPromtp)
 	{
@@ -1034,7 +1033,7 @@ void CSMLoginScene::StartEntry()
 		m_pLabelPromtp->SetVisible( true );
 	}
 
-	ShowWaitingAni();
+//	ShowWaitingAni();
 
 	{
 		WriteCon( "@@ NDLocalXmlString::LoadData()...\r\n" );
@@ -1052,7 +1051,6 @@ void CSMLoginScene::StartEntry()
 	CloseUpdateUILayer();
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
-	//if ( m_iAccountID == 0 )
 	m_iAccountID = ScriptMgrPtr->excuteLuaFuncRetN( "GetAccountID", "Login_ServerUI" );
 #endif
     
@@ -1061,11 +1059,11 @@ void CSMLoginScene::StartEntry()
 #endif
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	m_iAccountID = NDBeforeGameMgrObj.GetCurrentUser();
-    
-    clearSplash();
 #endif
-
-	ScriptMgrPtr->excuteLuaFunc( "ShowUI", "Entry", m_iAccountID );
+    
+	CCLog( "@@login041: StartEntry(%u)\r\n" , m_iAccountID);
+    if(m_iAccountID != 0)
+        ScriptMgrPtr->excuteLuaFunc( "ShowUI", "Entry", m_iAccountID );
 	//    ScriptMgrObj.excuteLuaFunc("ProecssLocalNotification", "MsgLoginSuc");
 
 #else //多线程不会有什么好处，反而是崩溃和不稳定，
@@ -1075,13 +1073,15 @@ void CSMLoginScene::StartEntry()
 		m_pLabelPromtp->SetText( NDCommonCString2(SZ_SETUP).c_str() );
 		m_pLabelPromtp->SetVisible( true );
 	}
-	ShowWaitingAni();
+//	ShowWaitingAni();
 	NDLocalXmlString::GetSingleton();
 	ScriptMgrObj;
 	pthread_t pid = {0};
 	pthread_create(&pid, NULL, CSMLoginScene::LoadTextAndLua, (void*)this);	
 #endif
-
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    clearSplash();
+#endif
 	CCLOG( "@@ CSMLoginScene::StartEntry() -- done.\r\n" );
 }
 
