@@ -161,10 +161,10 @@ public abstract class Cocos2dxActivity extends Activity implements
 		Log.d("init", "@@ to create Cocos2dxRenderer");
 		mGLSurfaceView.setCocos2dxRenderer(new Cocos2dxRenderer());
 
- 		ViewGroup.LayoutParams pkLayoutParams = new ViewGroup.LayoutParams(
- 				LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
-
-		 setContentView(mGLSurfaceView,pkLayoutParams);
+// 		ViewGroup.LayoutParams pkLayoutParams = new ViewGroup.LayoutParams(
+// 				LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+//
+//		 setContentView(mGLSurfaceView,pkLayoutParams);
 	}
 
 	public Cocos2dxGLSurfaceView onCreateView()
