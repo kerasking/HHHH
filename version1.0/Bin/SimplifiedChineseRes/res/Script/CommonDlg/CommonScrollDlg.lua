@@ -166,7 +166,14 @@ function p.CreateMsgUI(nIndex)
     
     local svc = RecursiveScrollContainer(layer,{TAG_TXT});
     local rect = svc:GetFrameRect();
+    local r = GetWinSize().w/960.0;
     
+    svc:SetFrameRect(CGRectMake(rect.origin.x,rect.origin.y,rect.size.w*r,rect.size.h));
+    
+    
+    rect = svc:GetFrameRect();
+    
+    LogInfo("chh:x:[%05f],y:[%05f],w:[%05f],h:[%05f]",rect.origin.x,rect.origin.y,rect.size.w,rect.size.h);
     
     LogInfo("txtlen:[%d]",string.len(sTip));
     local label = CreateLabel(sTip,CGRectMake(rect.size.w, 0, 14*CoordScaleX*string.len(sTip), rect.size.h),14,sFontColor);
