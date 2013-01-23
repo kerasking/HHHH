@@ -25,10 +25,11 @@
 #define  LOGD(...) __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
 
 void MobageSdkLoginAndroid::onLoginComplete(int userId) {
-	LOGD("app delegate onLoginComplete userId %d", userId);
+	LOGD("@@login app delegate onLoginComplete userId %d", userId);
 	NDBeforeGameMgr& mgr = NDBeforeGameMgrObj;
 	mgr.SetCurrentUser(userId);
     //ScriptMgrObj.excuteLuaFunc( "SetAccountID", "Login_ServerUI", userId );
+//	ScriptMgrPtr->excuteLuaFunc( "ShowUI", "Entry", userId );
 	LOGD("SetAccountID success!");
 }
 

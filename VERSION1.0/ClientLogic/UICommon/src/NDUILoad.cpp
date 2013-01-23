@@ -166,7 +166,7 @@ bool NDUILoad::LoadAny( const char* uiname, NDUINode *parent,
 		}
 		else
 		{
-			LOGERROR("LoadCtrl( kUIData, i, parent, sizeOffset ) is null");
+			LOGERROR("LoadCtrl( kUIData, i(%d), parent, sizeOffset ) is null", i);
 		}
 	}
 

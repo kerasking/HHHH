@@ -426,6 +426,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\CommonDlg\CommonScrollDlg.lua"
+				>
+			</File>
+			<File
 				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\CommonDlg\define.lua"
 				>
 			</File>

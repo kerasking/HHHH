@@ -597,7 +597,7 @@ unsigned int NDUIScrollViewContainer::WhichViewToScroll()
 	//獲取的移動距離如果小於0，那麼向右移動，索引增加
 	if(iCurMoveDis < 0)
 	{
-		if(abs(iCurMoveDis) > viewrect.size.width/4)
+		if(abs(iCurMoveDis) > viewrect.size.width/6)
 		{
 			iCurShowIndex = iCurShowIndex + 1 > size ? iCurShowIndex : iCurShowIndex + 1;
 		}
@@ -606,7 +606,7 @@ unsigned int NDUIScrollViewContainer::WhichViewToScroll()
 	//獲取的移動距離如果大於0，那麼向左移動，索引減少
 	else if(iCurMoveDis > 0)
 	{
-		if(iCurMoveDis > viewrect.size.width/4)
+		if(iCurMoveDis > viewrect.size.width/6)
 		{
 			iCurShowIndex = iCurShowIndex - 1 < 0 ? iCurShowIndex : iCurShowIndex - 1;
 		}
