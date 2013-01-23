@@ -2070,40 +2070,6 @@ bool NDBeforeGameMgr::CheckFirstTimeRuning()
 	return bFirstTime;
 }
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-static void removefiles(char* fold){
-    DIR *dp;
-    struct dirent *dirp;
-    struct stat statbuf;
-    char c[100]="/0";
-    char *w,*y,*z,*x;
-    int countfold=0;
-    dp=opendir(fold);
-    
-    while((dirp=readdir(dp))!=NULL)
-    {
-        if((strcmp(dirp->d_name,".")!=0) && (strcmp(dirp->d_name,"..")!=0))
-        {
-            strcpy(c,"./");
-            x=strcat(c,fold);
-            w=strcat(x,"/");
-            y=dirp->d_name;
-            z=strcat(w,y);
-            
-            lstat(dirp->d_name,&statbuf);
-            
-            if(S_ISREG(statbuf.st_mode)) remove(z);
-            else if (S_ISLNK(statbuf.st_mode))remove(z); 
-            else if(S_ISDIR(statbuf.st_mode)){
-                if(remove(z)>0); // folder is empty.
-                else removefiles(z);
-            }
-        }
-    }
-    rmdir(fold);
-}
-#endif
-
 
 void* CopyLoginResThread(void* ptr)
 {
@@ -2115,8 +2081,6 @@ void* CopyLoginResThread(void* ptr)
 	pkUnzip->UnZipFile("../SimplifiedChineseRes.zip","dhlj/");
 	NDBeforeGameMgr::ms_nCopyStatus = 1;
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    
-    removefiles("/sdcard/dhlj");
 
 	unsigned char* pszZipData = 0;
 	unsigned long ulZipLength = 0;
@@ -2181,6 +2145,49 @@ void* CopyLoginResThread(void* ptr)
 	return NULL;
 }
 
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+int recursiveDelete(char* dirname) {
+    DIR *dp;
+    struct dirent *ep;
+    
+    char abs_filename[FILENAME_MAX];
+    
+    dp = opendir (dirname);
+    if (dp != NULL)
+    {
+        while (ep = readdir (dp)) {
+            struct stat stFileInfo;
+            
+            snprintf(abs_filename, FILENAME_MAX, "%s/%s", dirname, ep->d_name);
+            
+            if (lstat(abs_filename, &stFileInfo) < 0)
+            {
+                LOGD("xxxxxerror lstat %s", abs_filename);
+            }            
+            if(S_ISDIR(stFileInfo.st_mode)) {
+                if(strcmp(ep->d_name, ".") &&
+                   strcmp(ep->d_name, "..")) {
+                    LOGD("xxxxx%s directory\n",abs_filename);
+                    recursiveDelete(abs_filename);
+                }
+            } else {
+                LOGD("xxxxx%s file\n",abs_filename);
+                remove(abs_filename);
+            }
+        }
+        (void) closedir (dp);
+    }
+    else
+        LOGD("xxxxxCouldn't open the directory");
+    
+    
+    remove(dirname);
+    return 0;
+    
+}
+#endif
+
 void* CopyResThread(void* ptr)
 {
 	LOGD("Entry CopyResThread");
@@ -2192,7 +2199,9 @@ void* CopyResThread(void* ptr)
 	pkUnzip->SetExtStatus(&NDBeforeGameMgr::ms_nCopyStatus);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	//pkUnzip->UnZipFile("assets/SimplifiedChineseRes.zip","/sdcard/dhlj/");
-
+    
+    recursiveDelete("/sdcard/dhlj");
+    
 	unsigned char* pszZipData = 0;
 	unsigned long ulZipLength = 0;
 	string strApkPath = getApkPath();
