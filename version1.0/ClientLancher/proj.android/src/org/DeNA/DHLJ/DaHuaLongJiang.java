@@ -49,6 +49,7 @@ import android.net.ParseException;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.opengl.GLSurfaceView;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -227,10 +228,18 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		};
 	};
 
+	public static String getDeviceVersion()
+	{
+		String strRet = "";
+
+		strRet = Build.MANUFACTURER + "-" + Build.MODEL + "-" + Build.VERSION.RELEASE;
+
+		return strRet;
+	}
+	
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		Log.d("init", "@@ DaHuaLongJiang.onCreate()");
-
 		if (isSDCardCanUse())
 		{
 			ms_pkDHLJ = this;
