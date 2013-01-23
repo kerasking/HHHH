@@ -453,8 +453,12 @@ public class PushService extends Service
 		 n.icon = tw.mobage.g23000052.R.drawable.dhlj_icon;
 		 n.when = System.currentTimeMillis();
 		 Intent intent = new Intent(this, MainActivity.class); 
+		 intent.setAction(ACTION_START);
 		 intent.addCategory(Intent.CATEGORY_LAUNCHER); 
-		 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+	     intent.addFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+	     intent.addFlags(Intent.FLAG_ACTIVITY_PREVIOUS_IS_TOP);
+	     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		 PendingIntent pi = PendingIntent.getActivity(this, 0, intent, 0);
 		 //String text1 = this.changeCharset(text, "UTF-8");
 		 n.setLatestEventInfo(this, getString(R.string.app_name), text, pi);

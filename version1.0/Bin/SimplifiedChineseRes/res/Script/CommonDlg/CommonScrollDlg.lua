@@ -1,6 +1,6 @@
 ---------------------------------------------------
 --描述: 通用对话框
---时间: 2012.9.10
+--时间: 2013.1.22
 --作者: chh
 ---------------------------------------------------
 
@@ -11,22 +11,18 @@
 CommonScrollDlg = {};
 local p = CommonScrollDlg;
 
---提示框大小
-local winsize = GetWinSize();
+
+local TAG_TXT           = 1;    --遮罩层
+local TAG_ANIMATE       = 2;    --动画
+local TAG_SCROLL_TXT	= 113;	--滚动文字
+local nShowCount    = 3;                                --同时能显示font的数量
+local nTimerLoopTime= 1/10;                             --定时器循环时间
 
 p.FontCacheLists    = {};                               --全部缓存未显示公告列表  
+p.FontLists			= {};								--全部正在滚动的公告
 
---{nTag,nIndex,nState}       nIndex:排序放置的位置   nState: 0.正在滚动 1.滚动完成正在播放收起动画
-p.FontLists         = {};                               --全部正在滚动的公告  
-p.TipFontSize       = 18;                               --字体大小
-p.nShowCount        = 3;                                --同时能显示font的数量
-p.nFontHeight       = p.TipFontSize*ScaleFactor;        --字体高度
+p.nTimerTag			= nil;
 
-p.nTimerLoopTime    = 1/10;                             --定时器循环时间
-p.nTimerTag         = nil;
-
-p.TAG_TXT           = 1;    --文本
-p.TAG_ANIMATE       = 2;    --动画
 
 
 -- tTips格式{nTip1,sColor1}
@@ -36,19 +32,74 @@ function p.ShowTipDlg(tTips)
     local scene = GetSMGameScene();
 	if not CheckP(scene) then
 		LogInfo("not CheckP(scene),load CommonScrollDlg.ShowTipsDlg failed!");
-		return 0;
+		return nil;
 	end
     
     table.insert(p.FontCacheLists,tTips);
     
-    --p.CreateMsgUI(1);
-    
     if(p.nTimerTag == nil) then
-        p.nTimerTag	= _G.RegisterTimer(p.OnProcessTextTimer, p.nTimerLoopTime);
+        p.nTimerTag	= _G.RegisterTimer(p.OnProcessTextTimer, nTimerLoopTime);
     end
-    
 end
 
+-----定时器回调-----
+function p.OnProcessTextTimer(nTimeTag)
+    LogInfo("CommonScrollDlg.OnProcessTextTimer");
+    
+    --插入到显示区
+    for i=1,nShowCount do
+        local bIsExists = p.IsExistsIndex(i);
+        if( bIsExists and #p.FontCacheLists>0) then
+            LogInfo("#p.FontCacheLists:[%d],i:[%d]", #p.FontCacheLists,i);
+            
+            --创建tip
+            p.CreateMsgUI(i);
+            return true;
+        end
+    end
+    
+    local scene = GetSMGameScene();
+    for i,v in ipairs(p.FontLists) do
+		local label = RecursiveLabel(scene,{v[1],TAG_TXT,TAG_SCROLL_TXT});
+		if(label) then
+			local rect = label:GetFrameRect();
+			label:SetFrameRect(CGRectMake(rect.origin.x-5*CoordScaleX,rect.origin.y,rect.size.w,rect.size.h));
+			LogInfo("v[3]:[%d]",v[3]);
+			v[3] = v[3] - 1;
+			
+			--改变动画
+            local animate = RecursivUISprite(scene,{v[1],TAG_ANIMATE});
+			if(v[3]==0) then	--播放结束动画
+				local szAniPath = NDPath_GetAnimationPath();
+                animate:ChangeSprite(szAniPath.."scroll02.spr");
+			elseif(v[3] < 0 and animate:IsAnimationComplete()) then	--删除滚动条
+				table.remove(p.FontLists,i);
+				local layer = GetUiNode(scene, v[1]);
+                layer:RemoveFromParent(true);
+			end
+		else
+			table.remove(p.FontLists,i);
+		end
+    end
+    
+    if( #p.FontLists == 0 and p.nTimerTag ) then
+        _G.UnRegisterTimer( p.nTimerTag );
+        p.nTimerTag = nil;
+    end
+end    
+
+
+--判断索引是否存在
+function p.IsExistsIndex(nIndex)
+	LogInfo("p.IsExistsIndex nIndex:[%d]",nIndex);
+    for i,v in ipairs(p.FontLists) do
+        if( v[2] == nIndex ) then
+			LogInfo("IsExistsIndex false!");
+            return false;
+        end
+    end
+    return true;
+end
 
 
 --创建公告动画
@@ -107,118 +158,32 @@ function p.CreateMsgUI(nIndex)
     
     
     --设置动画
-    local animate = RecursivUISprite(layer,{p.TAG_ANIMATE});
+    local animate = RecursivUISprite(layer,{TAG_ANIMATE});
     local szAniPath = NDPath_GetAnimationPath();
     animate:ChangeSprite(szAniPath.."scroll01.spr");
     
+    local winsize = GetWinSize(); 
     
-    --设置文本
-    local label = GetLabel(layer,p.TAG_TXT);
-    label:SetTextAlignment(UITextAlignment.LeftRCenter);
-    label:SetOffsetXEnd();
-    if(sFontColor) then
-        label:SetFontColor(sFontColor);
-    end
-    label:SetText(sTip);
+    local svc = RecursiveScrollContainer(layer,{TAG_TXT});
+    local rect = svc:GetFrameRect();
     
+    
+    LogInfo("txtlen:[%d]",string.len(sTip));
+    local label = CreateLabel(sTip,CGRectMake(rect.size.w, 0, 14*CoordScaleX*string.len(sTip), rect.size.h),14,sFontColor);
+    label:SetTextAlignment(UITextAlignment.Left);
+    label:SetTag(TAG_SCROLL_TXT);
+    svc:AddChild(label);
     
     --设置层的位置
-    local rect = RectFullScreenUILayer;
-    local ypos = animate:GetFrameRect().size.h * ( nIndex-1 );
-	layer:SetFrameRect(CGRectMake(rect.origin.x,ypos,rect.size.w,rect.size.h));
+    local rect = animate:GetFrameRect();
+	layer:SetFrameRect(CGRectMake((winsize.w-rect.size.w)/2, 80*CoordScaleX+nIndex*rect.size.h, rect.size.w , rect.size.h));
     
     
     --插入动画队列
-    local nState = 0;
-    table.insert(p.FontLists,{nTag,nIndex,nState});
-    
+    LogInfo("rect.size.w:[%d],5*CoordScaleX:[%d],rect.size.w/5*CoordScaleX:[%d]",rect.size.w,5*CoordScaleX,rect.size.w/5*CoordScaleX);
+    table.insert(p.FontLists,{nTag,nIndex,math.floor(rect.size.w/(5*CoordScaleX))+string.len(sTip)});
+	
     --删除缓存队列
     table.remove(p.FontCacheLists,1);
 end
 
---判断索引是否存在
-function p.IsExistsIndex(nIndex)
-    for i,v in ipairs(p.FontLists) do
-        LogInfo("i:[%d],v[2]:[%d] == nIndex:[%d]",i,v[2],nIndex);
-        if( v[2] == nIndex ) then
-            return false;
-        end
-    end
-    return true;
-end
-
------定时器回调-----
-function p.OnProcessTextTimer(nTimeTag)
-    LogInfo("CommonScrollDlg.OnProcessTextTimer");
-    
-    --插入到显示区
-    for i=1,p.nShowCount do
-        local bIsExists = p.IsExistsIndex(i);
-        if( bIsExists and #p.FontCacheLists>0) then
-            LogInfo("#p.FontCacheLists:[%d],i:[%d]", #p.FontCacheLists,i);
-            
-            --创建tip
-            p.CreateMsgUI(i);
-            return true;
-        end
-    end
-    
-    
-    --运行文字滚动动画
-    LogInfo("p.FontLists:[%d]",#p.FontLists);
-    local scene = GetSMGameScene();
-    for i,v in ipairs(p.FontLists) do
-        
-        local layer = GetUiNode(scene, v[1]);
-        if( layer ) then
-            
-            --设置文本位置
-            local label = GetLabel(layer, p.TAG_TXT);
-            if( label ) then
-                
-                label:SetOffsetX(label:GetOffsetX()-5*ScaleFactor);
-                
-                LogInfo("label:GetOffsetX():[%d],label:GetTextSize().w:[%d]",label:GetOffsetX(),label:GetTextSize().w);
-                
-                
-                if(label:GetOffsetX()<-label:GetTextSize().w) then
-                    
-                    --改变动画
-                    local animate = RecursivUISprite(layer,{p.TAG_ANIMATE});
-                    
-                    if( animate and v[3] == 0) then
-                        local szAniPath = NDPath_GetAnimationPath();
-                        animate:ChangeSprite(szAniPath.."scroll02.spr");
-                        v[3] = 1;
-                    end
-                    
-                    if( v[3] == 1 and animate:IsAnimationComplete() ) then
-                        LogInfo("p.OnProcessTextTimer animate:IsAnimationComplete!");
-                        
-                        --判断动画是否完成完成后就删除结点
-                        table.remove(p.FontLists,i);
-                        layer:RemoveFromParent(true);
-                    end
-                    
-                    --[[
-                    if( #p.FontLists == 0 and p.nTimerTag ) then
-                        _G.UnRegisterTimer( p.nTimerTag );
-                        p.nTimerTag = nil;
-                    end
-                    ]]
-                end
-            end
-        else
-            LogInfo("p.OnProcessTextTimer layer is nil!");
-            table.remove(p.FontLists,i);
-        end
-                                           
-    end
-    
-    
-    if( #p.FontLists == 0 and p.nTimerTag ) then
-        _G.UnRegisterTimer( p.nTimerTag );
-        p.nTimerTag = nil;
-    end
-    
-end

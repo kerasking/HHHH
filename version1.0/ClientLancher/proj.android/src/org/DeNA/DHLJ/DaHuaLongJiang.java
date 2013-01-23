@@ -89,6 +89,7 @@ import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import android.widget.VideoView;
+import tw.mobage.g23000052.MainActivity;
 import tw.mobage.g23000052.R;
 import android.widget.ImageView;
 import android.graphics.BitmapFactory;
@@ -875,7 +876,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 			public void onClick(DialogInterface dialog, int which)
 			{
 				dialog.dismiss();
-				android.os.Process.killProcess(android.os.Process.myPid());
+				MainActivity.onExit();
 			}
 		};
 
