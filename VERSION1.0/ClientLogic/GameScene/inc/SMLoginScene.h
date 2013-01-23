@@ -128,6 +128,7 @@ public:
 	void ShowCheckWIFIOff();
 	//
 	void ShowUpdateOff();
+    int  GetCurrentUser() { return m_iAccountID; }
 
 	NDUILabel*      m_pkProgressTextLabel;
 	

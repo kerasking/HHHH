@@ -98,7 +98,8 @@ enum
 	MOBILE_TYPE_ANDROID_MOBAGE_CH = 3,		//android简体
 	MOBILE_TYPE_ANDROID_MOBAGE_CHS = 4,		//android繁体
 	MOBILE_TYPE_IPHONE_91_CH = 5,			//IOS简体91版
-};
+};
+
 //资源类型
 #if 0
 enum 
@@ -533,6 +534,11 @@ void NDBeforeGameMgr::sendClientKey()
 void NDBeforeGameMgr::sendMsgConnect(int idAccount)
 {
 	CCLog( "@@login07: NDBeforeGameMgr::sendMsgConnect(%d)\r\n", idAccount );
+    if (idAccount == 0) {
+        idAccount = GetCurrentUser();
+        if(idAccount > 0)
+            ScriptMgrObj.excuteLuaFunc( "SetAccountID", "Login_ServerUI", idAccount );
+    }
 
 	NDTransData data(_MSG_CONNECT);
 
@@ -1411,7 +1417,8 @@ void NDBeforeGameMgr::Login()
 
 bool NDBeforeGameMgr::doNDSdkLogin()
 {
-#if (defined(USE_NDSDK) && defined(__APPLE__))
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#if (defined(USE_NDSDK)
 	if (m_sdkLogin)
 	{
 		//[m_sdkLogin release];
@@ -1428,6 +1435,7 @@ bool NDBeforeGameMgr::doNDSdkLogin()
 	}
 	m_sdkLogin = [[MobageSdkLogin alloc] init];
 	[m_sdkLogin LoginWithUser];
+#endif
 #endif
     return true;
 }
