@@ -167,7 +167,7 @@ function p.CreateMsgUI(nIndex)
     local svc = RecursiveScrollContainer(layer,{TAG_TXT});
     local rect = svc:GetFrameRect();
     local r = GetWinSize().w/960.0;
-    svc:SetFrameRect(CGRectMake(rect.origin.x,rect.origin.y,rect.size.w*r,rect.size.h));
+    svc:SetFrameRect(CGRectMake(rect.origin.x+(rect.size.w-rect.size.w*r)/2,rect.origin.y,rect.size.w*r,rect.size.h));
     
     rect = svc:GetFrameRect();
     
