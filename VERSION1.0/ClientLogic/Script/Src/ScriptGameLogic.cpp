@@ -1056,6 +1056,7 @@ void ScriptGameLogicLoad()
 	ETCFUNC("GetItemPicture", GetItemPicture);
 
 	ETCFUNC("ConvertReset", ConvertReset);
+	ETCFUNC("getStringSize", getStringSize);
 }
 
 }

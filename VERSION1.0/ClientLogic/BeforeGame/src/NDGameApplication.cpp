@@ -250,7 +250,7 @@ bool NDGameApplication::applicationDidFinishLaunching()
 	}
 
 	// turn on display FPS
-	//pDirector->setDisplayStats(true); //@fps 
+	pDirector->setDisplayStats(false); //@fps
 
 	// set FPS. the default value is 1.0/60 if you don't call this
 	//pDirector->setAnimationInterval(1.0 / 60);
@@ -356,7 +356,8 @@ void NDGameApplication::applicationDidEnterBackground()
 	CCDirector::sharedDirector()->stopAnimation();
 
 	// if you use SimpleAudioEngine, it must be pause
-	// SimpleAudioEngine::sharedEngine()->pauseBackgroundMusic();
+	SimpleAudioEngine::sharedEngine()->pauseBackgroundMusic();
+	CCLog( "@@ NDGameApplication::applicationDidEnterBackground()\r\n" );
 }
 
 void NDGameApplication::applicationWillEnterForeground()
@@ -375,6 +376,7 @@ void NDGameApplication::applicationWillEnterForeground()
 
 	// if you use SimpleAudioEngine, it must resume here
 	SimpleAudioEngine::sharedEngine()->resumeBackgroundMusic();
+	CCLog( "@@ NDGameApplication::applicationWillEnterForeground()\r\n" );
 }
 
 //@pm

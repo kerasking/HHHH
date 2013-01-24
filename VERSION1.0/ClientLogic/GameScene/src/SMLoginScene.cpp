@@ -137,7 +137,10 @@ CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
 		{
 			pkScene->setIsLoadLocalString(true);
 		}
-
+		SimpleAudioEngine::sharedEngine()->setMusicStream(true);
+		SimpleAudioEngine::sharedEngine()->raiseMusicStream();
+        
+#if (CC_TARGET_PLATFORM != CC_PLATFORM_ANDROID)
 		CCSize kWinSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 
 		NDUILayer* pkLayer = new NDUILayer();
@@ -150,12 +153,7 @@ CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
 		NDPicturePool& kPool = *(NDPicturePool::DefaultPool());
 		NDUIImage* pkBackgroundImage = new NDUIImage;
 
-		string strText = CONVERT_GBK_TO_UTF8("正在準備中……");
-		CCSize kTextSize = getStringSize("正在準備中……", 20 * FONT_SCALE);
 		ccColor4B kColor = {100,100,100,255};
-
-		SimpleAudioEngine::sharedEngine()->setMusicStream(true);
-		SimpleAudioEngine::sharedEngine()->raiseMusicStream();
 
 		pkScene->m_pkProgressTextLabel = new NDUILabel();
 		pkScene->m_pkProgressTextLabel->Initialization();
@@ -168,42 +166,21 @@ CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
 
 		NDUIImage* pkUILoadingImage = 0;
 		NDPicture* pkLoadingPic = 0;
-
-#ifdef USE_MGSDK
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 		NDPicture* pkPicture = kPool.AddPicture( NDPath::GetImgPath("Res00/Load/Unzipping.png") );
-#elif ((CACHE_MODE == 1) && (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID))
-		NDPicture* pkPicture = NULL;
-
-		CCImage::changeSystemFont(true);
-
-		pkLayer->AddChild(pkScene->m_pkProgressTextLabel,10,0);
-#else
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 		NDPicture* pkPicture = kPool.AddPicture( NDPath::GetImg00Path("Res00/Load/Unzipping.png") );
 #endif
-
-		if (pkPicture) 
+		if (pkPicture)
 		{
 			pkBackgroundImage->SetPicture(pkPicture, true);
-			
-#if 0 //大图才用，已经改成黑色地图了，暂时不需要
-			CCSize kPictureSize = pkPicture->GetSize();
-			CCDirector::sharedDirector()->setGLDefaultValues(1.0f,1.0f,1.0f);
-
-			float fScalePic = kPictureSize.width / kPictureSize.height;
-			float fHeight = 0.0f;
-			float fWidth = 0.0f;
-
-			fHeight = kWinSize.height * 1.2f;
-			fWidth = fHeight * fScalePic;
-
-			pkBackgroundImage->SetFrameRect(CCRectMake(kWinSize.width / 2.0f - fWidth / 2.0f,
-				(kWinSize.height - fHeight) / 2.0f, fWidth, fHeight));
-#else
-			CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
-			pkBackgroundImage->SetFrameRect( CCRectMake(0, 0, winSize.width, winSize.height ));
+        }
+        
+        CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
+        pkBackgroundImage->SetFrameRect( CCRectMake(0, 0, winSize.width, winSize.height ));
+        
+        pkLayer->AddChild(pkBackgroundImage);
 #endif
-			pkLayer->AddChild(pkBackgroundImage);
-		}
 
 		CCLog( "@@login01: open CSMLoginScene\r\n" );
 		
@@ -251,10 +228,24 @@ void CSMLoginScene::Initialization(void)
 	NDScene::Initialization();
 	//m_doucumentPath = NDPath::GetDocumentPath();
 	m_strCachePath = NDPath::GetCashesPath();
-	m_strSavePath = m_strCachePath + "update.zip";
+	//m_strSavePath = m_strCachePath + "update.zip";
 	//m_resPath = NDPath::GetResPath();
 	PackageCount = 0;
 	m_pTimer = new NDTimer();
+}
+
+void clearSplash()
+{
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    JniMethodInfo t;
+    if (JniHelper::getStaticMethodInfo(t, "org/DeNA/DHLJ/DaHuaLongJiang",
+                                       "clearSplash",
+                                       "()V"))
+    {
+        t.env->CallStaticObjectMethod(t.classID, t.methodID);
+        t.env->DeleteLocalRef(t.classID);
+    }
+#endif
 }
 
 void notifyProcess(int nPercent)
@@ -287,7 +278,7 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 	if ( idTag == TAG_TIMER_UPDATE ) 
 	{
 		LOGD("TAG_TIMER_UPDATE process entry");
-
+        /*
 		if ( !rename( m_strSavePath.c_str(), m_strSavePath.c_str() ) )
 		{
 			if ( remove( m_strSavePath.c_str() ) )
@@ -296,9 +287,19 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 				return;
 			}
 		}
-
+		*/
+        //重新设置m_SavePath的值，保存本地的文件名与服务器上下载名保持一致
+		char szUpdateURL[100] = {0};
+		snprintf(szUpdateURL,sizeof(szUpdateURL),"%s",m_strUpdateURL.c_str());
+		char* szTempFile = GetPathFileName(szUpdateURL,'/');
+        if (szTempFile)
+        {
+			m_strSavePath = m_strCachePath + szTempFile;
+        }
+		else
+			return;
 		LOGD("m_strUpdateURL is %s,m_strSavePath is %s",m_strUpdateURL.c_str(),m_strSavePath.c_str());
-
+        
 		FromUrl(m_strUpdateURL.c_str());
 		ToPath(m_strSavePath.c_str()); 
 		Download();
@@ -325,6 +326,7 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 		if(kDeqUpdateUrl.size() > 0)
 		{
 		    kDeqUpdateUrl.pop_front();
+			m_CurDownNum++;
 		}
 
 		PackageCount++;
@@ -382,12 +384,13 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 					LOGD("Copy files succeeded!");
 					CCDirector::sharedDirector()->setGLDefaultValues();
 					m_pTimer->KillTimer( this, TAG_TIMER_CHECK_COPY );
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 					m_pkProgressTextLabel->SetVisible(false);
 					NDBeforeGameMgrObj.doNDSdkLogin();
 					ShowWaitingAni();
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) 
+#endif
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
                     notifyProcess(100);
-					usleep(200);
 #endif
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 					usleep(200);
@@ -406,13 +409,10 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 					
 					CCSize kTextSize = getStringSize(pstrString->getCString(), 20 * FONT_SCALE);
 					CCSize kWinSize = CCDirector::sharedDirector()->getWinSizeInPixels();
-                    
-#if 1
+
  					m_pkProgressTextLabel->SetFrameRect(CCRectMake(kWinSize.width / 2.0f - kTextSize.width / 3.0f,
                                                                    kWinSize.height - kTextSize.height * 1.1f, kTextSize.width, kTextSize.height));
-#else
-					m_pkProgressTextLabel->SetFrameRect(CCRectMake(0, 0, kWinSize.width, kWinSize.height));
-#endif
+
 					//LOGD("kTextSize.width is %d,kTextSize.height is %d",(int)kTextSize.width,(int)kTextSize.height);
                     
                     if(pstrString)
@@ -438,10 +438,9 @@ void CSMLoginScene::OnTimer( OBJID idTag )
  		CCLog( "@@login02: to call OnEvent_LoginOKNormal()\r\n" );
 		m_iAccountID = NDBeforeGameMgrObj.GetCurrentUser();
 		OnEvent_LoginOKNormal(m_iAccountID);
+#endif
 
-#else
-
-#ifdef USE_MGSDK
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 		NDUIImage * pImage = (NDUIImage *)m_pLayerUpdate->GetChild( TAG_CTRL_PIC_BG);
 		if ( pImage )
 		{
@@ -449,7 +448,6 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 			pPicture->Initialization( NDPath::GetUIImgPath( SZ_MOBAGE_BG_PNG_PATH ).c_str() );
 			pImage->SetPicture( pPicture, true );
 		}
-#endif
 #endif
 
 #if CACHE_MODE == 1
@@ -545,6 +543,7 @@ bool CSMLoginScene::StartUpdate()
 	std::string strURL = *kDeqUpdateUrl.begin();
 	m_strUpdateURL	= strURL;
 	m_pTimer->SetTimer( this, TAG_TIMER_UPDATE, 0.5f );	
+	m_CurDownNum = 1;
 	StartDownload();
 	return true;
 }
@@ -650,12 +649,16 @@ void CSMLoginScene::ReflashPercent(int percent, int pos, int filelen )
 	*/ 
 	if ( m_pLabelPromtp )
 	{
-		std::stringstream str;
-		char buff[10] = {0};
-		sprintf(buff,"%.2f",filelen/(1024*1024.0));
-		str << "("<<buff<< "MB)" << NDCommonCString2(SZ_DOWNLOADING);
-
-		m_pLabelPromtp->SetText( str.str().c_str() );
+		int iTotalDownNum = kDeqUpdateUrl.size() + m_CurDownNum - 1;
+		//std::stringstream str;
+		char dataSize[10] = {0};
+		sprintf(dataSize,"%.2f",filelen/(1024*1024.0));
+		std::string strDownloading = NDCommonCString2(SZ_DOWNLOADING);
+		char buff[100] = {0};
+		sprintf(buff,"%s(%d/%d)",strDownloading.c_str(),m_CurDownNum,iTotalDownNum);
+		//str << "("<<buff<< "MB)" << CCString::stringWithFormat(strDownloading.c_str(), m_CurDownNum, iTotalDownNum)->getCString();
+		//m_pLabelPromtp->SetText( str.str().c_str() );
+		m_pLabelPromtp->SetText(buff);
 		m_pLabelPromtp->SetVisible( true );
 	}
 	SetProgress( percent );
@@ -665,7 +668,6 @@ void CSMLoginScene::ReflashPercent(int percent, int pos, int filelen )
 void CSMLoginScene::DidDownloadStatus( DownloadStatus status )
 {
 	CCLog( "@@ CSMLoginScene::DidDownloadStatus(): %d\r\n", int(status));
-
 	if (status == DownloadStatusResNotFound) 
 	{
 		//m_label->SetText( "抱歉，下载资源未找到，请联系GM" );
@@ -684,6 +686,7 @@ void CSMLoginScene::DidDownloadStatus( DownloadStatus status )
 		if (m_pLabelPromtp)
 		{
 			//m_label->SetText( "下载失败，请检查网络链接或者重启设备尝试" );
+
 			m_pLabelPromtp->SetText( NDCommonCString2(SZ_ERROR_05).c_str() );
 			m_pLabelPromtp->SetFontColor( ccc4(0xFF,0x0,0x0,255) );
 			//m_pLabelPromtp->SetFontSize( 20 );
@@ -940,12 +943,13 @@ void CSMLoginScene::OnEvent_LoginOKNormal( int iAccountID )
 			pPicture->Initialization( NDPath::GetUIImgPath( str.c_str() ).c_str() );
 			pImage->SetPicture( pPicture, true );
 		}
-}
+    }
 #endif
 	
 #if (UPDATE_ON == 0 && CACHE_MODE == 0)
- 		CloseWaitingAni();
- 		StartEntry();
+    CloseWaitingAni();
+    StartEntry();
+    clearSplash();
 #endif
 #if UPDATE_ON == 1
 #endif
@@ -980,10 +984,13 @@ void CSMLoginScene::OnEvent_LoginError( int iError )
 void CSMLoginScene::StartDownload()
 {
 	LOGD("Entry StartDownload");
+	
+	//獲取要下載的總的數量
+	int iTotalDownNum = kDeqUpdateUrl.size() + m_CurDownNum - 1;
 
 	if ( m_pLabelPromtp )
 	{
-		m_pLabelPromtp->SetText( NDCommonCString2(SZ_DOWNLOADING).c_str() );
+		m_pLabelPromtp->SetText( CCString::stringWithFormat(NDCommonCString2(SZ_DOWNLOADING).c_str(), m_CurDownNum, iTotalDownNum)->getCString());
 		m_pLabelPromtp->SetVisible( true );
 	}
 	if ( m_pCtrlProgress )
@@ -1020,7 +1027,6 @@ void CSMLoginScene::StartEntry()
 {
 	WriteCon( "@@ CSMLoginScene::StartEntry()\r\n" );
 	CCLog( "@@login04: StartEntry()\r\n" );
-
 #if 1
 	if (m_pLabelPromtp)
 	{
@@ -1028,7 +1034,7 @@ void CSMLoginScene::StartEntry()
 		m_pLabelPromtp->SetVisible( true );
 	}
 
-	ShowWaitingAni();
+//	ShowWaitingAni();
 
 	{
 		WriteCon( "@@ NDLocalXmlString::LoadData()...\r\n" );
@@ -1046,28 +1052,23 @@ void CSMLoginScene::StartEntry()
 	CloseUpdateUILayer();
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
-	//if ( m_iAccountID == 0 )
 	m_iAccountID = ScriptMgrPtr->excuteLuaFuncRetN( "GetAccountID", "Login_ServerUI" );
 #endif
     
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	m_iAccountID = NDBeforeGameMgrObj.GetCurrentUser();
 #endif
-
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	m_iAccountID = NDBeforeGameMgrObj.GetCurrentUser();
-    
-    JniMethodInfo t;
-    if (JniHelper::getStaticMethodInfo(t, "org/DeNA/DHLJ/DaHuaLongJiang",
-                                       "clearSplash",
-                                       "()V"))
-    {
-        t.env->CallStaticObjectMethod(t.classID, t.methodID);
-        t.env->DeleteLocalRef(t.classID);
-    }
 #endif
-
-	ScriptMgrPtr->excuteLuaFunc( "ShowUI", "Entry", m_iAccountID );
+    
+	CCLog( "@@login041: StartEntry(%u)\r\n" , m_iAccountID);
+    if(m_iAccountID != 0) {
+        NDBeforeGameMgrObj.SetLoginTry(false);
+        ScriptMgrPtr->excuteLuaFunc( "ShowUI", "Entry", m_iAccountID );
+    }
+    else
+        NDBeforeGameMgrObj.SetLoginTry(true);
 	//    ScriptMgrObj.excuteLuaFunc("ProecssLocalNotification", "MsgLoginSuc");
 
 #else //多线程不会有什么好处，反而是崩溃和不稳定，
@@ -1077,13 +1078,15 @@ void CSMLoginScene::StartEntry()
 		m_pLabelPromtp->SetText( NDCommonCString2(SZ_SETUP).c_str() );
 		m_pLabelPromtp->SetVisible( true );
 	}
-	ShowWaitingAni();
+//	ShowWaitingAni();
 	NDLocalXmlString::GetSingleton();
 	ScriptMgrObj;
 	pthread_t pid = {0};
 	pthread_create(&pid, NULL, CSMLoginScene::LoadTextAndLua, (void*)this);	
 #endif
-
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    clearSplash();
+#endif
 	CCLOG( "@@ CSMLoginScene::StartEntry() -- done.\r\n" );
 }
 
@@ -1236,6 +1239,8 @@ void CSMLoginScene::OnProcessUpdate()
 
 	LOGD("%s%s:%d",CONVERT_GBK_TO_UTF8("此時更新的IP地址為："),strUpdateURL.c_str(),uiServerPort);
 	CreateUpdateUILayer();
+    
+    clearSplash();
 
 	if ( !strUpdateURL.length() )
 	{
@@ -1288,3 +1293,24 @@ std::string CSMLoginScene::getTextFromStringXML_JNI( int nTextID )
 #endif
 	return ret;
 }
+
+
+char*  CSMLoginScene::GetPathFileName(char* src, char delitmit)   
+{ 
+	int i = strlen(src); 
+	if(!(*src))     
+		return NULL; 
+	while(src[i-1])  
+		if(strchr(src + (i - 1), delitmit))
+			return   (src + i); 
+		else   
+		{
+			i--; 
+		}
+		//如果都没有找到，则返回整个字符串
+		if (i == 0)
+		{
+			return src;
+		}
+		return  NULL; 
+} 

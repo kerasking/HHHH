@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest package="tw.mobage.g23000052"
       android:installLocation="auto"
-      android:versionCode="7009"
-      android:versionName="7.0.0.9" xmlns:android="http://schemas.android.com/apk/res/android">
+      android:versionCode="7022"
+      android:versionName="7.0.2.2" xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="8"/>
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -19,6 +19,7 @@
 	<uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
 	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="com.android.vending.BILLING" />
     
 
     <application android:name=".MyApplication" android:label="@string/app_name"
@@ -28,8 +29,8 @@
                   android:label="@string/app_name"
                   android:screenOrientation="landscape"
                   android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
-                  android:launchMode="singleTask"             
-                  android:configChanges="keyboardHidden|orientation"
+                  android:launchMode="standard"             
+                  android:configChanges="keyboardHidden"
                   android:windowSoftInputMode="adjustPan">
             <intent-filter android:label="@string/app_name">
                 <action android:name="android.intent.action.MAIN" />
@@ -39,7 +40,7 @@
             	<action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data  android:scheme="mobage-cn-23000052" />
+                <data  android:scheme="mobage-tw-23000052" />
             </intent-filter>
             <intent-filter>
                 <action android:name="tw.mobage.g23000052.RUN" />
@@ -50,13 +51,26 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+         <activity android:name="org.DeNA.DHLJ.DaHuaLongJiang"
+                  android:label="@string/app_name"
+                  android:launchMode="singleTask"
+                  android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
+                  android:screenOrientation="landscape"
+                  android:configChanges="keyboardHidden"
+                  android:windowSoftInputMode="adjustPan">
+            <intent-filter>
+            	<action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+            </intent-filter>
+        </activity>
         
       <activity android:name="org.DeNA.DHLJ.VideoActivity"
                 android:label="@string/app_name"
                 android:screenOrientation="landscape"
                 android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
                 android:launchMode="singleTask"
-                android:configChanges="keyboardHidden|orientation"
+                android:configChanges="keyboardHidden"
                 android:windowSoftInputMode="adjustPan">
         <intent-filter>
           <action android:name="android.intent.action.VIEW" />
@@ -66,10 +80,10 @@
       
          <activity android:name="com.mobage.android.MobageActivity"
                   android:label="@string/app_name"
-                  android:launchMode="standard"
+                  android:launchMode="singleTask"
                   android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
                   android:screenOrientation="landscape"
-                  android:configChanges="keyboardHidden|orientation"
+                  android:configChanges="keyboardHidden"
                   android:windowSoftInputMode="adjustPan">
             <intent-filter>
             	<action android:name="android.intent.action.VIEW" />
@@ -90,27 +104,15 @@
             </intent-filter>
         </receiver>
             
-		<receiver android:name="com.mobage.android.C2DMBaseReceiver">
-			<intent-filter>
-				<action android:name="com.denachina.androidpn.client.SHOW_NOTIFICATION" />
-				<category android:name="android.intent.category.DEFAULT" />
-			</intent-filter>
+        <receiver android:name="com.mobage.android.iab.BillingReceiver">
+        <intent-filter>
+                <action android:name="com.android.vending.billing.IN_APP_NOTIFY"/>
+                <action android:name="com.android.vending.billing.RESPONSE_CODE"/>
+        	 <action android:name="com.android.vending.billing.PURCHASE_STATE_CHANGED"/>
+        </intent-filter>
 		</receiver>
-		
-		<service android:enabled="true"
-			android:name="com.denachina.androidpn.client.NotificationService"
-			android:label="NotificationService">
-			<intent-filter>
-				<action android:name="com.denachina.androidpn.client.NotificationService" />
-			</intent-filter>
-		</service>
-		
-		<receiver android:name="com.denachina.androidpn.client.BootReceiver"
-		    >
-		    <intent-filter >
-		        <action android:name="android.intent.action.BOOT_COMPLETED"/>
-		    </intent-filter>
-		</receiver>
+        
+		<service android:name="com.mobage.android.iab.MobageBillingService"/>
         
 		<receiver android:name="org.DeNA.DHLJ.BootReceiver"
 		    android:process=":pushservice_dhlj">

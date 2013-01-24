@@ -30,6 +30,7 @@
 #include "TQString.h"
 #include "ObjectTracker.h"
 #include "UsePointPls.h"
+#include "NDDebugOpt.h"
 
 using namespace cocos2d;
 using namespace NDEngine;
@@ -313,7 +314,10 @@ void NDSprite::MoveToPosition(std::vector<CCPoint> kToPos, SpriteSpeed speed,
 		return;
 	}
 
-	//CCLog( "@@ NDSprite::MoveToPosition(%d, %d)\r\n", (int)kToPos[0].x, int(kToPos[0].y));
+	if (NDDebugOpt::getTraceClickMapEnabled())
+	{
+		CCLog( "@@ NDSprite::MoveToPosition(%d, %d)\r\n", (int)kToPos[0].x, int(kToPos[0].y));
+	}
 
 	if (GetParent())
 	{
@@ -340,6 +344,12 @@ void NDSprite::MoveToPosition(std::vector<CCPoint> kToPos, SpriteSpeed speed,
 			for (int i = 0; i < iSize; i++)
 			{
 				CCPoint to = kToPos[i];
+
+#if 1 //计算寻路的时候用整数，否则错误.
+				from = ccp(int(m_kPosition.x), int(m_kPosition.y));
+				to = ccp(int(kToPos[i].x), int(kToPos[i].y));
+#endif
+
 				std::vector < CCPoint > kPointList;
 				NDAutoPath::sharedAutoPath()->autoFindPath(from, to,
 					(NDMapLayer*) pkLayer, m_nSpeed, mustArrive,
@@ -353,6 +363,11 @@ void NDSprite::MoveToPosition(std::vector<CCPoint> kToPos, SpriteSpeed speed,
 						kPointList.end());
 					from = m_kPointList[m_kPointList.size() - 1];
 				}
+			}
+
+			if (NDDebugOpt::getTraceClickMapEnabled())
+			{
+				CCLog( "@@ autoFindPath() ok, m_kPointList has %d points in it.\r\n", m_kPointList.size());
 			}
 
 			//玩家已经在终点上

@@ -575,48 +575,79 @@ unsigned int NDUIScrollViewContainer::WhichViewToScroll()
 	}
 	
 	float fCenter							= 0.0f;
-//	if (IsViewCanCenter())
-//	{
-//		fCenter		= GetContainerCenter();
-//	}
-//	else
-//	{
-		fCenter		= GetAdjustCenter();
-//	}
+	fCenter		= GetAdjustCenter();
+
 	
 	const std::vector<NDNode*>& children	= m_pClientUINode->GetChildren();
 	size_t size								= children.size();
 	float fMin								= 1000.0f;
-	
-	for (size_t i = 0; i < size; i++) 
+
+	if (UIScrollStyleHorzontal == GetScrollStyle())
 	{
-		NDNode *child			= children[i];
+		//獲取當前移動的距離
+		NDNode *child			= children[0];
 		if (!child || !child->IsKindOfClass(RUNTIME_CLASS(CUIScrollView)))
 		{
-			continue;
+			return 0;
 		}
-		
 		CUIScrollView* view		= (CUIScrollView*)child;
-		float viewCenter		= 0.0f;
-		if (!CaclViewCenter(view, viewCenter, true))
+		CCRect rectClient		= GetClientRect(true);
+		CCRect viewrect			= view->GetFrameRect();
+		int iCurShowIndex = GetBeginIndex();
+		int iCurMoveDis = rectClient.origin.x - (-iCurShowIndex*viewrect.size.width);  
+
+		//獲取的移動距離如果小於0，那麼向右移動，索引增加
+		if(iCurMoveDis < 0)
 		{
-			continue;
+			if(abs(iCurMoveDis) > viewrect.size.width/6)
+			{
+				iCurShowIndex = iCurShowIndex + 1 > size ? iCurShowIndex : iCurShowIndex + 1;
+			}
+
 		}
-		
-		float tmpViewCenter		= viewCenter - fCenter;
-		if (tmpViewCenter < 0.0f)
+		//獲取的移動距離如果大於0，那麼向左移動，索引減少
+		else if(iCurMoveDis > 0)
 		{
-			tmpViewCenter		= -tmpViewCenter;
+			if(iCurMoveDis > viewrect.size.width/6)
+			{
+				iCurShowIndex = iCurShowIndex - 1 < 0 ? iCurShowIndex : iCurShowIndex - 1;
+			}
 		}
-		
-		if (tmpViewCenter < fMin)
-		{
-			fMin				= tmpViewCenter;
-			uiIndexFind			= i;	
-		}
+
+		return iCurShowIndex;
 	}
-	
-	return uiIndexFind;
+	else
+	{
+		for (size_t i = 0; i < size; i++) 
+		{
+			NDNode *child			= children[i];
+			if (!child || !child->IsKindOfClass(RUNTIME_CLASS(CUIScrollView)))
+			{
+				continue;
+			}
+
+			CUIScrollView* view		= (CUIScrollView*)child;
+			float viewCenter		= 0.0f;
+			if (!CaclViewCenter(view, viewCenter, true))
+			{
+				continue;
+			}
+
+			float tmpViewCenter		= viewCenter - fCenter;
+			if (tmpViewCenter < 0.0f)
+			{
+				tmpViewCenter		= -tmpViewCenter;
+			}
+
+			if (tmpViewCenter < fMin)
+			{
+				fMin				= tmpViewCenter;
+				uiIndexFind			= i;	
+			}
+		}
+
+		return uiIndexFind;
+	}
 }
 
 // cacl view center and container center dis; m_fScrollDistance = dis; m_bIsViewScrolling = true;

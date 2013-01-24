@@ -1910,8 +1910,28 @@ void NDMapMgr::SetBattleMonster(NDMonster* pkMonster)
 	}
 }
 
+void NDMapMgr::getDeviceVersionInfo_JNI()
+{
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	JniMethodInfo t;
+	if (JniHelper::getStaticMethodInfo(t, "org/DeNA/DHLJ/DaHuaLongJiang",
+		"getDeviceVersion",
+		"()Ljava/lang/String;"))
+	{
+		jstring retFromJava = (jstring) t.env->CallStaticObjectMethod(t.classID, t.methodID);
+		const char* str = t.env->GetStringUTFChars(retFromJava, 0);
+		ScriptMgrObj.excuteLuaFunc("setDeviceVersionInfo", "MsgLoginSuc", str);
+		CCLog("tzq %s", str);
+		t.env->ReleaseStringUTFChars(retFromJava, str);
+		t.env->DeleteLocalRef(t.classID);
+		t.env->DeleteLocalRef(retFromJava);
+	}
+#endif
+}
+
 void NDMapMgr::ProcessLoginSuc(NDTransData& kData)
 {
+	getDeviceVersionInfo_JNI();
 	ScriptMgrObj.excuteLuaFunc("ProcessLoginSuc", "MsgLoginSuc", 0);
 }
 
@@ -2378,6 +2398,8 @@ void NDMapMgr::processDisappear(NDTransData* pkData, int nLength)
 
 void NDMapMgr::processKickBack(NDTransData* pkData, int nLength)
 {
+	CCLog( "@@ !! NDMapMgr::processKickBack() !!\r\n ");
+
 	if (!pkData || nLength == 0)
 		return;
 

@@ -25,31 +25,31 @@ public class ConnectionLog
 	public ConnectionLog()
 	  throws IOException
 	{
-		File sdcard = Environment.getExternalStorageDirectory();
-        File logDir = new File(sdcard, "dhlj/log/");
-        if (!logDir.exists()) {
-        	logDir.mkdirs();
-        	// do not allow media scan
-            new File(logDir, ".nomedia").createNewFile();
-        }        
-		
-		open(logDir.getAbsolutePath() + "/push.log");
+//		File sdcard = Environment.getExternalStorageDirectory();
+//        File logDir = new File(sdcard, "dhlj/log/");
+//        if (!logDir.exists()) {
+//        	logDir.mkdirs();
+//        	// do not allow media scan
+//            new File(logDir, ".nomedia").createNewFile();
+//        }        
+//		
+//		open(logDir.getAbsolutePath() + "/push.log");
 	}
 
 	public ConnectionLog(String basePath)
 	  throws IOException
 	{
-		open(basePath);
+//		open(basePath);
 	}
 
 	protected void open(String basePath)
 	  throws IOException
 	{
-		File f = new File(basePath + "-" + getTodayString());
-		mPath = f.getAbsolutePath();
-		mWriter = new BufferedWriter(new FileWriter(mPath), 2048);
-
-		println("Opened log.");
+//		File f = new File(basePath + "-" + getTodayString());
+//		mPath = f.getAbsolutePath();
+//		mWriter = new BufferedWriter(new FileWriter(mPath), 2048);
+//
+//		println("Opened log.");
 	}
 
 	private static String getTodayString()
@@ -66,15 +66,15 @@ public class ConnectionLog
 	public void println(String message)
 	  throws IOException
 	{
-		mWriter.write(TIMESTAMP_FMT.format(new Date()));
-		mWriter.write(message);
-		mWriter.write('\n');
-		mWriter.flush();
+//		mWriter.write(TIMESTAMP_FMT.format(new Date()));
+//		mWriter.write(message);
+//		mWriter.write('\n');
+//		mWriter.flush();
 	}
 
 	public void close()
 	  throws IOException
 	{
-		mWriter.close();
+//		mWriter.close();
 	}
 }

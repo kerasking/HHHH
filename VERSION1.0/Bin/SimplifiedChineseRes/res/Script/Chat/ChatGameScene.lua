@@ -145,7 +145,7 @@ function p.AddChatText(speakerId,channel,speaker,text,nindex)
 		--chatText:SetContent(speakerId,channel,speaker,text,1,6,ccc4(0,0,255,255));
 		local rect  = CGRectMake(0, contentHight, winsize.w*0.7, winsize.h*0.05); 
 		chatText:SetFrameRect(rect);
-		contentHight=contentHight+chatText:GetContentHeight();
+		contentHight=contentHight+winsize.h*gRectScaleY/5.0; --chatText:GetContentHeight();
 		
 		LogInfo("gamescene chat AddChatText3")
 		

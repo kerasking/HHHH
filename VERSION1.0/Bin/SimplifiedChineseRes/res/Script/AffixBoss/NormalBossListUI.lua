@@ -1124,7 +1124,7 @@ function p.ShowPrompt( pBtnBattle, nPromptType )
 		local pPic		= pool:AddPicture( GetSMImg00Path( "Material_Drop_Copy.png" ), false );
 		local tSize		= pPic:GetSize();
 		pImage:SetPicture( pPic, true );
-		pImage:SetFrameRect( CGRectMake( 0, -tSize.h/2, tSize.w, tSize.h ) );
+		pImage:SetFrameRect( CGRectMake( 0, -tSize.h*CoordScaleY_960/2, tSize.w*CoordScaleY_960, tSize.h*CoordScaleY_960 ) );
 		pBtnBattle:AddChild( pImage );
 	end
 end

@@ -83,7 +83,9 @@ extern "C" {
 			{
 				LOGD("Failed to get the environment using AttachCurrentThread()");
 				return NULL;
-			} else {
+			}
+			else
+			{
 				// Success : Attached and obtained JNIEnv!
 				return env;
 			}
@@ -155,7 +157,8 @@ SimpleAudioEngine::SimpleAudioEngine()
 	jstring jstr;
 	if (getStaticMethodInfo(methodInfo, METHOD_NAME, "()Ljava/lang/String;"))
 	{
-		jstr = (jstring)methodInfo.env->CallStaticObjectMethod(methodInfo.classID, methodInfo.methodID);
+		jstr = (jstring)methodInfo.env->CallStaticObjectMethod(methodInfo.classID,
+			methodInfo.methodID);
 	}
 	methodInfo.env->DeleteLocalRef(methodInfo.classID);
 	
@@ -210,7 +213,8 @@ void SimpleAudioEngine::preloadBackgroundMusic(const char* pszFilePath)
     preloadBackgroundMusicJNI(pszFilePath);
 }
 
-void SimpleAudioEngine::playBackgroundMusic(const char* pszFilePath, bool bLoop)
+void SimpleAudioEngine::playBackgroundMusic(const char* pszFilePath,
+											bool bLoop)
 {
     playBackgroundMusicJNI(pszFilePath, bLoop);
 }
