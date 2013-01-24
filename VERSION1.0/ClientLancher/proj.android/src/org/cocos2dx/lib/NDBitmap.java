@@ -16,6 +16,7 @@ import java.util.*;
 public class NDBitmap { 
 	private static boolean enableNDBitmap = true; //to enable NDBitmap.
 	private static int s_enableNDBitmapCache = -1; //-1,0,1
+	public static boolean verbose = false;
 
 	// only for old version OS.
 	public static boolean isEnabled()
@@ -26,13 +27,22 @@ public class NDBitmap {
 			s_enableNDBitmapCache = 0;
 			if (enableNDBitmap)
 			{
-				String osVer = android.os.Build.VERSION.RELEASE;
-				final String[] ver = osVer.split("\\.");
-				if (ver[0].compareTo("2") == 0)
-					s_enableNDBitmapCache = 1;
+				s_enableNDBitmapCache = isVerOlder() ? 1 : 0;
 			}
 		}
 		return s_enableNDBitmapCache == 1;
+	}
+	
+	/**
+	 * isVerOlder: is this a older android os, such as 2.x
+	 * @param n
+	 * @return
+	 */
+	public static boolean isVerOlder()
+	{
+		String osVer = android.os.Build.VERSION.RELEASE;
+		final String[] ver = osVer.split("\\.");
+		return (ver[0].compareTo("2") == 0) ? true : false;
 	}
 	
 	/**
@@ -55,10 +65,13 @@ public class NDBitmap {
 		if (NDTextProxy.parse( paint, strText, fontName, fontSize, alignment, width, height ))
 		{
 			// create bitmap with the calc size
+			log("before create bitmap: w=" + NDTextProxy.bitmapWidth + ", h=" + NDTextProxy.bitmapHeight);
 			final Bitmap bitmap = Bitmap.createBitmap( NDTextProxy.bitmapWidth, NDTextProxy.bitmapHeight, Bitmap.Config.ARGB_8888 );
+			log("after create bitmap: w=" + NDTextProxy.bitmapWidth + ", h=" + NDTextProxy.bitmapHeight);
 			
 			// left align for each char
-			paint.setTextAlign(Align.LEFT);
+			//paint.setTextAlign(Align.LEFT);
+			paint.setTextAlign(Align.CENTER);
 			
 			// get canvas for bitmap
 			final Canvas canvas = new Canvas(bitmap);
@@ -69,12 +82,21 @@ public class NDBitmap {
 				if (objChar.bLineFeed) continue;
 				
 				//paint.setColor( objChar.color );
-				
-				String str = String.valueOf( objChar.c );
-				canvas.drawText( str, objChar.x, objChar.y, paint );
+				if (objChar.x >= 0 && objChar.x + objChar.w <= NDTextProxy.bitmapWidth &&
+					objChar.y >= 0 && objChar.y <= NDTextProxy.bitmapHeight)
+				{
+					String str = String.valueOf( objChar.c );
+					
+					//canvas.drawText( str, objChar.x, objChar.y, paint );
+					canvas.drawText( str, objChar.x + objChar.w*0.5f, objChar.y, paint );
+					
+					log("canvas.drawText(), str="+str+",x="+objChar.x+",y="+objChar.y);
+				}
 			}			
 	
+			log("before initNativeObject(), strText="+strText );
 			Cocos2dxBitmap.initNativeObject(bitmap);
+			log("after initNativeObject(), strText="+strText );
 		}
 	}
 	
@@ -87,5 +109,11 @@ public class NDBitmap {
 			//String strText = "helloÄãºÃÂð";
 			NDBitmap.createTextBitmap(strText, "", 0, 0, 200, 100);
 		}
+	}
+	
+	public static void log( final String str )
+	{
+		if (verbose)
+			Log.d("ndbmp", str);
 	}
 }

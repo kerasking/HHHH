@@ -77,9 +77,9 @@ public class NDTextProxy
 			final int width, final int height )
 	{
 		// translate text
-		//Log.d( "ndbmp", "[before translate] NDBitmap.parse(): " + strText);
+		log( "[before translate] NDBitmap.parse(): " + strText);
 		String newText = translateText( strText );
-		//Log.d( "ndbmp", "[after translate] NDBitmap.parse(): " + newText);
+		log( "[after translate] NDBitmap.parse(): " + newText);
 		
 		// reset proxy
 		resetWith( newText, fontName, fontSize, alignment, width, height );
@@ -90,7 +90,7 @@ public class NDTextProxy
 			buildCharProperty( paint, width, height );
 			calcAlignment();
 			applyAlignment();
-			//dumpCharList();
+			dumpCharList();
 			return true;
 		}
 		return false;
@@ -144,9 +144,11 @@ public class NDTextProxy
 			fontSize = 0;
 			color = 0;
 			bLineFeed = false;
+			bSpecialChar = false;
 		}
 		
 		public char			c;
+		public boolean		bSpecialChar;
 		public String		fontName;
 		public int			fontSize;
 		public int			color;
@@ -248,6 +250,7 @@ public class NDTextProxy
 	{
 		CharProperty charProp = new CharProperty();		
 		charProp.c = c;
+		charProp.bSpecialChar = isSpecialChar(c);
 		charProp.fontName = parseFlag.isFontName ? parseFlag.newFontName : defaultFontName;
 		charProp.fontSize = defaultFontSize;
 		charProp.color = parseFlag.isColor ? parseFlag.newColor : defaultColor;
@@ -431,7 +434,7 @@ public class NDTextProxy
 	 */
 	private static void buildCharProperty( Paint paint, int uiWidth, int uiHeight )
 	{
-		//Log.d("ndbmp","@@ buildCharProperty()");
+		log("@@ buildCharProperty()");
 			
 		// calc char height
 		final FontMetricsInt fm = paint.getFontMetricsInt();
@@ -440,7 +443,8 @@ public class NDTextProxy
 		calcWidth = 0;
 		calcHeight = 0;
 		lineCount = 1;
-		int x = 0, y = - fm.top;
+		int x = 0;
+		int y = (int) (-fm.top * 1);//@tune
 		
 		for ( CharProperty objChar : charList ) 
 		{
@@ -462,6 +466,12 @@ public class NDTextProxy
 			{
 				String str = String.valueOf( objChar.c );
 				int charWidth = (int) FloatMath.ceil( paint.measureText( str, 0, str.length()));
+				
+				// fix width for special char
+				if (isSpecialChar(objChar.c) && NDBitmap.isVerOlder())
+				{
+					charWidth = (int)(charWidth * 0.6);//@tune
+				}
 				
 				//if ui width not enough, change line.
 				if (withUILimit && (x + charWidth > uiMaxWidth))
@@ -488,10 +498,11 @@ public class NDTextProxy
 				}
 				
 				calcWidth = Math.max(calcWidth, x);
-				calcHeight = y;
 			}
 		}//for
 			
+		calcHeight = Math.max(lineCount,1) * fontHeight;
+		
 		// calc bitmap size
 		if (withUILimit)
 		{
@@ -500,8 +511,9 @@ public class NDTextProxy
 		}
 		else
 		{
-			bitmapWidth = calcWidth;
-			bitmapHeight = calcHeight;			
+			// make sure not zero size.
+			bitmapWidth = calcWidth > 0 ? calcWidth : 10;
+			bitmapHeight = calcHeight > 0 ? calcHeight : fontHeight;
 		}		
 	}
 	
@@ -631,20 +643,45 @@ public class NDTextProxy
 //		return s2;
 	}
 	
+	/**
+	 * isSpecialChar: 
+	 * @param c
+	 * @return
+	 */
+	private static boolean isSpecialChar( final char c )
+	{
+		// these special char, when rendering it on old android os (say it 2.x) with font "Lishu",
+		// rendering size bugs.
+		
+		if ((c >= '0' && c <= '9') || 
+			(c >= 'a' && c <= 'z') || 
+			(c >= 'A' && c <= 'Z') ||
+			(c == '%' || c == '/' || c == ':' 
+				|| c == '+' || c == '-' 
+				|| c == '[' || c == ']' 
+				|| c == '(' || c == ')'
+			))
+		{
+			return true;
+		}
+		return false;
+	}
+	
 	private static void dumpCharList()
 	{
-		Log.d("ndbmp", "@@ ---------------------------------\r\n");
+		if (!NDBitmap.verbose) return;
+		
+		log( "---------------------------------");
 		
 		for (final CharProperty objChar : charList) 
 		{
 			if (objChar.bLineFeed)
 			{
-				Log.d( "ndbmp", "@@ linefeed" );
+				log("@@ linefeed" );
 			}
 			else
 			{
-				Log.d( "ndbmp", "@@ " 
-							+ String.valueOf(objChar.c) 
+				log( String.valueOf(objChar.c) 
 							+ "  x=" + objChar.x
 							+ "  y=" + objChar.y
 							+ "  w=" + objChar.w
@@ -653,5 +690,10 @@ public class NDTextProxy
 							);
 			}
 		}
+	}
+	
+	public static void log( final String str )
+	{
+		NDBitmap.log( str );
 	}
 }
