@@ -57,8 +57,8 @@ using namespace CocosDenshion;
 
 #define UPDATE_TIP_TEXT_ANDROID 0x7f080039	///< 安卓解壓介面提示文字，對應安卓String.xml里的unzip_text 郭浩
 
-#define UPDATE_ON		0	//0关闭下载，1开启下载
-#define CACHE_MODE 		0  //发布模式//0关闭拷贝；1开启将资源拷贝至cache目录来访问
+#define UPDATE_ON		1	//0关闭下载，1开启下载
+#define CACHE_MODE 		1  //发布模式//0关闭拷贝；1开启将资源拷贝至cache目录来访问
 //--------------------//
 
 #define TAG_INSTALL_SUCCESS			1
@@ -336,6 +336,18 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 		    //定义保存路径
 		    m_strUpdateURL = *kDeqUpdateUrl.begin();
 		    //m_savePath = [[NSString stringWithFormat:@"%s/update%d.zip", m_cachPath.c_str(), PackageCount] UTF8String];
+			//重新设置m_SavePath的值，保存本地的文件名与服务器上下载名保持一致
+			/*
+			char szUpdateURL[100] = {0};
+			snprintf(szUpdateURL,sizeof(szUpdateURL),"%s",m_strUpdateURL.c_str());
+			char* szTempFile = GetPathFileName(szUpdateURL,'/');
+			if (szTempFile)
+			{
+				m_strSavePath = m_strCachePath + szTempFile;
+			}
+			else
+				return;
+			*/
 		    m_pTimer->SetTimer( this, TAG_TIMER_UPDATE, 0.5f );
 		    StartDownload();
 		}
@@ -655,7 +667,7 @@ void CSMLoginScene::ReflashPercent(int percent, int pos, int filelen )
 		sprintf(dataSize,"%.2f",filelen/(1024*1024.0));
 		std::string strDownloading = NDCommonCString2(SZ_DOWNLOADING);
 		char buff[100] = {0};
-		sprintf(buff,"%s(%d/%d)",strDownloading.c_str(),m_CurDownNum,iTotalDownNum);
+		sprintf(buff,"(%sMB)%s(%d/%d)",dataSize, strDownloading.c_str(),m_CurDownNum,iTotalDownNum);
 		//str << "("<<buff<< "MB)" << CCString::stringWithFormat(strDownloading.c_str(), m_CurDownNum, iTotalDownNum)->getCString();
 		//m_pLabelPromtp->SetText( str.str().c_str() );
 		m_pLabelPromtp->SetText(buff);

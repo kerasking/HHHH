@@ -135,6 +135,7 @@ void DownloadPackage::DownloadThreadExcute()
  	}		
  	m_pkHttp->setTimeout(60 * 1000);
 	//获取已经下载文件的大小,如果已经存在，则进行续传
+	m_nFileLen = 0;
     int startpos = GetFileSize(m_strDownloadPath.c_str());
  	int nDoneLength = m_pkHttp->getHttpFile(m_strDownloadURL.c_str(),
 		m_strDownloadPath.c_str(), startpos);
@@ -146,10 +147,11 @@ void DownloadPackage::DownloadThreadExcute()
 		{
 			nReconnectCount--;
 			sleep(10000);
+			m_nFileLen = 0;
 			startpos = GetFileSize(m_strDownloadPath.c_str());
 			nDoneLength = m_pkHttp->getHttpFile(m_strDownloadURL.c_str(),
 				m_strDownloadPath.c_str(), startpos);
-			if (nDoneLength >= m_nFileLen)
+			if ((nDoneLength >= m_nFileLen) && (m_nFileLen > 0))
 			{
 				break;
 			}
