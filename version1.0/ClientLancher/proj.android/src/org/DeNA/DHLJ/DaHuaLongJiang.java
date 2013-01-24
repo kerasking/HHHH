@@ -17,6 +17,7 @@ import org.cocos2dx.lib.Cocos2dxBitmap;
 import org.cocos2dx.lib.Cocos2dxEditText;
 import org.cocos2dx.lib.Cocos2dxGLSurfaceView;
 import org.cocos2dx.lib.Cocos2dxHelper;
+import org.cocos2dx.lib.NDBitmap;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.xmlpull.v1.XmlPullParserException;
@@ -250,6 +251,9 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	{
 		Log.d("init", "@@ DaHuaLongJiang.onCreate()");
 
+		//@del
+		NDBitmap.test();
+		
 		if (isSDCardCanUse())
 		{
 			ms_pkDHLJ = this;

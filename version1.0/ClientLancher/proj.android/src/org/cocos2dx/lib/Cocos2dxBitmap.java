@@ -82,13 +82,41 @@ public class Cocos2dxBitmap {
 
 	private static native void nativeInitBitmapDC(final int pWidth, final int pHeight, final byte[] pPixels);
 
+	
+	/**
+	 * createTextBitmap: 
+	 * @param pString
+	 * @param pFontName
+	 * @param pFontSize
+	 * @param pAlignment
+	 * @param pWidth
+	 * @param pHeight
+	 */
+	public static void createTextBitmap(String pString, 
+			final String pFontName, final int pFontSize, final int pAlignment, 
+			final int pWidth, final int pHeight) 
+	{
+		// if NDBitmap is enabled, forward to NDBitmap, otherwise call the old one.
+		if (NDBitmap.isEnabled())
+		{
+			NDBitmap.createTextBitmap( pString, pFontName, pFontSize, pAlignment, pWidth, pHeight );
+		}
+		else
+		{
+			createTextBitmap_Old( pString, pFontName, pFontSize, pAlignment, pWidth, pHeight );	
+		}
+	}
+	
 	/**
 	 * @param pWidth
 	 *            the width to draw, it can be 0
 	 * @param pHeight
 	 *            the height to draw, it can be 0
 	 */
-	public static void createTextBitmap(String pString, final String pFontName, final int pFontSize, final int pAlignment, final int pWidth, final int pHeight) {
+	public static void createTextBitmap_Old(String pString, final 
+			String pFontName, final int pFontSize, final int pAlignment, 
+			final int pWidth, final int pHeight) 
+	{
 		final int horizontalAlignment = pAlignment & 0x0F;
 		final int verticalAlignment = (pAlignment >> 4) & 0x0F;
 
@@ -343,7 +371,8 @@ public class Cocos2dxBitmap {
 		return strBuilder.toString();
 	}
 
-	private static void initNativeObject(final Bitmap pBitmap) {
+	//ND_MOD
+	public static void initNativeObject(final Bitmap pBitmap) {
 		final byte[] pixels = Cocos2dxBitmap.getPixels(pBitmap);
 		if (pixels == null) {
 			return;
