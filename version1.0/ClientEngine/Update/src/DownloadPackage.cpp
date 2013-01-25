@@ -137,8 +137,15 @@ void DownloadPackage::DownloadThreadExcute()
 	//获取已经下载文件的大小,如果已经存在，则进行续传
 	m_nFileLen = 0;
     int startpos = GetFileSize(m_strDownloadPath.c_str());
+	LOGD("Download startpos is %d",startpos);
  	int nDoneLength = m_pkHttp->getHttpFile(m_strDownloadURL.c_str(),
 		m_strDownloadPath.c_str(), startpos);
+   if (startpos >0 && m_pkHttp->getStatusCode() == 416)
+   {
+	   LOGD("already Download succeeded ,to unzip file!");
+	   DidDownloadStatus(DownloadStatusSuccess);
+	   return ;
+   }
 	//网络连接失败,进行重新连接尝试
 	int nReconnectCount = RECONNECTCOUNT;
 	if (nDoneLength == -1 || ((nDoneLength < m_nFileLen) && (nDoneLength > 0)))
