@@ -531,6 +531,11 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 
 		if (edittext != null)
 		{
+			FrameLayout parent = (FrameLayout) edittext.getParent();
+			if (parent != null)
+			{
+				parent.removeView(edittext);
+			}
 			// add edit to layout
 			menubar.addView(edittext);
 

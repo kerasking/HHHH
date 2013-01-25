@@ -23,6 +23,7 @@ public class MainActivity extends Activity {
 		i.addFlags(Intent.FLAG_ACTIVITY_PREVIOUS_IS_TOP);
 		i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		startActivity(i);
+		this.finish();
 	}
 	
 	public static void onExit()
