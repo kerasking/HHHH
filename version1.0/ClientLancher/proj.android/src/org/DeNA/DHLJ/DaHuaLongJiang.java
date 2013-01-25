@@ -883,7 +883,8 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 			public void onClick(DialogInterface dialog, int which)
 			{
 				dialog.dismiss();
-				MainActivity.onExit();
+				android.os.Process.killProcess(android.os.Process.myPid());
+//				MainActivity.onExit();
 			}
 		};
 
