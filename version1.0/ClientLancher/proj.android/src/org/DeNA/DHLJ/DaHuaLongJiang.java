@@ -115,7 +115,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 
 	private static Context s_context;
 	private static LinearLayout s_balancelayout;
-	private static LinearLayout s_TextViewlayout;
+	private static LinearLayout s_TextViewlayout = null;
 
 	private static Cocos2dxEditText edittext; // @ime
 	private static Button testbutton;
@@ -182,7 +182,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 				tv = null;
 			}
 			else {
-				Log.d(TAG, "Clear Splash2");
+				Log.d(TAG, "Clear Splash2 "+ tv +" " + s_TextViewlayout + " " + menubar);
 			}
 		};
 	};
@@ -254,7 +254,8 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 			PushService.actionStart(context);
 
 			MobageLogin();
-			addTextView();
+//			addTextView();
+			s_TextViewlayout = null;
 
 			Log.e(TAG, "onCreate called");
 			nativeInit(480, 320);
@@ -329,6 +330,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		{
 			wm.removeView(myFV);
 		}
+		System.exit(0);
 	}
 
 	@Override
@@ -1014,7 +1016,6 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	static
 	{
 		System.loadLibrary("mobage");
-		System.loadLibrary("cocos2d");
 		System.loadLibrary("GameLauncher");
 	}
 
