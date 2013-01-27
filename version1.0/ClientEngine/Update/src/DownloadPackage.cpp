@@ -192,15 +192,15 @@ void DownloadPackage::Download()
 
 int DownloadPackage::GetFileSize(const char* filepath)
 {
-	//int size = 0;
-  //  #ifdef WIN32
+	int size = 0;
 	FILE* file = fopen(filepath, "rb");
 	if(file)
 	{
 		fseek(file, 0L, SEEK_END);
-		return ftell(file); 
+		size = ftell(file); 
+		fclose(file);
 	}
-	return 0;
+	return size;
 #if 0
 
  #ifdef WIN32
