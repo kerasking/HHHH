@@ -159,7 +159,7 @@ public:
 		}
 		else
 		{
-			pFontName = FONT_UTIL::changeFontName( pFontName, jstrText );
+			//pFontName = FONT_UTIL::changeFontName( pFontName, jstrText );
 		}
 #endif
 

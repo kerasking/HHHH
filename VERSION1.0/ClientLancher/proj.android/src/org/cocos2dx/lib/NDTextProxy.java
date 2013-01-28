@@ -469,7 +469,7 @@ public class NDTextProxy
 				// fix width for special char
 				if (isSpecialChar(objChar.c) && NDBitmap.isVerOlder())
 				{
-					charWidth = (int)(charWidth * 0.6);//@tune
+					charWidth = NDSpecialCharWidth.fixCharWidth(objChar.c, charWidth); //@tune
 				}
 				
 				//if ui width not enough, change line.
