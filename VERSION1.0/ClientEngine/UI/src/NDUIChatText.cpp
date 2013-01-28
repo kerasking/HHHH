@@ -23,6 +23,15 @@
 #include "utf8.h"
 
 
+//是否把NDBITMAP这套机制编译进去（仅支持android） @ndbitmap
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	#define WITH_NDBITMAP 1
+#else
+	#define WITH_NDBITMAP 0
+#endif
+#define WITH_NDBITMAP 1
+
+
 #ifdef ANDROID
 #include <jni.h>
 #include <android/log.h>
@@ -73,11 +82,69 @@ std::string CUIChatText::GetChannelStr(CHAT_CHANNEL_TYPE channel)
 		return "";
 	}
 }
-//void CUIChatText::SetContent(int speakerID,int channel,const char* speaker,const char* text)
+
+//@ndbitmap
+void CUIChatText::SetContent_WithNDBitmap(int speakerID, int channel, const char* speaker,
+							 const char* text, int style, int fontSizelua, ccColor4B color)
+{
+#if WITH_NDBITMAP
+
+	//备注：LUA传过来的字体大小是6，太小了！改成12.
+	fontSizelua = (fontSizelua == 6 ? 12 : fontSizelua);
+
+	if (!speaker) return;
+
+	this->RemoveAllChildren(true);
+
+	textNodeList.clear();
+	this->speakerName = speaker;
+	text_style = style;
+
+	ChatTextType type = ChatNone;
+	ccColor4B clr = color;
+	std::string channel_str = GetChannelStr(CHAT_CHANNEL_TYPE(channel));
+
+	//
+	string strChannel = "";
+	if (!channel_str.empty())
+	{
+		strChannel = GetTxtPri("[") + channel_str + GetTxtPri("]");
+	}
+
+	//
+	string strSpeaker = "";
+	if (CHAT_CHANNEL_TYPE(channel) != CHAT_CHANNEL_SYS)
+	{
+		strSpeaker = speaker;
+		strSpeaker += GetTxtPri(":");
+	}
+
+	//
+	string strTotalText = strChannel + strSpeaker;
+	if (text && text[0])
+	{
+		strTotalText += text;
+	}
+
+	//
+	NDUILabel* label = CreateLabel( strTotalText.c_str(), fontSizelua, color, 0 );
+	if (label)
+	{
+		AddChild( label );
+	}
+
+	// calculate text height
+	contentHeight = getStringSize( strTotalText.c_str(), fontSizelua * FONT_SCALE ).height;
+#endif
+}
 
 void CUIChatText::SetContent(int speakerID, int channel, const char* speaker,
 							 const char* text, int style, int fontSizelua, ccColor4B color)
 {
+#if WITH_NDBITMAP
+	return SetContent_WithNDBitmap( speakerID, channel, speaker, text, style, fontSizelua, color );
+#endif
+
 	//备注：LUA传过来的字体大小是6，太小了！改成12.
 	fontSizelua = (fontSizelua == 6 ? 12 : fontSizelua);
 
@@ -380,7 +447,7 @@ NDUILabel* CUIChatText::CreateLabel(const char* utf8_text, unsigned int fontSize
 	NDUILabel* label = NULL;
 	if (utf8_text) 
 	{
-		CCSize textSize = getStringSize(utf8_text, fontSize*FONT_SCALE);
+		CCSize textSize = getStringSize(utf8_text, fontSize*FONT_SCALE); 
 
 		label = new NDUILabel();
 		label->Initialization();

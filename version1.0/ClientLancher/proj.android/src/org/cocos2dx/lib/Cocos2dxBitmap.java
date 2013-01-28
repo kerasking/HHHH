@@ -450,7 +450,22 @@ public class Cocos2dxBitmap {
 	}
 	
 	//ND_MOD
-	private static String getStringSize(String pString, final String pFontName,
+	private static String getStringSize( String pString, final String pFontName,
+											final int pFontSize, final int pAlignment)
+	{
+		if (NDBitmap.isEnabled())
+		{
+			if (pString.indexOf("<c") != -1 &&
+					pString.indexOf("/e") != -1)
+			{
+				return NDBitmap.getStringSize(pString, pFontName, pFontSize, pAlignment);
+			}
+		}
+		return getStringSize_Old(pString, pFontName, pFontSize, pAlignment);
+	}
+	
+	//ND_MOD
+	private static String getStringSize_Old(String pString, final String pFontName,
 			final int pFontSize, final int pAlignment)				
 	{
 		final int horizontalAlignment = pAlignment & 0x0F;

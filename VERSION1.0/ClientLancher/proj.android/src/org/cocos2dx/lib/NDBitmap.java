@@ -100,8 +100,37 @@ public class NDBitmap {
 		}
 	}
 	
+	/**
+	 * getStringSize: support rich format
+	 * @param strText
+	 * @param fontName
+	 * @param fontSize
+	 * @param alignment
+	 * @return
+	 */
+	public static String getStringSize( final String strText, final String fontName,
+											final int fontSize, final int alignment)
+	{
+		final Paint paint = Cocos2dxBitmap.newPaint( fontName, fontSize, alignment & 0x0F );
+	
+		if (NDTextProxy.parse( paint, strText, fontName, fontSize, alignment, 0, 0 ))
+		{
+			int w = NDTextProxy.bitmapWidth;
+			int h = NDTextProxy.bitmapHeight;
+			return String.valueOf(w)+" " +String.valueOf(h);
+		}
+		
+		return "";
+	}
+	
 	public static void test()
 	{
+		if (false)
+		{
+			NDTextProxy.testFormatText( "你好jack" );
+			NDTextProxy.testFormatText( "<cff00ee你好<cff00ccjack" );
+			NDTextProxy.testFormatText( "<cff00ee你好/e<cff00ccjack/e" );
+		}
 		if (false)
 		{
 			//String strText = "<C#112233>hello</C><C#aabbcc>你好吗</C>";

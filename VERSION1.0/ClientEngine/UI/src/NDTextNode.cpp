@@ -21,6 +21,15 @@
 #include "ScriptGameDataLua.h"
 #include "utf8.h"
 
+
+//是否把NDBITMAP这套机制编译进去（仅支持android）@ndbitmap
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	#define WITH_NDBITMAP 1
+#else
+	#define WITH_NDBITMAP 0
+#endif
+#define WITH_NDBITMAP 1
+
 using namespace cocos2d;
 
 namespace NDEngine
@@ -278,10 +287,46 @@ NDUITextBuilder* NDUITextBuilder::DefaultBuilder()
 	return NDUITextBuilder_DefaultBuilder;
 }
 
+//@ndbitmap
+NDUIText* NDUITextBuilder::Build_WithNDBitmap(const char* pszText, unsigned int uiFontSize,
+							 CCSize kContainerSize,
+							 cocos2d::ccColor4B kDefaultColor /*= ccc4(0, 0, 0, 255)*/,
+							 bool bWithPageArrow /*= false*/, bool bHpyerLink /*= false*/)
+{
+#if WITH_NDBITMAP
+	NDUILabel* label = new NDUILabel;
+	if (label)
+	{
+		label->SetText( pszText );
+		label->SetFontSize( uiFontSize );
+		label->SetFontColor( kDefaultColor );
+		label->Initialization();
+		label->SetRenderTimes(1);
+		label->SetFrameRect( CCRectMake(0,0,kContainerSize.width,kContainerSize.height));
+	}
+	
+	if (label)
+	{
+		NDUIText* uiText = new NDUIText();
+		uiText->Initialization(false);
+		uiText->AddChild( label );
+		return uiText;
+	}
+#endif
+	return NULL;
+}
+
 NDUIText* NDUITextBuilder::Build(const char* pszText, unsigned int uiFontSize,
 		CCSize kContainerSize, ccColor4B kDefaultColor, bool bWithPageArrow,
 		bool bHpyerLink)
 {
+#if WITH_NDBITMAP //@ndbitmap
+	if (!bWithPageArrow)
+	{
+		return Build_WithNDBitmap( pszText, uiFontSize, kContainerSize, kDefaultColor, bWithPageArrow, bHpyerLink );
+	}
+#endif
+
 	if (!pszText)
 	{
 		return 0;
