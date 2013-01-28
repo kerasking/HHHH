@@ -46,10 +46,6 @@
                 <action android:name="tw.mobage.g23000052.RUN" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-            <intent-filter>
-                <action android:name="tw.mobage.g23000052.RUN" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
         </activity>
          <activity android:name="org.DeNA.DHLJ.DaHuaLongJiang"
                   android:label="@string/app_name"
@@ -92,6 +88,8 @@
             </intent-filter>
         </activity>
         <activity android:name="com.denachina.account.weakaccount.WeakAccountActivity"
+                  android:screenOrientation="landscape"
+                  android:configChanges="keyboardHidden|orientation"
             	  android:windowSoftInputMode="adjustPan"
                 android:label="WeakAccountLogin" 
                >
