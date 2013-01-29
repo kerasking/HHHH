@@ -233,7 +233,9 @@ function p.OnUIEventMatirialContainerViewChange(uiNode, uiEventType, param)
 			  
 			  --延迟关闭自己
 			  lazyClose(NMAINSCENECHILDTAG.PlayerEquipUpStepUI); 
-		          
+	            lazyClose(NMAINSCENECHILDTAG.PlayerAttr);		
+	            lazyClose(NMAINSCENECHILDTAG.PlayerBackBag);
+			          
 		          --CloseUI(NMAINSCENECHILDTAG.PlayerEquipUpStepUI);
 		          --CloseUI(NMAINSCENECHILDTAG.PlayerEquipUpStepUI);
 		          return true;
