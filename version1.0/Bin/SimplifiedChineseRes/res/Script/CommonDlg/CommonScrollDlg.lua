@@ -72,6 +72,7 @@ function p.OnProcessTextTimer(nTimeTag)
 			if(v[3]==0) then	--播放结束动画
 				local szAniPath = NDPath_GetAnimationPath();
                 animate:ChangeSprite(szAniPath.."scroll02.spr");
+                animate:setExtra(1); --don't change "1"
 			elseif(v[3] < 0 and animate:IsAnimationComplete()) then	--删除滚动条
 				table.remove(p.FontLists,i);
 				local layer = GetUiNode(scene, v[1]);
@@ -139,7 +140,7 @@ function p.CreateMsgUI(nIndex)
     end
     
     --创建node
-    local layer = createNDUINode();
+    local layer = createNDUILayer();
 	if layer == nil then
 		return false;
 	end
@@ -161,15 +162,16 @@ function p.CreateMsgUI(nIndex)
     local animate = RecursivUISprite(layer,{TAG_ANIMATE});
     local szAniPath = NDPath_GetAnimationPath();
     animate:ChangeSprite(szAniPath.."scroll01.spr");
+    animate:setExtra(1); --don't change "1"
     
     local winsize = GetWinSize(); 
     
     local svc = RecursiveScrollContainer(layer,{TAG_TXT});
     local rect = svc:GetFrameRect();
     local r = GetWinSize().w/960.0;
-    svc:SetFrameRect(CGRectMake(rect.origin.x+(rect.size.w-rect.size.w*r)/2,rect.origin.y,rect.size.w*r,rect.size.h));
+--    svc:SetFrameRect(CGRectMake(rect.origin.x+(rect.size.w-rect.size.w*r)/2,rect.origin.y,rect.size.w*r,rect.size.h));
     
-    rect = svc:GetFrameRect();
+--    rect = svc:GetFrameRect();
     
     LogInfo("chh:x:[%05f],y:[%05f],w:[%05f],h:[%05f]",rect.origin.x,rect.origin.y,rect.size.w,rect.size.h);
     

@@ -1,5 +1,5 @@
 /*
- *  UIScrollView.h
+ *  NDUIScrollViewContainer.h
  *  SMYS
  *
  *  Created by jhzheng on 12-2-13.
@@ -7,8 +7,7 @@
  *
  */
 
-#ifndef _UI_SCROLL_VIEW_ZJH_
-#define _UI_SCROLL_VIEW_ZJH_
+#pragma once
 
 #include "NDUIScroll.h"
 #include "NDUIScrollContainer.h"
@@ -40,7 +39,6 @@ protected:
 };
 
 /////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////
 class ContainerClientLayer;
 class NDUIScrollViewContainer : public NDUIScrollContainer
 {
@@ -50,7 +48,7 @@ class NDUIScrollViewContainer : public NDUIScrollContainer
 	~NDUIScrollViewContainer();
 	
 public:
-	void Initialization(); override
+	virtual void Initialization();
 
     //设置list控件的样式 水平或者垂直
 	void SetStyle(int style);
@@ -71,29 +69,29 @@ public:
 	CCSize GetViewSize();
     
     //list控件中添加view
-	void AddView(CUIScrollView* view);
+	virtual void AddView(CUIScrollView* view);
     
     //删除索引为uiIndex的view
-    void RemoveView(unsigned int uiIndex);
+    virtual void RemoveView(unsigned int uiIndex);
     
     //删除id为uiViewId的view
-    void RemoveViewById(unsigned int uiViewId);
+    virtual void RemoveViewById(unsigned int uiViewId);
     
-	//void ReplaceView(unsigned int uiIndex, CUIScrollView* view);
-	//void ReplaceViewById(unsigned int uiViewId, CUIScrollView* view);
+	//virtual void ReplaceView(unsigned int uiIndex, CUIScrollView* view);
+	//virtual void ReplaceViewById(unsigned int uiViewId, CUIScrollView* view);
 
     //删除所有的view
-	void RemoveAllView();
-	//void InsertView(unsigned int uiIndex, CUIScrollView* view);
-	void ShowViewByIndex(unsigned int uiIndex);
-	void ShowViewById(unsigned int uiViewId);
-	void ScrollViewByIndex(unsigned int uiIndex);
-	void ScrollViewById(unsigned int uiViewId);
+	virtual void RemoveAllView();
+	//virtual void InsertView(unsigned int uiIndex, CUIScrollView* view);
+	virtual void ShowViewByIndex(unsigned int uiIndex);
+	virtual void ShowViewById(unsigned int uiViewId);
+	virtual void ScrollViewByIndex(unsigned int uiIndex);
+	virtual void ScrollViewById(unsigned int uiViewId);
 	
-	CUIScrollView* GetView(unsigned int uiIndex);
-	CUIScrollView* GetViewById(unsigned int uiViewId);
-	CUIScrollView* GetBeginView();
-	unsigned int GetBeginIndex();
+	virtual CUIScrollView* GetView(unsigned int uiIndex);
+	virtual CUIScrollView* GetViewById(unsigned int uiViewId);
+	virtual CUIScrollView* GetBeginView();
+	virtual unsigned int GetBeginIndex();
 
     void EnableScrollBar(bool bEnable)
     {
@@ -139,8 +137,8 @@ private:
 	void DrawScrollBar();
 	
 public:
-	void draw(); override
-	void SetFrameRect(CCRect rect); override
+	virtual void draw();
+	virtual void SetFrameRect(CCRect rect);
 	// CommonProtol
 	void OnScrollViewMove(NDObject* object, float fVertical, float fHorizontal); override
 	void OnScrollViewScrollMoveStop(NDObject* object); override
@@ -150,5 +148,3 @@ public:
 protected:
 	bool CanDestroyOnRemoveAllChildren(NDNode* pNode);override
 };
-
-#endif // _UI_SCROLL_VIEW_ZJH_

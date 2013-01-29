@@ -50,7 +50,7 @@ namespace NDEngine
 //		作用：初始化ui节点，必须被显示或隐式调用
 //		参数：无
 //		返回值：无
-		void Initialization(); override
+		virtual void Initialization();
 //		
 //		函数：SetFrameRect
 //		作用：设置ui相对于父亲节点的矩形显示范围，默认值为（0， 0， 0， 0）

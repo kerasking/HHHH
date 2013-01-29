@@ -42,8 +42,7 @@ public:
 	CCRect getRect();
 
 	void runWithRunFrameRecord(NDFrameRunRecord* pkRunFrameRecord, bool bNeedDraw);
-	void runWithRunFrameRecord(NDFrameRunRecord* pkRunFrameRecord, bool bNeedDraw,
-			float fDrawScale);
+	void runWithRunFrameRecord(NDFrameRunRecord* pkRunFrameRecord, bool bNeedDraw, float fDrawScale, int extra = 0);
 	void SlowDown(unsigned int multi);
 
 	bool lastFrameEnd(NDFrameRunRecord* pkRunRecord);

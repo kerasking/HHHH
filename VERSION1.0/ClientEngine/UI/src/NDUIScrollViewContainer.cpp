@@ -1,5 +1,5 @@
 /*
- *  UIScrollView.mm
+ *  NDUIScrollViewContainer.cpp
  *  SMYS
  *
  *  Created by jhzheng on 12-2-13.
@@ -7,7 +7,7 @@
  *
  */
 
-#include "NDUIScrollView.h"
+#include "NDUIScrollViewContainer.h"
 #include "ScriptUI.h"
 #include "CCPointExtension.h"
 #include "NDDirector.h"

@@ -395,11 +395,13 @@ void NDUILabel::draw()
 	}
 
 	CHECK_GL_ERROR_DEBUG();
+
+	debugDraw();
 }
 
 void NDUILabel::postDraw()
 {
-	debugDraw();
+	//debugDraw();
 }
 
 void NDUILabel::debugDraw()

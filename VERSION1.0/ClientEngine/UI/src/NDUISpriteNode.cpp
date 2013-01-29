@@ -97,6 +97,30 @@ void CUISpriteNode::draw()
 	
 	m_pSprite->SetPosition(pos);
 	m_pSprite->RunAnimation(true);
+
+	debugDraw();
+}
+
+void CUISpriteNode::debugDraw()
+{
+	if (!NDDebugOpt::getDrawDebugEnabled()) return;
+
+	CCRect scrRect = this->GetScreenRect();
+	ConvertUtil::convertToPointCoord( scrRect );
+
+	float l,r,t,b;
+	SCREEN2GL_RECT(scrRect,l,r,t,b);
+	{
+		// draw rect
+		glLineWidth(2);
+		ccDrawColor4F(1,0,0,1);
+		ccDrawRect( ccp(l,t), ccp(r,b));
+
+// 		// draw cross lines
+// 		glLineWidth(1);
+// 		ccDrawLine( ccp(l,b), ccp(r,t));
+// 		ccDrawLine( ccp(l,t), ccp(r,b));
+	}
 }
 
 void CUISpriteNode::SetAnimation(int nIndex, bool bFaceRight)
@@ -164,5 +188,15 @@ void CUISpriteNode::PlayAnimation( unsigned int nIndex, bool bReverse )
 	if( m_pSprite )
 	{
 		return m_pSprite->SetCurrentAnimation( nIndex, bReverse );
+	}
+}
+
+void CUISpriteNode::setExtra( const int extra )
+{
+	//当extra=1时表示缩放资源时以X方向为主，即确保缩放后资源在横向上能占满控件宽度.
+	//extra默认值0,则以Y方向为主.
+	if( m_pSprite )
+	{
+		m_pSprite->setExtra( extra );
 	}
 }
