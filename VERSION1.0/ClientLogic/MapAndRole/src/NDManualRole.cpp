@@ -207,13 +207,16 @@ void NDManualRole::Update(unsigned long ulDiff)
 				kCurrentPosition.x -= DISPLAY_POS_X_OFFSET;
 				kCurrentPosition.y -= DISPLAY_POS_Y_OFFSET;
 
-//@del
-// 				if (int(kCurrentPosition.x) % int(MAP_UNITSIZE_X) != 0
-// 						|| int(kCurrentPosition.y) % int(MAP_UNITSIZE_Y) != 0)
-// 				{
-// 					//continue;
-// 					return;
-// 				}
+#if 1
+				if (int(kCurrentPosition.x) % int(MAP_UNITSIZE_X) != 0
+						|| int(kCurrentPosition.y) % int(MAP_UNITSIZE_Y) != 0)
+				{
+					//continue;
+					return;
+				}
+#endif
+
+#if FIX_ANDROID_QIPA && (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 				if (!IS_SCREEN_POS_ALIGNED(kCurrentPosition))
 				{
 					if (NDDebugOpt::getTraceClickMapEnabled())
@@ -222,8 +225,9 @@ void NDManualRole::Update(unsigned long ulDiff)
 					}
 					return;
 				}
+#endif
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#if FIX_ANDROID_QIPA && (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 				float usOldRecordX = (kCurrentPosition.x) / MAP_UNITSIZE_X;
 				float usOldRecordY = (kCurrentPosition.y) / MAP_UNITSIZE_Y;
 				float usRecordX = usOldRecordX;
@@ -2628,7 +2632,7 @@ unsigned int NDManualRole::GetPeerageColor(int nPeerage)
 	return unClr;
 }
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#if FIX_ANDROID_QIPA && (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 int NDManualRole::GetPathDir(float oldX, float oldY, float newX, float newY)
 #else
 int NDManualRole::GetPathDir(int oldX, int oldY, int newX, int newY)
@@ -2659,7 +2663,7 @@ int NDManualRole::GetPathDir(int oldX, int oldY, int newX, int newY)
 	return -1;
 }
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#if FIX_ANDROID_QIPA && (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 bool NDManualRole::GetXYByDir(float oldX, float oldY, int dir, float& newX, float& newY)
 #else
 bool NDManualRole::GetXYByDir(int oldX, int oldY, int dir, int& newX, int& newY)

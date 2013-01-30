@@ -562,10 +562,12 @@ void NDPlayer::Walk(CCPoint toPos, SpriteSpeed speed, bool mustArrive/*=false*/)
  			(int)kCurrentPosition.x, (int)kCurrentPosition.y, (int)kPos.x, (int)kPos.y );
 	}
 
-//@del
-// 	if ((int(kCurrentPosition.x) - int(DISPLAY_POS_X_OFFSET)) % int(MAP_UNITSIZE_X) != 0
-// 	 || (int(kCurrentPosition.y) - int(DISPLAY_POS_Y_OFFSET)) % int(MAP_UNITSIZE_Y) != 0)
+#if FIX_ANDROID_QIPA
 	if (!IS_PLAYER_POS_ALIGNED(kCurrentPosition))
+#else
+ 	if ((int(kCurrentPosition.x) - int(DISPLAY_POS_X_OFFSET)) % int(MAP_UNITSIZE_X) != 0
+ 	 || (int(kCurrentPosition.y) - int(DISPLAY_POS_Y_OFFSET)) % int(MAP_UNITSIZE_Y) != 0)
+#endif
 	{ 
 		// Cell没走完,又设置新的目标
 		m_kTargetPos = kPos;
@@ -593,10 +595,15 @@ void NDPlayer::Walk(CCPoint toPos, SpriteSpeed speed, bool mustArrive/*=false*/)
 
 void NDPlayer::SetPosition(CCPoint newPosition)
 {
-	CCPoint newCell = ConvertUtil::convertDisplayToCell( newPosition, true );
-	CCPoint oldCell = ConvertUtil::convertDisplayToCell( GetPosition(), true );
+#if FIX_ANDROID_QIPA
+ 	CCPoint newCell = ConvertUtil::convertDisplayToCell( newPosition, true );
+ 	CCPoint oldCell = ConvertUtil::convertDisplayToCell( GetPosition(), true );
+#else
+	CCPoint newCell = ConvertUtil::convertDisplayToCell( newPosition );
+	CCPoint oldCell = ConvertUtil::convertDisplayToCell( GetPosition());
+#endif
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#if FIX_ANDROID_QIPA && (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	float nNewCol = newCell.x;
 	float nNewRow = newCell.y;
 	float nOldCol = oldCell.x;
@@ -615,7 +622,7 @@ void NDPlayer::SetPosition(CCPoint newPosition)
 		return;
 	}
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#if FIX_ANDROID_QIPA && (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	if (TAbs<float>(nNewCol - nOldCol) >= 1.0f || TAbs<float>(nNewRow - nOldRow) >= 1.0f)
 #else
 	if (nNewCol != nOldCol || nNewRow != nOldRow)

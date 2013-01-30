@@ -118,5 +118,6 @@ public: //ÅÐ¶Ï¸ñ×Ó¶ÔÆë
 #define IS_PLAYER_POS_ALIGNED(pos)	(ConvertUtil::isPlayerPosAligned(pos))
 //-----------------------------------------------------------------------------------------------------------
 
+#define FIX_ANDROID_QIPA 0
 
 NS_NDENGINE_END

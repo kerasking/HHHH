@@ -26,6 +26,7 @@ NS_NDENGINE_BGN
 #define SHOW_NAME_ROLE_W (64) // 在w(-64,64)区域内显示怪物和npc名字
 #define SHOW_NAME_ROLE_H (64)
 
+
 typedef struct _tagShowPetInfo
 {
 	OBJID idPet;
@@ -227,7 +228,7 @@ public:
 	void ResetShowPetPosition();
 	void ResetShowPet();
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#if FIX_ANDROID_QIPA && (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	int GetPathDir(float oldX, float oldY, float newX, float newY);
 	bool GetXYByDir(float oldX, float oldY, int dir, float& newX, float& newY);
 #else
