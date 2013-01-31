@@ -154,6 +154,11 @@ extern "C"
         MobageSdkLoginAndroid::onLoginError();
 		LOGD("Leave Java_org_DeNA_DHLJ_DaHuaLongJiang_onLoginError");
 	}
+
+	void Java_org_DeNA_DHLJ_DaHuaLongJiang_onQuitGameEvent(JNIEnv*  env, jobject thiz)
+	{
+		LOGD("Press exit");
+	}
     
 	void Java_org_DeNA_DHLJ_DaHuaLongJiang_onLogout(JNIEnv*  env, jobject thiz)
 	{
