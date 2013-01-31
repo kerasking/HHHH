@@ -49,6 +49,7 @@ import android.net.ParseException;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.opengl.GLSurfaceView;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -88,10 +89,13 @@ import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import android.widget.VideoView;
+import tw.mobage.g23000052.MainActivity;
 import tw.mobage.g23000052.R;
 import android.widget.ImageView;
 import android.graphics.BitmapFactory;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 
 public class DaHuaLongJiang extends Cocos2dxActivity
 {
@@ -111,11 +115,11 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 
 	private static Context s_context;
 	private static LinearLayout s_balancelayout;
-	private static LinearLayout s_TextViewlayout;
+	private static LinearLayout s_TextViewlayout = null;
 
 	private static Cocos2dxEditText edittext; // @ime
 	private static Button testbutton;
-	private static ImageView imgSplash;
+	private static ImageView imgSplash;	
 	private static TextView tv = null;
 	private static String textString;
 
@@ -170,13 +174,15 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	{
 		public void run()
 		{
-			View rootView = ms_pkDHLJ.getView();
 			if (tv != null && s_TextViewlayout != null && menubar != null)
 			{
-				rootView.setBackgroundResource(0);
+				Log.d(TAG, "Clear Splash");
 				s_TextViewlayout.removeView(tv);
 				menubar.removeView(s_TextViewlayout);
 				tv = null;
+			}
+			else {
+				Log.d(TAG, "Clear Splash2 "+ tv +" " + s_TextViewlayout + " " + menubar);
 			}
 		};
 	};
@@ -194,20 +200,6 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	{
 		public void run()
 		{
-			LinearLayout pkLinearLayout = new LinearLayout(ms_pkDHLJ);
-			pkLinearLayout.addView(m_pkView);
-			pkLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
-			LinearLayout.LayoutParams pkParams = new LinearLayout.LayoutParams(
-					ViewGroup.LayoutParams.FILL_PARENT,
-					ViewGroup.LayoutParams.FILL_PARENT);
-			pkParams.gravity = Gravity.CENTER;
-			ms_pkDHLJ.setContentView(pkLinearLayout, pkParams);
-			m_pkView.setLayoutParams(pkParams);
-			// ms_pkDHLJ.rootView.setVisibility(View.INVISIBLE);
-			// ms_pkDHLJ.balancebutton.setVisibility(View.INVISIBLE);
-			// menubar.setVisibility(View.INVISIBLE);
-			m_pkView.start();
-			m_pkView.setVisibility(View.VISIBLE);
 		};
 	};
 
@@ -215,17 +207,11 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	{
 		public void run()
 		{
-			// ms_pkDHLJ.setMain();
 			ViewGroup.LayoutParams pkParams = new ViewGroup.LayoutParams(
 					ViewGroup.LayoutParams.FILL_PARENT,
 					ViewGroup.LayoutParams.FILL_PARENT);
-			// ms_pkDHLJ.nativeInit(100, 200);
 			ms_pkDHLJ.setContentView(menubar, pkParams);
 			ms_pkDHLJ.rootView.setVisibility(View.VISIBLE);
-			// ms_pkDHLJ.balancebutton.setVisibility(View.INVISIBLE);
-			// menubar.setVisibility(View.INVISIBLE);
-			// m_pkView.start();
-			// m_pkView.setVisibility(View.INVISIBLE);
 		};
 	};
 
@@ -246,50 +232,34 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		};
 	};
 
+	public static String getDeviceVersion()
+	{
+		String strRet = "";
+
+		strRet = Build.MANUFACTURER + "-" + Build.MODEL + "-" + Build.VERSION.RELEASE;
+
+		return strRet;
+	}
+	
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		Log.d("init", "@@ DaHuaLongJiang.onCreate()");
-
 		if (isSDCardCanUse())
 		{
 			ms_pkDHLJ = this;
-			super.onCreate(savedInstanceState);
-			Log.e(TAG, "onCreate called");
-
 			Context context = getApplication().getApplicationContext();
-			CookieSyncManager.createInstance(this);
 			s_context = context;
-
-			Mobage.registerMobageResource(this, "tw.mobage.g23000052.R");
-			// RemoteNotificationView.DisableRemoteNotification();
-			SocialUtils.initializeMobage(this);
-			mPlatformListener = SocialUtils.createPlatformListener(true);
-			Mobage.addPlatformListener(mPlatformListener);
-
-			RemoteNotification.setListener(new RemoteNotificationListener()
-			{
-				@Override
-				public void handleReceive(Context context, Intent intent)
-				{
-					// You can use static method which performing a notification
-					// in status bar.
-					C2DMBaseReceiver.displayStatusBarNotification(context,
-							intent);
-				}
-			});
-
-			nativeInit(480, 320);
-
-			Mobage.checkLoginStatus();
-			Mobage.onCreate();
-
 			mDeviceID = Secure.getString(this.getContentResolver(),
 					Secure.ANDROID_ID);
 			PushService.actionStart(context);
 
-			menubar = new DynamicMenuBar(this);
-			menubar.setMenubarVisibility(View.VISIBLE);
-			menubar.setMenuIconGravity(Gravity.TOP | Gravity.LEFT);
+			MobageLogin();
+//			addTextView();
+			s_TextViewlayout = null;
+
+			Log.e(TAG, "onCreate called");
+			nativeInit(480, 320);
+			super.onCreate(savedInstanceState);
 
 			// testbutton = new Button(this);
 			// testbutton.setText("aaaaaaaaa".toCharArray(), 1, 6);
@@ -360,6 +330,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		{
 			wm.removeView(myFV);
 		}
+		System.exit(0);
 	}
 
 	@Override
@@ -377,41 +348,35 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	{
 		super.onConfigurationChanged(newConfig);
 	}
-
-	public static void drawText(int nProcess)
+	
+	public void MobageLogin()
 	{
-		textString = ms_pkDHLJ.getResources().getString(
-				R.string.unzip_text_firstrun)
-				+ String.valueOf(nProcess) + "%...";
-		UpdateTextHandler.post(mUpdateText);
+		CookieSyncManager.createInstance(this);
+
+		Mobage.registerMobageResource(this, "tw.mobage.g23000052.R");
+		// RemoteNotificationView.DisableRemoteNotification();
+		SocialUtils.initializeMobage(this);
+		mPlatformListener = SocialUtils.createPlatformListener(true);
+		Mobage.addPlatformListener(mPlatformListener);
+
+		Mobage.checkLoginStatus();
+		Mobage.onCreate();
+
+		menubar = new DynamicMenuBar(this);
+		menubar.setMenubarVisibility(View.VISIBLE);
+		menubar.setMenuIconGravity(Gravity.TOP | Gravity.LEFT);
 	}
 
-	public void setMain()
+	public static void drawText(int nProcess)
+	{		
+		textString = ms_pkDHLJ.getResources().getString(
+			R.string.unzip_text_firstrun)
+			+ String.valueOf(nProcess) + "%...";
+		UpdateTextHandler.post(mUpdateText);
+	}
+	
+	public void addBalanceView()
 	{
-		Log.d(TAG, "@@ DaHuaLongJiang::setMain()");
-
-		// remove all views
-		rootView = (View) getView();
-		FrameLayout parent = (FrameLayout) rootView.getParent();
-		if (parent != null)
-		{
-			parent.removeView(rootView);
-		}
-		menubar.removeAllViews();
-
-		// add edit view
-		addEditView();
-
-		// add surface view
-		m_pkView.setVisibility(View.INVISIBLE);
-		// menubar.addView(m_pkView);
-		menubar.addView(rootView);
-
-		addTextView();
-
-		// add splash image (fullscreen)
-		showSplash(1);
-
 		s_balancelayout = new LinearLayout(s_context);
 		s_balancelayout.setOrientation(LinearLayout.VERTICAL);
 
@@ -436,6 +401,33 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 
 		menubar.addView(s_balancelayout);
 		s_balancelayout.setVisibility(View.INVISIBLE);
+	}
+	public void addRootView()
+	{
+		// add surface view
+		menubar.addView(rootView);
+	}
+	public void setMain()
+	{
+		Log.d(TAG, "@@ DaHuaLongJiang::setMain()");
+
+		// remove all views
+		rootView = (View) getView();
+		FrameLayout parent = (FrameLayout) rootView.getParent();
+		if (parent != null)
+		{
+			parent.removeView(rootView);
+		}
+		menubar.removeAllViews();
+
+		// add edit view
+		addEditView();
+
+		addRootView();
+		
+		addTextView();
+		
+		addBalanceView();
 
 		// menubar.addView(testbutton);
 
@@ -452,43 +444,29 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	// @init: not used.
 	private static Handler imsgSplashHandler = new Handler();
 
-	public static void showSplash(int flag)
+	public void setTextViewBg()
 	{
-		/*
-		 * if (true) return; Log.d("init", "@@ dhlj, showSplash(), flag:" +
-		 * flag);
-		 * 
-		 * if (flag != 0) { if (true) { //filled with splash image imgSplash =
-		 * new ImageView( ms_pkDHLJ ); String fileName =
-		 * "/sdcard/dhlj/SimplifiedChineseRes/res/image00/Res00/Load/Unzipping.png"
-		 * ; Bitmap bmp = BitmapFactory.decodeFile(fileName);
-		 * 
-		 * if (bmp != null) { Log.d("init", "@@ dhlj, showSplash(), load img ok"
-		 * );
-		 * 
-		 * ViewGroup.LayoutParams param = new ViewGroup.LayoutParams(
-		 * ViewGroup.LayoutParams.FILL_PARENT,
-		 * ViewGroup.LayoutParams.FILL_PARENT);
-		 * 
-		 * imgSplash.setImageBitmap(bmp);
-		 * imgSplash.setScaleType(ImageView.ScaleType.FIT_XY);
-		 * imgSplash.setLayoutParams(param); menubar.addView(imgSplash);
-		 * //imgSplash.bringToFront(); } else { Log.d("init",
-		 * "@@ dhlj, showSplash(), load img failed" ); } } else { //filled with
-		 * back ground color (white) imgSplash = new ImageView( ms_pkDHLJ );
-		 * imgSplash.setBackgroundColor(Color.WHITE);
-		 * menubar.addView(imgSplash); } } else { if (imgSplash != null) {
-		 * Log.d("init", "@@ dhlj, showSplash(), hide it!");
-		 * 
-		 * //ms_pkDHLJ.getView().bringToFront(); //bringLayoutToFront();
-		 * 
-		 * // without the post method, the main UI crashes if the view is
-		 * removed imsgSplashHandler.post(new Runnable(){ public void run(){
-		 * FrameLayout parent = (FrameLayout) imgSplash.getParent(); if (parent
-		 * != null) { //parent.removeView(imgSplash);
-		 * //menubar.removeView(parent);
-		 * imgSplash.setVisibility(View.INVISIBLE); } } }); } }
-		 */
+		Drawable srcb=getResources().getDrawable(R.drawable.mobage_splash);
+		
+		DisplayMetrics dm = new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(dm);
+		
+	    Paint paint = new Paint();
+	    Bitmap bg = Bitmap.createBitmap( dm.widthPixels, dm.heightPixels, Bitmap.Config.ARGB_8888 );//创建一个新的和SRC长度宽度一样的位图  
+	    for(int i = 0; i < dm.widthPixels; ++i)
+	    	for(int j = 0; j < dm.heightPixels; ++j)
+	    bg.setPixel(i, j, 0xFFFFFFFF);
+
+	    Canvas cv = new Canvas( bg );  
+	    Bitmap srcbitmap0 =  ((BitmapDrawable)srcb).getBitmap(); 
+	    
+	    int size = (int) dm.heightPixels;
+
+	    Bitmap srcbitmap = Bitmap.createScaledBitmap(srcbitmap0, size, size, true);
+	    
+	    cv.drawBitmap( srcbitmap, (dm.widthPixels-srcbitmap.getWidth())/2, (dm.heightPixels-srcbitmap.getHeight())/2, paint	 );//在 x，y坐标开始画入src  
+
+	    s_TextViewlayout.setBackgroundDrawable(new BitmapDrawable(bg));
 	}
 
 	public static void clearSplash()
@@ -555,6 +533,11 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 
 		if (edittext != null)
 		{
+			FrameLayout parent = (FrameLayout) edittext.getParent();
+			if (parent != null)
+			{
+				parent.removeView(edittext);
+			}
 			// add edit to layout
 			menubar.addView(edittext);
 
@@ -662,19 +645,26 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	private void addTextView()
 	{
 		Log.v(TAG, "begin addTextView");
-
-		s_TextViewlayout = new LinearLayout(s_context);
-		s_TextViewlayout.setOrientation(LinearLayout.VERTICAL);
-		textString = ms_pkDHLJ.getResources().getString(R.string.unzip_text)
+		if(s_TextViewlayout == null) {
+			s_TextViewlayout = new LinearLayout(s_context);
+			s_TextViewlayout.setOrientation(LinearLayout.VERTICAL);
+			textString = ms_pkDHLJ.getResources().getString(R.string.unzip_text)
 				+ "...";
 
-		int pFontSize = 16;
+			int pFontSize = 16;
 
-		tv = new TextView(this);
-		tv.setText(textString);
-		tv.setTextSize(pFontSize);
-		tv.setTextColor(Color.BLACK);
-		s_TextViewlayout.addView(tv);
+			tv = new TextView(this);
+			tv.setText(textString);
+			tv.setTextSize(pFontSize);
+			tv.setTextColor(Color.BLACK);
+			setTextViewBg();
+			s_TextViewlayout.addView(tv);
+		}
+		FrameLayout parent = (FrameLayout) s_TextViewlayout.getParent();
+		if (parent != null)
+		{
+			parent.removeView(s_TextViewlayout);
+		}
 		menubar.addView(s_TextViewlayout);
 
 		UpdateTextHandler.post(mUpdateText);
@@ -716,6 +706,22 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 			JSONObject kJsonObject;
 			kJsonObject = new JSONObject(strReadBuffer.toString());
 			strRet = kJsonObject.getString(strTextName);
+			// JSONArray provinces = jsonObject.getJSONArray("provinces");
+			// String name = null;
+			// StringBuffer jsonFileInfo = new StringBuffer();
+			// JSONArray citys = null;
+			// for (int i = 0; i < provinces.length(); i++)
+			// {
+			// name = provinces.getJSONObject(i).getString("name");
+			// jsonFileInfo.append("/nname:" + name + "/n" + "citys:");
+			// citys = provinces.getJSONObject(i).getJSONArray("citys");
+			// for (int j = 0; j < citys.length(); j++)
+			// {
+			// jsonFileInfo.append(citys.getString(j) + "/t");
+			// }
+			// }
+			//
+			// System.out.println(jsonFileInfo);
 		} catch (ParseException e)
 		{
 			e.printStackTrace();
@@ -789,12 +795,8 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		if (playVideoInActivity)
 		{
 			ms_pkDHLJ.startVideoActivity();
-		} else
-		{
-			m_bIsStartingVideo = true;
-			VideoViewHandler.post(mShowVideoView);
 		}
-
+		
 		m_bVideoPlayed = true;
 
 		return 0;
@@ -803,12 +805,8 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	// @video
 	private void startVideoActivity()
 	{
-		Log.d("video", "@@ startVideoActivity()");
-
 		Intent intent = new Intent(getApplication(), VideoActivity.class);
 		startActivity(intent);
-
-		Log.d("video", "@@ startVideoActivity() -- done");
 	}
 
 	// @video
@@ -888,6 +886,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 			{
 				dialog.dismiss();
 				android.os.Process.killProcess(android.os.Process.myPid());
+//				MainActivity.onExit();
 			}
 		};
 
@@ -906,7 +905,6 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	{
 		if (m_bIsStartingVideo)
 		{
-			m_pkView.stopPlayback();
 			continueRootView();
 		}
 
@@ -1018,7 +1016,6 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	static
 	{
 		System.loadLibrary("mobage");
-		System.loadLibrary("cocos2d");
 		System.loadLibrary("GameLauncher");
 	}
 

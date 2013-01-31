@@ -29,6 +29,7 @@
 #include "WorldMapScene.h"
 #include "ScriptMgr.h"
 #include "ObjectTracker.h"
+#include "NDDebugOpt.h"
 
 #define TAG_MAP_UPDTAE (2046)
 #define	TAG_MAP_LONGTOUCH (2047)
@@ -83,9 +84,12 @@ bool NDMapLayerLogic::TouchBegin(NDTouch* touch)
 	m_kPosTouch = touch->GetLocation();
 	CCPoint touchPoint = this->ConvertToMapPoint( m_kPosTouch );
 	
-//	CCLog( "NDMapLayerLogic::TouchBegin(%d, %d) -> (%d, %d), ScreenCenter=(%d, %d)\r\n", 
-//		int(m_kPosTouch.x), int(m_kPosTouch.y), int(touchPoint.x), int(touchPoint.y),
-//		int(GetScreenCenter().x), int(GetScreenCenter().y));
+	if (NDDebugOpt::getTraceClickMapEnabled())
+	{
+		CCLog( "@@ NDMapLayerLogic::TouchBegin(%d, %d) -> (%d, %d), ScreenCenter=(%d, %d)\r\n", 
+			int(m_kPosTouch.x), int(m_kPosTouch.y), int(touchPoint.x), int(touchPoint.y),
+			int(GetScreenCenter().x), int(GetScreenCenter().y));
+	}
 
 // 	if(isTouchTreasureBox(touchPoint))
 // 	{
@@ -96,6 +100,11 @@ bool NDMapLayerLogic::TouchBegin(NDTouch* touch)
 
 	if (!NDPlayer::defaultHero().DealClickPointInSideNpc(touchPoint))
 	{
+		if (NDDebugOpt::getTraceClickMapEnabled())
+		{
+			CCLog( "@@ NDMapLayerLogic::TouchBegin(), not click on npc, -> SetPathing(true)\r\n" );
+		}
+
 		SetPathing(true);
 	}
 
@@ -110,13 +119,21 @@ void NDMapLayerLogic::TouchEnd(NDTouch* touch)
 	CCPoint posTouch = touch->GetLocation();
 	CCPoint touchPoint = this->ConvertToMapPoint( posTouch );
 
-//	CCLog( "NDMapLayerLogic::TouchEnd(%d, %d) -> (%d, %d), ScreenCenter=(%d, %d)\r\n", 
-//		int(posTouch.x), int(posTouch.y), int(touchPoint.x), int(touchPoint.y),
-//		int(GetScreenCenter().x), int(GetScreenCenter().y));
+	if (NDDebugOpt::getTraceClickMapEnabled())
+	{
+		CCLog( "@@ NDMapLayerLogic::TouchEnd(%d, %d) -> (%d, %d), ScreenCenter=(%d, %d)\r\n", 
+			int(posTouch.x), int(posTouch.y), int(touchPoint.x), int(touchPoint.y),
+			int(GetScreenCenter().x), int(GetScreenCenter().y));
+	}
 
 	NDPlayer& kPlayer = NDPlayer::defaultHero();
 	if (!kPlayer.ClickPoint(touchPoint, false, IsPathing()))
 	{
+		if (NDDebugOpt::getTraceClickMapEnabled())
+		{
+			CCLog( "@@ NDMapLayerLogic::TouchEnd(), !kPlayer.ClickPoint(), -> kPlayer.stopMoving()\r\n" );
+		}
+
 		kPlayer.stopMoving();
 		if (BaseScriptMgrObj.excuteLuaFunc<bool>("IsInPractising", "PlayerFunc"))
 		{

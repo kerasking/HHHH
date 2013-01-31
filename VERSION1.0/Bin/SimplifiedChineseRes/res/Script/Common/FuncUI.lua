@@ -260,6 +260,22 @@ function GetWorldMapUITag()
 	return NMAINSCENECHILDTAG.WorldMap;
 end
 
+--延迟关闭
+function lazyClose(tagUI,bPlaySE)
+	local ui = GetUI(tagUI)
+	if not ui then
+		return false;	
+	end
+	
+	if bPlaySE == nil or bPlaySE == true then
+    	--Music.PlayEffectSound(0);
+    end
+    
+	ui:lazyClose();
+	
+	return true;
+end
+
 --关闭主界面某个UI  默认播放音效
 function CloseUI(tagUI,bPlaySE)
 	local ui = GetUI(tagUI)

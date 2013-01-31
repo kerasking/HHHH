@@ -217,7 +217,7 @@ p.UserInfoReady = false;
 p.HeroInfoReady = false;
 p.EffectSprite	= nil;
 function p.HeroStarTip()
-	p.RemoveEffect();
+	--p.RemoveEffect();
 	if p.HeroInfoReady == false then
 		return;
 	end
@@ -232,14 +232,13 @@ function p.HeroStarTip()
 		return;
 	end
 	
-	local nSoulNeed = HeroStar.GetStarSoulNeed(nGrade,nLev);
-	local nSoul = GetRoleBasicDataN(nRoleId, USER_ATTR.USER_ATTR_SOPH);
-	
 	--未开启功能 返回
 	if false == MainUIBottomSpeedBar.GetFuncIsOpen(115) then
 		return;
 	end
 
+	local nSoulNeed = HeroStar.GetStarSoulNeed(nGrade,nLev);
+	local nSoul = GetRoleBasicDataN(nRoleId, USER_ATTR.USER_ATTR_SOPH);
 	
 	if nSoul >= nSoulNeed then
 
@@ -278,7 +277,6 @@ function p.HeroStarTip()
 	else
 		LogInfo("HeroStarTip nGrade nLev nSoulNeed nSoul"..nGrade.." "..nLev.." "..nSoulNeed.." "..nSoul);
 		p.RemoveEffect();
-		
 	end
 end
 

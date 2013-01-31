@@ -295,7 +295,10 @@ bool NDPlayer::CancelClickPointInSideNpc()
 
 bool NDPlayer::ClickPoint(CCPoint point, bool bLongTouch, bool bPath/*=true*/)
 {
-//	CCLog( "NDPlayer::ClickPoint(%d, %d), @0\r\n", (int)point.x, (int)point.y );
+	if (NDDebugOpt::getTraceClickMapEnabled())
+	{
+		CCLog( "@@ NDPlayer::ClickPoint(%d, %d)\r\n", (int)point.x, (int)point.y );
+	}
 
 	if (AutoPathTipObj.IsWorking())
 	{
@@ -311,8 +314,10 @@ bool NDPlayer::ClickPoint(CCPoint point, bool bLongTouch, bool bPath/*=true*/)
 	if (bLongTouch && bPath)
 	{
 		//长按不执行其它操作
-//		CCLog( "NDPlayer::ClickPoint(%d, %d), @1\r\n", (int)point.x, (int)point.y );
-//		WriteCon( "NDPlayer::ClickPoint(%d, %d), @1\r\n", (int)point.x, (int)point.y );
+		if (NDDebugOpt::getTraceClickMapEnabled())
+		{
+			CCLog( "@@ NDPlayer::ClickPoint(), bLongTouch && bPath, -> hero().Walk(point, SpriteSpeedStep8);\r\n" );
+		}
 		NDPlayer::defaultHero().Walk(point, SpriteSpeedStep8);
 		return true;
 	}
@@ -456,8 +461,10 @@ bool NDPlayer::ClickPoint(CCPoint point, bool bLongTouch, bool bPath/*=true*/)
  		
 	if (bPath || bNpcPath)
 	{
-//		CCLog( "NDPlayer::ClickPoint(%d, %d), @2\r\n", (int)point.x, (int)point.y );
-//		WriteCon( "NDPlayer::ClickPoint(%d, %d), @2\r\n", (int)point.x, (int)point.y );
+		if (NDDebugOpt::getTraceClickMapEnabled())
+		{
+			CCLog( "@@ NDPlayer::ClickPoint(), (bPath || bNpcPath), -> Hero().Walk(point, SpriteSpeedStep8);\r\n");
+		}
 		NDPlayer::defaultHero().Walk(point, SpriteSpeedStep8);
 	}
 
@@ -532,7 +539,10 @@ int NDPlayer::GetOrder()
 
 void NDPlayer::Walk(CCPoint toPos, SpriteSpeed speed, bool mustArrive/*=false*/)
 {
-//	CCLog( "@@ NDPlayer::Walk(%d, %d)\r\n", int(toPos.x), int(toPos.y));
+	if (NDDebugOpt::getTraceClickMapEnabled())
+	{
+		CCLog( "@@ NDPlayer::Walk(%d, %d)\r\n", int(toPos.x), int(toPos.y));
+	}
 
 	if (!isRoleCanMove())
 	{
@@ -546,21 +556,33 @@ void NDPlayer::Walk(CCPoint toPos, SpriteSpeed speed, bool mustArrive/*=false*/)
 
 	CCPoint kCurrentPosition = GetPosition();
 
-// 	CCLog( "NDPlayer::Walk(), (%d, %d)->(%d, %d)\r\n",
-// 		(int)kCurrentPosition.x, (int)kCurrentPosition.y, (int)kPos.x, (int)kPos.y );
-//	WriteCon( "NDPlayer::Walk(), (%d, %d)->(%d, %d)\r\n",
-//		(int)kCurrentPosition.x, (int)kCurrentPosition.y, (int)kPos.x, (int)kPos.y );
+	if (NDDebugOpt::getTraceClickMapEnabled())
+	{
+		CCLog( "@@ NDPlayer::Walk(), (%d, %d)->(%d, %d)\r\n",
+ 			(int)kCurrentPosition.x, (int)kCurrentPosition.y, (int)kPos.x, (int)kPos.y );
+	}
 
-	if ((int(kCurrentPosition.x) - int(DISPLAY_POS_X_OFFSET)) % int(MAP_UNITSIZE_X) != 0
-	 || (int(kCurrentPosition.y) - int(DISPLAY_POS_Y_OFFSET)) % int(MAP_UNITSIZE_Y) != 0)
+#if FIX_ANDROID_QIPA
+	if (!IS_PLAYER_POS_ALIGNED(kCurrentPosition))
+#else
+ 	if ((int(kCurrentPosition.x) - int(DISPLAY_POS_X_OFFSET)) % int(MAP_UNITSIZE_X) != 0
+ 	 || (int(kCurrentPosition.y) - int(DISPLAY_POS_Y_OFFSET)) % int(MAP_UNITSIZE_Y) != 0)
+#endif
 	{ 
 		// Cell没走完,又设置新的目标
 		m_kTargetPos = kPos;
-//		CCLog( "NDPlayer, Not Finished, reset target !! (%d, %d)\r\n", int(kPos.x), int(kPos.y));
+
+		if (NDDebugOpt::getTraceClickMapEnabled())
+		{
+			CCLog( "@@ NDPlayer::Walk(), Not Finished, reset target !!\r\n" );
+		}
 	}
 	else
 	{
-//		CCLog( "NDPlayer, WalkToPosition(%d, %d)\r\n", int(kPos.x), int(kPos.y));
+		if (NDDebugOpt::getTraceClickMapEnabled())
+		{
+			CCLog( "@@ NDPlayer::Walk(), -> WalkToPosition(), dstPos(%d,%d), speed=%d\r\n", int(kPos.x), int(kPos.y), int(speed));
+		}
 
 		std::vector < CCPoint > vPos;
 		//kPos = ccpAdd(kPos,kPos);
@@ -573,13 +595,25 @@ void NDPlayer::Walk(CCPoint toPos, SpriteSpeed speed, bool mustArrive/*=false*/)
 
 void NDPlayer::SetPosition(CCPoint newPosition)
 {
+#if FIX_ANDROID_QIPA
+ 	CCPoint newCell = ConvertUtil::convertDisplayToCell( newPosition, true );
+ 	CCPoint oldCell = ConvertUtil::convertDisplayToCell( GetPosition(), true );
+#else
 	CCPoint newCell = ConvertUtil::convertDisplayToCell( newPosition );
+	CCPoint oldCell = ConvertUtil::convertDisplayToCell( GetPosition());
+#endif
+
+#if FIX_ANDROID_QIPA && (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	float nNewCol = newCell.x;
+	float nNewRow = newCell.y;
+	float nOldCol = oldCell.x;
+	float nOldRow = oldCell.y;
+#else
 	int nNewCol = newCell.x;
 	int nNewRow = newCell.y;
-
-	CCPoint oldCell = ConvertUtil::convertDisplayToCell( GetPosition() );
 	int nOldCol = oldCell.x;
 	int nOldRow = oldCell.y;
+#endif
 
 	NDManualRole::SetPosition(newPosition);
 
@@ -588,7 +622,11 @@ void NDPlayer::SetPosition(CCPoint newPosition)
 		return;
 	}
 
+#if FIX_ANDROID_QIPA && (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	if (TAbs<float>(nNewCol - nOldCol) >= 1.0f || TAbs<float>(nNewRow - nOldRow) >= 1.0f)
+#else
 	if (nNewCol != nOldCol || nNewRow != nOldRow)
+#endif
 	{
 		if (nOldCol == 0 && nOldRow == 0)
 		{
@@ -611,6 +649,11 @@ void NDPlayer::SetPosition(CCPoint newPosition)
 						<< (unsigned short)nNewRow << (unsigned char)dir;
 
 					NDDataTransThread::DefaultThread()->GetSocket()->Send(&data);
+
+					if (NDDebugOpt::getTraceClickMapEnabled())
+					{
+						CCLog( "@@ send _MSG_WALK_EX, row=%d, col=%d, dir=%d\r\n", nNewRow, nNewCol, int(dir));
+					}
 				}
 				m_nServerCol = nNewCol;
 				m_nServerRow = nNewRow;

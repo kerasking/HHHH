@@ -77,7 +77,7 @@ public: //格子坐标相关转换 @cell
 	static CCPoint convertCellToDisplay( const int cellX, const int cellY );
 
 	//显示坐标 -> 格子坐标
-	static CCPoint convertDisplayToCell( const CCPoint& display );
+	static CCPoint convertDisplayToCell( const CCPoint& display, bool bAligned = false );
 
 	//格子坐标 -> 屏幕坐标
 	static CCPoint convertCellToScreen( const int cellX, const int cellY );
@@ -95,6 +95,11 @@ public:
 public: //@android
 	static CCPoint getAndroidScale();
 	static float getIosScale();
+
+public: //判断格子对齐
+	static bool isCellSizeOK(); //格子大小是否整除的
+	static bool isScreenPosAligned( const CCPoint& posScreen ); //屏幕位置是否对齐
+	static bool isPlayerPosAligned( const CCPoint& kCurrentPosition ); //角色位置是否对齐
 };
 
 //-----------------------------------------------------------------------------------------------------------
@@ -106,7 +111,13 @@ public: //@android
 //角色显示时相对于Cell的偏移
 #define DISPLAY_POS_X_OFFSET		(MAP_UNITSIZE_X / 2)
 #define DISPLAY_POS_Y_OFFSET		(MAP_UNITSIZE_Y)
+
+//判断格子对齐
+#define IS_CELLSIZE_OK				(ConvertUtil::isCellSizeOK())
+#define IS_SCREEN_POS_ALIGNED(pos)	(ConvertUtil::isScreenPosAligned(pos))
+#define IS_PLAYER_POS_ALIGNED(pos)	(ConvertUtil::isPlayerPosAligned(pos))
 //-----------------------------------------------------------------------------------------------------------
 
+#define FIX_ANDROID_QIPA 0
 
 NS_NDENGINE_END
