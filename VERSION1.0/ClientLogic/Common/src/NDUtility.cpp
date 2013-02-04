@@ -306,6 +306,8 @@ void showDialog(const char* content)
 // 退出游戏,返回主界面时统一做释放及各模块初始化操作
 void quitGame(bool bTipNet/*=false*/)
 {
+	CCLog( "@@ quitGame()");
+
 	ScriptGlobalEvent::OnEvent (GE_QUITGAME);
 	CloseProgressBar;
 	
@@ -319,9 +321,18 @@ void quitGame(bool bTipNet/*=false*/)
 	NDMapMgrObj.ClearGP();
 	while (NDDirector::DefaultDirector()->PopScene());
 
+#if 0
+	CCLog( "@@ to replace with CSMLoginScene");
 	NDDirector::DefaultDirector()->ReplaceScene(CSMLoginScene::Scene());
 
+	CCLog( "@@ to call ScriptGlobalEvent::OnEvent (GE_LOGIN_GAME)" );
 	ScriptGlobalEvent::OnEvent (GE_LOGIN_GAME);
+#else
+	CCLog( "@@ to replace with CSMLoginScene");
+	CSMLoginScene* loginScene = CSMLoginScene::Scene();
+	NDDirector::DefaultDirector()->ReplaceScene(loginScene);
+	loginScene->lazySendLoginEvent();
+#endif
 }
 
 // string getStringTime(long nSeconds)
