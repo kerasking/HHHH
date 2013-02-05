@@ -14,6 +14,9 @@ p.UIN=317003333;
 
 p.LoginWait = true;
 p.SerName = "";
+p.SerIp = "";
+p.SerPort = "";
+
 p.nCurSerId = -1;
 p.nPreSerId = -1;
 
@@ -495,9 +498,14 @@ function p.OnUIEvent(uiNode, uiEventType, param)
         local sServerIp = info.nServerIP;
         local nServerPort = info.nServePort;
         p.SerName = sServerName;
+        p.SerIp = sServerIp;
+		 p.SerPort = nServerPort;
+        
         p.nPreSerId = p.nCurSerId;
         p.nCurSerId = info.nServerID;
         
+        --检测当前是否有版本更新
+        --p.SendDataToCheckVision();
         LogInfo("登录服务器名:[%s],ip:[%s],port:[%d]",sServerName,sServerIp,nServerPort);
         p.LoginGame(sServerName,sServerIp,nServerPort);
 	end
@@ -728,3 +736,19 @@ function p.LoginGameNew()
 	p.LoginOK_Normal( p.UIN )
 end
 RegisterGlobalEventHandler( GLOBALEVENT.GE_LOGIN_GAME,"Login_ServerUI.LoginGame", p.LoginGameNew );
+
+
+
+---------新加在服务器列表页面增加版本判断功能-----------tzq 2013-2-1 begin---------------
+
+--向世界服务器发送数据请求版本验证
+function p.SendDataToCheckVision()
+	local WorldSerIp = GetGameConfig("world_server_ip");
+	local WorldSerPort = GetWorldServerPort();
+	
+	LoginUICheckClientVersion(WorldSerIp, WorldSerPort);
+	--LogInfo( "LogSerUI CheckVision WorldSerIp = %s, WorldSerPort = %d", WorldSerIp, WorldSerPort);
+end
+
+
+---------新加在服务器列表页面增加版本判断功能-----------tzq 2013-2-1 end---------------

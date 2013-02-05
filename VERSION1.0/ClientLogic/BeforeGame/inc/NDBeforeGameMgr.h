@@ -225,6 +225,7 @@ namespace NDEngine
         MobageSdkLogin *m_sdkLogin;
 #endif
         bool m_bOAuthTokenOK;
+
 	public:
 		enum LoginState
 		{
@@ -249,6 +250,11 @@ namespace NDEngine
 
         void CopyRes();
 		void CopyLoginRes();
+
+
+		bool m_bLogUIUpdate;    //标识是否为服务器列表页面更新
+		void SetLogUIUpdate(bool bValue){m_bLogUIUpdate = bValue;}
+		bool GetLogUIUpdate(){return m_bLogUIUpdate;}
 
 	protected:
 		std::string	m_szDeviceToken;

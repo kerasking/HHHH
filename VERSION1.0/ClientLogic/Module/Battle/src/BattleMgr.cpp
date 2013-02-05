@@ -577,30 +577,30 @@ void BattleMgr::restartLastBattle()
 	for (VEC_FIGHTER_IT it = m_vFighter.begin(); it != m_vFighter.end(); it++)
 	{
 		NDLog("add_fighter");
-		Fighter* fighter = *it;
+		Fighter* pkFighter = *it;
 
-		fighter->reStoreAttr();
-		fighter->setBattle(m_pkBattle);
+		pkFighter->reStoreAttr();
+		pkFighter->setBattle(m_pkBattle);
 //		fighter->LoadMonster(idlookface, level, strName);
-		m_pkBattle->AddFighter(fighter);
+		m_pkBattle->AddFighter(pkFighter);
 	}
 
 	ScriptMgrObj.excuteLuaFunc("SetUIVisible", "",0);
-	NDDirector* director = NDDirector::DefaultDirector();
-	NDMapLayer* mapLayer = NDMapMgrObj.getMapLayerOfScene(NDDirector::DefaultDirector()->GetRunningScene());
-	mapLayer->showSwitchSprite(SWITCH_TO_BATTLE);
+	NDDirector* pkDirector = NDDirector::DefaultDirector();
+	NDMapLayer* pkMapLayer = NDMapMgrObj.getMapLayerOfScene(NDDirector::DefaultDirector()->GetRunningScene());
+	pkMapLayer->showSwitchSprite(SWITCH_TO_BATTLE);
 	//mapLayer->SetBattleBackground(true);
 	
 	RestoreActionList();
 	
-	CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
-	m_pkBattle->SetFrameRect(CCRectMake(0, 0, winSize.width, winSize.height));
+	CCSize kWinSize = CCDirector::sharedDirector()->getWinSizeInPixels();
+	m_pkBattle->SetFrameRect(CCRectMake(0, 0, kWinSize.width, kWinSize.height));
 
 	m_pkBattle->InitEudemonOpt();
 	m_pkBattle->sortFighterList();
 	m_pkBattle->InitSpeedBar();
 	//m_battle->SetVisible(false);
-	director->EnableDispatchEvent(false);
+	pkDirector->EnableDispatchEvent(false);
 	m_pkBattle->RestartFight();
 }
 
@@ -610,7 +610,7 @@ void BattleMgr::processBattleStart(NDEngine::NDTransData& bao)
 	ScriptMgrObj.excuteLuaFunc("PlayBattleMusic", "Music");
 
 	//备份进入战斗前一场景的非副本地图数据ID及窗口位置//++Guosen 2012.7.5
-	NDMapLayer * pMapLayer = NDMapMgrObj.getMapLayerOfScene(NDDirector::DefaultDirector()->GetRunningScene());
+	NDMapLayer* pMapLayer = NDMapMgrObj.getMapLayerOfScene(NDDirector::DefaultDirector()->GetRunningScene());
 	if( pMapLayer && ( pMapLayer->GetMapIndex() < 3 ) )//3及以上是战斗时的背景
 	{
 		m_nLastSceneMapDocID = pMapLayer->GetMapIndex();
@@ -621,11 +621,11 @@ void BattleMgr::processBattleStart(NDEngine::NDTransData& bao)
 	Byte btPackageType = 0;
 	Byte btBattleType = 0;
 	Byte btTeamAmout = 0;
-	int map_id = 0;
+	int nMapID = 0;
 	unsigned short posX = 0;
 	unsigned short posY = 0;
 
-	bao >> btPackageType >> btBattleType >> btTeamAmout >> map_id >> posX >> posY;	//>> btAction;
+	bao >> btPackageType >> btBattleType >> btTeamAmout >> nMapID >> posX >> posY;	//>> btAction;
 
 	bool bBattleStart = (btPackageType & 2 > 0);
 	m_nLastBattleType = btBattleType;
@@ -833,7 +833,7 @@ void BattleMgr::processBattleStart(NDEngine::NDTransData& bao)
 		 closeUI();
 		 */
 
-		m_nBattleMapId = map_id;
+		m_nBattleMapId = nMapID;
 		m_nBattleX = posX;
 		m_nBattleY = posY;
 
@@ -1313,7 +1313,9 @@ void BattleMgr::ShowBattleWinResult(int nBattleType)
 
         ScriptMgrObj.excuteLuaFunc("LoadUI", "ArenaRewardUI",0);
         ScriptMgrObj.excuteLuaFunc("SetResult","ArenaRewardUI", 
-			BATTLE_COMPLETE_WIN, m_pkBattleReward->m_nMoney, m_pkBattleReward->m_nRepute,m_pkBattleReward->m_nSoph,m_pkBattleReward->m_nEMoney);
+			BATTLE_COMPLETE_WIN, m_pkBattleReward->m_nMoney,
+			m_pkBattleReward->m_nRepute,m_pkBattleReward->m_nSoph,
+			m_pkBattleReward->m_nEMoney);
         
 		//结果页面显示之后释放奖励物品
         if (m_pkBattleReward != NULL)
@@ -1345,7 +1347,9 @@ void BattleMgr::ShowBattleLoseResult(int nBattleType)
     {
         ScriptMgrObj.excuteLuaFunc("LoadUI", "ArenaRewardUI",0);
         ScriptMgrObj.excuteLuaFunc("SetResult","ArenaRewardUI", 
-			BATTLE_COMPLETE_LOSE, m_pkBattleReward->m_nMoney, m_pkBattleReward->m_nRepute,m_pkBattleReward->m_nSoph,m_pkBattleReward->m_nEMoney);
+			BATTLE_COMPLETE_LOSE, m_pkBattleReward->m_nMoney, 
+			m_pkBattleReward->m_nRepute,m_pkBattleReward->m_nSoph,
+			m_pkBattleReward->m_nEMoney);
     }
     
     //结果页面显示之后释放奖励物品
@@ -1369,7 +1373,9 @@ void BattleMgr::ShowReplayWinResult(int nBattleType)
         ScriptMgrObj.excuteLuaFunc("LoadUI", "ArenaRewardUI",0);
         NDLog(@"money:%d--repute:%d",prebattleReward->money,prebattleReward->repute);
         ScriptMgrObj.excuteLuaFunc("SetResult","ArenaRewardUI", 
-			BATTLE_COMPLETE_WIN, m_pkPrebattleReward->m_nMoney, m_pkPrebattleReward->m_nRepute,m_pkPrebattleReward->m_nSoph,m_pkPrebattleReward->m_nEMoney);
+			BATTLE_COMPLETE_WIN, m_pkPrebattleReward->m_nMoney,
+			m_pkPrebattleReward->m_nRepute,m_pkPrebattleReward->m_nSoph,
+			m_pkPrebattleReward->m_nEMoney);
     }
     
     //副本战斗成功回放 显示  DynMapSuccess.ini
@@ -1387,7 +1393,8 @@ void BattleMgr::ShowReplayWinResult(int nBattleType)
             {
                 NDLog("addRewardItem:%d",m_pkPrebattleReward->m_nItemTypes[i]);
                 ScriptMgrObj.excuteLuaFunc("addRewardItem", "MonsterRewardUI", 
-					i+1, m_pkPrebattleReward->m_nItemTypes[i], m_pkPrebattleReward->m_nItemAmount[i]);
+					i+1, m_pkPrebattleReward->m_nItemTypes[i],
+					m_pkPrebattleReward->m_nItemAmount[i]);
             }
         }	
         
@@ -1399,7 +1406,8 @@ void BattleMgr::ShowReplayWinResult(int nBattleType)
 					m_pkPrebattleReward->m_ntemtype[i], m_pkPrebattleReward->m_nPetGainExp[i]);
 
                 ScriptMgrObj.excuteLuaFunc("SetRewardExp", "MonsterRewardUI", 
-					m_pkPrebattleReward->m_nPetId[i], m_pkPrebattleReward->m_nPetGainExp[i]);
+					m_pkPrebattleReward->m_nPetId[i],
+					m_pkPrebattleReward->m_nPetGainExp[i]);
             }
         }
         
@@ -1424,7 +1432,9 @@ void BattleMgr::ShowReplayLoseResult(int nBattleType)
     {
         ScriptMgrObj.excuteLuaFunc("LoadUI", "ArenaRewardUI",0);
         ScriptMgrObj.excuteLuaFunc("SetResult","ArenaRewardUI", 
-			BATTLE_COMPLETE_LOSE, m_pkPrebattleReward->m_nMoney, m_pkPrebattleReward->m_nRepute,m_pkPrebattleReward->m_nSoph,m_pkPrebattleReward->m_nEMoney);
+			BATTLE_COMPLETE_LOSE, m_pkPrebattleReward->m_nMoney,
+			m_pkPrebattleReward->m_nRepute,m_pkPrebattleReward->m_nSoph,
+			m_pkPrebattleReward->m_nEMoney);
     }
     //副本战斗失败回放 显示  BattleFailUI.ini
     else if (BATTLE_TYPE_MONSTER_PLAYBACK == nBattleType)
