@@ -95,11 +95,6 @@ public:
 public: //@android
 	static CCPoint getAndroidScale();
 	static float getIosScale();
-
-public: //判断格子对齐
-	static bool isCellSizeOK(); //格子大小是否整除的
-	static bool isScreenPosAligned( const CCPoint& posScreen ); //屏幕位置是否对齐
-	static bool isPlayerPosAligned( const CCPoint& kCurrentPosition ); //角色位置是否对齐
 };
 
 //-----------------------------------------------------------------------------------------------------------
@@ -112,12 +107,6 @@ public: //判断格子对齐
 #define DISPLAY_POS_X_OFFSET		(MAP_UNITSIZE_X / 2)
 #define DISPLAY_POS_Y_OFFSET		(MAP_UNITSIZE_Y)
 
-//判断格子对齐
-#define IS_CELLSIZE_OK				(ConvertUtil::isCellSizeOK())
-#define IS_SCREEN_POS_ALIGNED(pos)	(ConvertUtil::isScreenPosAligned(pos))
-#define IS_PLAYER_POS_ALIGNED(pos)	(ConvertUtil::isPlayerPosAligned(pos))
 //-----------------------------------------------------------------------------------------------------------
-
-#define FIX_ANDROID_QIPA 0
 
 NS_NDENGINE_END

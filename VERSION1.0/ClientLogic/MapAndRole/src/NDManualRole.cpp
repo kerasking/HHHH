@@ -216,28 +216,10 @@ void NDManualRole::Update(unsigned long ulDiff)
 				}
 #endif
 
-#if FIX_ANDROID_QIPA && (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-				if (!IS_SCREEN_POS_ALIGNED(kCurrentPosition))
-				{
-					if (NDDebugOpt::getTraceClickMapEnabled())
-					{
-						CCLog( "@@ NDManualRole::Update(), !IS_SCREEN_POS_ALIGNED(kCurrentPosition), return!");
-					}
-					return;
-				}
-#endif
-
-#if FIX_ANDROID_QIPA && (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-				float usOldRecordX = (kCurrentPosition.x) / MAP_UNITSIZE_X;
-				float usOldRecordY = (kCurrentPosition.y) / MAP_UNITSIZE_Y;
-				float usRecordX = usOldRecordX;
-				float usRecordY = usOldRecordY;
-#else
 				int usOldRecordX = (kCurrentPosition.x) / MAP_UNITSIZE_X;
 				int usOldRecordY = (kCurrentPosition.y) / MAP_UNITSIZE_Y;
 				int usRecordX = usOldRecordX;
 				int usRecordY = usOldRecordY;
-#endif
 
 				if (!GetXYByDir(usOldRecordX, usOldRecordY, nDir, usRecordX,
 						usRecordY))
@@ -2632,18 +2614,11 @@ unsigned int NDManualRole::GetPeerageColor(int nPeerage)
 	return unClr;
 }
 
-#if FIX_ANDROID_QIPA && (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-int NDManualRole::GetPathDir(float oldX, float oldY, float newX, float newY)
-#else
 int NDManualRole::GetPathDir(int oldX, int oldY, int newX, int newY)
-#endif
 {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	if (!(TAbs<float>(oldX - newX) <= 1 && TAbs<float>(oldY - newY) <= 1))
-#else
 	if (!(abs(oldX - newX) <= 1 && abs(oldY - newY) <= 1))
-#endif
 	{
+		CCLog( "@@ GetPathDir() err!! cell distance too big !!\r\n");
 		return -1;
 	}
 
@@ -2663,11 +2638,7 @@ int NDManualRole::GetPathDir(int oldX, int oldY, int newX, int newY)
 	return -1;
 }
 
-#if FIX_ANDROID_QIPA && (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-bool NDManualRole::GetXYByDir(float oldX, float oldY, int dir, float& newX, float& newY)
-#else
 bool NDManualRole::GetXYByDir(int oldX, int oldY, int dir, int& newX, int& newY)
-#endif
 {
 	if (dir < 0 || dir > 7)
 	{
