@@ -75,6 +75,7 @@ using namespace CocosDenshion;
 #define TAG_TIMER_FIRST_RUN         12  // 
 #define TAG_TIMER_LOAD_RES_OK       13  // 装载文字和Lua完毕
 #define TAG_TIMER_CHECK_LOGIN_COPY  14
+#define TAG_TIMER_LAZY_SEND_LOGIN_EVENT  15
 
 //----------------------------------------------------------
 //Update Layer 里
@@ -510,6 +511,12 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 #endif
 		ScriptMgrObj.excuteLuaFunc( "ShowUI", "Entry", m_iAccountID );
 		//    ScriptMgrObj.excuteLuaFunc("ProecssLocalNotification", "MsgLoginSuc");
+	}
+	else if (TAG_TIMER_LAZY_SEND_LOGIN_EVENT == idTag)
+	{
+		CCLog( "@@ to call SMLoginScene::OnTimer, call ScriptGlobalEvent::OnEvent (GE_LOGIN_GAME); \r\n" );
+		m_pTimer->KillTimer( this, TAG_TIMER_LAZY_SEND_LOGIN_EVENT );
+		ScriptGlobalEvent::OnEvent (GE_LOGIN_GAME);
 	}
 }
 
@@ -1326,3 +1333,11 @@ char*  CSMLoginScene::GetPathFileName(char* src, char delitmit)
 		}
 		return  NULL; 
 } 
+
+void CSMLoginScene::lazySendLoginEvent()
+{
+	if (m_pTimer)
+	{
+		m_pTimer->SetTimer( this, TAG_TIMER_LAZY_SEND_LOGIN_EVENT,0.1f );
+	}
+}

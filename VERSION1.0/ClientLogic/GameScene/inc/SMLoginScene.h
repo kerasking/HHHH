@@ -51,6 +51,7 @@ class CSMLoginScene
 
 public:
 	void Initialization(); override
+	void lazySendLoginEvent();
 	
 public:// ISMUpdateEvent
 	virtual void OnDownloadEvent(DWORD dwSizeFile,DWORD dwSideDownLoaded);

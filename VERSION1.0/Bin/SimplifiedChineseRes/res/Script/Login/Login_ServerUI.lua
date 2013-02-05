@@ -102,6 +102,9 @@ p.RoleListTag = {};
 --end
 	
 function p.LoadUI()
+
+    LogInfo("@@ Login_ServerUI::LoadUI()" );
+    
     local bFlag = HideLoginUI(NMAINSCENECHILDTAG.Login_ServerUI);
     if(bFlag) then
         return true;
@@ -519,6 +522,8 @@ function p.LoginOK_Guest(param)
 end
 
 function p.LoginOK_Normal(param)
+    LogInfo("@@ Login_ServerUI::LoginOK_Normal()" );
+    
     p.UIN = param;
     LogInfo("p.LoginOK_Normal uin:[%d]",param);
     p.ChangeUserLogin(p.UIN);
@@ -539,7 +544,7 @@ function p.RunGetServerListTimer()
     if(p.nTimerID == nil) then
         LogInfo("p.RunGetServerListTimer send!");
         sendMsgConnect(p.worldIP, p.worldPort, p.UIN);
-        p.nTimerID = RegisterTimer( p.TimerGetServerList, 30 );
+        p.nTimerID = RegisterTimer( p.TimerGetServerList, 10 );
     end
 end
 
@@ -725,7 +730,7 @@ function p.GetAccountID()
 end
 --++Guosen 2012.8.4
 function p.LoginGameNew()
-	LogInfo( "Login_ServerUI: LoginGameNew()" );
+	LogInfo( "@@ Login_ServerUI: LoginGameNew()" );
 	Music.PlayLoginMusic()
 	p.LoadUI();
 	p.LoginOK_Normal( p.UIN )
