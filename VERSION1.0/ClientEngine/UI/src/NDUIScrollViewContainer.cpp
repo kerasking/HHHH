@@ -599,18 +599,21 @@ unsigned int NDUIScrollViewContainer::WhichViewToScroll()
 		//獲取的移動距離如果小於0，那麼向右移動，索引增加
 		if(iCurMoveDis < 0)
 		{
-			if(abs(iCurMoveDis) > viewrect.size.width/6)
+			if(abs(iCurMoveDis) > viewrect.size.width/8)
 			{
-				iCurShowIndex = iCurShowIndex + 1 > size ? iCurShowIndex : iCurShowIndex + 1;
+				//iCurShowIndex = iCurShowIndex + 1 > size ? iCurShowIndex : iCurShowIndex + 1;
+				int iMoveNum = abs(iCurMoveDis)/viewrect.size.width + 1; 
+				iCurShowIndex = iCurShowIndex + iMoveNum > size - 1 ? size - 1 : iCurShowIndex + iMoveNum;
 			}
-
 		}
 		//獲取的移動距離如果大於0，那麼向左移動，索引減少
 		else if(iCurMoveDis > 0)
 		{
-			if(iCurMoveDis > viewrect.size.width/6)
+			if(iCurMoveDis > viewrect.size.width/8)
 			{
-				iCurShowIndex = iCurShowIndex - 1 < 0 ? iCurShowIndex : iCurShowIndex - 1;
+				//iCurShowIndex = iCurShowIndex - 1 < 0 ? iCurShowIndex : iCurShowIndex - 1;
+				int iMoveNum = abs(iCurMoveDis)/viewrect.size.width + 1; 
+				iCurShowIndex = iCurShowIndex - iMoveNum < 0 ? 0 : iCurShowIndex - iMoveNum;
 			}
 		}
 
