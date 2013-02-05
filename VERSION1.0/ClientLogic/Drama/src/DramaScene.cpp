@@ -51,12 +51,6 @@ DramaScene::~DramaScene()
 	DEC_NDOBJ_RTCLS
 
 	WriteCon( "%08X: DramaScene::~DramaScene()\r\n", this);
-
-// 	if(m_layerMap != NULL)
-// 	{
-// 		delete (m_layerMap);
-// 		m_layerMap = NULL;
-// 	}
 }
 
 void DramaScene::Init(int nMapId)
@@ -343,24 +337,24 @@ bool DramaScene::RemoveScene(int nKey)
 		return false;
 	}
 
-	DramaTransitionScene* scene = it->second;
+	DramaTransitionScene* pkScene = it->second;
 
-	NDDirector* director = NDDirector::DefaultDirector();
-	if (!director)
+	NDDirector* pkDirector = NDDirector::DefaultDirector();
+	if (!pkDirector)
 	{
 		return false;
 	}
 
-	if (scene != director->GetRunningScene())
+	if (pkScene != pkDirector->GetRunningScene())
 	{
 		return false;
 	}
 
 	m_mapScene.erase(it);
 
-	if (scene)
+	if (pkScene)
 	{
-		director->PopScene();
+		pkDirector->PopScene();
 	}
 
 	return true;
@@ -368,21 +362,21 @@ bool DramaScene::RemoveScene(int nKey)
 
 void DramaScene::OpenChat(bool bLeft)
 {
-	DramaChatLayer*& chat = bLeft ? m_chatlayerLeft : m_chatlayerRight;
+	DramaChatLayer*& pkChat = bLeft ? m_chatlayerLeft : m_chatlayerRight;
 
-	if (!chat)
+	if (!pkChat)
 	{
 		if (bLeft)
 		{
-			chat = new DramaLeftChat;
+			pkChat = new DramaLeftChat;
 		}
 		else
 		{
-			chat = new DramaRightChat;
+			pkChat = new DramaRightChat;
 		}
-		chat->Initialization();
-		chat->SetTargetDelegate(this);
-		AddChild(chat, 1);
+		pkChat->Initialization();
+		pkChat->SetTargetDelegate(this);
+		AddChild(pkChat, 1);
 	}
 }
 
@@ -405,12 +399,12 @@ void DramaScene::SetChatFigure(bool bLeft, std::string filename, bool bReverse,i
 void DramaScene::SetChatTitle(bool bLeft, std::string title, int nFontSize,
 		int nFontColor)
 {
-	DramaChatLayer*& chat = bLeft ? m_chatlayerLeft : m_chatlayerRight;
-	if (!chat)
+	DramaChatLayer*& pkChat = bLeft ? m_chatlayerLeft : m_chatlayerRight;
+	if (!pkChat)
 	{
 		return;
 	}
-	chat->SetTitle(title, nFontSize, nFontColor);
+	pkChat->SetTitle(title, nFontSize, nFontColor);
 }
 
 void DramaScene::SetChatTitleBySpriteKey(bool bLeft, int nKey, int nFontSize,
@@ -431,12 +425,12 @@ void DramaScene::SetChatTitleBySpriteKey(bool bLeft, int nKey, int nFontSize,
 void DramaScene::SetChatContent(bool bLeft, std::string content, int nFontSize,
 		int nFontColor)
 {
-	DramaChatLayer*& chat = bLeft ? m_chatlayerLeft : m_chatlayerRight;
-	if (!chat)
+	DramaChatLayer*& pkChat = bLeft ? m_chatlayerLeft : m_chatlayerRight;
+	if (!pkChat)
 	{
 		return;
 	}
-	chat->SetContent(content, nFontSize, nFontColor);
+	pkChat->SetContent(content, nFontSize, nFontColor);
 }
 
 void DramaScene::ShowTipDlg(std::string content)
