@@ -892,8 +892,7 @@ void NDMapMgr::processPlayer(NDTransData* pkData, int nLength)
 		// todoÈ¡Ïû´ò×ø×´Ì¬
 		if (pkRole->AssuredRidePet())
 		{
-// 			pkRole->SetCurrentAnimation(pkRole->GetPetStandAction(),
-// 					pkRole->IsReverse());
+
 		}
 		else
 		{
