@@ -634,7 +634,7 @@ void NDPlayer::SetPosition(CCPoint newPosition)
 
 					NDDataTransThread::DefaultThread()->GetSocket()->Send(&data);
 
-					if (1)
+					if (0)
 					{
 						CCLog( "@@ send _MSG_WALK_EX, row=%d, col=%d, dir=%d\r\n", nNewRow, nNewCol, int(dir));
 					}
