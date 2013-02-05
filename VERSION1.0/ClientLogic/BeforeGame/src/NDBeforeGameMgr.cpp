@@ -1944,6 +1944,9 @@ bool NDBeforeGameMgr::CheckClientVersion( const char* szURL,unsigned int uiPort 
 
 	NDTransData kData(_MSG_CLIENT_VERSION);
     
+	//每次检测版本都默认为非服务器列表页面
+    SetLogUIUpdate(false);
+
 	LOGD("Send the _MSG_CLIENT_VERSION message to server!");
 
 	kData << s_nVersion;

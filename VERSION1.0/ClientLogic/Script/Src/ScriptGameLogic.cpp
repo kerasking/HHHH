@@ -877,16 +877,25 @@ bool CheckClientVersion(const char* szURL)
 {
 	//CSMLoginScene* pScene = (CSMLoginScene*)NDDirector::DefaultDirector()->GetSceneByTag(SMLOGINSCENE_TAG);
 	//if(pScene){
-	//    return pScene->CheckClientVersion();
+	    //return pScene->CheckClientVersion();
 	//}
 	return false;
 	// return NDBeforeGameMgrObj.CheckClientVersion( szURL );
 }
 ///////////////////////////////////////////////
-//void SetRole(unsigned long ulLookFace, const char* pszRoleName, int nProfession)
-//{
-//    NDBeforeGameMgrObj.SetRole(ulLookFace, pszRoleName, nProfession);
-//}
+bool LoginUICheckClientVersion(const char* szURL, unsigned int uiPort)
+{
+	bool ret = NDBeforeGameMgrObj.CheckClientVersion(szURL, uiPort);
+    
+	//如果需要向服务端发送检测消息
+	if(ret)
+	{
+		//这里设置当前为服务器页面发送的请求
+		NDBeforeGameMgrObj.SetLogUIUpdate(true);
+	}
+		
+	return ret;
+}
 
 ///////////////////////////////////////////////
 bool LoginByLastData(void)
@@ -1057,6 +1066,6 @@ void ScriptGameLogicLoad()
 
 	ETCFUNC("ConvertReset", ConvertReset);
 	ETCFUNC("getStringSize", getStringSize);
+	ETCFUNC("LoginUICheckClientVersion", LoginUICheckClientVersion);
 }
-
 }
