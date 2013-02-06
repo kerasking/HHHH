@@ -344,7 +344,7 @@ void NDUILabel::draw()
 	this->preDraw();
 
 	if (!m_texture) return;
-	if (m_texture->getWidth() == 0 || m_texture->getHeight() == 0) return;
+	if (m_texture->getPixelsWide() == 0 || m_texture->getPixelsHigh() == 0) return;
 	
 	NDUINode::draw();
 	
