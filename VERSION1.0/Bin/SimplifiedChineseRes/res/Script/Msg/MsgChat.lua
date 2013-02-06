@@ -37,7 +37,7 @@ function p.ProcessTalkInfo(netdatas)
         return;
     end
     if channel == 22 then
-        CommonScrollDlg.ShowTipDlg({text,ccc4(255,255,255,255)});
+        --CommonScrollDlg.ShowTipDlg({text,ccc4(242,101,34,255)});
         channel = 5;
     end
     CloseLoadBar();
