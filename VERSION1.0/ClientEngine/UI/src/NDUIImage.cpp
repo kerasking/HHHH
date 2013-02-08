@@ -79,8 +79,10 @@ namespace NDEngine
 		
 		if (this->IsVisibled()) 
 		{
-			if (m_pic) m_pic->DrawInRect(this->GetScreenRect());
-			//else if (m_combinePic) m_combinePic->DrawInRect(this->GetScreenRect()); ///< 临时性注释 郭浩
+			if (m_pic)
+			{
+				m_pic->DrawInRect(this->GetScreenRect());
+			}
 		}		
 
 		//使用NDPicture了，这里不需要debugDraw()了.

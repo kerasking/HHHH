@@ -444,14 +444,9 @@ void BattleMgr::processSkillInfo(NDTransData& data, int len)
 			if (btAction == 0)
 			{ // 玩家技能
 				kPlayer.AddSkill(idSkill);
-				//GameScreen.role.addSkill(skill);
 			}
 			else if (btAction == 1)
 			{
-				//NDBattlePet* pet = NDPlayer::defaultHero().battlepet;
-				//				if (pet) {
-				//					pet->AddSkill(idSkill);
-				//				}
 				PetMgrObj.AddSkill(kPlayer.m_nID, idPet, idSkill);
 			}
 		}
@@ -459,7 +454,6 @@ void BattleMgr::processSkillInfo(NDTransData& data, int len)
 		{
 			int idNextLevelSkill = data.ReadInt();
 			int lqz = data.ReadShort();
-			//DianhuaUILayer::RefreshList(btAction, idNextLevelSkill, lqz);
 		}
 		else if (btAction == 5)
 		{ // 更新技能熟练度
@@ -482,9 +476,6 @@ void BattleMgr::processSkillInfo(NDTransData& data, int len)
 			}
 		}
 	}
-
-	//LearnSkillUILayer::RefreshSkillList();
-	//PetSkillCompose::refresh();
 }
 
 void BattleMgr::closeUI()
@@ -525,15 +516,21 @@ void BattleMgr::showBattleScene()
 		{//此时隐藏下述三个UI
 			NDUILayer * pLayer	= (NDUILayer *)pGameScene->GetChild(2010);//AffixNormalBoss//副本界面
 			if ( pLayer )
+			{
 				pLayer->SetVisible( false );
+			}
 			
 			pLayer	= (NDUILayer *)pGameScene->GetChild(2015);//Arena//竞技场界面
 			if ( pLayer )
+			{
 				pLayer->SetVisible( false );
+			}
 			
 			pLayer	= (NDUILayer *)pGameScene->GetChild(2035);//DynMapGuide//查看攻略界面
 			if ( pLayer )
+			{
 				pLayer->SetVisible( false );
+			}
 		}
 	}
 }
@@ -630,20 +627,6 @@ void BattleMgr::processBattleStart(NDEngine::NDTransData& bao)
 	bool bBattleStart = (btPackageType & 2 > 0);
 	m_nLastBattleType = btBattleType;
 
-	//	if (btAction == BATTLE_STAGE_LEAVE_WATCH) {
-	//		// 退出观战
-	//		if (m_battle && m_battle->IsWatch()) {
-	//			m_battle->setServerBattleResult(BATTLE_COMPLETE_END);
-	//			if (m_battle->IsPracticeBattle()) {
-	//				m_battle->setBattleStatus(BattleUILayer::BS_FIGHTER_SHOW_PAS);
-	//			} else {
-	//				quitBattle();
-	//			}
-	//			
-	//			return;
-	//		}
-	//	}
-
 	if (bBattleStart && m_pkBattle && m_pkBattle->GetParent() != NULL)
 	{
 		quitBattle(false);
@@ -657,7 +640,7 @@ void BattleMgr::processBattleStart(NDEngine::NDTransData& bao)
 		//		closeUI();
 	}
 
-	NDMapMgr& mapMgr = NDMapMgrObj; ///< 临时性注释 郭浩
+	NDMapMgr& mapMgr = NDMapMgrObj;
 
 	// 初始化战斗对象
 	if (!m_pkBattle)
@@ -766,33 +749,7 @@ void BattleMgr::processBattleStart(NDEngine::NDTransData& bao)
 			idlookface = idlookface/100000*100000+model_id*100+idlookface%100;
 		}
 
-//		if (nFighterType == FIGHTER_TYPE_PET) {
-		//				if (idObj == role.m_id) { // 主控角色
-		// 停止走路
 		fighter->LoadMonster(idlookface, level, strName);
-		//				} else { // 周围玩家
-		//					NDManualRole* player = mapMgr.GetManualRole(idObj);
-		//					if (player) {
-		//						CCPoint pos = CCPointZeroON;
-		//						if (player->GetLastPointOfPath(pos))
-		//						{
-		//							player->SetPositionEx(pos);
-		//							player->stopMoving(false, false);
-		//						}
-		//						else
-		//						{
-		//							player->stopMoving(true, false);
-		//						}
-		//						
-		//						fighter->SetRole(player);
-		//					}
-		//				}
-//		}else if (nFighterType == FIGHTER_TYPE_MONSTER) { // 右边的怪物
-//			//				int lookface = 0;
-//			//				bao >> lookface;
-//			//				string name = bao.ReadUnicodeString();
-//			fighter->LoadMonster(idlookface, level, strName);
-//		}
 
 		fighter->GetRole()->m_nLife = nLife;
 		fighter->GetRole()->m_nMaxLife = nLifeMax;
@@ -804,35 +761,12 @@ void BattleMgr::processBattleStart(NDEngine::NDTransData& bao)
 			fighter->GetRole()->SetWeaponImage(weapon_id);
 		}
 
-		// 服务端下发的状态
-		//			for (int j = 0; j < statusNum; j++) {
-		//				int idStatus = bao.ReadInt();
-		//				int idEffect = bao.ReadInt();
-		//				Byte num = bao.ReadByte();
-		//				string name = bao.ReadUnicodeString();
-		//				string des = bao.ReadUnicodeString();
-		//				fighter->addAStatus(new FighterStatus(idStatus, idEffect, num, name, des));
-		//			}
-
 		m_vFighter.push_back(fighter);
 		m_pkBattle->AddFighter(fighter);
-
-		//			// 死亡处理
-		//			if (info.nLife == 0)
-		//			{
-		//				fighter->setDieOK(true);
-		//				dieAction(*fighter);
-		//			}
 	}
 
 	if (bBattleStart)
 	{
-		/* comment by jhzheng
-		 // 关闭正在操作的ui界面
-		 CloseProgressBar;
-		 closeUI();
-		 */
-
 		m_nBattleMapId = nMapID;
 		m_nBattleX = posX;
 		m_nBattleY = posY;
@@ -878,7 +812,6 @@ void BattleMgr::processBattleStart(NDEngine::NDTransData& bao)
 		m_pkBattle->InitEudemonOpt();
 		m_pkBattle->sortFighterList();
 		m_pkBattle->InitSpeedBar();
-		//m_battle->SetVisible(false);
 		director->EnableDispatchEvent(false);
 	}
 }

@@ -164,7 +164,6 @@ void QuickTalkCell::draw()
 
 		if (uiLayer->GetFocus() == this)
 		{ // 当前处于焦点,绘制焦点色
-		  //DrawRecttangle(GetScreenRect(), m_clrFocus); ///< 临时性注释 郭浩
 			m_lbText->SetFontColor(m_clrFocusText);
 		}
 		else

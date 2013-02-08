@@ -268,8 +268,9 @@ NDSceneTile::NDSceneTile() :
 }
 
 NDMapMonsterRange::NDMapMonsterRange() :
-		m_nTypeId(0), m_nColumn(0), m_nRow(0)
-//, m_bBoss(false) ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+m_nTypeId(0),
+m_nColumn(0),
+m_nRow(0)
 {
 }
 

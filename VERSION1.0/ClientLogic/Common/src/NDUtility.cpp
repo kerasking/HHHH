@@ -385,61 +385,6 @@ void CopyDataToCopyCache(const char* data)
 		memcpy(COPY_DATA, data, sizeof(COPY_DATA) - 1);
 	}
 }
-// 
-// std::string cutBytesToString(NSInputStream* stream, int iType)
-// {
-// 	if (stream == NULL)
-// 	{
-// 		return "";
-// 	}
-// 	
-// 	[stream setProperty:[NSNumber numberWithInt:0] forKey:NSStreamFileCurrentOffsetKey];
-// 	
-// 	std::vector<unsigned short> vec;
-// 	
-// 	while ([stream hasBytesAvailable])
-// 	{
-// 		unsigned char byteBufL[1] = {0x00};
-// 		unsigned char byteBufH[1] = {0x00};
-// 		int readLen = [stream read:byteBufL maxLength:1];
-// 		if ( !readLen ) 
-// 		{
-// 			break;
-// 		}
-// 		
-// 		readLen = [stream read:byteBufH maxLength:1];
-// 		if ( !readLen ) 
-// 		{
-// 			return std::string("");
-// 		}
-// 		
-// 		unsigned short ch = (unsigned short) ((unsigned short)byteBufH[0] & 0xff | ((unsigned short)(byteBufL[0] & 0xff) << 8));
-// 		
-// 		if (ch != 9632) // '¡ö' = 9632
-// 		{
-// 			if (iType == 1) 
-// 			{
-// 				vec.push_back(ch);
-// 			} 
-// 			else if (iType == 0)
-// 			{
-// 				break;
-// 			}
-// 		} 
-// 		else 
-// 		{
-// 			iType--;
-// 		}
-// 	}
-// 	
-// 	if (vec.size())
-// 	{
-// 		NSString *tmp = [NSString stringWithCharacters:(const unichar *)&(vec[0]) length:vec.size()];
-// 		return std::string([tmp UTF8String]);
-// 	}
-// 	
-// 	return std::string("");
-// }
 
 std::string loadPackInfo(int param)
 {
@@ -563,47 +508,6 @@ std::string GetUpdateUrl()
 	return "";
 }
 
-// bool IsSupportPrecisionPic()
-// {
-// 	static bool bfirstCall = true;
-// 	static bool bSupport = false;
-// 	
-// 	if (!bfirstCall) return bSupport;
-// 	
-// 	switch ([[UIDevice currentDevice] platformType])
-// 	{
-// 		case UIDevice1GiPhone: bSupport = false;				//IPHONE_1G_NAMESTRING;
-// 		case UIDevice3GiPhone: bSupport = false;				//IPHONE_3G_NAMESTRING;
-// 		case UIDevice3GSiPhone:	bSupport = false;				//IPHONE_3GS_NAMESTRING;
-// 		case UIDevice4iPhone:	bSupport = true;				//IPHONE_4_NAMESTRING;
-// 		case UIDevice5iPhone:	bSupport = true;				//IPHONE_5_NAMESTRING;
-// 		case UIDeviceUnknowniPhone: bSupport = false;			//IPHONE_UNKNOWN_NAMESTRING;
-// 			
-// 		case UIDevice1GiPod: bSupport = false;					//IPOD_1G_NAMESTRING;
-// 		case UIDevice2GiPod: bSupport = false;					//IPOD_2G_NAMESTRING;
-// 		case UIDevice3GiPod: bSupport = false;					//IPOD_3G_NAMESTRING;
-// 		case UIDevice4GiPod: bSupport = false;					//IPOD_4G_NAMESTRING;
-// 		case UIDeviceUnknowniPod: bSupport = false;				//IPOD_UNKNOWN_NAMESTRING;
-// 			
-// 		case UIDevice1GiPad : bSupport = false;					//IPAD_1G_NAMESTRING;
-// 		case UIDevice2GiPad : bSupport = false;					//IPAD_2G_NAMESTRING;
-// 			
-// 		case UIDeviceAppleTV2 : bSupport = false;				//APPLETV_2G_NAMESTRING;
-// 			
-// 		case UIDeviceiPhoneSimulator: bSupport = false;			//IPHONE_SIMULATOR_NAMESTRING;
-// 		case UIDeviceiPhoneSimulatoriPhone: bSupport = false;	//IPHONE_SIMULATOR_IPHONE_NAMESTRING;
-// 		case UIDeviceiPhoneSimulatoriPad: bSupport = false;		//IPHONE_SIMULATOR_IPAD_NAMESTRING;
-// 			
-// 		case UIDeviceIFPGA: bSupport = false;					//IFPGA_NAMESTRING;
-// 			
-// 		default: bSupport = false;								//IPOD_FAMILY_UNKNOWN_DEVICE;
-// 	}
-// 	
-// 	bfirstCall = false;
-// 	
-// 	return bSupport;
-// }
-
 std::string platformString()
 {
 	// todo(zjh)
@@ -614,7 +518,6 @@ std::string platformString()
 void drawRectBar2(int x, int y, int color, int num1, int num2, int width)
 {
 	int curColor = 0x0B2212;
-//	DrawPolygon(CCRectMake(x, y, width + 1, 5), INTCOLORTOCCC4(curColor), 1); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 
 	if (num2 <= 0)
 	{
@@ -631,8 +534,6 @@ void drawRectBar2(int x, int y, int color, int num1, int num2, int width)
 	{
 		return;
 	}
-
-	//DrawRecttangle(CCRectMake(x, y, width1, 4), INTCOLORTOCCC4(color)); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 }
 
 CCRect getNewNumCut(unsigned int num, bool hightlight)
@@ -644,10 +545,6 @@ CCRect getNewNumCut(unsigned int num, bool hightlight)
 
 void ShowAlert(const char* pszAlert)
 {
-// todo(zjh)
-// 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NDCommonCString_RETNS("tip") message:[NSString stringWithUTF8String:pszAlert] delegate:NULL cancelButtonTitle:NDCommonCString_RETNS("haode") otherButtonTitles:NULL];
-// 	[alert show];
-// 	[alert release];
 }
 
 uint TimeConvert(TIME_TYPE type /*=TIME_MILLISECOND*/, time_t long_time)

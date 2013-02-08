@@ -2558,16 +2558,12 @@ bool NDManualRole::GetShowPetInfo(ShowPetInfo& info)
 
 void NDManualRole::ResetShowPetPosition()
 {
-	/*if (!m_pBattlePetShow)
-	 return;
 
-	 m_pBattlePetShow->SetPosition(GetPosition());*/
 }
 
 void NDManualRole::ResetShowPet()
 {
 	ShowPetInfo emptyShowPetInfo;
-	//SetShowPet(emptyShowPetInfo); ///<ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 }
 
 std::string NDManualRole::GetPeerageName(int nPeerage)
