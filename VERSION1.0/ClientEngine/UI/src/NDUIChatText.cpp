@@ -21,16 +21,7 @@
 #include "ScriptGameDataLua.h"
 #include "UsePointPls.h"
 #include "utf8.h"
-
-
-//是否把NDBITMAP这套机制编译进去（仅支持android） @ndbitmap
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	#define WITH_NDBITMAP 1
-#else
-	#define WITH_NDBITMAP 0
-#endif
-#define WITH_NDBITMAP 1
-
+#include "NDBitmapMacro.h"
 
 #ifdef ANDROID
 #include <jni.h>
@@ -84,11 +75,10 @@ std::string CUIChatText::GetChannelStr(CHAT_CHANNEL_TYPE channel)
 }
 
 //@ndbitmap
+#if WITH_NDBITMAP
 void CUIChatText::SetContent_WithNDBitmap(int speakerID, int channel, const char* speaker,
 							 const char* text, int style, int fontSizelua, ccColor4B color)
 {
-#if WITH_NDBITMAP
-
 	//备注：LUA传过来的字体大小是6，太小了！改成12.
 	fontSizelua = (fontSizelua == 6 ? 12 : fontSizelua);
 
@@ -135,13 +125,13 @@ void CUIChatText::SetContent_WithNDBitmap(int speakerID, int channel, const char
 
 	// calculate text height
 	contentHeight = getStringSize( strTotalText.c_str(), fontSizelua * FONT_SCALE ).height;
-#endif
 }
+#endif
 
 void CUIChatText::SetContent(int speakerID, int channel, const char* speaker,
 							 const char* text, int style, int fontSizelua, ccColor4B color)
 {
-#if WITH_NDBITMAP
+#if WITH_NDBITMAP //@ndbitmap
 	return SetContent_WithNDBitmap( speakerID, channel, speaker, text, style, fontSizelua, color );
 #endif
 

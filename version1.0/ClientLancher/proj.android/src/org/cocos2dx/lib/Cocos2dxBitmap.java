@@ -96,6 +96,7 @@ public class Cocos2dxBitmap {
 			final String pFontName, final int pFontSize, final int pAlignment, 
 			final int pWidth, final int pHeight) 
 	{
+		//@ndbitmap
 		// if NDBitmap is enabled, forward to NDBitmap, otherwise call the old one.
 		if (NDBitmap.isEnabled())
 		{
@@ -449,7 +450,7 @@ public class Cocos2dxBitmap {
 		}
 	}
 	
-	//ND_MOD
+	//@ndbitmap
 	private static String getStringSize( String pString, final String pFontName,
 											final int pFontSize, final int pAlignment)
 	{

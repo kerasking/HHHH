@@ -20,15 +20,8 @@
 #include "StringConvert.h"
 #include "ScriptGameDataLua.h"
 #include "utf8.h"
+#include "NDBitmapMacro.h"
 
-
-//是否把NDBITMAP这套机制编译进去（仅支持android）@ndbitmap
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	#define WITH_NDBITMAP 1
-#else
-	#define WITH_NDBITMAP 0
-#endif
-#define WITH_NDBITMAP 1
 
 using namespace cocos2d;
 
@@ -288,12 +281,12 @@ NDUITextBuilder* NDUITextBuilder::DefaultBuilder()
 }
 
 //@ndbitmap
+#if WITH_NDBITMAP
 NDUIText* NDUITextBuilder::Build_WithNDBitmap(const char* pszText, unsigned int uiFontSize,
 							 CCSize kContainerSize,
 							 cocos2d::ccColor4B kDefaultColor /*= ccc4(0, 0, 0, 255)*/,
 							 bool bWithPageArrow /*= false*/, bool bHpyerLink /*= false*/)
 {
-#if WITH_NDBITMAP
 	NDUILabel* label = new NDUILabel;
 	if (label)
 	{
@@ -312,9 +305,9 @@ NDUIText* NDUITextBuilder::Build_WithNDBitmap(const char* pszText, unsigned int 
 		uiText->AddChild( label );
 		return uiText;
 	}
-#endif
 	return NULL;
 }
+#endif
 
 NDUIText* NDUITextBuilder::Build(const char* pszText, unsigned int uiFontSize,
 		CCSize kContainerSize, ccColor4B kDefaultColor, bool bWithPageArrow,

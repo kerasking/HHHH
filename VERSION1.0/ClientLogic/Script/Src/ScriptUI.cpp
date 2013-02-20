@@ -1538,6 +1538,7 @@ NDUINode* CreateColorLabel(const char* str, unsigned int fontsize, unsigned int 
 	CCSize winsize	= CCDirector::sharedDirector()->getWinSizeInPixels();
 	winsize.width	= nConstraitWidth;
 
+//@ndbitmap
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) && 1
 	return CreateColorLabel_NDBitmap(str, fontsize, nConstraitWidth);
 #else

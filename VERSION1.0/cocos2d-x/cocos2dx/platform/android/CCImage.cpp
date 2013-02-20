@@ -159,7 +159,14 @@ public:
 		}
 		else
 		{
-			//pFontName = FONT_UTIL::changeFontName( pFontName, jstrText );
+			//@ndbitmap
+			//说明：若使用NDBitmap机制则不需要改变字体：使用同一种字体，原先低端机的字符间距问题通过修正解决，详见NDSpecialCharWidth.java
+			//		若未使用NDBitmap机制，则沿用原来改字体的方式解决字符宽度问题.
+			const int WITH_NDBITMAP = 1;
+			if (!WITH_NDBITMAP)
+			{
+				pFontName = FONT_UTIL::changeFontName( pFontName, jstrText );
+			}
 		}
 #endif
 

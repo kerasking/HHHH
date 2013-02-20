@@ -18,9 +18,11 @@ public class NDBitmap {
 	private static int s_enableNDBitmapCache = -1; //-1,0,1
 	public static boolean verbose = false;
 
-	// only for old version OS.
+	//开关：是否启用NDBitmap的Java端开关
 	public static boolean isEnabled()
 	{
+		return true;
+		/*
 		if (true) return true;//@del
 		if (s_enableNDBitmapCache == -1)
 		{
@@ -31,6 +33,7 @@ public class NDBitmap {
 			}
 		}
 		return s_enableNDBitmapCache == 1;
+		*/
 	}
 	
 	/**

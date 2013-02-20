@@ -16,6 +16,7 @@
 #include <vector>
 #include <map>
 #include "HyperLinkLabel.h"
+#include "NDBitmapMacro.h"
 
 
 namespace NDEngine
@@ -99,10 +100,13 @@ public:
 			unsigned int textWidth, unsigned int fontSize);
 
 private:
+	//@ndbitmap
+#if WITH_NDBITMAP
 	NDUIText* Build_WithNDBitmap(const char* pszText, unsigned int uiFontSize,
 		CCSize kContainerSize,
 		cocos2d::ccColor4B kDefaultColor = ccc4(0, 0, 0, 255),
 		bool bWithPageArrow = false, bool bHpyerLink = false);
+#endif
 
 private:
 	//两位16进制字符串转16进制值

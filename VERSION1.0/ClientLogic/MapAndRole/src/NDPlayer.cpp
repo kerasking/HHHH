@@ -1363,8 +1363,12 @@ void NDPlayer::debugDraw()
 void NDPlayer::DrawNameLabel(bool bDraw)
 {
 	NDManualRole::DrawNameLabel(bDraw);
+	DrawTest_NDBitmap();
+}
 
-// 	/////////////@del ฒโสิด๚ย๋////////////////////
+//@ndbitmap ฒโสิด๚ย๋
+void NDPlayer::DrawTest_NDBitmap()
+{
 #if 0
 	const char* testStr[] = 
 	{
