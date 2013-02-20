@@ -892,8 +892,7 @@ void NDMapMgr::processPlayer(NDTransData* pkData, int nLength)
 		// todoÈ¡Ïû´ò×ø×´Ì¬
 		if (pkRole->AssuredRidePet())
 		{
-// 			pkRole->SetCurrentAnimation(pkRole->GetPetStandAction(),
-// 					pkRole->IsReverse());
+
 		}
 		else
 		{
@@ -1206,13 +1205,6 @@ void NDMapMgr::processWalk(NDTransData* pkData, int nLength)
 
 	if (NDPlayer::defaultHero().m_nID != nID)
 	{
-//		NDManualRole* pkRole = 0;
-//		pkRole = NDMapMgrObj.GetManualRole(nID);
-//
-//		if (pkRole->isTeamLeader())
-//		{
-//			pkRole->teamSetServerDir(ucDir);
-//		}
 		NDManualRole *role = NULL;
 		role = NDMapMgrObj.GetManualRole(nID);
 		if ( role && (!role->isTeamMember() || role->isTeamLeader())) 

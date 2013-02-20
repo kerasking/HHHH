@@ -562,10 +562,8 @@ void NDPlayer::Walk(CCPoint toPos, SpriteSpeed speed, bool mustArrive/*=false*/)
  			(int)kCurrentPosition.x, (int)kCurrentPosition.y, (int)kPos.x, (int)kPos.y );
 	}
 
-//@del
-// 	if ((int(kCurrentPosition.x) - int(DISPLAY_POS_X_OFFSET)) % int(MAP_UNITSIZE_X) != 0
-// 	 || (int(kCurrentPosition.y) - int(DISPLAY_POS_Y_OFFSET)) % int(MAP_UNITSIZE_Y) != 0)
-	if (!IS_PLAYER_POS_ALIGNED(kCurrentPosition))
+ 	if ((int(kCurrentPosition.x) - int(DISPLAY_POS_X_OFFSET)) % int(MAP_UNITSIZE_X) != 0
+ 	 || (int(kCurrentPosition.y) - int(DISPLAY_POS_Y_OFFSET)) % int(MAP_UNITSIZE_Y) != 0)
 	{ 
 		// Cell没走完,又设置新的目标
 		m_kTargetPos = kPos;
@@ -593,20 +591,20 @@ void NDPlayer::Walk(CCPoint toPos, SpriteSpeed speed, bool mustArrive/*=false*/)
 
 void NDPlayer::SetPosition(CCPoint newPosition)
 {
-	CCPoint newCell = ConvertUtil::convertDisplayToCell( newPosition, true );
-	CCPoint oldCell = ConvertUtil::convertDisplayToCell( GetPosition(), true );
+	CCPoint newCell = ConvertUtil::convertDisplayToCell( newPosition );
+	CCPoint oldCell = ConvertUtil::convertDisplayToCell( GetPosition());
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	float nNewCol = newCell.x;
-	float nNewRow = newCell.y;
-	float nOldCol = oldCell.x;
-	float nOldRow = oldCell.y;
-#else
 	int nNewCol = newCell.x;
 	int nNewRow = newCell.y;
 	int nOldCol = oldCell.x;
 	int nOldRow = oldCell.y;
-#endif
+
+	if (TAbs<int>(nNewRow - nOldRow) > 1 || 
+		TAbs<int>(nNewCol - nOldCol) > 1)
+	{
+		CCLog( "@@ !! check old-new cell failed !!\r\n");
+		CCLog( "@@ !! newRow=%d, newCol=%d, oldRow=%d, oldCol=%d\r\n", nNewRow, nNewCol, nOldRow, nOldCol );
+	}
 
 	NDManualRole::SetPosition(newPosition);
 
@@ -615,21 +613,14 @@ void NDPlayer::SetPosition(CCPoint newPosition)
 		return;
 	}
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	if (TAbs<float>(nNewCol - nOldCol) >= 1.0f || TAbs<float>(nNewRow - nOldRow) >= 1.0f)
-#else
 	if (nNewCol != nOldCol || nNewRow != nOldRow)
-#endif
 	{
 		if (nOldCol == 0 && nOldRow == 0)
 		{
+			CCLog( "@@ !! old cell x,y both 0 !!\r\n" );
 		}
 		else
 		{
-			/*
-			 int dir = nNewCol != nOldCol ? ( nNewCol > nOldCol ? 3 : 2 ) :
-			 ( nNewRow != nOldRow ? (nNewRow > nOldRow ? 1 : 0 ) : -1 );
-			 */
 			int dir = this->GetPathDir(nOldCol, nOldRow, nNewCol, nNewRow);
 
 			if (dir != -1)
@@ -643,7 +634,7 @@ void NDPlayer::SetPosition(CCPoint newPosition)
 
 					NDDataTransThread::DefaultThread()->GetSocket()->Send(&data);
 
-					if (NDDebugOpt::getTraceClickMapEnabled())
+					if (0)
 					{
 						CCLog( "@@ send _MSG_WALK_EX, row=%d, col=%d, dir=%d\r\n", nNewRow, nNewCol, int(dir));
 					}
@@ -1372,27 +1363,52 @@ void NDPlayer::debugDraw()
 void NDPlayer::DrawNameLabel(bool bDraw)
 {
 	NDManualRole::DrawNameLabel(bDraw);
+	DrawTest_NDBitmap();
+}
 
-// 	/////////////@del 测试代码////////////////////
-// 	static NDUILabel* s_testLabel = NULL;
-// 	if (!s_testLabel)
-// 	{
-// 		s_testLabel = new NDUILabel;
-// 		s_testLabel->Initialization(); 
-// 		s_testLabel->SetFontSize(12); 
-// 
-// 		s_testLabel->SetText( "测试透明文字，听说有问题啊，反对数据库范德萨发大奖赛阿凡达是范德萨阿凡达");
-// 		s_testLabel->SetFontColor( ccc4(0,255,0,125));
-// 	}
-// 	if (s_testLabel)
-// 	{
-// 		CCSize stringSize = getStringSize( s_testLabel->GetText().c_str(), s_testLabel->GetFontSize() * FONT_SCALE);
-// 		float halfW = stringSize.width * 0.5f;
-// 		CCPoint pt = ccpAdd( this->getHeadPos(), ccp(-halfW,-30));
-// 
-// 		s_testLabel->SetFrameRect(CCRectMake(pt.x, pt.y, stringSize.width, stringSize.height));
-// 		s_testLabel->draw();
-// 	}
+//@ndbitmap 测试代码
+void NDPlayer::DrawTest_NDBitmap()
+{
+#if 0
+	const char* testStr[] = 
+	{
+		"AaBbCcDdEeFfGg",
+		"HhIiJjKkLlMmNn",
+		"OoPpQqRrSsTt",	
+		"UuVvWwXxYyZz",
+		"0123456789",
+		"()[]<>+-=.,':%/\\",
+	};
+	
+	int testStrAmount = sizeof(testStr) / sizeof(testStr[0]);
+	
+	static NDUILabel* arrLabel[10] = {0}; //10 label is enough.
+	for (int i = 0; i < testStrAmount; i++)
+	{
+		NDUILabel*& label = arrLabel[i];
+		if (!label)
+		{
+			label = new NDUILabel;
+			label->Initialization(); 
+			label->SetFontSize(12); 
+			label->SetFontColor( ccc4(0,0,0,255));
+			label->SetText( testStr[i] );
+		}
+		if (label)
+		{
+			CCSize stringSize = getStringSize( label->GetText().c_str(), label->GetFontSize() * FONT_SCALE);
+			float halfW = stringSize.width * 0.5f;
+			
+			//CCPoint pt = ccpAdd( this->getHeadPos(), ccp(-halfW,-50 - 30*i ));
+			//label->SetFrameRect(CCRectMake(pt.x, pt.y, stringSize.width, stringSize.height));
+			
+			CCPoint pt = ccpAdd( this->getHeadPos(), ccp(100, -50-30*i ));
+			label->SetFrameRect(CCRectMake(pt.x, pt.y, stringSize.width*2, stringSize.height));
+
+			label->draw();
+		}
+	}
+#endif
 }
 
 void NDPlayer::InitializationFroLookFace( int lookface, bool bSetLookFace /*= true*/ )

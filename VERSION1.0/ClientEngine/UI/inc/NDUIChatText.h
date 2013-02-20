@@ -11,6 +11,7 @@
 #include "NDUILabel.h"
 #include "AutoLink.h"
 #include <list>
+#include "NDBitmapMacro.h"
 
 #define SMALL_CHAT_FONTSIZE	(9)
 
@@ -90,10 +91,16 @@ public:
 	{
 		this->contentWidth=width;
 	}
-	//void SetContent(int speakerID,int channel,const char* speaker,const char* text,int style ,int fontSizelua, ccColor4B color);
-	//void SetContent(int speakerID,int channel,const char* speaker,const char* text);
+
+	//@ndbitmap
+#if WITH_NDBITMAP
+	void SetContent_WithNDBitmap(int speakerID, int channel, const char* speaker,
+								const char* text, int style, int fontSizelua, ccColor4B color);
+#endif
+
 	void SetContent(int speakerID, int channel, const char* speaker, 
-		const char* text, int style, int fontSizelua, ccColor4B color);
+								const char* text, int style, int fontSizelua, ccColor4B color);
+
 	int GetContentHeight()
 	{
 		return contentHeight;

@@ -1944,6 +1944,9 @@ bool NDBeforeGameMgr::CheckClientVersion( const char* szURL,unsigned int uiPort 
 
 	NDTransData kData(_MSG_CLIENT_VERSION);
     
+	//每次检测版本都默认为非服务器列表页面
+    SetLogUIUpdate(false);
+
 	LOGD("Send the _MSG_CLIENT_VERSION message to server!");
 
 	kData << s_nVersion;
@@ -2147,44 +2150,49 @@ void* CopyLoginResThread(void* ptr)
 
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-int recursiveDelete(char* dirname) {
-    DIR *dp;
-    struct dirent *ep;
-    
-    char abs_filename[FILENAME_MAX];
-    
-    dp = opendir (dirname);
-    if (dp != NULL)
-    {
-        while (ep = readdir (dp)) {
-            struct stat stFileInfo;
-            
-            snprintf(abs_filename, FILENAME_MAX, "%s/%s", dirname, ep->d_name);
-            
-            if (lstat(abs_filename, &stFileInfo) < 0)
-            {
-                LOGD("xxxxxerror lstat %s", abs_filename);
-            }            
-            if(S_ISDIR(stFileInfo.st_mode)) {
-                if(strcmp(ep->d_name, ".") &&
-                   strcmp(ep->d_name, "..")) {
-                    LOGD("xxxxx%s directory\n",abs_filename);
-                    recursiveDelete(abs_filename);
-                }
-            } else {
-                LOGD("xxxxx%s file\n",abs_filename);
-                remove(abs_filename);
-            }
-        }
-        (void) closedir (dp);
-    }
-    else
-        LOGD("xxxxxCouldn't open the directory");
-    
-    
-    remove(dirname);
-    return 0;
-    
+int recursiveDelete(char* dirname)
+{
+	DIR *dp;
+	struct dirent* ep = 0;
+
+	char abs_filename[FILENAME_MAX] = {0};
+
+	dp = opendir(dirname);
+	if (dp != NULL)
+	{
+		while (ep = readdir(dp))
+		{
+			struct stat stFileInfo;
+
+			snprintf(abs_filename, FILENAME_MAX, "%s/%s", dirname, ep->d_name);
+
+			if (lstat(abs_filename, &stFileInfo) < 0)
+			{
+				LOGD("xxxxxerror lstat %s", abs_filename);
+			}
+			if (S_ISDIR(stFileInfo.st_mode))
+			{
+				if (strcmp(ep->d_name, ".") && strcmp(ep->d_name, ".."))
+				{
+					LOGD("xxxxx%s directory\n", abs_filename);
+					recursiveDelete(abs_filename);
+				}
+			}
+			else
+			{
+				LOGD("xxxxx%s file\n", abs_filename);
+				remove(abs_filename);
+			}
+		}
+		(void) closedir(dp);
+	}
+	else
+	{
+		LOGD("xxxxxCouldn't open the directory");
+	}
+
+	remove(dirname);
+	return 0;
 }
 #endif
 

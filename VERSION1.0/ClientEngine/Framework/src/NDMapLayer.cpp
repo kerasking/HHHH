@@ -1968,7 +1968,7 @@ void NDMapLayer::drawCell()
 	
 			//@todo: check visible
 			CCPoint org = ccp(x + pad, y + pad);//left top
-			CCPoint dest = ccp(x + MAP_UNITSIZE_X - pad, y + MAP_UNITSIZE_Y + - pad); //right bottom
+			CCPoint dest = ccp(x + MAP_UNITSIZE_X - pad, y + MAP_UNITSIZE_Y - pad); //right bottom
 			ccDrawRect( org, dest );
 		}
 	}

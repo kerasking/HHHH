@@ -75,6 +75,7 @@ using namespace CocosDenshion;
 #define TAG_TIMER_FIRST_RUN         12  // 
 #define TAG_TIMER_LOAD_RES_OK       13  // 装载文字和Lua完毕
 #define TAG_TIMER_CHECK_LOGIN_COPY  14
+#define TAG_TIMER_LAZY_SEND_LOGIN_EVENT  15
 
 //----------------------------------------------------------
 //Update Layer 里
@@ -378,9 +379,11 @@ void CSMLoginScene::OnTimer( OBJID idTag )
         switch (nCopyStatus) 
         {
             case -1:
-                m_pTimer->KillTimer( this, TAG_TIMER_CHECK_COPY );
-                LOGERROR("Copy files error!");
-                exit(0);
+				{
+					m_pTimer->KillTimer( this, TAG_TIMER_CHECK_COPY );
+					LOGERROR("Copy files error!");
+					exit(0);
+				}
                 break;
             case 0:
                 break;
@@ -414,24 +417,22 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 				{
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 					CCString* pstrString = NULL;
-                    notifyProcess(nCopyStatus);
+					notifyProcess (nCopyStatus);
 #elif(CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 					CCString* pstrString = CCString::stringWithFormat("解壓資源……已經解壓了%d%%",nCopyStatus);
-					//string strText = CONVERT_GBK_TO_UTF8(pstrString->getCString());
-					
+
 					CCSize kTextSize = getStringSize(pstrString->getCString(), 20 * FONT_SCALE);
 					CCSize kWinSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 
- 					m_pkProgressTextLabel->SetFrameRect(CCRectMake(kWinSize.width / 2.0f - kTextSize.width / 3.0f,
-                                                                   kWinSize.height - kTextSize.height * 1.1f, kTextSize.width, kTextSize.height));
+					m_pkProgressTextLabel->SetFrameRect(CCRectMake(kWinSize.width / 2.0f - kTextSize.width / 3.0f,
+						kWinSize.height - kTextSize.height * 1.1f, kTextSize.width, kTextSize.height));
 
-					//LOGD("kTextSize.width is %d,kTextSize.height is %d",(int)kTextSize.width,(int)kTextSize.height);
-                    
-                    if(pstrString)
-                        m_pkProgressTextLabel->SetText(pstrString->getCString());
+					if(pstrString)
+						m_pkProgressTextLabel->SetText(pstrString->getCString());
 #elif(CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-					CCAssert(0);///< 未实现 郭浩
+					CCAssert(0); ///< 未实现 郭浩
 #endif
+
 				}
                 break;
         }
@@ -510,6 +511,12 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 #endif
 		ScriptMgrObj.excuteLuaFunc( "ShowUI", "Entry", m_iAccountID );
 		//    ScriptMgrObj.excuteLuaFunc("ProecssLocalNotification", "MsgLoginSuc");
+	}
+	else if (TAG_TIMER_LAZY_SEND_LOGIN_EVENT == idTag)
+	{
+		CCLog( "@@ to call SMLoginScene::OnTimer, call ScriptGlobalEvent::OnEvent (GE_LOGIN_GAME); \r\n" );
+		m_pTimer->KillTimer( this, TAG_TIMER_LAZY_SEND_LOGIN_EVENT );
+		ScriptGlobalEvent::OnEvent (GE_LOGIN_GAME);
 	}
 }
 
@@ -1326,3 +1333,11 @@ char*  CSMLoginScene::GetPathFileName(char* src, char delitmit)
 		}
 		return  NULL; 
 } 
+
+void CSMLoginScene::lazySendLoginEvent()
+{
+	if (m_pTimer)
+	{
+		m_pTimer->SetTimer( this, TAG_TIMER_LAZY_SEND_LOGIN_EVENT,0.1f );
+	}
+}

@@ -302,38 +302,11 @@ CCString* NDDataPersist::GetDataPath()
 
 CCString* NDDataPersist::GetAccountListPath()
 {
-// 	NSString dir = [kFavoriteAccountListFileName stringByDeletingLastPathComponent] ;
-// 	if (!KDirectory::isDirectoryExist([dir UTF8String])) 
-// 	{
-// 		if (!KDirectory::createDir([dir UTF8String]))
-// 		{
-// 			return nil;
-// 		}
-// 	}
-// 	return kFavoriteAccountListFileName;
-	//	NSArray *paths = NSSearchPathForDirectoriesInDomains( 
-	//							     NSDocumentDirectory, NSUserDomainMask, YES);
-	//	NSString *documentsDirectory = [paths objectAtIndex:0];
-	//	return [documentsDirectory stringByAppendingPathComponent:kFavoriteAccountListFileName];
-
 	return new CCString("");
 }
 
 void NDDataPersist::LoadAccountList()
 {
-	/***
-	* 临时性注释 郭浩
-	* all
-	*/
-// 	NSString *filePath = this->GetAccountListPath();
-// 	if ([[NSFileManager defaultManager] fileExistsAtPath:filePath])
-// 	{ 
-// 		accountList = [[NSMutableArray alloc] initWithContentsOfFile:filePath];
-// 	}
-// 	else
-// 	{
-// 		accountList = [[NSMutableArray alloc] init];
-// 	}	
 }
 
 void NDDataPersist::AddAcount(const char* account, const char* pwd)
@@ -446,32 +419,7 @@ void NDDataPersist::SaveAccountList()
 
 CCString* NDDataPersist::GetAccountDeviceListPath()
 {
-/***
-* 临时性注释 郭浩
-* begin
-*/
-
-	// 	NSString dir = [kFavoriteAccountDeviceListFileName stringByDeletingLastPathComponent];
-	// 
-	// 	if (!KDirectory::isDirectoryExist([dir UTF8String])) 
-	// 	{
-	// 		if (!KDirectory::createDir([dir UTF8String]))
-	// 		{
-	// 			return nil;
-	// 		}
-	// 	}
-	// 	return kFavoriteAccountDeviceListFileName;
-
-/***
-* 临时性注释 郭浩
-* end
-*/
 	return 0;
-
-	//	NSArray *paths = NSSearchPathForDirectoriesInDomains( 
-	//							     NSDocumentDirectory, NSUserDomainMask, YES);
-	//	NSString *documentsDirectory = [paths objectAtIndex:0];
-	//	return [documentsDirectory stringByAppendingPathComponent:kFavoriteAccountListFileName];
 }
 
 void NDDataPersist::LoadAccountDeviceList()

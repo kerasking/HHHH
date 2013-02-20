@@ -20,6 +20,8 @@
 #include "StringConvert.h"
 #include "ScriptGameDataLua.h"
 #include "utf8.h"
+#include "NDBitmapMacro.h"
+
 
 using namespace cocos2d;
 
@@ -278,10 +280,46 @@ NDUITextBuilder* NDUITextBuilder::DefaultBuilder()
 	return NDUITextBuilder_DefaultBuilder;
 }
 
+//@ndbitmap
+#if WITH_NDBITMAP
+NDUIText* NDUITextBuilder::Build_WithNDBitmap(const char* pszText, unsigned int uiFontSize,
+							 CCSize kContainerSize,
+							 cocos2d::ccColor4B kDefaultColor /*= ccc4(0, 0, 0, 255)*/,
+							 bool bWithPageArrow /*= false*/, bool bHpyerLink /*= false*/)
+{
+	NDUILabel* label = new NDUILabel;
+	if (label)
+	{
+		label->SetText( pszText );
+		label->SetFontSize( uiFontSize );
+		label->SetFontColor( kDefaultColor );
+		label->Initialization();
+		label->SetRenderTimes(1);
+		label->SetFrameRect( CCRectMake(0,0,kContainerSize.width,kContainerSize.height));
+	}
+	
+	if (label)
+	{
+		NDUIText* uiText = new NDUIText();
+		uiText->Initialization(false);
+		uiText->AddChild( label );
+		return uiText;
+	}
+	return NULL;
+}
+#endif
+
 NDUIText* NDUITextBuilder::Build(const char* pszText, unsigned int uiFontSize,
 		CCSize kContainerSize, ccColor4B kDefaultColor, bool bWithPageArrow,
 		bool bHpyerLink)
 {
+#if WITH_NDBITMAP //@ndbitmap
+	if (!bWithPageArrow)
+	{
+		return Build_WithNDBitmap( pszText, uiFontSize, kContainerSize, kDefaultColor, bWithPageArrow, bHpyerLink );
+	}
+#endif
+
 	if (!pszText)
 	{
 		return 0;
