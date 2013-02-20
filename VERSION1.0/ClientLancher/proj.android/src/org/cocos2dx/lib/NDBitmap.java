@@ -72,9 +72,16 @@ public class NDBitmap {
 			final Bitmap bitmap = Bitmap.createBitmap( NDTextProxy.bitmapWidth, NDTextProxy.bitmapHeight, Bitmap.Config.ARGB_8888 );
 			log("after create bitmap: w=" + NDTextProxy.bitmapWidth + ", h=" + NDTextProxy.bitmapHeight);
 			
-			// left align for each char
-			//paint.setTextAlign(Align.LEFT);
-			paint.setTextAlign(Align.CENTER);
+			// alignment
+			final boolean alignLeft = true;
+			if (alignLeft)
+			{
+				paint.setTextAlign(Align.LEFT);
+			}
+			else
+			{
+				paint.setTextAlign(Align.CENTER);
+			}
 			
 			// get canvas for bitmap
 			final Canvas canvas = new Canvas(bitmap);
@@ -90,8 +97,14 @@ public class NDBitmap {
 				{
 					String str = String.valueOf( objChar.c );
 					
-					//canvas.drawText( str, objChar.x, objChar.y, paint );
-					canvas.drawText( str, objChar.x + objChar.w*0.5f, objChar.y, paint );
+					if (alignLeft)
+					{
+						canvas.drawText( str, objChar.x, objChar.y, paint );
+					}
+					else
+					{
+						canvas.drawText( str, objChar.x + objChar.w*0.5f, objChar.y, paint );
+					}
 					
 					log("canvas.drawText(), str="+str+",x="+objChar.x+",y="+objChar.y);
 				}
