@@ -273,11 +273,11 @@ void CCDirector::setGLDefaultValues(void)
     setProjection(m_eProjection);
 
     // set other opengl default values
-#if ND_MOD
-    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-#else
+//#if ND_MOD
+//    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+//#else
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-#endif
+//#endif
 }
 
 #if ND_MOD

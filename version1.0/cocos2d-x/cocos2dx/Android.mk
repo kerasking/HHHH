@@ -182,7 +182,7 @@ LOCAL_WHOLE_STATIC_LIBRARIES += libiconv_static
 LOCAL_CFLAGS := -DUSE_FILE32API
 LOCAL_EXPORT_CFLAGS := -DUSE_FILE32API
 
-include $(BUILD_SHARED_LIBRARY)
+include $(BUILD_STATIC_LIBRARY)
 
 $(call import-module,libjpeg)
 $(call import-module,libxml2)

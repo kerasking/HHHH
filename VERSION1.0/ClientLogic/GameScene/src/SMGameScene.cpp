@@ -36,7 +36,6 @@ CSMGameScene* CSMGameScene::Scene()
 CSMGameScene::CSMGameScene()
 {
 	INC_NDOBJ_RTCLS
-//	m_miniMap	= NULL;	 ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 	m_pkMapLayerLogic	= NULL;
 
 	WriteCon( "%08X: CSMGameScene::CSMGameScene()\r\n", this);
@@ -80,29 +79,6 @@ void CSMGameScene::Initialization(int mapID)
 
 void CSMGameScene::ShowMiniMap(bool bShow)
 {
-	/***
-	* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-	* all
-	*/
-// 	if (bShow) 
-// 	{
-// 		if (!m_miniMap)
-// 		{
-// 			m_miniMap = new NDMiniMap();
-// 			m_miniMap->Initialization();
-// 			m_miniMap->SetGameScene(this);
-// 			m_miniMap->SetFrameRect(CCRectMake(308.0f, 0.0f, 172.0f, 84.0f));
-// 			AddChild(m_miniMap);
-// 		}
-// 	} 
-// 	else
-// 	{
-// 		if (m_miniMap)
-// 		{
-// 			RemoveChild(m_miniMap, true);
-// 			m_miniMap = NULL;
-// 		}
-// 	}
 }
 
 CCSize CSMGameScene::GetSize()

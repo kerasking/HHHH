@@ -346,7 +346,7 @@ void NDSprite::MoveToPosition(std::vector<CCPoint> kToPos, SpriteSpeed speed,
 				CCPoint to = kToPos[i];
 
 #if 1 //计算寻路的时候用整数，否则错误.
-				from = ccp(int(m_kPosition.x), int(m_kPosition.y));
+				from = ccp(int(from.x), int(from.y));
 				to = ccp(int(kToPos[i].x), int(kToPos[i].y));
 #endif
 

@@ -22,7 +22,6 @@ using namespace NDEngine;
 class Fighter;
 class StatusDialog :
 public NDUILayer
-//public NDUITableLayerDelegate ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 {
 	DECLARE_CLASS(StatusDialog)
 public:

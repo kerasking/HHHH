@@ -104,7 +104,6 @@ BOOL CAStar::FindPath(NDMapLayer* pGamemap, const CMyPos& posStart,
 
 		NodeInfo* pkCurrentNode = this->GetCurrentNode();
 
-
 		if (NULL == pkCurrentNode)
 		{ ///\open表已经空了
 			break;
@@ -150,10 +149,10 @@ int CAStar::GetHValue(const CMyPos& kPos)
 
 	if (nDx > nDy)
 	{
-		return 10*nDx+6*nDy;
+		return 10 * nDx + 6 * nDy;
 	}
 
-	return 10*nDy+6*nDx;
+	return 10 * nDy + 6 * nDx;
 }
 
 void CAStar::AddToList(MAP_NODE& _list, NodeInfo* pNodeNew)
@@ -256,21 +255,16 @@ void CAStar::SearchChild(NodeInfo* pParentNode)
 
 	kPosNode.x = pParentNode->nX;
 	kPosNode.y = pParentNode->nY;
-	/*
-	 int nArrayX[4] = {0, -1, 0, 1};
-	 int nArrayY[4] = {1, 0, -1, 0};
-	 */
-	int nArrayX[8] =
-	{ 0, -1, -1, -1, 0, 1, 1, 1 };
-	int nArrayY[8] =
-	{ 1, 1, 0, -1, -1, -1, 0, 1 };
+
+	int nArrayX[8] = { 0, -1, -1, -1, 0, 1, 1, 1 };
+	int nArrayY[8] = { 1, 1, 0, -1, -1, -1, 0, 1 };
 
 	for (int i = 0; i < 8; ++i)
 	{
 		kPosNewNode.x = kPosNode.x + nArrayX[i];
 		kPosNewNode.y = kPosNode.y + nArrayY[i];
 
-	//	CCLog("Add Node:%d,%d",posNewNode.x,posNewNode.y);
+		//	CCLog("Add Node:%d,%d",posNewNode.x,posNewNode.y);
 
 		if (kPosNewNode.x < 0)
 			continue;
@@ -332,7 +326,7 @@ void CAStar::SearchChild(NodeInfo* pParentNode)
 			pNewNode->nY = kPosNewNode.y;
 
 			pNewNode->nG = nG;
-			pNewNode->nH = this->GetHValue(kPosNewNode);
+			pNewNode->nH = GetHValue(kPosNewNode);
 			pNewNode->nF = nG + pNewNode->nH;
 			pNewNode->nStep = pParentNode->nStep + 1;
 			pNewNode->pParent = pParentNode;
@@ -385,19 +379,6 @@ void CAStar::GetPath(NodeInfo* pNode)
 		//setDirPath.push_front(pFirstNode );
 		m_kSetPath.push_front(pFirstNode);
 	}
-
-	//setDirPath.insert(setDirPath.end(),m_setPath.begin(),m_setPath.end());
-	/*
-	 ///\更新方向
-	 for ( int i = 0 ; i < setDirPath.size()-1 ; ++i )
-	 {
-	 NodeInfo* pMyNode   = setDirPath[i];
-	 NodeInfo* pNextNode = setDirPath[i+1];
-
-	 pNextNode->nDir = m_pGamemap->GetDirection(pMyNode->nX, pMyNode->nY,pNextNode->nX, pNextNode->nY);
-	 pNextNode->nDir = (pNextNode->nDir+1)%8;
-	 }
-	 */
 }
 
 //----------------------------------------------------//

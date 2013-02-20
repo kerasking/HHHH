@@ -244,6 +244,7 @@ void NDScriptRegLua::doReg()
     ETMEMBERFUNC("SetTouchEnabled",                 &NDUILayer::SetTouchEnabled)                //添加
 	ETMEMBERFUNC("SetFocus",						&NDUILayer::SetFocus)
 	ETMEMBERFUNC("GetFocus",						&NDUILayer::GetFocus)
+	ETMEMBERFUNC("lazyClose",						&NDUILayer::lazyDelete)
 	ETCLASSEND(NDUILayer)
 	
 //#pragma mark 按钮类导出"NDUIButton.h"

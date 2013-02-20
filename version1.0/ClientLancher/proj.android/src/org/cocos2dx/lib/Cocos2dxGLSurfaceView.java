@@ -98,24 +98,6 @@ public class Cocos2dxGLSurfaceView extends GLSurfaceView
 
 	protected void initView()
 	{
-		Drawable srcb=getResources().getDrawable(R.drawable.mobage_splash);
-		
-		DisplayMetrics dm = new DisplayMetrics();
-		DaHuaLongJiang.ms_pkDHLJ.getWindowManager().getDefaultDisplay().getMetrics(dm);
-		
-	    Paint paint = new Paint();
-	    Bitmap bg = Bitmap.createBitmap( dm.widthPixels, dm.heightPixels, Bitmap.Config.ARGB_8888 );//创建一个新的和SRC长度宽度一样的位图  
-	    for(int i = 0; i < dm.widthPixels; ++i)
-	    	for(int j = 0; j < dm.heightPixels; ++j)
-	    bg.setPixel(i, j, 0xFFFFFFFF);
-
-	    Canvas cv = new Canvas( bg );  
-	    Bitmap srcbitmap =  ((BitmapDrawable)srcb).getBitmap(); 
-	    
-	    cv.drawBitmap( srcbitmap, (dm.widthPixels-srcbitmap.getWidth())/2, (dm.heightPixels-srcbitmap.getHeight())/2, paint	 );//在 x，y坐标开始画入src  
-
-	    this.setBackgroundDrawable(new BitmapDrawable(bg));
-
 		this.setFocusableInTouchMode(true);
 
 		Cocos2dxGLSurfaceView.mCocos2dxGLSurfaceView = this;
@@ -223,6 +205,9 @@ public class Cocos2dxGLSurfaceView extends GLSurfaceView
 				Cocos2dxGLSurfaceView.this.mCocos2dxRenderer.handleOnResume();
 			}
 		});
+
+		setRenderMode( RENDERMODE_CONTINUOUSLY );
+		Log.d( "render", "@@ set render mode: continuously");
 	}
 
 	@Override
@@ -237,7 +222,9 @@ public class Cocos2dxGLSurfaceView extends GLSurfaceView
 			}
 		});
 
-		super.onPause();
+		//super.onPause();
+		setRenderMode( RENDERMODE_WHEN_DIRTY );
+		Log.d( "render", "@@ set render mode: when dirty");
 	}
 
 	@Override
@@ -371,8 +358,14 @@ public class Cocos2dxGLSurfaceView extends GLSurfaceView
 	{
 		if (!this.isInEditMode())
 		{
-			this.mCocos2dxRenderer.setScreenWidthAndHeight(pNewSurfaceWidth,
-					pNewSurfaceHeight);
+			// make regular
+			int regularWidth = pNewSurfaceWidth/30*30;
+			int regularHeight = pNewSurfaceHeight/20*20;
+			Log.d( "surface", "@@ surface size width=" + pNewSurfaceWidth + ", height=" + pNewSurfaceHeight);
+			Log.d( "surface", "@@ surface size [regular] width=" + regularWidth + ", height=" + regularHeight);
+
+			//this.mCocos2dxRenderer.setScreenWidthAndHeight(pNewSurfaceWidth, pNewSurfaceHeight);
+			this.mCocos2dxRenderer.setScreenWidthAndHeight(regularWidth, regularHeight);
 		}
 	}
 

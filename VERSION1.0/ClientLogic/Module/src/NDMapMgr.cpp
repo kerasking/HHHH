@@ -892,8 +892,7 @@ void NDMapMgr::processPlayer(NDTransData* pkData, int nLength)
 		// todoÈ¡Ïû´ò×ø×´Ì¬
 		if (pkRole->AssuredRidePet())
 		{
-// 			pkRole->SetCurrentAnimation(pkRole->GetPetStandAction(),
-// 					pkRole->IsReverse());
+
 		}
 		else
 		{
@@ -1206,13 +1205,6 @@ void NDMapMgr::processWalk(NDTransData* pkData, int nLength)
 
 	if (NDPlayer::defaultHero().m_nID != nID)
 	{
-//		NDManualRole* pkRole = 0;
-//		pkRole = NDMapMgrObj.GetManualRole(nID);
-//
-//		if (pkRole->isTeamLeader())
-//		{
-//			pkRole->teamSetServerDir(ucDir);
-//		}
 		NDManualRole *role = NULL;
 		role = NDMapMgrObj.GetManualRole(nID);
 		if ( role && (!role->isTeamMember() || role->isTeamLeader())) 
@@ -1910,8 +1902,28 @@ void NDMapMgr::SetBattleMonster(NDMonster* pkMonster)
 	}
 }
 
+void NDMapMgr::getDeviceVersionInfo_JNI()
+{
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	JniMethodInfo t;
+	if (JniHelper::getStaticMethodInfo(t, "org/DeNA/DHLJ/DaHuaLongJiang",
+		"getDeviceVersion",
+		"()Ljava/lang/String;"))
+	{
+		jstring retFromJava = (jstring) t.env->CallStaticObjectMethod(t.classID, t.methodID);
+		const char* str = t.env->GetStringUTFChars(retFromJava, 0);
+		ScriptMgrObj.excuteLuaFunc("setDeviceVersionInfo", "MsgLoginSuc", str);
+		CCLog("tzq %s", str);
+		t.env->ReleaseStringUTFChars(retFromJava, str);
+		t.env->DeleteLocalRef(t.classID);
+		t.env->DeleteLocalRef(retFromJava);
+	}
+#endif
+}
+
 void NDMapMgr::ProcessLoginSuc(NDTransData& kData)
 {
+	getDeviceVersionInfo_JNI();
 	ScriptMgrObj.excuteLuaFunc("ProcessLoginSuc", "MsgLoginSuc", 0);
 }
 

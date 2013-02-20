@@ -215,9 +215,11 @@ function p.OnUIEventMatirialContainerViewChange(uiNode, uiEventType, param)
 	if uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK then
 		--local nItemId = tag;
 		--点击图片寻路
+	
 		if tag ==ID_FOSTER_B_L_CTRL_EQUIP_BUTTON_2 then
 			local itemBtn = ConverToItemButton(uiNode);
 			local nItemType  =ConvertN(itemBtn:GetItemType());
+	
 			if nItemType ~= 0 then
 			
 			    local mapID=GetDataBaseDataN("itemtype",nItemType,DB_ITEMTYPE.ORIGIN_MAP); 
@@ -227,8 +229,13 @@ function p.OnUIEventMatirialContainerViewChange(uiNode, uiEventType, param)
 		          TaskUI.GoToDynMap(mapID,1,2);
 		          
 		          --关闭界面
-		          CloseMainUI();
-		          
+		          --CloseMainUI();
+			  
+			  --延迟关闭自己
+			  lazyClose(NMAINSCENECHILDTAG.PlayerEquipUpStepUI); 
+	            lazyClose(NMAINSCENECHILDTAG.PlayerAttr);		
+	            lazyClose(NMAINSCENECHILDTAG.PlayerBackBag);
+			          
 		          --CloseUI(NMAINSCENECHILDTAG.PlayerEquipUpStepUI);
 		          --CloseUI(NMAINSCENECHILDTAG.PlayerEquipUpStepUI);
 		          return true;

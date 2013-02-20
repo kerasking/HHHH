@@ -201,9 +201,6 @@ local scene = GetSMGameScene();
 	btn11:EnalbeGray( true );
 	btn12:EnalbeGray( true );
 	
-
-	
-	
 	--local nVIPRank = p.GetPlayerVipRank();
 	local nPlayerId = GetPlayerId();
 	local nVIPRank 		= GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_VIP_RANK);

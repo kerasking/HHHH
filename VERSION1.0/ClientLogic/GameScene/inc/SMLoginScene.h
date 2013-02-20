@@ -51,6 +51,7 @@ class CSMLoginScene
 
 public:
 	void Initialization(); override
+	void lazySendLoginEvent();
 	
 public:// ISMUpdateEvent
 	virtual void OnDownloadEvent(DWORD dwSizeFile,DWORD dwSideDownLoaded);
@@ -85,6 +86,7 @@ private:
 public:// twt
     typedef deque<string> DEQSTR;
     DEQSTR kDeqUpdateUrl;
+	 int m_CurDownNum;
     vector<string> split(std::string& src, std::string delimit);
     std::string trim(std::string &s);
 	std::string m_strSavePath;
@@ -93,6 +95,7 @@ public:// twt
     void InitDownload( std::string & szUpdatePath );
     int  PackageCount ;
     bool ReadFile( const char* file, int begin, int end, char* buf );
+	char* GetPathFileName(char* src, char delitmit);
     
 public:
     //++Guosen
@@ -126,6 +129,7 @@ public:
 	void ShowCheckWIFIOff();
 	//
 	void ShowUpdateOff();
+    int  GetCurrentUser() { return m_iAccountID; }
 
 	NDUILabel*      m_pkProgressTextLabel;
 	

@@ -155,6 +155,11 @@ public:
 	bool isTouchMoved( const int errorPixels = 3 );
 
 public:
+	void lazyDelete(); //@lazydel
+private:
+	NDTimer* m_pLazyDeleteTimer;
+	
+public:
 	CCPoint m_kBeginTouch;
 	CCPoint m_kEndTouch;
 	//touch event center

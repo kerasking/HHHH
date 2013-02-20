@@ -32,8 +32,9 @@ private:
 	typedef std::list<DramaCommandBase*> COMMANDQUE;
 	typedef COMMANDQUE::iterator COMMANDQUE_IT;
 
-	COMMANDQUE m_queueCommond, m_queueCommondExcute;
-	NDTimer m_timer;
+	COMMANDQUE m_kQueueCommond;
+	COMMANDQUE m_kQueueCommondExcute;
+	NDTimer m_kTimer;
 
 private:
 	void End();

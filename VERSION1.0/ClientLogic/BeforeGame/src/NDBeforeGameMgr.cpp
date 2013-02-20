@@ -47,6 +47,12 @@
 #include "android/jni/Java_org_cocos2dx_lib_Cocos2dxHelper.h"
 #include <jni.h>
 #include <android/log.h>
+#include <stdio.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <dirent.h>
+#include <fcntl.h>
+#include <string.h>
 #define  LOG_TAG    "DaHuaLongJiang"
 #define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
 #define  LOGERROR(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
@@ -89,7 +95,19 @@ using namespace NDEngine;
 
 //--
 #define SZ_VERINI_PATH					"version.ini"//版本文件相对路径/（"SimplifiedChineseRes"目录下）
+
+enum
+{
+	MOBILE_TYPE_NONE = 0,
+	MOBILE_TYPE_IPHONE_APPSTORE_CH = 1,		//IOS简体
+	MOBILE_TYPE_IPHONE_APPSTORE_CHS = 2,	//IOS繁体
+	MOBILE_TYPE_ANDROID_MOBAGE_CH = 3,		//android简体
+	MOBILE_TYPE_ANDROID_MOBAGE_CHS = 4,		//android繁体
+	MOBILE_TYPE_IPHONE_91_CH = 5,			//IOS简体91版
+};
+
 //资源类型
+#if 0
 enum 
 {
   RES_TYPE_IPHONE	= 1,
@@ -97,8 +115,11 @@ enum
   RES_TYPE_NEWPAD	= 3,
   RES_TYPE_ANDROID	= 4, 
 };
+#endif
 //资源类型开关
-#define RES_TYPE	RES_TYPE_IPHONE;
+#define RES_TYPE	MOBILE_TYPE_ANDROID_MOBAGE_CHS;
+
+
 
 /////////////////////////////////////////////////////////////////////
 // 帐号注册
@@ -413,6 +434,7 @@ NDBeforeGameMgr::NDBeforeGameMgr()
 
 	m_CurrentUser_id = 0;
 	//m_sdkLogin = NULL;
+    m_bLoginTry = false;
 }
 
 NDBeforeGameMgr::~NDBeforeGameMgr()
@@ -519,6 +541,11 @@ void NDBeforeGameMgr::sendClientKey()
 void NDBeforeGameMgr::sendMsgConnect(int idAccount)
 {
 	CCLog( "@@login07: NDBeforeGameMgr::sendMsgConnect(%d)\r\n", idAccount );
+    if (idAccount == 0) {
+        idAccount = GetCurrentUser();
+        if(idAccount > 0)
+            ScriptMgrObj.excuteLuaFunc( "SetAccountID", "Login_ServerUI", idAccount );
+    }
 
 	NDTransData data(_MSG_CONNECT);
 
@@ -1397,7 +1424,8 @@ void NDBeforeGameMgr::Login()
 
 bool NDBeforeGameMgr::doNDSdkLogin()
 {
-#if (defined(USE_NDSDK) && defined(__APPLE__))
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#if (defined(USE_NDSDK)
 	if (m_sdkLogin)
 	{
 		//[m_sdkLogin release];
@@ -1414,6 +1442,7 @@ bool NDBeforeGameMgr::doNDSdkLogin()
 	}
 	m_sdkLogin = [[MobageSdkLogin alloc] init];
 	[m_sdkLogin LoginWithUser];
+#endif
 #endif
     return true;
 }
@@ -1915,6 +1944,9 @@ bool NDBeforeGameMgr::CheckClientVersion( const char* szURL,unsigned int uiPort 
 
 	NDTransData kData(_MSG_CLIENT_VERSION);
     
+	//每次检测版本都默认为非服务器列表页面
+    SetLogUIUpdate(false);
+
 	LOGD("Send the _MSG_CLIENT_VERSION message to server!");
 
 	kData << s_nVersion;
@@ -2041,6 +2073,7 @@ bool NDBeforeGameMgr::CheckFirstTimeRuning()
 	return bFirstTime;
 }
 
+
 void* CopyLoginResThread(void* ptr)
 {
 	LOGD("Entry CopyResThread");
@@ -2115,6 +2148,54 @@ void* CopyLoginResThread(void* ptr)
 	return NULL;
 }
 
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+int recursiveDelete(char* dirname)
+{
+	DIR *dp;
+	struct dirent* ep = 0;
+
+	char abs_filename[FILENAME_MAX] = {0};
+
+	dp = opendir(dirname);
+	if (dp != NULL)
+	{
+		while (ep = readdir(dp))
+		{
+			struct stat stFileInfo;
+
+			snprintf(abs_filename, FILENAME_MAX, "%s/%s", dirname, ep->d_name);
+
+			if (lstat(abs_filename, &stFileInfo) < 0)
+			{
+				LOGD("xxxxxerror lstat %s", abs_filename);
+			}
+			if (S_ISDIR(stFileInfo.st_mode))
+			{
+				if (strcmp(ep->d_name, ".") && strcmp(ep->d_name, ".."))
+				{
+					LOGD("xxxxx%s directory\n", abs_filename);
+					recursiveDelete(abs_filename);
+				}
+			}
+			else
+			{
+				LOGD("xxxxx%s file\n", abs_filename);
+				remove(abs_filename);
+			}
+		}
+		(void) closedir(dp);
+	}
+	else
+	{
+		LOGD("xxxxxCouldn't open the directory");
+	}
+
+	remove(dirname);
+	return 0;
+}
+#endif
+
 void* CopyResThread(void* ptr)
 {
 	LOGD("Entry CopyResThread");
@@ -2126,7 +2207,9 @@ void* CopyResThread(void* ptr)
 	pkUnzip->SetExtStatus(&NDBeforeGameMgr::ms_nCopyStatus);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	//pkUnzip->UnZipFile("assets/SimplifiedChineseRes.zip","/sdcard/dhlj/");
-
+    
+    recursiveDelete("/sdcard/dhlj");
+    
 	unsigned char* pszZipData = 0;
 	unsigned long ulZipLength = 0;
 	string strApkPath = getApkPath();

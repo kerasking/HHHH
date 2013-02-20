@@ -160,36 +160,6 @@ void StatusDialog::Initialization(Fighter* f)
 		
 		bool bChangeClr = false;
 		FighterStatus* fs = NULL;
-//		for (VEC_FIGHTER_STATUS_IT it = vStatus.begin(); it != vStatus.end(); it++) {
-//			fs = it;
-//			
-//			SocialElement* se = new SocialElement;
-//			this->m_vElement.push_back(se);
-////			se->m_text1 = fs->m_name;
-////			
-////			int btTurn = BattleMgrObj.GetBattle()->getTurn();
-////			if(fs->m_num - btTurn >= 0) {
-////				stringstream ss;
-////				ss << fs->m_num - btTurn << NDCommonCString("HuiHe");
-////				se->m_text2 = ss.str();
-////			}else{
-////				se->m_text2 = NDCommonCString("yongjiu");
-////			}
-//			
-//			SocialTextLayer* st = new SocialTextLayer;
-//			st->Initialization(CCRectMake(0.0f, 0.0f, DIALOG_WIDTH - 38, 15.0f),
-//					   CCRectMake(0.0f, 0.0f, DIALOG_WIDTH - 38, 15.0f), se);
-//			
-//			if (bChangeClr) {
-//				st->SetBackgroundColor(INTCOLORTOCCC4(0xc3d2d5));
-//			} else {
-//				st->SetBackgroundColor(INTCOLORTOCCC4(0xe3e5da));
-//			}
-//			
-//			sec->AddCell(st);
-//			
-//			nTableHeight += 30;
-//		}
 		
 		nTableHeight = nTableHeight > MAX_DIALOG_HEIGHT - nHeight - 5 ?
 			MAX_DIALOG_HEIGHT - nHeight - 5 : nTableHeight;
@@ -211,55 +181,7 @@ void StatusDialog::draw()
 	NDUILayer::draw();
 	
 	if (this->IsVisibled())
-	{
-		/***
-		* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-		* begin
-		*/
-// 		DrawLine(ccp(scrRect.origin.x + 30, scrRect.origin.y + 2), 
-// 			 ccp(scrRect.origin.x + scrRect.size.width - 30, scrRect.origin.y + 2), 
-// 			 ccc4(41, 65, 33, 255), 1);
-// 		DrawLine(ccp(scrRect.origin.x + 30, scrRect.origin.y + 3), 
-// 			 ccp(scrRect.origin.x + scrRect.size.width - 30, scrRect.origin.y + 3), 
-// 			 ccc4(57, 105, 90, 255), 1);
-// 		DrawLine(ccp(scrRect.origin.x + 30, scrRect.origin.y + 4), 
-// 			 ccp(scrRect.origin.x + scrRect.size.width - 30, scrRect.origin.y + 4), 
-// 			 ccc4(82, 125, 115, 255), 1);
-// 		DrawLine(ccp(scrRect.origin.x + 30, scrRect.origin.y + 5), 
-// 			 ccp(scrRect.origin.x + scrRect.size.width - 30, scrRect.origin.y + 5), 
-// 			 ccc4(82, 117, 82, 255), 1);
-// 		
-// 		//bottom frame
-// 		DrawLine(ccp(scrRect.origin.x + 30, scrRect.origin.y + scrRect.size.height - 2), 
-// 			 ccp(scrRect.origin.x + scrRect.size.width - 30, scrRect.origin.y + scrRect.size.height - 2), 
-// 			 ccc4(41, 65, 33, 255), 1);
-// 		DrawLine(ccp(scrRect.origin.x + 30, scrRect.origin.y + scrRect.size.height - 3), 
-// 			 ccp(scrRect.origin.x + scrRect.size.width - 30, scrRect.origin.y + scrRect.size.height - 3), 
-// 			 ccc4(57, 105, 90, 255), 1);
-// 		DrawLine(ccp(scrRect.origin.x + 30, scrRect.origin.y + scrRect.size.height - 4), 
-// 			 ccp(scrRect.origin.x + scrRect.size.width - 30, scrRect.origin.y + scrRect.size.height - 4), 
-// 			 ccc4(82, 125, 115, 255), 1);
-// 		DrawLine(ccp(scrRect.origin.x + 30, scrRect.origin.y + scrRect.size.height - 5), 
-// 			 ccp(scrRect.origin.x + scrRect.size.width - 30, scrRect.origin.y + scrRect.size.height - 5), 
-// 			 ccc4(82, 117, 82, 255), 1);
-// 		
-// 		//left frame
-// 		DrawLine(ccp(scrRect.origin.x + 13, scrRect.origin.y + 16), 
-// 			 ccp(scrRect.origin.x + 13, scrRect.origin.y + scrRect.size.height - 16), 
-// 			 ccc4(115, 121, 90, 255), 8);
-// 		
-// 		//right frame
-// 		DrawLine(ccp(scrRect.origin.x + scrRect.size.width - 13, scrRect.origin.y + 16), 
-// 			 ccp(scrRect.origin.x + scrRect.size.width - 13, scrRect.origin.y + scrRect.size.height - 16), 
-// 			 ccc4(115, 121, 90, 255), 8);
-// 		
-// 		//background
-// 		DrawRecttangle(CCRectMake(scrRect.origin.x + 17, scrRect.origin.y + 5, scrRect.size.width - 34, scrRect.size.height - 10), ccc4(196, 201, 181, 255));
-/***
-* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-* end
-*/
-		
+	{		
 		m_picLeftTop->DrawInRect(CCRectMake(scrRect.origin.x+7, 
 						    scrRect.origin.y, 
 						    m_picLeftTop->GetSize().width, 

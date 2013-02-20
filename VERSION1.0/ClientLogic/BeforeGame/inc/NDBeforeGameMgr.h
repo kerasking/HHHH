@@ -129,6 +129,8 @@ namespace NDEngine
         
         void  SetCurrentUser(unsigned int User_id) { m_CurrentUser_id = User_id; }
         unsigned int  GetCurrentUser() { return m_CurrentUser_id; }
+        void  SetLoginTry(bool b)   { m_bLoginTry = b; }
+        bool  GetLoginTry()         { return m_bLoginTry; }
         
         void  SetOAuthTokenOK() { m_bOAuthTokenOK = true; }
         bool  IsOAuthTokenOK() { return m_bOAuthTokenOK; }
@@ -151,6 +153,7 @@ namespace NDEngine
         std::string   m_strRoleName;
         int           m_nProfession;
         unsigned int  m_CurrentUser_id;
+        bool          m_bLoginTry;
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
         NSString*     m_CurrentTransactionID;
 #endif
@@ -222,6 +225,7 @@ namespace NDEngine
         MobageSdkLogin *m_sdkLogin;
 #endif
         bool m_bOAuthTokenOK;
+
 	public:
 		enum LoginState
 		{
@@ -246,6 +250,11 @@ namespace NDEngine
 
         void CopyRes();
 		void CopyLoginRes();
+
+
+		bool m_bLogUIUpdate;    //标识是否为服务器列表页面更新
+		void SetLogUIUpdate(bool bValue){m_bLogUIUpdate = bValue;}
+		bool GetLogUIUpdate(){return m_bLogUIUpdate;}
 
 	protected:
 		std::string	m_szDeviceToken;
