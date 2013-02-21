@@ -45,55 +45,55 @@ public class NDSpecialCharWidth
 
 	private static void doInit()
 	{
-		add('A', 0.90f); 	add('a', 0.75f);
-		add('B', 0.90f); 	add('b', 0.70f);
-		add('C', 0.90f); 	add('c', 0.70f);
-		add('D', 0.90f); 	add('d', 0.70f);
-		add('E', 0.90f); 	add('e', 0.70f);
-		add('F', 0.90f); 	add('f', 0.65f);
-		add('G', 0.90f); 	add('g', 0.70f);
+		add('A', 0.80f); 	add('a', 0.65f);
+		add('B', 0.80f); 	add('b', 0.60f);
+		add('C', 0.80f); 	add('c', 0.60f);
+		add('D', 0.80f); 	add('d', 0.60f);
+		add('E', 0.80f); 	add('e', 0.60f);
+		add('F', 0.80f); 	add('f', 0.55f);
+		add('G', 0.80f); 	add('g', 0.60f);
 		
-		add('H', 0.90f); 	add('h', 0.70f);
-		add('I', 0.70f); 	add('i', 0.50f);
-		add('J', 0.90f); 	add('j', 0.60f);
-		add('K', 0.90f); 	add('k', 0.70f);
-		add('L', 0.90f); 	add('l', 0.70f);
-		add('M', 1.00f); 	add('m', 0.90f);
-		add('N', 0.90f); 	add('n', 0.70f);
+		add('H', 0.80f); 	add('h', 0.60f);
+		add('I', 0.40f); 	add('i', 0.40f);
+		add('J', 0.60f); 	add('j', 0.50f);
+		add('K', 0.80f); 	add('k', 0.60f);
+		add('L', 0.80f); 	add('l', 0.40f);
+		add('M', 0.90f); 	add('m', 0.80f);
+		add('N', 0.80f); 	add('n', 0.60f);
 		
-		add('O', 0.90f); 	add('o', 0.80f);
-		add('P', 0.90f); 	add('p', 0.7f);
-		add('Q', 0.90f); 	add('q', 0.80f);
-		add('R', 0.90f); 	add('r', 0.80f);
-		add('S', 0.90f); 	add('s', 0.70f);
-		add('T', 0.90f); 	add('t', 0.70f);
+		add('O', 0.80f); 	add('o', 0.65f);
+		add('P', 0.75f); 	add('p', 0.65f);
+		add('Q', 0.80f); 	add('q', 0.70f);
+		add('R', 0.80f); 	add('r', 0.65f);
+		add('S', 0.80f); 	add('s', 0.60f);
+		add('T', 0.80f); 	add('t', 0.60f);
 		
-		add('U', 0.90f); 	add('u', 0.70f);
-		add('V', 0.90f); 	add('v', 0.70f);
-		add('W', 1.00f); 	add('w', 0.85f);
-		add('X', 0.90f); 	add('x', 0.70f);
-		add('Y', 0.90f); 	add('y', 0.70f);
-		add('Z', 0.90f); 	add('z', 0.70f);
+		add('U', 0.80f); 	add('u', 0.60f);
+		add('V', 0.80f); 	add('v', 0.60f);
+		add('W', 0.90f); 	add('w', 0.75f);
+		add('X', 0.80f); 	add('x', 0.60f);
+		add('Y', 0.80f); 	add('y', 0.60f);
+		add('Z', 0.80f); 	add('z', 0.60f);
 		
-		add('0', 0.65f);
-		add('1', 0.5f);
-		add('2', 0.65f);
-		add('3', 0.65f);
-		add('4', 0.65f);
-		add('5', 0.65f);
-		add('6', 0.65f);
-		add('7', 0.65f);
-		add('8', 0.65f);
-		add('9', 0.65f);
+		add('0', 0.60f);
+		add('1', 0.45f);
+		add('2', 0.60f);
+		add('3', 0.60f);
+		add('4', 0.60f);
+		add('5', 0.60f);
+		add('6', 0.60f);
+		add('7', 0.60f);
+		add('8', 0.60f);
+		add('9', 0.60f);
 		
-		add('(', 0.55f);	add(')', 0.55f);
-		add('[', 0.55f);	add(']', 0.55f);
-		add('<', 0.70f);	add('>', 0.75f);
-		add('+', 0.70f);	add('-', 0.70f);
-		add('.', 0.40f);	add(',', 0.40f);
-		add('=', 0.70f);	add(':', 0.40f);
-		add('/', 0.70f);	add('\\', 0.70f);
-		add('%', 1.00f);	add('\'', 0.60f);
+		add('(', 0.50f);	add(')', 0.50f);
+		add('[', 0.50f);	add(']', 0.50f);
+		add('<', 0.65f);	add('>', 0.70f);
+		add('+', 0.65f);	add('-', 0.65f);
+		add('.', 0.35f);	add(',', 0.35f);
+		add('=', 0.65f);	add(':', 0.35f);
+		add('/', 0.65f);	add('\\', 0.65f);
+		add('%', 0.95f);	add('\'', 0.55f);
 
 		add(' ', 0.50f);
 	}

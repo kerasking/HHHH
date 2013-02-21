@@ -1378,6 +1378,7 @@ void NDPlayer::DrawTest_NDBitmap()
 		"UuVvWwXxYyZz",
 		"0123456789",
 		"()[]<>+-=.,':%/\\",
+		"lion",
 	};
 	
 	int testStrAmount = sizeof(testStr) / sizeof(testStr[0]);
