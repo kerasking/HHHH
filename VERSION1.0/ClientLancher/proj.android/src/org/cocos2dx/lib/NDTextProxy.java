@@ -249,7 +249,7 @@ public class NDTextProxy
 	{
 		CharProperty charProp = new CharProperty();		
 		charProp.c = c;
-		charProp.bSpecialChar = isSpecialChar(c);
+		charProp.bSpecialChar = NDSpecialCharWidth.isSpecialChar(c);
 		charProp.fontName = parseFlag.isFontName ? parseFlag.newFontName : defaultFontName;
 		charProp.fontSize = defaultFontSize;
 		charProp.color = parseFlag.isColor ? parseFlag.newColor : defaultColor;
@@ -467,7 +467,7 @@ public class NDTextProxy
 				int charWidth = (int) FloatMath.ceil( paint.measureText( str, 0, str.length()));
 				
 				// fix width for special char
-				if (isSpecialChar(objChar.c) && NDBitmap.isVerOlder())
+				if (objChar.bSpecialChar && NDBitmap.isVerOlder())
 				{
 					charWidth = NDSpecialCharWidth.fixCharWidth(objChar.c, charWidth); //@tune
 				}
@@ -754,31 +754,7 @@ public class NDTextProxy
 //		String s2 = s1.replace( "/e", "</C>");
 //		return s2;
 	}
-	
-	/**
-	 * isSpecialChar: 
-	 * @param c
-	 * @return
-	 */
-	private static boolean isSpecialChar( final char c )
-	{
-		// these special char, when rendering it on old android os (say it 2.x) with font "Lishu",
-		// rendering size bugs.
 		
-		if ((c >= '0' && c <= '9') || 
-			(c >= 'a' && c <= 'z') || 
-			(c >= 'A' && c <= 'Z') ||
-			(c == '%' || c == '/' || c == ':' 
-				|| c == '+' || c == '-' 
-				|| c == '[' || c == ']' 
-				|| c == '(' || c == ')'
-			))
-		{
-			return true;
-		}
-		return false;
-	}
-	
 	private static void dumpCharList()
 	{
 		if (!NDBitmap.verbose) return;

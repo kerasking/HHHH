@@ -23,7 +23,7 @@ public class NDSpecialCharWidth
 		mapChar.put( key, value );
 	}
 	
-	private static void init()
+	private static void checkInit()
 	{
 		if (!initFlag)
 		{
@@ -32,6 +32,17 @@ public class NDSpecialCharWidth
 		}
 	}
 	
+	/**
+	 * isSpecialChar: 
+	 * @param c
+	 * @return
+	 */
+	public static boolean isSpecialChar( final char c )
+	{
+		checkInit();
+		return mapChar.containsKey( ""+c);
+	}
+
 	private static void doInit()
 	{
 		add('A', 0.90f); 	add('a', 0.75f);
@@ -75,19 +86,21 @@ public class NDSpecialCharWidth
 		add('8', 0.65f);
 		add('9', 0.65f);
 		
-		add('(', 0.90f);	add(')', 0.90f);
-		add('[', 0.70f);	add(']', 0.70f);
+		add('(', 0.55f);	add(')', 0.55f);
+		add('[', 0.55f);	add(']', 0.55f);
 		add('<', 0.70f);	add('>', 0.75f);
 		add('+', 0.70f);	add('-', 0.70f);
 		add('.', 0.40f);	add(',', 0.40f);
-		add('=', 0.70f);	add(':', 0.60f);
+		add('=', 0.70f);	add(':', 0.40f);
 		add('/', 0.70f);	add('\\', 0.70f);
 		add('%', 1.00f);	add('\'', 0.60f);
+
+		add(' ', 0.50f);
 	}
 	
 	public static int fixCharWidth( final char c, final int width )
 	{
-		init();
+		checkInit();
 		
 		String key = ""+c;
 		String value = (String) mapChar.get( key );

@@ -61,6 +61,9 @@ public class NDBitmap {
 		String strText, final String fontName, final int fontSize, 
 		final int alignment, final int width, final int height) 
 	{			
+		log("------------------");
+		log("NDBitmap.createTextBitmap() - enter");
+
 		// create a paint
 		final Paint paint = Cocos2dxBitmap.newPaint( fontName, fontSize, alignment & 0x0F );
 	
@@ -114,6 +117,8 @@ public class NDBitmap {
 			Cocos2dxBitmap.initNativeObject(bitmap);
 			log("after initNativeObject(), strText="+strText );
 		}
+
+		log("NDBitmap.createTextBitmap() - leave");
 	}
 	
 	/**
@@ -127,15 +132,21 @@ public class NDBitmap {
 	public static String getStringSize( final String strText, final String fontName,
 											final int fontSize, final int alignment)
 	{
+		log("------------------");
+		log("NDBitmap.getStringSize() - enter");
+
 		final Paint paint = Cocos2dxBitmap.newPaint( fontName, fontSize, alignment & 0x0F );
 	
 		if (NDTextProxy.parse( paint, strText, fontName, fontSize, alignment, 0, 0 ))
 		{
 			int w = NDTextProxy.bitmapWidth;
 			int h = NDTextProxy.bitmapHeight;
+
+			log( "NDBitmap.getStringSize(): text=" + strText + ",fontName=" + fontName + ",fontSize=" + fontSize + ",w=" + w + ",h=" + h);
 			return String.valueOf(w)+" " +String.valueOf(h);
 		}
 		
+		log("NDBitmap.getStringSize() - leave");
 		return "";
 	}
 	
