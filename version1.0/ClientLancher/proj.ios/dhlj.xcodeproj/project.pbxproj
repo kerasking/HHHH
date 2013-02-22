@@ -7,6 +7,20 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2085E89B16D6346D009DFA2E /* NDJsonReader.h in Headers */ = {isa = PBXBuildFile; fileRef = 2085E89A16D6346D009DFA2E /* NDJsonReader.h */; };
+		2085E89F16D635EB009DFA2E /* NDUIListHorz.h in Headers */ = {isa = PBXBuildFile; fileRef = 2085E89C16D635EB009DFA2E /* NDUIListHorz.h */; };
+		2085E8A016D635EB009DFA2E /* NDUIListVert.h in Headers */ = {isa = PBXBuildFile; fileRef = 2085E89D16D635EB009DFA2E /* NDUIListVert.h */; };
+		2085E8A116D635EB009DFA2E /* NDUIScrollViewContainer.h in Headers */ = {isa = PBXBuildFile; fileRef = 2085E89E16D635EB009DFA2E /* NDUIScrollViewContainer.h */; };
+		2085E8A316D635F7009DFA2E /* NDBitmapMacro.h in Headers */ = {isa = PBXBuildFile; fileRef = 2085E8A216D635F7009DFA2E /* NDBitmapMacro.h */; };
+		2085E8A616D636D4009DFA2E /* NDUIListHorz.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2085E8A416D636D4009DFA2E /* NDUIListHorz.cpp */; };
+		2085E8A716D636D4009DFA2E /* NDUIListVert.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2085E8A516D636D4009DFA2E /* NDUIListVert.cpp */; };
+		20A59CF016D74E930008DBD0 /* NDControlHelp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 20A59CEF16D74E930008DBD0 /* NDControlHelp.cpp */; };
+		20A59D0616D753C80008DBD0 /* json_internalarray.inl in Sources */ = {isa = PBXBuildFile; fileRef = 20A59CD016D727240008DBD0 /* json_internalarray.inl */; };
+		20A59D0716D753C80008DBD0 /* json_internalmap.inl in Sources */ = {isa = PBXBuildFile; fileRef = 20A59CD116D727240008DBD0 /* json_internalmap.inl */; };
+		20A59D0816D753C80008DBD0 /* json_reader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 20A59CD216D727240008DBD0 /* json_reader.cpp */; };
+		20A59D0916D753C80008DBD0 /* json_value.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 20A59CD316D727240008DBD0 /* json_value.cpp */; };
+		20A59D0A16D753C80008DBD0 /* json_valueiterator.inl in Sources */ = {isa = PBXBuildFile; fileRef = 20A59CD416D727240008DBD0 /* json_valueiterator.inl */; };
+		20A59D0B16D753C80008DBD0 /* json_writer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 20A59CD516D727240008DBD0 /* json_writer.cpp */; };
 		20E23701169169A1008FB048 /* TextureList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 20E236FF169169A1008FB048 /* TextureList.cpp */; };
 		20E2370B16916DFB008FB048 /* cpLog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 20E2370316916DFB008FB048 /* cpLog.cpp */; };
 		20E2370C16916DFB008FB048 /* KCondition.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 20E2370416916DFB008FB048 /* KCondition.cpp */; };
@@ -16,6 +30,7 @@
 		20E2371016916DFB008FB048 /* KThread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 20E2370816916DFB008FB048 /* KThread.cpp */; };
 		20E2371116916DFB008FB048 /* KTimeVal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 20E2370916916DFB008FB048 /* KTimeVal.cpp */; };
 		20E2371216916DFB008FB048 /* Main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 20E2370A16916DFB008FB048 /* Main.cpp */; };
+		20E5B2C816D7184D00C1DFC6 /* NDJsonReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 20E5B2C716D7184D00C1DFC6 /* NDJsonReader.cpp */; };
 		5A150D90164BCAAF00B1D1C3 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A150D8F164BCAAF00B1D1C3 /* OpenGLES.framework */; };
 		5A1A41A51653804800BD1510 /* AppController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5A1A41A01653804600BD1510 /* AppController.mm */; };
 		5A1A41A61653804800BD1510 /* AppDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1A41A11653804600BD1510 /* AppDelegate.cpp */; };
@@ -927,7 +942,6 @@
 		5AF6F5371663677D006834AF /* ScriptMgr.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AF6F5361663677D006834AF /* ScriptMgr.h */; };
 		5AF6F53916636788006834AF /* ScriptMgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF6F53816636788006834AF /* ScriptMgr.cpp */; };
 		5AF6F53C1663752A006834AF /* NDUIScrollContainer.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AF6F53A1663752A006834AF /* NDUIScrollContainer.h */; };
-		5AF6F53D1663752A006834AF /* NDUIScrollView.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AF6F53B1663752A006834AF /* NDUIScrollView.h */; };
 		5AF6F54016637A3D006834AF /* NDUIScrollContainer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF6F53E16637A3D006834AF /* NDUIScrollContainer.cpp */; };
 		5AF6F54116637A3D006834AF /* NDUIScrollViewContainer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF6F53F16637A3D006834AF /* NDUIScrollViewContainer.cpp */; };
 		5AF6F54316637DBC006834AF /* GameSceneLoading.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF6F54216637DBC006834AF /* GameSceneLoading.cpp */; };
@@ -1042,6 +1056,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		20A59D0116D753880008DBD0 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/${PRODUCT_NAME}";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		5A1B38851649F2A500C94D7F /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1117,6 +1140,30 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		2085E89A16D6346D009DFA2E /* NDJsonReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NDJsonReader.h; sourceTree = "<group>"; };
+		2085E89C16D635EB009DFA2E /* NDUIListHorz.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NDUIListHorz.h; sourceTree = "<group>"; };
+		2085E89D16D635EB009DFA2E /* NDUIListVert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NDUIListVert.h; sourceTree = "<group>"; };
+		2085E89E16D635EB009DFA2E /* NDUIScrollViewContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NDUIScrollViewContainer.h; sourceTree = "<group>"; };
+		2085E8A216D635F7009DFA2E /* NDBitmapMacro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NDBitmapMacro.h; sourceTree = "<group>"; };
+		2085E8A416D636D4009DFA2E /* NDUIListHorz.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NDUIListHorz.cpp; sourceTree = "<group>"; };
+		2085E8A516D636D4009DFA2E /* NDUIListVert.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NDUIListVert.cpp; sourceTree = "<group>"; };
+		20A59CD016D727240008DBD0 /* json_internalarray.inl */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; name = json_internalarray.inl; path = ../../Json/src/json_internalarray.inl; sourceTree = "<group>"; };
+		20A59CD116D727240008DBD0 /* json_internalmap.inl */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; name = json_internalmap.inl; path = ../../Json/src/json_internalmap.inl; sourceTree = "<group>"; };
+		20A59CD216D727240008DBD0 /* json_reader.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; name = json_reader.cpp; path = ../../Json/src/json_reader.cpp; sourceTree = "<group>"; };
+		20A59CD316D727240008DBD0 /* json_value.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; name = json_value.cpp; path = ../../Json/src/json_value.cpp; sourceTree = "<group>"; };
+		20A59CD416D727240008DBD0 /* json_valueiterator.inl */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; name = json_valueiterator.inl; path = ../../Json/src/json_valueiterator.inl; sourceTree = "<group>"; };
+		20A59CD516D727240008DBD0 /* json_writer.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; name = json_writer.cpp; path = ../../Json/src/json_writer.cpp; sourceTree = "<group>"; };
+		20A59CDC16D727800008DBD0 /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = config.h; path = ../../Json/inc/config.h; sourceTree = "<group>"; };
+		20A59CDD16D727800008DBD0 /* features.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = features.h; path = ../../Json/inc/features.h; sourceTree = "<group>"; };
+		20A59CDE16D727800008DBD0 /* forwards.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = forwards.h; path = ../../Json/inc/forwards.h; sourceTree = "<group>"; };
+		20A59CDF16D727800008DBD0 /* JasonAutolink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JasonAutolink.h; path = ../../Json/inc/JasonAutolink.h; sourceTree = "<group>"; };
+		20A59CE016D727800008DBD0 /* json_batchallocator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = json_batchallocator.h; path = ../../Json/inc/json_batchallocator.h; sourceTree = "<group>"; };
+		20A59CE116D727800008DBD0 /* json.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = json.h; path = ../../Json/inc/json.h; sourceTree = "<group>"; };
+		20A59CE216D727800008DBD0 /* reader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = reader.h; path = ../../Json/inc/reader.h; sourceTree = "<group>"; };
+		20A59CE316D727800008DBD0 /* value.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = value.h; path = ../../Json/inc/value.h; sourceTree = "<group>"; };
+		20A59CE416D727800008DBD0 /* writer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = writer.h; path = ../../Json/inc/writer.h; sourceTree = "<group>"; };
+		20A59CEF16D74E930008DBD0 /* NDControlHelp.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = NDControlHelp.cpp; sourceTree = "<group>"; };
+		20A59D0516D753880008DBD0 /* libJson.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libJson.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		20E236FF169169A1008FB048 /* TextureList.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextureList.cpp; sourceTree = "<group>"; };
 		20E23700169169A1008FB048 /* TextureList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureList.h; sourceTree = "<group>"; };
 		20E2370316916DFB008FB048 /* cpLog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = cpLog.cpp; sourceTree = "<group>"; };
@@ -1132,6 +1179,13 @@
 		20E2371516916E09008FB048 /* KHttp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KHttp.h; sourceTree = "<group>"; };
 		20E2371616916E09008FB048 /* KThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KThread.h; sourceTree = "<group>"; };
 		20E2371716916E09008FB048 /* KTimeVal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KTimeVal.h; sourceTree = "<group>"; };
+		20E5294216D71EC900C1DFC6 /* Json-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Json-Prefix.pch"; sourceTree = "<group>"; };
+		20E5294316D71EC900C1DFC6 /* JsonProj.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = JsonProj.xcconfig; sourceTree = "<group>"; };
+		20E5294416D71EC900C1DFC6 /* JsonTarget.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = JsonTarget.xcconfig; sourceTree = "<group>"; };
+		20E5294516D71EC900C1DFC6 /* Json.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Json.h; sourceTree = "<group>"; };
+		20E5294616D71EC900C1DFC6 /* JsonPriv.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JsonPriv.h; sourceTree = "<group>"; };
+		20E5294716D71EC900C1DFC6 /* Json.cp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Json.cp; sourceTree = "<group>"; };
+		20E5B2C716D7184D00C1DFC6 /* NDJsonReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NDJsonReader.cpp; sourceTree = "<group>"; };
 		5A150D8F164BCAAF00B1D1C3 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		5A1A419F1653804500BD1510 /* AppController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppController.h; sourceTree = "<group>"; };
 		5A1A41A01653804600BD1510 /* AppController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AppController.mm; sourceTree = "<group>"; };
@@ -2415,7 +2469,6 @@
 		5AF6F5361663677D006834AF /* ScriptMgr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScriptMgr.h; sourceTree = "<group>"; };
 		5AF6F53816636788006834AF /* ScriptMgr.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = ScriptMgr.cpp; sourceTree = "<group>"; };
 		5AF6F53A1663752A006834AF /* NDUIScrollContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NDUIScrollContainer.h; sourceTree = "<group>"; };
-		5AF6F53B1663752A006834AF /* NDUIScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NDUIScrollView.h; sourceTree = "<group>"; };
 		5AF6F53E16637A3D006834AF /* NDUIScrollContainer.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = NDUIScrollContainer.cpp; sourceTree = "<group>"; };
 		5AF6F53F16637A3D006834AF /* NDUIScrollViewContainer.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = NDUIScrollViewContainer.cpp; sourceTree = "<group>"; };
 		5AF6F54216637DBC006834AF /* GameSceneLoading.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = GameSceneLoading.cpp; sourceTree = "<group>"; };
@@ -2471,6 +2524,65 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		20E5294016D71EC900C1DFC6 /* Json */ = {
+			isa = PBXGroup;
+			children = (
+				20E5294316D71EC900C1DFC6 /* JsonProj.xcconfig */,
+				20E5294416D71EC900C1DFC6 /* JsonTarget.xcconfig */,
+				20E5294516D71EC900C1DFC6 /* Json.h */,
+				20E5294616D71EC900C1DFC6 /* JsonPriv.h */,
+				20E5294716D71EC900C1DFC6 /* Json.cp */,
+				20E5294116D71EC900C1DFC6 /* Supporting Files */,
+			);
+			path = Json;
+			sourceTree = "<group>";
+		};
+		20E5294116D71EC900C1DFC6 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				20E5294216D71EC900C1DFC6 /* Json-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		20E5B2CA16D71C8000C1DFC6 /* Json */ = {
+			isa = PBXGroup;
+			children = (
+				20E5B2CC16D71CCB00C1DFC6 /* src */,
+				20E5B2CB16D71CC600C1DFC6 /* inc */,
+			);
+			name = Json;
+			sourceTree = "<group>";
+		};
+		20E5B2CB16D71CC600C1DFC6 /* inc */ = {
+			isa = PBXGroup;
+			children = (
+				20A59CDC16D727800008DBD0 /* config.h */,
+				20A59CDD16D727800008DBD0 /* features.h */,
+				20A59CDE16D727800008DBD0 /* forwards.h */,
+				20A59CDF16D727800008DBD0 /* JasonAutolink.h */,
+				20A59CE016D727800008DBD0 /* json_batchallocator.h */,
+				20A59CE116D727800008DBD0 /* json.h */,
+				20A59CE216D727800008DBD0 /* reader.h */,
+				20A59CE316D727800008DBD0 /* value.h */,
+				20A59CE416D727800008DBD0 /* writer.h */,
+			);
+			name = inc;
+			sourceTree = "<group>";
+		};
+		20E5B2CC16D71CCB00C1DFC6 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				20A59CD016D727240008DBD0 /* json_internalarray.inl */,
+				20A59CD116D727240008DBD0 /* json_internalmap.inl */,
+				20A59CD216D727240008DBD0 /* json_reader.cpp */,
+				20A59CD316D727240008DBD0 /* json_value.cpp */,
+				20A59CD416D727240008DBD0 /* json_valueiterator.inl */,
+				20A59CD516D727240008DBD0 /* json_writer.cpp */,
+			);
+			name = src;
+			sourceTree = "<group>";
+		};
 		5A1B38891649F2A500C94D7F /* TinyXML */ = {
 			isa = PBXGroup;
 			children = (
@@ -2673,6 +2785,7 @@
 			children = (
 				5A3FC1A116529FF0002166DD /* NDUILoadEngine.cpp */,
 				5A1B3F86164AB5C100C94D7F /* IniFile.cpp */,
+				20A59CEF16D74E930008DBD0 /* NDControlHelp.cpp */,
 				5A1B3F88164AB5C100C94D7F /* UIData.cpp */,
 			);
 			path = src;
@@ -2683,16 +2796,19 @@
 			children = (
 				5AEA3B851687FE4E00456B97 /* NDUICustomView.h */,
 				5AEA3B591687F9BD00456B97 /* NDUIChatText.h */,
+				2085E89C16D635EB009DFA2E /* NDUIListHorz.h */,
+				2085E89D16D635EB009DFA2E /* NDUIListVert.h */,
+				2085E89E16D635EB009DFA2E /* NDUIScrollViewContainer.h */,
 				5AEA3B5A1687F9BD00456B97 /* NDUIExp.h */,
 				5AEA3B5B1687F9BD00456B97 /* NDUIHyperlink.h */,
 				5AEA3B5C1687F9BD00456B97 /* NDUIMovableLayer.h */,
 				5AEA3B5D1687F9BD00456B97 /* NDUIScroll.h */,
+				2085E8A216D635F7009DFA2E /* NDBitmapMacro.h */,
 				5AEA3B5E1687F9BD00456B97 /* NDUIScrollContainerExpand.h */,
 				5AEA3B5F1687F9BD00456B97 /* NDUIScrollViewExpand.h */,
 				5AEA3B601687F9BD00456B97 /* NDUIScrollViewMulHand.h */,
 				5AEA3B611687F9BD00456B97 /* NDUISpriteNode.h */,
 				5AF6F53A1663752A006834AF /* NDUIScrollContainer.h */,
-				5AF6F53B1663752A006834AF /* NDUIScrollView.h */,
 				5A1B3F8A164AB5C100C94D7F /* Analyst.h */,
 				5A1B3F8B164AB5C100C94D7F /* AnalystType.h */,
 				5A1B3F8C164AB5C100C94D7F /* GameUITaskList.h */,
@@ -2740,6 +2856,8 @@
 			isa = PBXGroup;
 			children = (
 				5AEA3B6F1687F9EE00456B97 /* NDUIChatText.cpp */,
+				2085E8A416D636D4009DFA2E /* NDUIListHorz.cpp */,
+				2085E8A516D636D4009DFA2E /* NDUIListVert.cpp */,
 				5AEA3B701687F9EE00456B97 /* NDUIExp.cpp */,
 				5AEA3B711687F9EE00456B97 /* NDUIHyperlink.cpp */,
 				5AEA3B721687F9EE00456B97 /* NDUIMovableLayer.cpp */,
@@ -3034,6 +3152,7 @@
 		5A1B405B164AB5C100C94D7F /* inc */ = {
 			isa = PBXGroup;
 			children = (
+				2085E89A16D6346D009DFA2E /* NDJsonReader.h */,
 				5A6302C11689DE2C002CA289 /* UTF8.h */,
 				5A5FF1F7167B2B5700E897F9 /* NDVideoEventListener.h */,
 				5A5FF1F8167B2B5700E897F9 /* NDVideoMgr.h */,
@@ -3064,6 +3183,7 @@
 				5A5FF1FB167B2B6500E897F9 /* NDVideoEventListener.cpp */,
 				5A5FF1FC167B2B6500E897F9 /* NDVideoMgr.cpp */,
 				5AF6F5261663645C006834AF /* NDUtil.cpp */,
+				20E5B2C716D7184D00C1DFC6 /* NDJsonReader.cpp */,
 				5A3FC19B16528B2B002166DD /* TQPlatform.cpp */,
 				5A1B406E164AB5C100C94D7F /* Des.cpp */,
 				5A1B406F164AB5C100C94D7F /* Des.mm */,
@@ -4849,6 +4969,7 @@
 		5AC4562C1643D6F90014B2E7 = {
 			isa = PBXGroup;
 			children = (
+				20E5B2CA16D71C8000C1DFC6 /* Json */,
 				5AB98FD616991D58005C8A5B /* MobageSDK */,
 				5AC456411643D6FA0014B2E7 /* dhlj */,
 				5AC4778C1643DA550014B2E7 /* cocos2dx */,
@@ -4858,6 +4979,7 @@
 				5A1B38A51649F2F800C94D7F /* KUtil */,
 				5A1B390E1649F8C000C94D7F /* ClientEngine */,
 				5A1B45E9164ABC3700C94D7F /* ClientLogic */,
+				20E5294016D71EC900C1DFC6 /* Json */,
 				5AC4563A1643D6FA0014B2E7 /* Frameworks */,
 				5A3FC1AC1652A8B8002166DD /* Resources */,
 				5AC456381643D6FA0014B2E7 /* Products */,
@@ -4876,6 +4998,7 @@
 				5A1B38ED1649F71100C94D7F /* libSQLite3.a */,
 				5A1B390C1649F8C000C94D7F /* libClientEngine.a */,
 				5A1B45E7164ABC3700C94D7F /* libClientLogic.a */,
+				20A59D0516D753880008DBD0 /* libJson.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -5346,7 +5469,6 @@
 				5AF6F52E16636477006834AF /* NDBaseNetMgr.h in Headers */,
 				5AF6F52F16636477006834AF /* NDBaseScriptMgr.h in Headers */,
 				5AF6F53C1663752A006834AF /* NDUIScrollContainer.h in Headers */,
-				5AF6F53D1663752A006834AF /* NDUIScrollView.h in Headers */,
 				5AF6F5991663BBD6006834AF /* NDBaseGlobalDialog.h in Headers */,
 				5AF6F59A1663BBD6006834AF /* NDUIBaseItemButton.h in Headers */,
 				5AF6F5A11663BBF1006834AF /* EngineScriptCommon.h in Headers */,
@@ -5366,6 +5488,11 @@
 				5AEA3B6C1687F9BD00456B97 /* NDUISpriteNode.h in Headers */,
 				5AEA3B861687FE4E00456B97 /* NDUICustomView.h in Headers */,
 				5A6302C21689DE2C002CA289 /* UTF8.h in Headers */,
+				2085E89B16D6346D009DFA2E /* NDJsonReader.h in Headers */,
+				2085E89F16D635EB009DFA2E /* NDUIListHorz.h in Headers */,
+				2085E8A016D635EB009DFA2E /* NDUIListVert.h in Headers */,
+				2085E8A116D635EB009DFA2E /* NDUIScrollViewContainer.h in Headers */,
+				2085E8A316D635F7009DFA2E /* NDBitmapMacro.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5606,6 +5733,22 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		20A59CF116D753880008DBD0 /* Json */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 20A59D0216D753880008DBD0 /* Build configuration list for PBXNativeTarget "Json" */;
+			buildPhases = (
+				20A59CF216D753880008DBD0 /* Sources */,
+				20A59D0116D753880008DBD0 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Json;
+			productName = NetWork;
+			productReference = 20A59D0516D753880008DBD0 /* libJson.a */;
+			productType = "com.apple.product-type.library.static";
+		};
 		5A1B38861649F2A500C94D7F /* TinyXML */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 5A1B38901649F2A500C94D7F /* Build configuration list for PBXNativeTarget "TinyXML" */;
@@ -5786,6 +5929,9 @@
 				en,
 				"zh-Hans",
 				"zh-Hant",
+				English,
+				zh_CN,
+				zh_TW,
 			);
 			mainGroup = 5AC4562C1643D6F90014B2E7;
 			productRefGroup = 5AC456381643D6FA0014B2E7 /* Products */;
@@ -5801,6 +5947,7 @@
 				5A1B38EC1649F71100C94D7F /* SQLite3 */,
 				5A1B390B1649F8C000C94D7F /* ClientEngine */,
 				5A1B45E6164ABC3700C94D7F /* ClientLogic */,
+				20A59CF116D753880008DBD0 /* Json */,
 			);
 		};
 /* End PBXProject section */
@@ -5851,6 +5998,19 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		20A59CF216D753880008DBD0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				20A59D0616D753C80008DBD0 /* json_internalarray.inl in Sources */,
+				20A59D0716D753C80008DBD0 /* json_internalmap.inl in Sources */,
+				20A59D0816D753C80008DBD0 /* json_reader.cpp in Sources */,
+				20A59D0916D753C80008DBD0 /* json_value.cpp in Sources */,
+				20A59D0A16D753C80008DBD0 /* json_valueiterator.inl in Sources */,
+				20A59D0B16D753C80008DBD0 /* json_writer.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		5A1B38831649F2A500C94D7F /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -6010,6 +6170,10 @@
 				5AEA3B801687F9EE00456B97 /* NDUIScrollViewExpand.cpp in Sources */,
 				5AEA3B811687F9EE00456B97 /* NDUIScrollViewMulHand.cpp in Sources */,
 				5AEA3B821687F9EE00456B97 /* NDUISpriteNode.cpp in Sources */,
+				2085E8A616D636D4009DFA2E /* NDUIListHorz.cpp in Sources */,
+				2085E8A716D636D4009DFA2E /* NDUIListVert.cpp in Sources */,
+				20E5B2C816D7184D00C1DFC6 /* NDJsonReader.cpp in Sources */,
+				20A59CF016D74E930008DBD0 /* NDControlHelp.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6428,6 +6592,44 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		20A59D0316D753880008DBD0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+				DSTROOT = /tmp/Json.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_PREFIX_HEADER = "";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"TARGET_OS_IPHONE=1",
+					__IOS_PLATFORM__,
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = Json;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		20A59D0416D753880008DBD0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+				DSTROOT = /tmp/Json.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_PREFIX_HEADER = "";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"TARGET_OS_IPHONE=1",
+					__IOS_PLATFORM__,
+				);
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = Json;
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
 		5A1B38911649F2A500C94D7F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -6554,6 +6756,7 @@
 					"../../cocos2d-x/UI/inc",
 					"../../cocos2d-x/UI/platform",
 					"../../cocos2d-x/UI/import/inc",
+					../../Json/inc,
 					"../../cocos2d-x/Utility/inc",
 				);
 				OTHER_LDFLAGS = "-ObjC";
@@ -6596,6 +6799,7 @@
 					"../../cocos2d-x/UI/inc",
 					"../../cocos2d-x/UI/platform",
 					"../../cocos2d-x/UI/import/inc",
+					../../Json/inc,
 					"../../cocos2d-x/Utility/inc",
 				);
 				OTHER_LDFLAGS = "-ObjC";
@@ -6829,6 +7033,7 @@
 					"$(SRCROOT)/build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/libTinyXML.a",
 					"$(SRCROOT)/build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/libKUtil.a",
 					"$(SRCROOT)/build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/libClientEngine.a",
+					"$(SRCROOT)/build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/libJson.a",
 					"$(SRCROOT)/build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/libClientLogic.a",
 					"-ObjC",
 				);
@@ -7019,6 +7224,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		20A59D0216D753880008DBD0 /* Build configuration list for PBXNativeTarget "Json" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				20A59D0316D753880008DBD0 /* Debug */,
+				20A59D0416D753880008DBD0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		5A1B38901649F2A500C94D7F /* Build configuration list for PBXNativeTarget "TinyXML" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
