@@ -913,6 +913,7 @@ void CSMLoginScene::OnMsg_ClientVersion(NDTransData& kData)
 	else if ( ( nFromVersion == nToVersion ) && (bLatest) )
 	{
 		LOGD("Current version is newest");
+
 		StartEntry();
 		return;
 	}
@@ -1047,6 +1048,13 @@ void CSMLoginScene::SetProgress( int nPercent )
 //===========================================================================
 void CSMLoginScene::StartEntry()
 {
+	//在选服列表界面更新版本特殊处理
+	if(NDBeforeGameMgrObj.GetLogUIUpdate())
+	{
+		ScriptMgrObj.excuteLuaFunc("LoguiLoginGame", "Login_ServerUI");
+		return;
+	}
+
 	WriteCon( "@@ CSMLoginScene::StartEntry()\r\n" );
 	CCLog( "@@login04: StartEntry()\r\n" );
 #if 1
