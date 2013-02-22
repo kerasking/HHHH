@@ -17,7 +17,9 @@
 //#include "NDUITableLayer.h"
 #include "NDPicture.h"
 #include "NDUIScrollContainer.h"
-#include "NDUIScrollView.h"
+#include "NDUIScrollViewContainer.h"
+#include "NDUIListHorz.h"
+#include "NDUIListVert.h"
 #include "NDTextNode.h"
 #include "NDUIHyperlink.h"
 #include "UICheckBox.h"
@@ -59,13 +61,13 @@ enum MY_CONTROL_TYPE
 	MY_CONTROL_TYPE_UITEXT,							// UI文本(文本可显示不同颜色)
 	MY_CONTROL_TYPE_HYPER_TEXT,						// 链接文本
 	MY_CONTROL_TYPE_HYPER_TEXT_BUTTON,				// 链接按钮
-	MY_CONTROL_TYPE_LIST,							// 列表(水平型)
+	MY_CONTROL_TYPE_LIST_HORZ,						// 列表(水平型) @listbox
 	MY_CONTROL_TYPE_EXP,							// 经验条
 	MY_CONTROL_TYPE_PROGRESS,						// 进度条
 	MY_CONTROL_TYPE_SLIDER,							// 滑动条
 	MY_CONTROL_TYPE_BACK,							// 背景
 	MY_CONTROL_TYPE_TABLE,							// 表格
-	MY_CONTROL_TYPE_LIST_M,							// 垂直型列表
+	MY_CONTROL_TYPE_LIST_VERT,						// 垂直型列表 @listbox
 	MY_CONTROL_TYPE_RADIO_BUTTON,					// 点选按钮
 	MY_CONTROL_TYPE_ITEM_BUTTON,					// 物品按钮
 	MY_CONTROL_TYPE_EQUIP_BUTTON,					// 装备按钮
@@ -75,46 +77,14 @@ enum MY_CONTROL_TYPE
 	MY_CONTROL_TYPE_LIST_LOOP,                      // 循环水平列表21
 };
 
+
+//----------------------------------------------------------------------------------------------------------
 class CtrolBase
 {
 protected:
-	void Init(UIINFO& info, CCSize& sizeOffset)
-	{
-		m_info = info;
-		
-		m_sizeOffset = sizeOffset;
-	}
+	void Init(UIINFO& info, CCSize& sizeOffset);
 	
-	CCRect GetFrameRect()
-	{
-		CCRect rect = CCRectZero;
-		
-		rect.origin = ccpAdd(
-							 m_info.CtrlPos, 
-							 ccp(m_sizeOffset.width, m_sizeOffset.height));
-		
-		if (m_info.nCtrlWidth != 0 && m_info.nCtrlHeight != 0)
-		{
-			rect.size = CCSizeMake(m_info.nCtrlWidth, m_info.nCtrlHeight);
-			return rect;
-		}
-		
-		if (m_info.strNormalFile.empty()) 
-		{
-			NDAsssert(0);
-			
-			return rect;
-		}
-		
-		NDPicture* pic = NDPicturePool::DefaultPool()->AddPicture(
-							NDPath::GetUIImgPath(m_info.strNormalFile.c_str()) );
-		
-		rect.size = pic->GetSize();
-		
-		delete pic;
-		
-		return rect;
-	}
+	CCRect GetFrameRect();
 	
 	NDPicture* GetNormalPicture()
 	{
@@ -141,91 +111,17 @@ protected:
 		return GetPicture(m_info.strBackFile, m_info.rectBack);
 	}
 	
-	LabelTextAlignment GetTextAlign()
-	{
-		/*
-		 "左对齐";
-		 "右对齐";
-		 "水平居中"
-		 "竖直居中"
-		 "居中"
-		 */
-		
-		LabelTextAlignment align = LabelTextAlignmentLeft;
-		CCLog("test %s", m_info.strTextAlign.c_str());
-		if (stricmp( m_info.strTextAlign.c_str(), GetTxtPri("LeftAlign").c_str()) == 0) //左对齐
-			align = LabelTextAlignmentLeft;
+	LabelTextAlignment GetTextAlign();
 
-		else if (stricmp( m_info.strTextAlign.c_str(), GetTxtPri("RightAlign").c_str()) == 0) //右对齐
-			align = LabelTextAlignmentRight;
-
-		else if (stricmp( m_info.strTextAlign.c_str(), GetTxtPri("HorzCenterAlign").c_str()) == 0) //水平居中对齐
-			align = LabelTextAlignmentHorzCenter;
-
-		else if (stricmp( m_info.strTextAlign.c_str(), GetTxtPri("VertCenterAlign").c_str()) == 0) //竖直居中对齐
-			align = LabelTextAlignmentVertCenter;
-
-		else if (stricmp( m_info.strTextAlign.c_str(), GetTxtPri("CenterAlign").c_str()) == 0) //居中对齐
-			align = LabelTextAlignmentCenter;
-
-		return align;
-	}
 private:	
-	NDPicture*	GetPicture(std::string& filename, CTRL_UV& uv)
-	{
-		//LOGD("GetPicture() filename is %s",filename.c_str());
-
-		NDPicture* res = NULL;
-		
-		if (filename.empty())
-		{
-			return res;
-		}
-		
-		if (m_info.nCtrlWidth != 0 && m_info.nCtrlHeight != 0)
-		{ // 拉伸 (拉伸后不进行u,v处理)
-			// 获取图片大小并与u,v比较,大小不一样说明是抠图,则不做拉伸,这一步以后可以放到UI编辑器(直接导出该信息)
-			const string strTemp = NDPath::GetUIImgPath(filename.c_str());
-			//LOGD("NDPath::GetUIImgPath(filename.c_str() return value is %s",strTemp.c_str());
-			NDPicture *pic = NDPicturePool::DefaultPool()->AddPicture(strTemp.c_str());
-
-			//LOGD("NDPicture *pic value is %d",(int)pic);
-
-			if (pic)
-			{
-				CCSize size = pic->GetSize();
-				if (uv.w <= int(size.width) && uv.h <= int(size.height))
-				{
-					pic->Cut(CCRectMake(uv.x, uv.y, uv.w, uv.h ) );
-					
-					return pic;
-				}
-			}
-			
-			res  = NDPicturePool::DefaultPool()->AddPicture(
-															NDPath::GetUIImgPath(filename.c_str()),
-															m_info.nCtrlWidth, m_info.nCtrlHeight );
-			delete pic;
-		}
-		else
-		{ // 不拉伸 (扣出来的图不做拉伸处理)
-			res  = NDPicturePool::DefaultPool()->AddPicture(
-															NDPath::GetUIImgPath(filename.c_str()) );
-			
-			if (uv.w != 0 && uv.h != 0)
-			{
-				res->Cut(CCRectMake(
-									uv.x, uv.y, uv.w, uv.h ) );
-			}
-		}
-		
-		return res;
-	}
+	NDPicture*	GetPicture(std::string& filename, CTRL_UV& uv);
 	
 protected:
 	UIINFO m_info;
 	CCSize m_sizeOffset;
 };
+
+//----------------------------------------------------------------------------------------------------------
 
 template<typename CTROL>
 class CtrolTrait : public CtrolBase
@@ -327,6 +223,7 @@ public:
 	}
 };
 
+//@listbox
 template<>
 class CtrolTrait<NDUIScrollViewContainer> : public CtrolBase
 {
@@ -335,7 +232,6 @@ public:
 	{
 		Init(info, sizeOffset);
 
-		// 水平型
 		CCRect rect = this->GetFrameRect();
 		NDUIScrollViewContainer *container = new NDUIScrollViewContainer;
 		container->Initialization();
@@ -565,30 +461,11 @@ public:
 	}
 };
 
+//----------------------------------------------------------------------------------------------------------
+
 template<int CtrolType>
 class ControlHelp : public CtrolTrait<void>
 {
-};
-					
-template<>															
-class ControlHelp<MY_CONTROL_TYPE_LIST_M> : public CtrolTrait<NDUIScrollViewContainer>		
-{	
-public:
-	NDUIScrollViewContainer* Create(UIINFO& info, CCSize& sizeOffset)
-	{
-		Init(info, sizeOffset);
-
-		// 水平型
-		CCRect rect = this->GetFrameRect();
-		NDUIScrollViewContainer *container = new NDUIScrollViewContainer;
-		container->Initialization();
-		container->SetStyle(UIScrollStyleVerical);
-		container->SetFrameRect(rect);
-		container->SetTopReserveDistance(rect.size.height);
-		container->SetBottomReserveDistance(rect.size.height);
-		container->SetBackgroundImage(GetNormalPicture(), true);
-		return container;
-	}
 };
 
 template<>															
@@ -643,6 +520,50 @@ public:
 	}
 };
 
+//@listbox: 水平列表框
+template<>															
+class ControlHelp<MY_CONTROL_TYPE_LIST_HORZ> : public CtrolTrait<NDUIScrollViewContainer>
+{	
+public:
+	NDUIListHorz* Create(UIINFO& info, CCSize& sizeOffset)
+	{
+		Init(info, sizeOffset);
+
+		CCRect rect = this->GetFrameRect();
+		NDUIListHorz *listHorz = new NDUIListHorz;
+		listHorz->Initialization();
+		listHorz->SetStyle(UIScrollStyleHorzontal);
+		listHorz->SetFrameRect(rect);
+// 		listHorz->SetTopReserveDistance(rect.size.height);
+// 		listHorz->SetBottomReserveDistance(rect.size.height);
+// 		listHorz->SetBackgroundImage(GetNormalPicture(), true);
+		return listHorz;
+	}
+};
+
+//@listbox: 垂直列表框
+template<>															
+class ControlHelp<MY_CONTROL_TYPE_LIST_VERT> : public CtrolTrait<NDUIScrollViewContainer>
+{	
+public:
+	NDUIListVert* Create(UIINFO& info, CCSize& sizeOffset)
+	{
+		Init(info, sizeOffset);
+
+		CCRect rect = this->GetFrameRect();
+		NDUIListVert *listVert = new NDUIListVert;
+		listVert->Initialization();
+		listVert->SetStyle(UIScrollStyleVerical);
+		listVert->SetFrameRect(rect);
+		listVert->SetTopReserveDistance(rect.size.height);
+		listVert->SetBottomReserveDistance(rect.size.height);
+		listVert->SetBackgroundImage(GetNormalPicture(), true);
+		return listVert;
+	}
+};
+
+//----------------------------------------------------------------------------------------------------------
+
 #pragma mark 控件声明
 
 #define CtrolHelpDeclare(CONTROL_TYPE, CONTROL)						\
@@ -656,7 +577,8 @@ CtrolHelpDeclare(MY_CONTROL_TYPE_PICTURE, NDUIImage)
 CtrolHelpDeclare(MY_CONTROL_TYPE_BUTTON, NDUIButton)
 CtrolHelpDeclare(MY_CONTROL_TYPE_CHECK_BUTTON, CUICheckBox)
 CtrolHelpDeclare(MY_CONTROL_TYPE_TEXT, NDUILabel)
-CtrolHelpDeclare(MY_CONTROL_TYPE_LIST, NDUIScrollViewContainer)
+
+//CtrolHelpDeclare(MY_CONTROL_TYPE_LIST_HORZ, NDUIScrollViewContainer) //@listbox
 
 CtrolHelpDeclare(MY_CONTROL_TYPE_LIST_HV, CUIScrollViewContainerM)
 CtrolHelpDeclare(MY_CONTROL_TYPE_LIST_LOOP, CUIScrollContainerExpand)

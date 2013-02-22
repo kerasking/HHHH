@@ -205,6 +205,9 @@ public class Cocos2dxGLSurfaceView extends GLSurfaceView
 				Cocos2dxGLSurfaceView.this.mCocos2dxRenderer.handleOnResume();
 			}
 		});
+
+		setRenderMode( RENDERMODE_CONTINUOUSLY );
+		Log.d( "render", "@@ set render mode: continuously");
 	}
 
 	@Override
@@ -219,7 +222,9 @@ public class Cocos2dxGLSurfaceView extends GLSurfaceView
 			}
 		});
 
-		super.onPause();
+		//super.onPause();
+		setRenderMode( RENDERMODE_WHEN_DIRTY );
+		Log.d( "render", "@@ set render mode: when dirty");
 	}
 
 	@Override
@@ -356,6 +361,8 @@ public class Cocos2dxGLSurfaceView extends GLSurfaceView
 			// make regular
 			int regularWidth = pNewSurfaceWidth/30*30;
 			int regularHeight = pNewSurfaceHeight/20*20;
+			Log.d( "surface", "@@ surface size width=" + pNewSurfaceWidth + ", height=" + pNewSurfaceHeight);
+			Log.d( "surface", "@@ surface size [regular] width=" + regularWidth + ", height=" + regularHeight);
 
 			//this.mCocos2dxRenderer.setScreenWidthAndHeight(pNewSurfaceWidth, pNewSurfaceHeight);
 			this.mCocos2dxRenderer.setScreenWidthAndHeight(regularWidth, regularHeight);

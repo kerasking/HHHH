@@ -11,6 +11,7 @@
 #include "CCPointExtension.h"
 #include "NDUtil.h"
 #include "ObjectTracker.h"
+#include "NDBitmapMacro.h"
 
 IMPLEMENT_CLASS(CUIHyperlinkText, NDUINode)
 
@@ -64,8 +65,28 @@ void CUIHyperlinkText::SetLinkText(const char* text)
 	
 	CCSize textSize;
 	textSize.width	= m_rectLinkRect.size.width;
+
+#if 1 && WITH_NDBITMAP //@ndbitmap
+	textSize = getStringSize( text, m_uiLinkFontSize * FONT_SCALE );
+
+	// if single line is not enough, then try to calculate the actual size.
+	if (textSize.width > m_rectLinkRect.size.width)
+	{
+		int lineCount = textSize.width / m_rectLinkRect.size.width;
+		if (textSize.width > lineCount * m_rectLinkRect.size.width)
+		{
+			lineCount++;
+		}
+		if (lineCount > 10) lineCount = 10;
+
+		textSize.width	= m_rectLinkRect.size.width;
+		textSize.height = m_rectLinkRect.size.height * lineCount;
+	}
+#else
 	textSize.height = NDUITextBuilder::DefaultBuilder()->StringHeightAfterFilter(text, textSize.width, m_uiLinkFontSize);
 	textSize.width	= NDUITextBuilder::DefaultBuilder()->StringWidthAfterFilter(text, textSize.width, m_uiLinkFontSize);
+#endif
+
 	m_uiLinkText	= NDUITextBuilder::DefaultBuilder()->Build(text, m_uiLinkFontSize, textSize, 
 															   m_colorLinkFont, false, m_bLineEnabel); 
 	CCRect rectText	= CCRectMake(0, 0, textSize.width, textSize.height);

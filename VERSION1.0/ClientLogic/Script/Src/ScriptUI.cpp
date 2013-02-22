@@ -33,7 +33,7 @@
 
 // smys begin
 #include "NDUIScroll.h"
-#include "NDUIScrollView.h"
+#include "NDUIScrollViewContainer.h"
 #include "NDUIScrollViewMulHand.h"
 #include "UIRoleNode.h"
 #include "NDUIHyperlink.h"
@@ -1513,6 +1513,22 @@ CCSize GetHyperLinkTextSize(const char* str, unsigned int fontsize, int nBoundWi
 	return textSize;
 }
 
+// @ndbitmap: create a single color label by NDBitmap mechanism 
+NDUINode* CreateColorLabel_NDBitmap(const char* str, unsigned int fontsize, unsigned int nConstraitWidth)
+{
+	//@todo: setFrameRect
+	NDUILabel* label = new NDUILabel;
+	if (label)
+	{
+		label->Initialization();
+		label->SetRenderTimes(1);
+		label->SetText(str);
+		label->SetTag(0);
+		label->SetFontSize(fontsize);
+	}
+	return label;
+}
+
 NDUINode* CreateColorLabel(const char* str, unsigned int fontsize, unsigned int nConstraitWidth)
 {
 	if (!str)
@@ -1521,7 +1537,13 @@ NDUINode* CreateColorLabel(const char* str, unsigned int fontsize, unsigned int 
 	}
 	CCSize winsize	= CCDirector::sharedDirector()->getWinSizeInPixels();
 	winsize.width	= nConstraitWidth;
+
+//@ndbitmap
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) && 1
+	return CreateColorLabel_NDBitmap(str, fontsize, nConstraitWidth);
+#else
 	return (NDUINode*)NDUITextBuilder::DefaultBuilder()->Build(str, fontsize, winsize, ccc4(255, 255, 255, 255));
+#endif
 }
 
 NDScene* GetSMGameScene()

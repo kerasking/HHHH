@@ -1363,27 +1363,53 @@ void NDPlayer::debugDraw()
 void NDPlayer::DrawNameLabel(bool bDraw)
 {
 	NDManualRole::DrawNameLabel(bDraw);
+	DrawTest_NDBitmap();
+}
 
-// 	/////////////@del 测试代码////////////////////
-// 	static NDUILabel* s_testLabel = NULL;
-// 	if (!s_testLabel)
-// 	{
-// 		s_testLabel = new NDUILabel;
-// 		s_testLabel->Initialization(); 
-// 		s_testLabel->SetFontSize(12); 
-// 
-// 		s_testLabel->SetText( "测试透明文字，听说有问题啊，反对数据库范德萨发大奖赛阿凡达是范德萨阿凡达");
-// 		s_testLabel->SetFontColor( ccc4(0,255,0,125));
-// 	}
-// 	if (s_testLabel)
-// 	{
-// 		CCSize stringSize = getStringSize( s_testLabel->GetText().c_str(), s_testLabel->GetFontSize() * FONT_SCALE);
-// 		float halfW = stringSize.width * 0.5f;
-// 		CCPoint pt = ccpAdd( this->getHeadPos(), ccp(-halfW,-30));
-// 
-// 		s_testLabel->SetFrameRect(CCRectMake(pt.x, pt.y, stringSize.width, stringSize.height));
-// 		s_testLabel->draw();
-// 	}
+//@ndbitmap 测试代码
+void NDPlayer::DrawTest_NDBitmap()
+{
+#if 0
+	const char* testStr[] = 
+	{
+		"AaBbCcDdEeFfGg",
+		"HhIiJjKkLlMmNn",
+		"OoPpQqRrSsTt",	
+		"UuVvWwXxYyZz",
+		"0123456789",
+		"()[]<>+-=.,':%/\\",
+		"lion",
+	};
+	
+	int testStrAmount = sizeof(testStr) / sizeof(testStr[0]);
+	
+	static NDUILabel* arrLabel[10] = {0}; //10 label is enough.
+	for (int i = 0; i < testStrAmount; i++)
+	{
+		NDUILabel*& label = arrLabel[i];
+		if (!label)
+		{
+			label = new NDUILabel;
+			label->Initialization(); 
+			label->SetFontSize(12); 
+			label->SetFontColor( ccc4(0,0,0,255));
+			label->SetText( testStr[i] );
+		}
+		if (label)
+		{
+			CCSize stringSize = getStringSize( label->GetText().c_str(), label->GetFontSize() * FONT_SCALE);
+			float halfW = stringSize.width * 0.5f;
+			
+			//CCPoint pt = ccpAdd( this->getHeadPos(), ccp(-halfW,-50 - 30*i ));
+			//label->SetFrameRect(CCRectMake(pt.x, pt.y, stringSize.width, stringSize.height));
+			
+			CCPoint pt = ccpAdd( this->getHeadPos(), ccp(100, -50-30*i ));
+			label->SetFrameRect(CCRectMake(pt.x, pt.y, stringSize.width*2, stringSize.height));
+
+			label->draw();
+		}
+	}
+#endif
 }
 
 void NDPlayer::InitializationFroLookFace( int lookface, bool bSetLookFace /*= true*/ )

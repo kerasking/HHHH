@@ -642,6 +642,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\UI\inc\NDBitmapMacro.h"
+					>
+				</File>
+				<File
 					RelativePath="..\UI\inc\NDScrollLayer.h"
 					>
 				</File>
@@ -730,7 +734,7 @@
 					>
 				</File>
 				<File
-					RelativePath="..\UI\inc\NDUIScrollView.h"
+					RelativePath="..\UI\inc\NDUIScrollViewContainer.h"
 					>
 				</File>
 				<File
@@ -953,6 +957,10 @@
 						>
 					</File>
 					<File
+						RelativePath="..\UI\import\src\NDControlHelp.cpp"
+						>
+					</File>
+					<File
 						RelativePath="..\UI\import\src\NDUILoadEngine.cpp"
 						>
 					</File>
@@ -965,6 +973,26 @@
 						>
 					</File>
 				</Filter>
+			</Filter>
+			<Filter
+				Name="listbox"
+				>
+				<File
+					RelativePath="..\UI\src\NDUIListHorz.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\UI\inc\NDUIListHorz.h"
+					>
+				</File>
+				<File
+					RelativePath="..\UI\src\NDUIListVert.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\UI\inc\NDUIListVert.h"
+					>
+				</File>
 			</Filter>
 		</Filter>
 		<Filter
@@ -1294,11 +1322,11 @@
 			>
 		</File>
 		<File
-			RelativePath="..\UI\inc\NDUITableLayer.h"
+			RelativePath="..\TempClass\NDUITableLayer.h"
 			>
 		</File>
 		<File
-			RelativePath="..\TempClass\NDUITableLayer.h"
+			RelativePath="..\UI\inc\NDUITableLayer.h"
 			>
 		</File>
 		<File

@@ -487,6 +487,9 @@ public:
 	}
 	unsigned int GetAnimationAmount();
 
+	void setExtra( const int extra ) { m_nExtra = extra; }
+	int getExtra() { return m_nExtra; }
+
 protected:
 
 	bool MoveByPath( const bool bFirstPath = false );
@@ -565,6 +568,7 @@ private:
 	bool m_bHightLight;
 	ISpriteEvent* m_pkSpriteEvent;
 	NSTimeInterval m_dBeginTime;
+	int m_nExtra;
 };
 
 #define DefaultGlobalSprite NDSprite::GetGlobalPlayerPointer(0)

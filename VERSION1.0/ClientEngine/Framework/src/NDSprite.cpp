@@ -96,6 +96,8 @@ NDSprite::NDSprite()
 	m_bHightLight = false;
 
 	m_dBeginTime = 0.0;
+
+	m_nExtra = 0;
 }
 
 NDSprite::~NDSprite()
@@ -233,7 +235,7 @@ void NDSprite::RunAnimation_WithFrames(bool bDraw)
 	{
 		standAction(true);
 		m_pkCurrentAnimation->runWithRunFrameRecord(m_pkFrameRunRecord,
-			bDraw, m_fScale);
+			bDraw, m_fScale, m_nExtra);
 	}
 
 	OnDrawEnd(bDraw);
@@ -1178,7 +1180,7 @@ bool NDSprite::DrawSubAnimation(NDSubAniGroup& kSag)
 	// 子动画播放位置设置
 	aniGroup->setPosition( posTarget );
 	
-	ani->runWithRunFrameRecord( record, true, m_fScale );
+	ani->runWithRunFrameRecord( record, true, m_fScale, m_nExtra );
 	
 	aniGroup->setPosition( pos );
 	

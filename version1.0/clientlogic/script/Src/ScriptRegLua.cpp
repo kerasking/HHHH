@@ -34,7 +34,7 @@
 #include "NDUIScrollViewExpand.h"
 #include "NDUIScrollViewMulHand.h"
 #include "NDUIScrollContainerExpand.h""
-#include "NDUIScrollView.h"
+#include "NDUIScrollViewContainer.h"
 #include "NDUIScrollContainer.h"
 #include "NDUIScroll.h"
 #include "NDUIMovableLayer.h"
@@ -615,6 +615,7 @@ void NDScriptRegLua::doReg()
 	ETMEMBERFUNC("GetAnimationAmount",				&CUISpriteNode::GetAnimationAmount)
 	ETMEMBERFUNC("PlayAnimation",					&CUISpriteNode::PlayAnimation)
 	ETMEMBERFUNC("IsAnimationComplete",				&CUISpriteNode::IsAnimationComplete)
+	ETMEMBERFUNC("setExtra",						&CUISpriteNode::setExtra)
 	ETCLASSEND(CUISpriteNode)
 	
 //#pragma mark ±à¼­¿ò¿Ø¼þ "UIEdit.h"

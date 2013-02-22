@@ -268,11 +268,11 @@ NDUINode* NDUILoad::CreateCtrl( UIINFO& uiInfo, CCSize sizeOffset, const char*& 
 			ctrlTypeName = "MY_CONTROL_TYPE_TEXT";
 		}
 		break;
-	case MY_CONTROL_TYPE_LIST:
+	case MY_CONTROL_TYPE_LIST_HORZ: //@listbox
 		{
-			ControlHelp<MY_CONTROL_TYPE_LIST> help;
+			ControlHelp<MY_CONTROL_TYPE_LIST_HORZ> help;
 			node = (NDUINode*)help.Create(uiInfo, sizeOffset);
-			ctrlTypeName = "MY_CONTROL_TYPE_LIST";
+			ctrlTypeName = "MY_CONTROL_TYPE_LIST_HORZ";
 		}
 		break;
 	case MY_CONTROL_TYPE_PROGRESS:
@@ -324,11 +324,11 @@ NDUINode* NDUILoad::CreateCtrl( UIINFO& uiInfo, CCSize sizeOffset, const char*& 
 			ctrlTypeName = "MY_CONTROL_TYPE_HYPER_TEXT_BUTTON";
 		}
 		break;
-	case MY_CONTROL_TYPE_LIST_M:
+	case MY_CONTROL_TYPE_LIST_VERT: //@listbox
 		{
-			ControlHelp<MY_CONTROL_TYPE_LIST_M> help;
+			ControlHelp<MY_CONTROL_TYPE_LIST_VERT> help;
 			node = (NDUINode*)help.Create(uiInfo, sizeOffset);
-			ctrlTypeName = "MY_CONTROL_TYPE_LIST_M";
+			ctrlTypeName = "MY_CONTROL_TYPE_LIST_VERT";
 		}
 		break;
 	case MY_CONTROL_TYPE_ITEM_BUTTON:
