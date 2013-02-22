@@ -885,15 +885,7 @@ bool CheckClientVersion(const char* szURL)
 ///////////////////////////////////////////////
 bool LoginUICheckClientVersion(const char* szURL, unsigned int uiPort)
 {
-	bool ret = NDBeforeGameMgrObj.CheckClientVersion(szURL, uiPort);
-    
-	//如果需要向服务端发送检测消息
-	if(ret)
-	{
-		//这里设置当前为服务器页面发送的请求
-		NDBeforeGameMgrObj.SetLogUIUpdate(true);
-	}
-		
+	bool ret = NDBeforeGameMgrObj.LoginSerUICheckClientVersion(szURL, uiPort);
 	return ret;
 }
 

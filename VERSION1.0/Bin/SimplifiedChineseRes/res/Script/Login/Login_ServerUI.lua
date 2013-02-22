@@ -13,6 +13,8 @@ p.Pwd="";
 p.UIN=317003333;
 
 p.LoginWait = true;
+p.LoginUiUpdate = false;          --在服务器列表是否要检测版本更新的标志
+
 p.SerName = "";
 p.SerIp = "";
 p.SerPort = "";
@@ -504,10 +506,14 @@ function p.OnUIEvent(uiNode, uiEventType, param)
         p.nPreSerId = p.nCurSerId;
         p.nCurSerId = info.nServerID;
         
-        --检测当前是否有版本更新
-        --p.SendDataToCheckVision();
         LogInfo("登录服务器名:[%s],ip:[%s],port:[%d]",sServerName,sServerIp,nServerPort);
-        p.LoginGame(sServerName,sServerIp,nServerPort);
+        
+        if p.LoginUiUpdate then
+			--检测当前是否有版本更新
+			p.SendDataToCheckVision();
+		 else
+			p.LoginGame(sServerName,sServerIp,nServerPort);
+		 end
 	end
 	return true;
 end
@@ -749,6 +755,13 @@ function p.SendDataToCheckVision()
 	LoginUICheckClientVersion(WorldSerIp, WorldSerPort);
 	--LogInfo( "LogSerUI CheckVision WorldSerIp = %s, WorldSerPort = %d", WorldSerIp, WorldSerPort);
 end
+
+--服务器列表更新版本后登入
+function p.LoguiLoginGame()
+   p.LoginGame(p.SerName, p.SerIp, p.SerPort);
+end
+
+
 
 
 ---------新加在服务器列表页面增加版本判断功能-----------tzq 2013-2-1 end---------------

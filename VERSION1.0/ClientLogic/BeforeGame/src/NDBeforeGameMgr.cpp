@@ -1956,6 +1956,53 @@ bool NDBeforeGameMgr::CheckClientVersion( const char* szURL,unsigned int uiPort 
     return true;
 }
 
+bool NDBeforeGameMgr::LoginSerUICheckClientVersion( const char* szURL, unsigned int uiPort)
+{
+	LOGD("NDBeforeGameMgr::CheckClientVersion");
+	int s_nVersion = 0;
+	unsigned char ucResType = RES_TYPE;
+
+	//取得当前客户端版本
+	bool bFile = true;
+	FILE* pkFile = 0;
+	char szLocalVersion[5] = {0};
+
+	//从caches下取版本信息
+	string sVersion = NDPath::GetCashesPath() + NDPath::GetRootResDirName() + SZ_VERINI_PATH;
+	LOGD("sVersion is %s",sVersion.c_str());
+	pkFile = fopen(sVersion.c_str(), "rb");
+
+	if (!pkFile)
+	{
+		LOGERROR("读取CACHES目录下版本文件失败");
+		bFile = 0;
+	}
+	else
+	{
+		fread(szLocalVersion, 1, 4, pkFile);
+		fclose(pkFile);
+		s_nVersion = atoi(szLocalVersion);
+	}
+
+	if (NDDataTransThread::DefaultThread()->GetThreadStatus() != ThreadStatusRunning)	
+	{
+		return false;
+	}
+
+	NDTransData kData(_MSG_CLIENT_VERSION);
+
+	//服务器列表页面升级
+	SetLogUIUpdate(true);
+
+	kData << s_nVersion;
+	kData << ucResType;
+	NDDataTransThread::DefaultThread()->GetSocket()->Send(&kData);
+
+	return true;
+}
+
+
+
 int NDBeforeGameMgr::ms_nCopyStatus = 0;
 int NDBeforeGameMgr::ms_nCopyLoginResStatus = 0;
 //检测首次运行

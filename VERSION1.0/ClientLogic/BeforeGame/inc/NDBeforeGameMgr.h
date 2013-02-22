@@ -236,7 +236,9 @@ namespace NDEngine
 		LoginState m_LoginState;
 	//
 	public:
-		bool CheckClientVersion( const char* szURL,unsigned int uiPort );
+		bool CheckClientVersion( const char* szURL, unsigned int uiPort);
+		bool LoginSerUICheckClientVersion( const char* szURL, unsigned int uiPort);
+
 		bool isWifiNetWork();
 		bool CheckFirstTimeRuning();
 		void SetDeviceToken( const char * szDeviceToken ){ if ( szDeviceToken ) m_szDeviceToken = szDeviceToken;}
