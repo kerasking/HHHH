@@ -1425,7 +1425,7 @@ void NDBeforeGameMgr::Login()
 bool NDBeforeGameMgr::doNDSdkLogin()
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-#if (defined(USE_NDSDK)
+#if (defined(USE_NDSDK))
 	if (m_sdkLogin)
 	{
 		//[m_sdkLogin release];

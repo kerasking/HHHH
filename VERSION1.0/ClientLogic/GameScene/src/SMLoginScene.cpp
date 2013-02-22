@@ -168,7 +168,7 @@ CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
 		NDUIImage* pkUILoadingImage = 0;
 		NDPicture* pkLoadingPic = 0;
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-		NDPicture* pkPicture = kPool.AddPicture( NDPath::GetImgPath("Res00/Load/Unzipping.png") );
+		NDPicture* pkPicture = kPool.AddPicture( NDPath::GetImg00Path("Res00/Load/Unzipping.png") );
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 		NDPicture* pkPicture = kPool.AddPicture( NDPath::GetImg00Path("Res00/Load/Unzipping.png") );
 #endif
@@ -430,7 +430,7 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 					if(pstrString)
 						m_pkProgressTextLabel->SetText(pstrString->getCString());
 #elif(CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-					CCAssert(0); ///< 未实现 郭浩
+					CCAssert(0,""); ///< 未实现 郭浩
 #endif
 
 				}
@@ -454,13 +454,16 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 #endif
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-		NDUIImage * pImage = (NDUIImage *)m_pLayerUpdate->GetChild( TAG_CTRL_PIC_BG);
-		if ( pImage )
-		{
-			NDPicture * pPicture = new NDPicture;
-			pPicture->Initialization( NDPath::GetUIImgPath( SZ_MOBAGE_BG_PNG_PATH ).c_str() );
-			pImage->SetPicture( pPicture, true );
-		}
+        if(m_pLayerUpdate) {
+            CCLog( "@@login02: m_pLayerUpdate=%p\r\n", m_pLayerUpdate );
+            NDUIImage * pImage = (NDUIImage *)m_pLayerUpdate->GetChild( TAG_CTRL_PIC_BG);
+            if ( pImage )
+            {
+                NDPicture * pPicture = new NDPicture;
+                pPicture->Initialization( NDPath::GetUIImgPath( SZ_MOBAGE_BG_PNG_PATH ).c_str() );
+                pImage->SetPicture( pPicture, true );
+            }
+        }
 #endif
 
 #if CACHE_MODE == 1
@@ -1282,7 +1285,9 @@ void CSMLoginScene::OnProcessUpdate()
 		return;
 	}
 #else
-	//StartEntry();
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+	StartEntry();
+#endif
 #endif
 }
 

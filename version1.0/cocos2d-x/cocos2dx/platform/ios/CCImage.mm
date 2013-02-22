@@ -584,5 +584,11 @@ bool CCImage::saveToFile(const char *pszFilePath, bool bIsToRGB)
     return true;
 }
 
+#if ND_MOD
+void CCImage::changeSystemFont( bool bSystemFont )
+{
+}
+#endif
+
 NS_CC_END
 
