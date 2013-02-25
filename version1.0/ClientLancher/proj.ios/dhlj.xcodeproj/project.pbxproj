@@ -15,11 +15,8 @@
 		2085E8A616D636D4009DFA2E /* NDUIListHorz.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2085E8A416D636D4009DFA2E /* NDUIListHorz.cpp */; };
 		2085E8A716D636D4009DFA2E /* NDUIListVert.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2085E8A516D636D4009DFA2E /* NDUIListVert.cpp */; };
 		20A59CF016D74E930008DBD0 /* NDControlHelp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 20A59CEF16D74E930008DBD0 /* NDControlHelp.cpp */; };
-		20A59D0616D753C80008DBD0 /* json_internalarray.inl in Sources */ = {isa = PBXBuildFile; fileRef = 20A59CD016D727240008DBD0 /* json_internalarray.inl */; };
-		20A59D0716D753C80008DBD0 /* json_internalmap.inl in Sources */ = {isa = PBXBuildFile; fileRef = 20A59CD116D727240008DBD0 /* json_internalmap.inl */; };
 		20A59D0816D753C80008DBD0 /* json_reader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 20A59CD216D727240008DBD0 /* json_reader.cpp */; };
 		20A59D0916D753C80008DBD0 /* json_value.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 20A59CD316D727240008DBD0 /* json_value.cpp */; };
-		20A59D0A16D753C80008DBD0 /* json_valueiterator.inl in Sources */ = {isa = PBXBuildFile; fileRef = 20A59CD416D727240008DBD0 /* json_valueiterator.inl */; };
 		20A59D0B16D753C80008DBD0 /* json_writer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 20A59CD516D727240008DBD0 /* json_writer.cpp */; };
 		20E23701169169A1008FB048 /* TextureList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 20E236FF169169A1008FB048 /* TextureList.cpp */; };
 		20E2370B16916DFB008FB048 /* cpLog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 20E2370316916DFB008FB048 /* cpLog.cpp */; };
@@ -1147,13 +1144,9 @@
 		2085E8A216D635F7009DFA2E /* NDBitmapMacro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NDBitmapMacro.h; sourceTree = "<group>"; };
 		2085E8A416D636D4009DFA2E /* NDUIListHorz.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NDUIListHorz.cpp; sourceTree = "<group>"; };
 		2085E8A516D636D4009DFA2E /* NDUIListVert.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NDUIListVert.cpp; sourceTree = "<group>"; };
-		20A59CD016D727240008DBD0 /* json_internalarray.inl */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; name = json_internalarray.inl; path = ../../Json/src/json_internalarray.inl; sourceTree = "<group>"; };
-		20A59CD116D727240008DBD0 /* json_internalmap.inl */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; name = json_internalmap.inl; path = ../../Json/src/json_internalmap.inl; sourceTree = "<group>"; };
 		20A59CD216D727240008DBD0 /* json_reader.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; name = json_reader.cpp; path = ../../Json/src/json_reader.cpp; sourceTree = "<group>"; };
 		20A59CD316D727240008DBD0 /* json_value.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; name = json_value.cpp; path = ../../Json/src/json_value.cpp; sourceTree = "<group>"; };
-		20A59CD416D727240008DBD0 /* json_valueiterator.inl */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; name = json_valueiterator.inl; path = ../../Json/src/json_valueiterator.inl; sourceTree = "<group>"; };
 		20A59CD516D727240008DBD0 /* json_writer.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; name = json_writer.cpp; path = ../../Json/src/json_writer.cpp; sourceTree = "<group>"; };
-		20A59CDC16D727800008DBD0 /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = config.h; path = ../../Json/inc/config.h; sourceTree = "<group>"; };
 		20A59CDD16D727800008DBD0 /* features.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = features.h; path = ../../Json/inc/features.h; sourceTree = "<group>"; };
 		20A59CDE16D727800008DBD0 /* forwards.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = forwards.h; path = ../../Json/inc/forwards.h; sourceTree = "<group>"; };
 		20A59CDF16D727800008DBD0 /* JasonAutolink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JasonAutolink.h; path = ../../Json/inc/JasonAutolink.h; sourceTree = "<group>"; };
@@ -2217,6 +2210,7 @@
 		5A3FC1A116529FF0002166DD /* NDUILoadEngine.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = NDUILoadEngine.cpp; sourceTree = "<group>"; };
 		5A3FC1A316529FF8002166DD /* NDUILoadEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NDUILoadEngine.h; sourceTree = "<group>"; };
 		5A3FC1A91652A8A6002166DD /* SimplifiedChineseRes */ = {isa = PBXFileReference; lastKnownFileType = folder; name = SimplifiedChineseRes; path = ../../Bin/SimplifiedChineseRes; sourceTree = "<group>"; };
+		5A440E9016D76B1C00211539 /* jsonconfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jsonconfig.h; path = ../../Json/inc/jsonconfig.h; sourceTree = "<group>"; };
 		5A47BAA0169730BE0092C259 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		5A5FF1DB167B243B00E897F9 /* DownloadPackage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DownloadPackage.h; sourceTree = "<group>"; };
 		5A5FF1E0167B243B00E897F9 /* DownloadPackage.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = DownloadPackage.cpp; sourceTree = "<group>"; };
@@ -2557,7 +2551,7 @@
 		20E5B2CB16D71CC600C1DFC6 /* inc */ = {
 			isa = PBXGroup;
 			children = (
-				20A59CDC16D727800008DBD0 /* config.h */,
+				5A440E9016D76B1C00211539 /* jsonconfig.h */,
 				20A59CDD16D727800008DBD0 /* features.h */,
 				20A59CDE16D727800008DBD0 /* forwards.h */,
 				20A59CDF16D727800008DBD0 /* JasonAutolink.h */,
@@ -2573,11 +2567,8 @@
 		20E5B2CC16D71CCB00C1DFC6 /* src */ = {
 			isa = PBXGroup;
 			children = (
-				20A59CD016D727240008DBD0 /* json_internalarray.inl */,
-				20A59CD116D727240008DBD0 /* json_internalmap.inl */,
 				20A59CD216D727240008DBD0 /* json_reader.cpp */,
 				20A59CD316D727240008DBD0 /* json_value.cpp */,
-				20A59CD416D727240008DBD0 /* json_valueiterator.inl */,
 				20A59CD516D727240008DBD0 /* json_writer.cpp */,
 			);
 			name = src;
@@ -6002,11 +5993,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				20A59D0616D753C80008DBD0 /* json_internalarray.inl in Sources */,
-				20A59D0716D753C80008DBD0 /* json_internalmap.inl in Sources */,
 				20A59D0816D753C80008DBD0 /* json_reader.cpp in Sources */,
 				20A59D0916D753C80008DBD0 /* json_value.cpp in Sources */,
-				20A59D0A16D753C80008DBD0 /* json_valueiterator.inl in Sources */,
 				20A59D0B16D753C80008DBD0 /* json_writer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

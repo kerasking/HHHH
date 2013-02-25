@@ -479,6 +479,12 @@ void NDUILoad::PostLoad(UIINFO& uiInfo)
 	uiInfo.CtrlPos.y *= sy;
 	uiInfo.nCtrlWidth *= sx;
 	uiInfo.nCtrlHeight *= sy;	
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+	if (IS_IPHONE5)
+	{
+		uiInfo.CtrlPos.x	*= IPHONE5_WIDTH_SCALE;
+		uiInfo.nCtrlWidth	*= IPHONE5_WIDTH_SCALE;	
+	}
 #endif
 
 	//÷ÿ÷√√™µ„(0,0)

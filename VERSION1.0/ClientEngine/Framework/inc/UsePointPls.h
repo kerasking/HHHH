@@ -54,6 +54,9 @@ USING_NS_CC;
 
 //-----------------------------------------------------------------------------------------------------------
 
+#define IPHONE5_POINT_SIZE_WIDTH	568
+
+
 
 NS_NDENGINE_BGN
 class ConvertUtil
@@ -95,6 +98,10 @@ public:
 public: //@android
 	static CCPoint getAndroidScale();
 	static float getIosScale();
+
+public:
+	static bool		is_iphone5();
+	static float	get_iphone5_width_scale_for_ui_480_based();
 };
 
 //-----------------------------------------------------------------------------------------------------------
@@ -108,5 +115,8 @@ public: //@android
 #define DISPLAY_POS_Y_OFFSET		(MAP_UNITSIZE_Y)
 
 //-----------------------------------------------------------------------------------------------------------
+
+#define IS_IPHONE5					(ConvertUtil::is_iphone5())
+#define IPHONE5_WIDTH_SCALE			(ConvertUtil::get_iphone5_width_scale_for_ui_480_based())
 
 NS_NDENGINE_END

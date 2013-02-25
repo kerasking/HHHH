@@ -171,4 +171,22 @@ float ConvertUtil::getIosScale()
 	return NDDirector::DefaultDirector()->getIosScale();
 }
 
+bool ConvertUtil::is_iphone5()
+{
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+	CCSize sizePoints = CCDirector::sharedDirector()->getWinSize();
+	if (int(sizePoints.width) == IPHONE5_POINT_SIZE_WIDTH)
+	{
+		return true;
+	}
+#endif
+	return false;
+}
+
+float ConvertUtil::get_iphone5_width_scale_for_ui_480_based()
+{
+	//UI≈‰÷√ «ª˘”⁄480*320
+	return float(IPHONE5_POINT_SIZE_WIDTH) / 480.0f;
+}
+
 NS_NDENGINE_END
