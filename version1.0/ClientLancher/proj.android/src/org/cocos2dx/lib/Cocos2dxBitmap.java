@@ -456,8 +456,8 @@ public class Cocos2dxBitmap {
 	{
 		if (NDBitmap.isEnabled())
 		{
-			if (pString.indexOf("<c") != -1 &&
-					pString.indexOf("/e") != -1)
+			if ((pString.indexOf("<c") != -1 && pString.indexOf("/e") != -1)
+				|| (NDBitmap.isVerOlder()))
 			{
 				return NDBitmap.getStringSize(pString, pFontName, pFontSize, pAlignment);
 			}
