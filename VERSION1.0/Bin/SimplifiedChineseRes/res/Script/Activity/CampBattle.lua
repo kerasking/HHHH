@@ -106,6 +106,9 @@ local g_nPlayerListBottom = 1;
 local MAX_PLAYER_NUM_PER_PAGE = 8;
 local MAX_REPORT_NUM_PER_PAGE = 3;
 
+local g_FailWaitTime = 15;	--失败时等待时间
+
+
 --玩家名字表
 local tPlayerName = {}
 
@@ -484,7 +487,7 @@ function p.TimerTick(tag)
 			
 
 			
-        elseif g_Count <= 30 then
+		elseif g_Count <= g_FailWaitTime then
 			if bIfAutoJoinNextBattle == tState.WINOutBattle then
 				CDLabel:SetChecked( true );
 				CDLabel:SetTitle(GetTxtPri("CB2_T2").." "..g_Count);
@@ -493,7 +496,7 @@ function p.TimerTick(tag)
 				--CDLabel:SetTitle(GetTxtPri("CB2_T2").." "..(g_Count-30));
 			end
 		else	
-			CDLabel:SetTitle(GetTxtPri("CB2_T2").." "..(g_Count-30));
+			CDLabel:SetTitle(GetTxtPri("CB2_T2").." "..(g_Count- g_FailWaitTime));
 			CDLabel:SetChecked( true );
 		end		
 	end
@@ -616,7 +619,7 @@ function p.updateCount(restCount)
 			
 			
 
-        elseif restCount <=30 then
+		elseif restCount <= g_FailWaitTime then
 			
 			CDlabel:SetTitle(FormatTime(restCount,1));
 			CDlabel:SetChecked( false );
@@ -1207,12 +1210,27 @@ GetTxtPri("CB2_T291"),
 GetTxtPri("CB2_T292"),
 GetTxtPri("CB2_T30"),
 GetTxtPri("CB2_T31"),
+
+GetTxtPri("CB2_T3211"),
+GetTxtPri("CB2_T3311"),
+GetTxtPri("CB2_T3411"),
+GetTxtPri("CB2_T3511"),
+GetTxtPri("CB2_T3611"),
+GetTxtPri("CB2_T3711"),
+GetTxtPri("CB2_T3811"),
+GetTxtPri("CB2_T3911"),
+GetTxtPri("CB2_T4011"),
+GetTxtPri("CB2_T4111"),
+
+
 GetTxtPri("CB2_T32"),
 GetTxtPri("CB2_T33"),
 GetTxtPri("CB2_T34"),
 GetTxtPri("CB2_T35"),
 GetTxtPri("CB2_T351"),
 GetTxtPri("CB2_T352"),
+GetTxtPri("CB2_T4211"),
+GetTxtPri("CB2_T4311"),
 }
 
 

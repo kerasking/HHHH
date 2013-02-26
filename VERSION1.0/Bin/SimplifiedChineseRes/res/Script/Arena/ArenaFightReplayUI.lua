@@ -77,6 +77,14 @@ function p.OnUIEvent(uiNode,uiEventType,param)
 			NormalBossListUI.Redisplay();
             if scene~= nil then
                 scene:RemoveChildByTag(NMAINSCENECHILDTAG.ArenaFightReplayUI,true);
+                
+                if ArenaUI.isInChallenge == 7 then
+                --斗地主
+                	Slave.EndBattleNotify();
+                end
+                
+                
+                
                 return true;
             end
         elseif ID_FIGHTREPLAY_CTRL_BUTTON_PLAYBACK == tag then

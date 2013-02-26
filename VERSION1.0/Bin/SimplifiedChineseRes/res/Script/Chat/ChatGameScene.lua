@@ -178,9 +178,9 @@ local gCount =0;
 function p.DelayShowUI()
 	
 
-	LogInfo("DelayShowUI OnlineCheckIn.InInCity() true")
+	--LogInfo("DelayShowUI OnlineCheckIn.InInCity() true")
 	if CheckP(p.GetParent()) == false then
-		LogInfo("DelayShowUI parent nil loadui")
+		--LogInfo("DelayShowUI parent nil loadui")
 		p.LoadUI()		
 	else
 		local Chatlayer = p.GetParent();

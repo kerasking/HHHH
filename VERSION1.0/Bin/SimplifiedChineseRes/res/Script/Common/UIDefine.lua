@@ -200,6 +200,9 @@ NMAINSCENECHILDTAG =
 
  	DestinyUI               = NUITAG_BEGIN + 182,                   --占星
     DestinyFeteUI           = NUITAG_BEGIN + 183,                   --占星祭祀
+   
+   	SlaveUI					= 2015,                   --斗地主
+   	
     CommonDlg				= NDLGTAG_BEGIN,						--通用对话框
 	CommonDlgNew              = NDLGTAGNEW_BEGIN,                     --新通用对话框
 	--后面都被对话框占用了,请不要使用

@@ -187,7 +187,9 @@ function p.LoadPVPAttrUI(life,strength,dex,intel,speed)
 	SetLabel(layer, 20,  ""..dex);
 	SetLabel(layer, 21,  ""..intel);
 	SetLabel(layer, 22,  ""..life);
-	SetLabel(layer, 23,  ""..speed);
+	--SetLabel(layer, 23,  ""..speed);
+    SetLabel(layer, ID_ROLEATTR_PVPATR_CTRL_TEXT_18,  "");
+    SetLabel(layer, 23,  "");
 	
 	scene:AddChildZ(layer,5006);
 end

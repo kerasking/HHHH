@@ -201,6 +201,9 @@ NMSG_Type =
     _MSG_CHAOSBATTLE_RANKBOARD			= _MSG_GENERAL+8005,	--排行榜
     _MSG_CHAOSBATTLE_USERREPORT         = _MSG_GENERAL+8006,	--个人战报
     _MSG_CHAOSBATTLE_UPDATEPLAYERINFO	= _MSG_GENERAL+8007,	--更新玩家信息
+    _MSG_CHAOSBATTLE_WEEKINFO           = _MSG_GENERAL+8008,	--衰落信息
+    
+    
     _MSG_CHAOSBATTLE_ACTION             = _MSG_GENERAL+8050,	--大乱斗操作
     _MSG_CHAOSBATTLE_ACTION_RET         = _MSG_GENERAL+8051,	--大乱斗操作返回
     
@@ -217,7 +220,16 @@ NMSG_Type =
     _MSG_SYNDICATEBATTLE_REPORT         = _MSG_GENERAL+8108,    --对战战报
     _MSG_SYNDICATEBATTLE_PLAYERINFO     = _MSG_GENERAL+8109,    --玩家信息
     
-    
+	--==================斗地主=====================--
+  _MSG_LANDLORDS_ACTION				= _MSG_GENERAL+8120;		--斗地主动作
+  _MSG_LANDLORDS_ACTION_RET			= _MSG_GENERAL+8121;		--斗地主动作返回
+  _MSG_LANDLORDS_NOTIFY				= _MSG_GENERAL+8122;		--斗地主通知
+  _MSG_LANDLORDS_TARGET_LIST			= _MSG_GENERAL+8123;		--目标列表
+  _MSG_LANDLORDS_SYNSLAVES			= _MSG_GENERAL+8124;		--本家族中被捕的人员
+  _MSG_LANDLORDS_ENEMY_LIST			= _MSG_GENERAL+8125;		--仇人列表
+  _MSG_LANDLORDS_PLAYER_INFO			= _MSG_GENERAL+8126;		--斗地主玩家信息  
+  _MSG_LANDLORDS_SOS_LIST			= _MSG_GENERAL+8127;		--斗地主玩家信息  
+
 
     _MSG_PLAYER_ACTION_LIST   =   _MSG_GENERAL + 7003,               --下发活动列表
         
@@ -228,4 +240,7 @@ NMSG_Type =
     
     _MSG_QUEUE_BEGIN                =   _MSG_GENERAL + 2034,               --登入排队开始         
     _MSG_QUEUE_END                =   _MSG_GENERAL + 2035,               --登入排队结束      
+    
+    _MSG_EVENT_LIST               = _MSG_GENERAL + 7007,         --充值活动数据接收消息
+    
 };

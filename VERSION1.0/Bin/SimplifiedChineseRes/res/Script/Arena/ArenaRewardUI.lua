@@ -103,6 +103,18 @@ function p.ReviveCallbackArmyBattleFail(nEventType, param)
     end
 end
 
+
+
+--斗地主战结束
+function p.ReviveCallbackLandlords(nEventType, param)
+    if(CommonDlgNew.BtnOk == nEventType) then
+		p.CloseBattle();
+		Slave.EndBattleNotify();
+    end
+end
+
+
+
 --local nTag
 
 function p.SetResult(result,money,repute,soph,emoney)
@@ -123,7 +135,6 @@ function p.SetResult(result,money,repute,soph,emoney)
             
             Music.PlayEffectSound(1094);
         elseif result ==0 then --失败
-            --str = string.format("战斗失败, 获得银币: %d, 获得将魂: %d", money, repute);
             
             if(repute>0) then
                 str = string.format(GetTxtPri("ARU2_T3"), money, ItemFunc.GetName(repute));
@@ -143,18 +154,23 @@ function p.SetResult(result,money,repute,soph,emoney)
         
         local str = nil;
         if result ==1 then --胜利
-            str = string.format(GetTxtPri("ARU2_T5"), money, repute);
+            if(money>0) then
+                 str = string.format(GetTxtPri("ARU2_T5"), repute, ItemFunc.GetName(money));
+            else
+                 str = string.format(GetTxtPri("ARU2_T511"), repute);               
+            end
+            
             Music.PlayEffectSound(1094);
         elseif result ==0 then --失败
-            str = string.format(GetTxtPri("ARU2_T6"), money, repute);
+            if(money>0) then
+                str = string.format(GetTxtPri("ARU2_T6"), repute, ItemFunc.GetName(money));
+            else
+                str = string.format(GetTxtPri("ARU2_T611"), repute);               
+            end
             Music.PlayEffectSound(1093);
         end
         
-        --if CampBattle.IsAutoFight() then
-        --	CommonDlgNew.ShowYesDlg(str, p.ReviveCallback, nil, 3);  
-        --else
-        --	CommonDlgNew.ShowYesDlg(str, p.ReviveCallback, nil,3);  	 
-        --end
+
         if result == 1 then
         	CommonDlgNew.ShowYesDlg(str, p.ReviveCallbackCampBattleSucc, nil,3);
         else
@@ -183,7 +199,25 @@ function p.SetResult(result,money,repute,soph,emoney)
         	CommonDlgNew.ShowYesDlg(str, p.ReviveCallbackArmyBattleFail, nil,3);
         end
         
-
+                
+    elseif 7 == ArenaUI.isInChallenge then
+    --斗地主
+       local layer=p.GetParent();
+        if layer then
+            layer:SetVisible(false);
+        end
+        
+        local str = nil;
+        if result ==1 then --胜利
+            str = string.format(GetTxtPri("ARU2_T7"));
+            Music.PlayEffectSound(1094);
+        elseif result ==0 then --失败
+            str = string.format(GetTxtPri("ARU2_T8"));
+            Music.PlayEffectSound(1093);
+        end
+        
+        CommonDlgNew.ShowYesDlg(str, p.ReviveCallbackLandlords, nil,3);
+ 
     else
         LogInfo("+++++++++++result[%d]+++++++++++",result);
         local layer=p.GetParent();
