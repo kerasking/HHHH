@@ -1057,8 +1057,13 @@ void NDSprite::standAction(bool bStand)
 			if ((dCurTime - m_dBeginTime) > 5 && rand() % 100 > 95)
 			{
 				m_dBeginTime = dCurTime;
-				SetCurrentAnimation(MANUELROLE_RELAX,m_bReverse);
-				m_pkCurrentAnimation->setReverse(m_bReverse);
+
+				const char* sceneClsName = NDDirector::DefaultDirector()->GetRunningScene()->GetRuntimeClass()->className;
+				if (!strstr(sceneClsName, "DramaScene"))
+				{
+					SetCurrentAnimation(MANUELROLE_RELAX,m_bReverse);
+					m_pkCurrentAnimation->setReverse(m_bReverse);
+				}
 			}
 		}
 		//--Guosen 2012.11.27 自动强制将精灵的状态置为站立战斗中出问题，先注释
