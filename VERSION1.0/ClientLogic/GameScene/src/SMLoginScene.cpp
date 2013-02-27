@@ -1294,7 +1294,7 @@ void CSMLoginScene::OnProcessUpdate()
 	}
 #else
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-	StartEntry();
+	//StartEntry();
 #endif
 #endif
 }
