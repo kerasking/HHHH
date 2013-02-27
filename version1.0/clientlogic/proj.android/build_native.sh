@@ -1,7 +1,7 @@
 # set params
 NDK_ROOT_LOCAL=/cygdrive/d/android-ndk-r8b
-COCOS2DX_ROOT_LOCAL=/cygdrive/e/work/dhsgclient-x/VERSION1.0/cocos2d-x
-CLIENT_LOCAL=/cygdrive/e/work/dhsgclient-x/VERSION1.0/
+COCOS2DX_ROOT_LOCAL=/cygdrive/e/work/dhsgclient-x-tw-bug-02/VERSION1.0/cocos2d-x
+CLIENT_LOCAL=/cygdrive/e/work/dhsgclient-x-tw-bug-02/VERSION1.0/
 
 buildexternalsfromsource=
 
@@ -31,7 +31,7 @@ done
 
 # try to get global variable
 
-HELLOWORLD_ROOT=/cygdrive/e/work/dhsgclient-x/VERSION1.0/ClientLogic/proj.android
+HELLOWORLD_ROOT=/cygdrive/e/work/dhsgclient-x-tw-bug-02/VERSION1.0/ClientLogic/proj.android
 
 # make sure assets is exist
 if [ -d $HELLOWORLD_ROOT/assets ]; then

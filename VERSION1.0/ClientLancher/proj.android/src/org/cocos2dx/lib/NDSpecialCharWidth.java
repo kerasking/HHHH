@@ -98,8 +98,13 @@ public class NDSpecialCharWidth
 		add(' ', 0.50f);
 	}
 	
-	public static int fixCharWidth( final char c, final int width )
+	public static int fixCharWidth( final char c, final int width, final String fontName )
 	{
+		if (fontName.indexOf("LiSu") == -1)
+		{
+			return width;
+		}
+
 		checkInit();
 		
 		String key = ""+c;
