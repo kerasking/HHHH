@@ -358,7 +358,7 @@ NDBeforeGameMgr::NDBeforeGameMgr()
 	NDNetMsgPoolObj->RegMsg(MB_SERVER_INFO_REQUEST, this);
 	//NDNetMsgPoolObj->RegMsg(_MSG_NOTIFY_CLIENT, this);
 	//NDNetMsgPoolObj->RegMsg(_MSG_MPF_VERSION, this);
-
+	SetLogUIUpdate(false);
 	//ndRegisterAccount = [[NDRegisterAccount alloc] init];
 #if USE_ROBOT == 0
 // 	NDDataPersist loginData;
@@ -460,6 +460,8 @@ NDBeforeGameMgr::~NDBeforeGameMgr()
 // 		[m_sdkLogin release];
 // 		m_sdkLogin = NULL;
 // 	}
+
+	SetLogUIUpdate(false);
 }
 
 bool NDBeforeGameMgr::Load()
