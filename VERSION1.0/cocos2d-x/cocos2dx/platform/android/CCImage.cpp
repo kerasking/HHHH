@@ -284,6 +284,7 @@ bool CCImage::getStringSize( const char *    in_utf8,
 void CCImage::changeSystemFont( bool bSystemFont )
 {
 	LOGD("Set bSystemFont");
+	CCLog("ndbmp", "@@ CCImage::changeSystemFont(), bSystemFont=%d\r\n", (int)bSystemFont);
 	gs_bIsSystemFont = bSystemFont;
 }
 

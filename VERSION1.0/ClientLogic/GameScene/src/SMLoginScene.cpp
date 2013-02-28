@@ -561,6 +561,9 @@ bool CSMLoginScene::StartUpdate()
 		LOGERROR("kDeqUpdateUrl is empty");
 		return false;
 	}
+	
+	CCImage::changeSystemFont(true);
+
 	//请求第一个包
 	std::string strURL = *kDeqUpdateUrl.begin();
 	m_strUpdateURL	= strURL;
