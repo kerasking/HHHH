@@ -1523,6 +1523,7 @@ NDUINode* CreateColorLabel_NDBitmap(const char* str, unsigned int fontsize, unsi
 		label->Initialization();
 		label->SetRenderTimes(1);
 		label->SetText(str);
+		label->SetFontColor(ccc4(255, 255, 255, 255));
 		label->SetTag(0);
 		label->SetFontSize(fontsize);
 	}
