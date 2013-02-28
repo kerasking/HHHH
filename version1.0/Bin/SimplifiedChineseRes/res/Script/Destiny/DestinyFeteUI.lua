@@ -418,7 +418,7 @@ function p.CreateDescLayer()
 		uiLoad:Free();
         ]]
         
-        local pLabelTips = _G.CreateColorLabel( v, 12, size.w );
+        local pLabelTips = _G.CreateColorLabel( v, 12, size.w, 1 );
         --pLabelTips:SetFrameRect(CGSizeMake(size.w,14*CoordScaleY));
         view:AddChild(pLabelTips);
 		

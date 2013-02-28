@@ -1530,8 +1530,10 @@ NDUINode* CreateColorLabel_NDBitmap(const char* str, unsigned int fontsize, unsi
 	return label;
 }
 
-NDUINode* CreateColorLabel(const char* str, unsigned int fontsize, unsigned int nConstraitWidth)
+NDUINode* CreateColorLabel(const char* str, unsigned int fontsize, unsigned int nConstraitWidth, int extra=0)
 {
+	bool forceTextBuild = (extra == 1);
+
 	//LUA fontSize=6, fix it.
 	fontsize = (fontsize == 6 ? 12 : fontsize);
 	if (!str)
@@ -1543,7 +1545,14 @@ NDUINode* CreateColorLabel(const char* str, unsigned int fontsize, unsigned int 
 
 //@ndbitmap
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) && 1
-	return CreateColorLabel_NDBitmap(str, fontsize, nConstraitWidth);
+	if (forceTextBuild)
+	{
+		return (NDUINode*)NDUITextBuilder::DefaultBuilder()->Build(str, fontsize, winsize, ccc4(255, 255, 255, 255));
+	}
+	else
+	{
+		return CreateColorLabel_NDBitmap(str, fontsize, nConstraitWidth);
+	}
 #else
 	return (NDUINode*)NDUITextBuilder::DefaultBuilder()->Build(str, fontsize, winsize, ccc4(255, 255, 255, 255));
 #endif
