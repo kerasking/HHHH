@@ -1532,6 +1532,8 @@ NDUINode* CreateColorLabel_NDBitmap(const char* str, unsigned int fontsize, unsi
 
 NDUINode* CreateColorLabel(const char* str, unsigned int fontsize, unsigned int nConstraitWidth)
 {
+	//LUA fontSize=6, fix it.
+	fontsize = (fontsize == 6 ? 12 : fontsize);
 	if (!str)
 	{
 		return NULL;

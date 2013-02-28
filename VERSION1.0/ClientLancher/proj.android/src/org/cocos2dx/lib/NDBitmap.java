@@ -66,7 +66,7 @@ public class NDBitmap {
 
 		// create a paint
 		final Paint paint = Cocos2dxBitmap.newPaint( fontName, fontSize, alignment & 0x0F );
-	
+		
 		// reset proxy
 		if (NDTextProxy.parse( paint, strText, fontName, fontSize, alignment, width, height ))
 		{
@@ -94,9 +94,14 @@ public class NDBitmap {
 			{
 				if (objChar.bLineFeed) continue;
 				
-				//paint.setColor( objChar.color );
-				if (objChar.x >= 0 && objChar.x + objChar.w <= NDTextProxy.bitmapWidth &&
-					objChar.y >= 0 && objChar.y <= NDTextProxy.bitmapHeight)
+				paint.setAlpha(0xff);
+				paint.setColor( objChar.color );
+				
+				// check x constraint and y constraint (NOTE: when single line, don't check y constraint)
+				if (
+					(objChar.x >= 0 && objChar.x + objChar.w <= NDTextProxy.bitmapWidth) &&
+					(NDTextProxy.lineCount == 1 || (objChar.y >= 0 && objChar.y <= NDTextProxy.bitmapHeight))
+					)
 				{
 					String str = String.valueOf( objChar.c );
 					

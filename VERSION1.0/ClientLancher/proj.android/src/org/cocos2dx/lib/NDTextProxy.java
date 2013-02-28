@@ -333,8 +333,11 @@ public class NDTextProxy
 			
 			if (bytesColor.length >= 3) //3 for r,g,b
 			{
-				int cr = Color.rgb( bytesColor[0], bytesColor[1], bytesColor[2]);
-								
+				int r = bytesColor[0] & 0xff;
+				int g = bytesColor[1] & 0xff;
+				int b = bytesColor[2] & 0xff;
+				int cr = Color.rgb( g, b, r ); //reverse order
+
 				parseFlag.isColor = true;
 				parseFlag.newColor = cr;
 				
