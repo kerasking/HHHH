@@ -58,6 +58,7 @@
 #include "NDUITableLayer.h"
 #include "CCPlatformConfig.h"
 #include "NDJsonReader.h"
+#include "NDBitmapMacro.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #include <jni.h>
@@ -1530,9 +1531,9 @@ NDUINode* CreateColorLabel_NDBitmap(const char* str, unsigned int fontsize, unsi
 	return label;
 }
 
-NDUINode* CreateColorLabel(const char* str, unsigned int fontsize, unsigned int nConstraitWidth, int extra=0)
+NDUINode* CreateColorLabel(const char* str, unsigned int fontsize, unsigned int nConstraitWidth/*, int extra=0*/)
 {
-	bool forceTextBuild = (extra == 1);
+//	bool forceTextBuild = (extra == 1);
 
 	//LUA fontSize=6, fix it.
 	fontsize = (fontsize == 6 ? 12 : fontsize);
@@ -1544,7 +1545,7 @@ NDUINode* CreateColorLabel(const char* str, unsigned int fontsize, unsigned int 
 	winsize.width	= nConstraitWidth;
 
 //@ndbitmap
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) && 1
+#if WITH_NDBITMAP
 	if (forceTextBuild)
 	{
 		return (NDUINode*)NDUITextBuilder::DefaultBuilder()->Build(str, fontsize, winsize, ccc4(255, 255, 255, 255));

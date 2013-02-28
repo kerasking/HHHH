@@ -21,7 +21,7 @@ public class NDBitmap {
 	//开关：是否启用NDBitmap的Java端开关
 	public static boolean isEnabled()
 	{
-		return true;
+		return false;
 		/*
 		if (true) return true;//@del
 		if (s_enableNDBitmapCache == -1)

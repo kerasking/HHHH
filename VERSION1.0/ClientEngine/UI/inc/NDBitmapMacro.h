@@ -16,5 +16,5 @@
 #else
 	#define WITH_NDBITMAP 0
 #endif
-//#define WITH_NDBITMAP 1 //编译开关
+#define WITH_NDBITMAP 0 //编译开关
 
