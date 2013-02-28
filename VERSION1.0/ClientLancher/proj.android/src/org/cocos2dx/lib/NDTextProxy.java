@@ -37,7 +37,7 @@ public class NDTextProxy
 	
 	public static String	defaultFontName;
 	public static int		defaultFontSize;
-	public static int		defaultColor = 0x000000ff; //RGBA, black.
+	public static int		defaultColor = 0xffffffff; //RGBA, white.
 	
 	public static int		alignmentHorz;
 	public static int		alignmentVert;
