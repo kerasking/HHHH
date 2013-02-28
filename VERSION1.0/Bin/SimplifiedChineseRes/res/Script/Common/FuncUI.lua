@@ -231,6 +231,9 @@ function CloseMainUI()
             and i ~= "BattleFail" 
             and i ~= "ArenaFightReplayUI" 
             and i ~= "RaidersLoad" 
+            and i ~= "ArenaRewardUI" 
+            and i ~= "BattleUI_Title" 
+            and v ~= 2015    
             then
             
             
