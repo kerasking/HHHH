@@ -239,7 +239,15 @@
 							>
 						</File>
 						<File
+							RelativePath="..\..\ClientLancher\proj.android\src\org\cocos2dx\lib\NDTextAlign.java"
+							>
+						</File>
+						<File
 							RelativePath="..\..\ClientLancher\proj.android\src\org\cocos2dx\lib\NDTextProxy.java"
+							>
+						</File>
+						<File
+							RelativePath="..\..\ClientLancher\proj.android\src\org\cocos2dx\lib\NDTextTranslate.java"
 							>
 						</File>
 					</Filter>

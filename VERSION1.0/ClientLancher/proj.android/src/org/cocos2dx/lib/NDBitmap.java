@@ -71,9 +71,9 @@ public class NDBitmap {
 		if (NDTextProxy.parse( paint, strText, fontName, fontSize, alignment, width, height ))
 		{
 			// create bitmap with the calc size
-			log("before create bitmap: w=" + NDTextProxy.bitmapWidth + ", h=" + NDTextProxy.bitmapHeight);
-			final Bitmap bitmap = Bitmap.createBitmap( NDTextProxy.bitmapWidth, NDTextProxy.bitmapHeight, Bitmap.Config.ARGB_8888 );
-			log("after create bitmap: w=" + NDTextProxy.bitmapWidth + ", h=" + NDTextProxy.bitmapHeight);
+			log("before create bitmap: w=" + NDTextProxy.getBitmapWidth() + ", h=" + NDTextProxy.getBitmapHeight());
+			final Bitmap bitmap = Bitmap.createBitmap( NDTextProxy.getBitmapWidth(), NDTextProxy.getBitmapHeight(), Bitmap.Config.ARGB_8888 );
+			log("after create bitmap");
 			
 			// alignment
 			final boolean alignLeft = true;
@@ -89,38 +89,40 @@ public class NDBitmap {
 			// get canvas for bitmap
 			final Canvas canvas = new Canvas(bitmap);
 			
-			// draw each char
-			for (final CharProperty objChar : NDTextProxy.charList) 
+			// draw each line & each char
+			for (final NDTextProxy.CharLine charLine : NDTextProxy.charLineList)
 			{
-				if (objChar.bLineFeed) continue;
-				
-				paint.setAlpha(0xff);
-				paint.setColor( objChar.color );
-				
-				// check x constraint and y constraint (NOTE: when single line, don't check y constraint)
-				if (
-					(objChar.x >= 0 && objChar.x + objChar.w <= NDTextProxy.bitmapWidth) &&
-					(NDTextProxy.lineCount == 1 || (objChar.y >= 0 && objChar.y <= NDTextProxy.bitmapHeight))
-					)
+				for (final CharProperty objChar : charLine.charList) 
 				{
-					String str = String.valueOf( objChar.c );
+					if (objChar.bLineFeed) continue;
 					
-					if (alignLeft)
-					{
-						canvas.drawText( str, objChar.x, objChar.y, paint );
-					}
-					else
-					{
-						canvas.drawText( str, objChar.x + objChar.w*0.5f, objChar.y, paint );
-					}
+					paint.setAlpha(0xff);
+					paint.setColor( objChar.color );
 					
-					log("canvas.drawText(), str="+str+",x="+objChar.x+",y="+objChar.y);
-				}
-			}			
-	
-			log("before initNativeObject(), strText="+strText );
-			Cocos2dxBitmap.initNativeObject(bitmap);
-			log("after initNativeObject(), strText="+strText );
+					// check x constraint and y constraint (NOTE: when single line, don't check y constraint)
+					if (
+						(objChar.x >= 0 && objChar.x + objChar.w <= NDTextProxy.getBitmapWidth()) 
+						//&& (charLine.lineCount == 1 || (objChar.y >= 0 && objChar.y <= NDTextProxy.getBitmapHeight()))
+						&& !objChar.outOfRange
+						)
+					{
+						String str = String.valueOf( objChar.c );
+						
+						if (alignLeft)
+						{
+							canvas.drawText( str, objChar.x, objChar.y, paint );
+						}
+						else
+						{
+							canvas.drawText( str, objChar.x + objChar.w*0.5f, objChar.y, paint );
+						}
+						
+						log("canvas.drawText(), str="+str+",x="+objChar.x+",y="+objChar.y);
+					}
+				}//for each char			
+			}//for each line
+			
+			Cocos2dxBitmap.initNativeObject(bitmap);			
 		}
 
 		log("NDBitmap.createTextBitmap() - leave");
@@ -144,8 +146,8 @@ public class NDBitmap {
 	
 		if (NDTextProxy.parse( paint, strText, fontName, fontSize, alignment, 0, 0 ))
 		{
-			int w = NDTextProxy.bitmapWidth;
-			int h = NDTextProxy.bitmapHeight;
+			int w = NDTextProxy.getBitmapWidth();
+			int h = NDTextProxy.getBitmapHeight();
 
 			log( "NDBitmap.getStringSize(): text=" + strText + ",fontName=" + fontName + ",fontSize=" + fontSize + ",w=" + w + ",h=" + h);
 			return String.valueOf(w)+" " +String.valueOf(h);
@@ -159,9 +161,9 @@ public class NDBitmap {
 	{
 		if (false)
 		{
-			NDTextProxy.testFormatText( "你好jack" );
-			NDTextProxy.testFormatText( "<cff00ee你好<cff00ccjack" );
-			NDTextProxy.testFormatText( "<cff00ee你好/e<cff00ccjack/e" );
+			NDTextTranslate.testFormatText( "你好jack" );
+			NDTextTranslate.testFormatText( "<cff00ee你好<cff00ccjack" );
+			NDTextTranslate.testFormatText( "<cff00ee你好/e<cff00ccjack/e" );
 		}
 		if (false)
 		{
@@ -170,6 +172,13 @@ public class NDBitmap {
 			//String strText = "hello你好吗";
 			NDBitmap.createTextBitmap(strText, "", 0, 0, 200, 100);
 		}
+		if (false)
+		{
+			//String strText = "<C#112233>hello</C><C#aabbcc>你好吗</C>";
+			String strText = "<C#112233>这是第一行</C>\n<C#223344>this is second line</C>";
+			//String strText = "hello你好吗";
+			NDBitmap.createTextBitmap(strText, "", 12, 0x33, 200, 100);
+		}		
 	}
 	
 	public static void log( final String str )

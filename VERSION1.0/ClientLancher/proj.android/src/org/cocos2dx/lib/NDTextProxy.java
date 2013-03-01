@@ -24,40 +24,23 @@ import org.cocos2dx.lib.*;
  */
 public class NDTextProxy 
 { 
-	/* The values are the same as cocos2dx/platform/CCImage.h. */
-	private static final int HORI_ALIGN_LEFT = 1;
-	private static final int HORI_ALIGN_RIGHT = 2;
-	private static final int HORI_ALIGN_CENTER = 3;
-	private static final int VERT_ALIGN_TOP = 1;
-	private static final int VERT_ALIGN_BOTTOM = 2;
-	private static final int VERT_ALIGN_CENTER = 3;
+	private static String	strText;	
+	private static String	defaultFontName;
+	private static int		defaultFontSize;
+	private static int		defaultColor = 0xffffffff; //RGBA, white.
 	
-	public static String	strText;
-	public static int		lineCount = 1; //at least 1
+	private static int		alignmentHorz;
+	private static int		alignmentVert;
 	
-	public static String	defaultFontName;
-	public static int		defaultFontSize;
-	public static int		defaultColor = 0xffffffff; //RGBA, white.
+	private static int		uiMaxWidth = 0;
+	private static int		uiMaxHeight = 0;
+	private static boolean 	withUILimit = false;
 	
-	public static int		alignmentHorz;
-	public static int		alignmentVert;
+	private static TextIndex 				index = null;
+	private static ParseFlag 				parseFlag = null;
 	
-	public static int		uiMaxWidth = 0;
-	public static int		uiMaxHeight = 0;
-	public static boolean 	withUILimit = false;
-	
-	public static int		calcWidth = 0;
-	public static int		calcHeight = 0;
-	public static int		calcStartX = 0;
-	public static int		calcStartY = 0;
-
-	public static int		bitmapWidth;
-	public static int		bitmapHeight;
-	
-	public static TextIndex 				index = null;
-	public static ParseFlag 				parseFlag = null;
-	public static ArrayList<CharProperty> 	charList = null;
-
+	private static ArrayList<CharProperty> 	charList = null;
+	public static ArrayList<CharLine>		charLineList = null;
 	
 	
 	/**
@@ -77,9 +60,7 @@ public class NDTextProxy
 			final int width, final int height )
 	{
 		// translate text
-		log( "[before translate] NDBitmap.parse(): " + strText);
-		String newText = translateText( strText );
-		log( "[after translate] NDBitmap.parse(): " + newText);
+		String newText = NDTextTranslate.translateText( strText );
 		
 		// reset proxy
 		resetWith( newText, fontName, fontSize, alignment, width, height );
@@ -88,8 +69,9 @@ public class NDTextProxy
 		if (buildCharList())
 		{		
 			buildCharProperty( paint, width, height );
-			calcAlignment();
-			applyAlignment();
+			buildCharLines();
+			
+			NDTextAlign.calcAlignment( paint, charLineList, uiMaxWidth, uiMaxHeight, alignmentHorz, alignmentVert );
 			dumpCharList();
 			return true;
 		}
@@ -106,7 +88,6 @@ public class NDTextProxy
 		strText 			= in_strText;
 		defaultFontName 	= in_fontName;
 		defaultFontSize 	= in_fontSize;
-		lineCount 			= 1;
 		
 		alignmentHorz 		= (in_alignment & 0x0F);
 		alignmentVert 		= (in_alignment >> 4) & 0x0F;
@@ -144,6 +125,7 @@ public class NDTextProxy
 			color = 0;
 			bLineFeed = false;
 			bSpecialChar = false;
+			outOfRange = false;
 		}
 		
 		public char			c;
@@ -153,8 +135,24 @@ public class NDTextProxy
 		public int			color;
 		public boolean		bLineFeed; //if true, strChar is ignored.
 		public int 			x,y,w,h;
+		public boolean		outOfRange;
 	}
-
+	
+	/**
+	 * inner class CharLine: for a line of chars
+	 *
+	 */
+	public static class CharLine
+	{
+		public ArrayList<CharProperty> charList = new ArrayList<CharProperty>();
+		
+		public int calcWidth = 0;
+		public int calcHeight = 0;
+		public int calcStartX = 0;
+		public int calcStartY = 0;
+		public int lineCount = 0;
+	}
+	
 	/**
 	 * inner class ParseFlag: store some flags during parsing
 	 */
@@ -234,6 +232,14 @@ public class NDTextProxy
 				addCharProperty( c );
 			}
 		}
+		
+		//trim: if last char is a lineFeed, then remove it
+		int n = charList.size();
+		if (n > 0 && charList.get(n-1).bLineFeed)
+		{
+			charList.remove(n-1);
+		}
+				
 		return true; //always true to ensure a bitmap. 
 	}
 
@@ -416,17 +422,6 @@ public class NDTextProxy
 		index.pop();
 		return false;
 	}
-
-	/**
-	 * isSingleLine
-	 * @param strText
-	 * @return
-	 */
-	private static boolean isSingleLine()
-	{
-		return strText.indexOf('\r') == -1
-				&& strText.indexOf('\n') == -1;
-	}
 	
 	/**
 	 * buildCharProperty
@@ -442,9 +437,6 @@ public class NDTextProxy
 		final FontMetricsInt fm = paint.getFontMetricsInt();
 		final int fontHeight = (int) Math.ceil(fm.bottom - fm.top);
 		
-		calcWidth = 0;
-		calcHeight = 0;
-		lineCount = 1;
 		int x = 0;
 		int y = (int) (-fm.top * 1);//@tune
 		
@@ -459,7 +451,6 @@ public class NDTextProxy
 				// move to next line
 				x = 0;
 				y += fontHeight;				
-				lineCount++;
 				
 				// zero width (don't need to draw)
 				objChar.w = 0;
@@ -481,7 +472,6 @@ public class NDTextProxy
 					// move to next line
 					x = 0;
 					y += fontHeight;
-					lineCount++;
 					
 					// set xywh
 					objChar.x = x;
@@ -499,265 +489,57 @@ public class NDTextProxy
 					x += charWidth;								
 				}
 				
-				calcWidth = Math.max(calcWidth, x);
+				// check if clipped
+				if (uiMaxHeight > 0 && objChar.y > uiMaxHeight + fontHeight)
+				{
+					objChar.outOfRange = true;
+				}
 			}
 		}//for
-			
-		calcHeight = Math.max(lineCount,1) * fontHeight;
-		
-		// calc bitmap size
-		if (withUILimit)
-		{
-			/*
-			bitmapWidth = Math.min( uiMaxWidth, calcWidth );
-			if (uiMaxHeight > 0)
-				bitmapHeight = Math.min( uiMaxHeight, calcHeight );
-			else
-				bitmapHeight = calcHeight;
-			*/
-			bitmapWidth = uiMaxWidth;
-			bitmapHeight = uiMaxHeight;			
-		}
-		else
-		{
-			// make sure not zero size.
-			bitmapWidth = calcWidth > 0 ? calcWidth : 10;
-			bitmapHeight = calcHeight > 0 ? calcHeight : fontHeight;
-		}		
 	}
 	
 	/**
-	 * calcAlignment
+	 * build lines from char list, check "\r\n"
 	 */
-	private static void calcAlignment()
+	private static void buildCharLines()
 	{
-		calcStartX = 0;
-		calcStartY = 0;
-		
-		if (!withUILimit) return;
-		
-		if (lineCount == 1)
+		if (charLineList == null)
 		{
-			// deal with horizontal align
-			if (alignmentHorz == HORI_ALIGN_CENTER)
-			{
-				calcStartX = (int) (0.5 * (uiMaxWidth - calcWidth));
-				calcStartX = Math.max(0, calcStartX);
-			}
-			else if (alignmentHorz == HORI_ALIGN_RIGHT)
-			{
-				calcStartX = (int) (uiMaxWidth - calcWidth);
-				calcStartX = Math.max(0, calcStartX);
-			}
-			
-			// deal with vertical align
-			if (alignmentVert == VERT_ALIGN_CENTER)
-			{
-				calcStartY = (int) (0.5 * (uiMaxHeight - calcHeight));
-				calcStartY = Math.max(0, calcStartY);
-			}
-			else if (alignmentVert == VERT_ALIGN_BOTTOM)
-			{
-				calcStartY = (int) (uiMaxHeight - calcHeight);
-				calcStartY = Math.max(0, calcStartY);
-			}
-		}
-		else if (lineCount > 1)
-		{
-			// ONLY deal with vertical align
-			if (alignmentVert == VERT_ALIGN_CENTER)
-			{
-				calcStartY = (int) (0.5 * (uiMaxHeight - calcHeight));
-				calcStartY = Math.max(0, calcStartY);
-			}
-			else if (alignmentVert == VERT_ALIGN_BOTTOM)
-			{
-				calcStartY = (int) (uiMaxHeight - calcHeight);
-				calcStartY = Math.max(0, calcStartY);
-			}	
-		}
-	}
-	
-	/**
-	 * applyAlignment
-	 */
-	private static void applyAlignment()
-	{
-		if (calcStartX != 0 || calcStartY != 0)
-		{
-			for (CharProperty objChar : charList) 
-			{
-				if (!objChar.bLineFeed)
-				{
-					objChar.x += calcStartX;
-					objChar.y += calcStartY;
-				}
-			}
+			charLineList = new ArrayList<CharLine>();
 		}
 		
-		calcStartX = 0;
-		calcStartY = 0;
-	}
-	
-	private static boolean isACloserThanB( final int a, final int b )
-	{
-		//eg: a=3,b=5 then a is closer than b
-		//		a=3, b=-1 then a is also closer than b, b is invalid.
-		if (a != -1)
-		{
-			if (b == -1 || a < b)
-				return true;
-		}
-		return false;
-	}
-	
-	/**
-	 * insertText: insert strB into strA at index pos.
-	 * @param strText
-	 * @param index
-	 * @param insertString
-	 * @return
-	 */
-	private static String insertText( final String strA, final int index, final String strB )
-	{
-		if (strA.length() == 0) return strB;
+		charLineList.clear();
+		if (charList.size() == 0) return;
 		
-		if (index == 0)
-		{
-			return strB + strA;
-		}
-		else if (index < strA.length())
-		{
-			String left = strA.substring(0, index);
-			String right = strA.substring(index);
-			return left + strB + right;
-		}
-		return "";
-	}
-	
-	public static void testFormatText( String strText )
-	{
-		log( "before formatText(): " + strText);
-		strText = formatText( strText );
-		log( "after  formatText(): " + strText);
-	}
-	
-	/**
-	 * formatText: the input text maybe not well-formed, try to fix it.
-	 * @param strText
-	 * @return
-	 */
-	private static String formatText( String strText )
-	{
-		int start = 0;
+		CharLine charLine = new CharLine();
+		charLineList.add( charLine );
 		
-		boolean hasBeginTag = false;
-		
-		while (start < strText.length())
+		for ( CharProperty objChar : charList )
 		{
-			int find1 = strText.indexOf("<c", start);
-			int find2 = strText.indexOf("/e", start);
-			
-			if (hasBeginTag)
+			if (objChar.bLineFeed)
 			{
-				if (isACloserThanB( find1, find2 ))
-				{
-					// we expect a end-tag, but meet with a begin-tag, so we need to insert a end-tag before it.
-					strText = insertText( strText, find1, "/e" );
-					start = find1 + 4; //4 for "/e<c"
-				}
-				else if (isACloserThanB( find2, find1 ))
-				{
-					// correct: start-tag and end-tag match ok,.
-					start = find2 + 2;
-					hasBeginTag = false;
-				}
-				else
-				{
-					// neither tag found, we just append a end-tag
-					strText = strText + "/e";
-				}
-			}
-			else // we don't have a begin tag
-			{
-				if (isACloserThanB( find1, find2 ))
-				{
-					// correct: now we have a begin-tag
-					start = find1 + 2; //2 for "<c"
-					hasBeginTag = true;
-				}
-				else if (isACloserThanB( find2, find1 ))
-				{
-					// we have a end-tag before a begin-tag, we ignore the end-tag as normal text
-					start = find2 + 2;
-				}
-				else
-				{
-					// neither tag found, it's ok
-					break;
-				}				
-			}
-		}
-		
-		return strText;
-	}
-	
-	/**
-	 * translateText:	translate special tag
-	 * @param strText
-	 * @return
-	 */
-	private static String translateText( String strText )
-	{
-		// strText maybe not well-formed, format it before translate.
-		strText = formatText( strText );
-		
-		String result = "";
-		int len = strText.length();
-		int start = 0;
-		
-		while (start < len)
-		{
-			int find = strText.indexOf("<c", start);
-			if (find != -1)
-			{
-				// we find a "<c" 
-				int index = find + 2;
-				String leftPart = strText.substring(start, find);
-				String color = strText.substring(index, index+6);
-				
-				result += leftPart;
-				result += "<C#";
-				result += color;
-				result += ">";
-				
-				start = index + 6;
-				
-				// try to find "/e"
-				find = strText.indexOf("/e", start);
-				if (find != -1)
-				{
-					leftPart = strText.substring(start, find);
-					
-					result += leftPart;
-					result += "</C>";
-					
-					start = find + 2;
-				}				
+				charLine = new CharLine();
+				charLineList.add( charLine );				
 			}
 			else
 			{
-				result += strText.substring(start);
-				break;
+				charLine.charList.add(objChar);
 			}
 		}
-		return result;
-			
-//		String s1 = strText.replaceAll( "<c", "<C#" );
-//		String s2 = s1.replace( "/e", "</C>");
-//		return s2;
+
+		log( "has " + charLineList.size() + " lines\r\n");
 	}
-		
+	
+	public static int getBitmapWidth()
+	{
+		return NDTextAlign.bitmapWidth;
+	}
+	
+	public static int getBitmapHeight()
+	{
+		return NDTextAlign.bitmapHeight;
+	}
+			
 	private static void dumpCharList()
 	{
 		if (!NDBitmap.verbose) return;
