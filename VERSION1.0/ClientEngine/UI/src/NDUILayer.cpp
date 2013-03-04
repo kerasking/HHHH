@@ -2081,7 +2081,7 @@ bool NDUILayer::IsTouchOnButton( const CCPoint& touch )
 					|| pNode->IsKindOfClass( RUNTIME_CLASS(CUICheckBox))
 					|| pNode->IsKindOfClass( RUNTIME_CLASS(CUIHyperlinkButton))
 					|| pNode->IsKindOfClass( RUNTIME_CLASS(CUIHyperlinkText))
-					//|| pNode->IsKindOfClass( RUNTIME_CLASS(CUISpriteNode))
+					|| pNode->IsKindOfClass( RUNTIME_CLASS(CUIChatText))
 					)
 				{
 					CCRect nodeFrame = uiNode->GetBoundRect();
