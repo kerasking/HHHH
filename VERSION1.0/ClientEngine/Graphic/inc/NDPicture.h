@@ -63,7 +63,7 @@ public:
 	void Initialization(vector<const char*>& vImgFiles, vector<CCRect>& vImgCustomRect, vector<CCPoint>&vOffsetPoint);
 	void Initialization(const char* imageFile, int hrizontalPixel,int verticalPixel = 0);
 
-	void DrawInRect(CCRect kRect);
+	void DrawInRect(CCRect kRect, bool bHighlight = false);
 	void Cut(CCRect kRect);
 
 	void SetReverse(bool reverse);
@@ -104,6 +104,7 @@ private:
 
 	GLfloat m_coordinates[8];
 	GLubyte m_colors[16];
+	GLubyte m_colorsHighlight[16];
 	GLfloat m_pfVertices[8];
 
 	string m_strfile;

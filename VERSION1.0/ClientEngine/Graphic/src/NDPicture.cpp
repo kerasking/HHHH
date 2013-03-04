@@ -518,6 +518,7 @@ NDPicture* NDPicture::Copy()
 
 	memcpy(pkPicture->m_coordinates, m_coordinates, sizeof(GLfloat) * 8);
 	memcpy(pkPicture->m_colors, m_colors, sizeof(GLbyte) * 16);
+	memcpy(pkPicture->m_colorsHighlight, m_colorsHighlight, sizeof(GLbyte) * 16);
 	memcpy(pkPicture->m_pfVertices, m_pfVertices, sizeof(GLfloat) * 8);
 
 	//灰图
@@ -538,7 +539,7 @@ NDPicture* NDPicture::Copy()
 	return pkPicture;
 }
 
-void NDPicture::DrawInRect(CCRect kRect)
+void NDPicture::DrawInRect(CCRect kRect, bool bHighlight)
 {
 	//ND上层传来的都是基于像素，转成基于点的
 	ConvertUtil::convertToPointCoord( kRect );
@@ -577,7 +578,7 @@ void NDPicture::DrawInRect(CCRect kRect)
 
 		glVertexAttribPointer(kCCVertexAttrib_Position, 2, GL_FLOAT, GL_FALSE, 0, m_pfVertices);
 		glVertexAttribPointer(kCCVertexAttrib_TexCoords, 2, GL_FLOAT, GL_FALSE, 0, m_coordinates);
-		glVertexAttribPointer(kCCVertexAttrib_Color, 4, GL_UNSIGNED_BYTE, GL_TRUE, 0, m_colors);
+		glVertexAttribPointer(kCCVertexAttrib_Color, 4, GL_UNSIGNED_BYTE, GL_TRUE, 0, bHighlight ? m_colorsHighlight : m_colors);
 		
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
@@ -641,6 +642,14 @@ void NDPicture::SetColor(ccColor4B color)
 	m_colors[13] = color.g;
 	m_colors[14] = color.b;
 	m_colors[15] = color.a;
+
+	// fill highlight color
+	memcpy( m_colorsHighlight, m_colors, sizeof(m_colors));
+	m_colorsHighlight[3] 
+		= m_colorsHighlight[7] 
+		= m_colorsHighlight[11]
+		= m_colorsHighlight[15]
+		= 125;
 }
 
 bool NDPicture::SetGrayState(bool gray)

@@ -219,6 +219,16 @@ NDUINode* NDUILoad::LoadCtrl( CUIData& uiData, const int ctrlIndex, NDUINode *pa
 	{
 		node->SetBoundScale(2);
 	}
+
+	//特别处理：主界面右上角图标（点击半透明，类似NPC点击）
+	if (strstr(uiData.getIniFile().GetPath(), "MainUI.ini") != NULL
+		&& uiInfo.nID == 9
+		&& node->IsKindOfClass(RUNTIME_CLASS(NDUIButton)))
+	{
+		NDUIButton* btn = reinterpret_cast<NDUIButton*>(node);
+		btn->enableHighlight(true);
+	}
+
 	return node;
 }
 

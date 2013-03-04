@@ -236,6 +236,7 @@ public:
 		return m_kInfo.strTextAlign;
 	}
 
+	CIniFile& getIniFile() { return m_kINIFile; }
 
 private:
 
