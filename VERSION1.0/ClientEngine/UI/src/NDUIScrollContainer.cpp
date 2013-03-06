@@ -72,12 +72,12 @@ void NDUIScrollContainer::ScrollToTop()
 		it != children.end();
 		it++)
 	{
-		NDNode* node			= *it;
-		if (!node->IsKindOfClass(RUNTIME_CLASS(CUIScroll)))
+		NDNode* pkNode			= *it;
+		if (!pkNode->IsKindOfClass(RUNTIME_CLASS(CUIScroll)))
 		{
 			continue;
 		}
-		CUIScroll* scroll		= (CUIScroll*)node;
+		CUIScroll* scroll		= (CUIScroll*)pkNode;
 		CCRect rect				= scroll->GetFrameRect();
 		scroll->SetFrameRect(CCRectMake(rect.origin.x, 0, rect.size.width, rect.size.height));
 		break;
@@ -131,26 +131,26 @@ bool NDUIScrollContainer::CanHorizontalMove(NDObject* object, float& hDistance)
 		return false;
 	}
 	
-	CUIMovableLayer *layer = (CUIMovableLayer*)object;
+	CUIMovableLayer* pkLayer = (CUIMovableLayer*)object;
 	
-	CCRect rectself = this->GetFrameRect();
-	CCRect rectmove = layer->GetFrameRect();
+	CCRect kSelfRect = this->GetFrameRect();
+	CCRect kMoveRect = pkLayer->GetFrameRect();
 	
 	if (hDistance > 0.0f)
 	{
-		if ( (rectself.size.width - m_uiRightDistance) <
-			 (rectmove.origin.x + hDistance) )
+		if ( (kSelfRect.size.width - m_uiRightDistance) <
+			 (kMoveRect.origin.x + hDistance) )
 		{
-            hDistance = rectself.size.width - m_uiRightDistance - rectmove.origin.x;
+            hDistance = kSelfRect.size.width - m_uiRightDistance - kMoveRect.origin.x;
 			return true;
 		}
 	}
 	else if (hDistance < 0.0f)
 	{
 		if ( (m_uiLeftDistance) >
-			 (rectmove.origin.x + rectmove.size.width + hDistance) )
+			 (kMoveRect.origin.x + kMoveRect.size.width + hDistance) )
 		{
-            hDistance = m_uiLeftDistance - (rectmove.origin.x + rectmove.size.width);
+            hDistance = m_uiLeftDistance - (kMoveRect.origin.x + kMoveRect.size.width);
 			return true;
 		}
 	}

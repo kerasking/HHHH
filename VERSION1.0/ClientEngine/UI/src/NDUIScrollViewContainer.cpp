@@ -677,7 +677,7 @@ void NDUIScrollViewContainer::ScrollView(unsigned int uiIndex,
 		return;
 	}
 
-	NDNode* pkChildNode = children[uiIndex];
+	NDNode* pkChildNode = children[4];
 
 	if (!pkChildNode
 			|| !pkChildNode->IsKindOfClass(RUNTIME_CLASS(CUIScrollView)))
@@ -685,17 +685,7 @@ void NDUIScrollViewContainer::ScrollView(unsigned int uiIndex,
 		return;
 	}
 
-	static int s_bFirst = 0;
-
 	CUIScrollView* pkView = (CUIScrollView*) pkChildNode;
-	;
-
-// 	if (1 == s_bFirst)
-// 	{
-// 		pkView = (CUIScrollView*)pkChildNode;
-// 	}
-
-	s_bFirst++;
 
 	float fViewCenter = 0.0f;
 	if (!CaclViewCenter(pkView, fViewCenter))
@@ -704,15 +694,8 @@ void NDUIScrollViewContainer::ScrollView(unsigned int uiIndex,
 	}
 
 	float fCenter = 0.0f;
-//	bool bIsViewCanCenter	= IsViewCanCenter();
-//	if (bIsViewCanCenter)
-//	{
-//		fCenter		= GetContainerCenter();
-//	}
-//	else
-//	{
+
 	fCenter = GetAdjustCenter();
-//	}
 
 	float fDistance = fCenter - fViewCenter;
 
