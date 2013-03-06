@@ -1223,7 +1223,6 @@ GetTxtPri("CB2_T4011"),
 GetTxtPri("CB2_T4111"),
 
 
-GetTxtPri("CB2_T32"),
 GetTxtPri("CB2_T33"),
 GetTxtPri("CB2_T34"),
 GetTxtPri("CB2_T35"),
