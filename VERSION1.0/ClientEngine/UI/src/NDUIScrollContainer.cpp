@@ -215,7 +215,8 @@ bool NDUIScrollContainer::TouchBegin(NDTouch* touch)
 		{
 			continue;
 		}
-		if (cocos2d::CCRect::CCRectContainsPoint(((NDUINode*)pNode)->GetScreenRect(), touch->GetLocation()))
+		if (cocos2d::CCRect::CCRectContainsPoint(((NDUINode*)pNode)->GetScreenRect(),
+			touch->GetLocation()))
 		{
 			return NDUILayer::TouchBegin(touch);
 		}
@@ -268,30 +269,31 @@ void NDUIScrollContainer::DrawScrollBar()
 	{
 		return;
 	}
-	CUIScroll* scroll	= (CUIScroll*)pNode;
-	if (scroll->GetScrollStyle() != UIScrollStyleVerical ||
-		!scroll->IsTouchDown())
+	CUIScroll* pkScroll	= (CUIScroll*)pNode;
+	if (pkScroll->GetScrollStyle() != UIScrollStyleVerical ||
+		!pkScroll->IsTouchDown())
 	{
 		return;
 	}
-	CCRect rectScroll	= scroll->GetFrameRect();
-	if(rectScroll.size.height > this->GetFrameRect().size.height)
+	CCRect kScrollRect	= pkScroll->GetFrameRect();
+	if(kScrollRect.size.height > this->GetFrameRect().size.height)
 	{
-		CCRect rectself		= this->GetScreenRect();
-		CCRect rectClient	= rectScroll;
-		CCRect rect			= CCRectZero;
-		CCSize sizePic		= m_picScroll->GetSize();
-		rect.size.width		= sizePic.width;
-		rect.size.height	= rectself.size.height / rectClient.size.height * rectself.size.height;
-		rect.origin			= ccp(rectself.size.width - rect.size.width,
-								  -rectClient.origin.y / rectClient.size.height * rectself.size.height);
-		rect.origin			= ccpAdd(rect.origin, this->GetScreenRect().origin);
+		CCRect kSelfRect		= this->GetScreenRect();
+		CCRect kClientRect	= kScrollRect;
+		CCRect kRect			= CCRectZero;
+		CCSize kPicSize		= m_picScroll->GetSize();
+		kRect.size.width		= kPicSize.width;
+		kRect.size.height	= kSelfRect.size.height / kClientRect.size.height * kSelfRect.size.height;
+		kRect.origin			= ccp(kSelfRect.size.width - kRect.size.width,
+								  -kClientRect.origin.y / kClientRect.size.height * kSelfRect.size.height);
+		kRect.origin			= ccpAdd(kRect.origin, this->GetScreenRect().origin);
 		
-		m_picScroll->DrawInRect(rect);
-        
-        if(m_picScrollBg) {
-            rect.origin.y = rectClient.origin.y;
-            m_picScrollBg->DrawInRect(rect);
-        }
+		m_picScroll->DrawInRect(kRect);
+
+		if(m_picScrollBg)
+		{
+			kRect.origin.y = kClientRect.origin.y;
+			m_picScrollBg->DrawInRect(kRect);
+		}
 	}	
 }
