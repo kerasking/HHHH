@@ -75,7 +75,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "more mk", "more mk", "{0A4E
 	ProjectSection(SolutionItems) = preProject
 		Android.mk = Android.mk
 		libiconv\proj.android\jni\Android.mk = libiconv\proj.android\jni\Android.mk
-		cocos2d-x\cocos2dx\Android.mk = cocos2d-x\cocos2dx\Android.mk
 		cocos2d-x\CocosDenshion\android\Android.mk = cocos2d-x\CocosDenshion\android\Android.mk
 	EndProjectSection
 EndProject
