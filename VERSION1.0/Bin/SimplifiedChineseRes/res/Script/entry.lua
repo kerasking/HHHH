@@ -164,5 +164,12 @@ endTimeSlice("SyndicateBattle/define.lua")
 bgnTimeSlice("Banquet/define.lua")
 DoFile("Banquet/define.lua");
 endTimeSlice("Banquet/define.lua")
+
+--–“‘À±¶œ‰
+DoFile("LuckyBox/define.lua");
 --’º–«
 DoFile("Destiny/define.lua");
+--√˚»À
+DoFile("RankList/define.lua");
+--π≈º£—∞±¶
+DoFile("TreasureHunt/define.lua");

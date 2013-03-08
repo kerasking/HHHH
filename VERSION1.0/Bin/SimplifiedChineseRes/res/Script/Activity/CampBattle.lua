@@ -175,7 +175,8 @@ end
 
 
 --加载每日签到主界面
-function p.LoadUI()
+function p.LoadUI( nActivityId )
+    MsgLogin.EnterChaosBattle(nActivityId);
 	--p.TestInitList();
 	--40级以下返回
 	local nRoleId =  GetPlayerId();
@@ -328,7 +329,7 @@ function p.LoadUI()
 	--刷新玩家列表
 	--p.RefreshInfo();
 	
-    --[[屏蔽鼓舞功能
+	--[[屏蔽鼓舞功能
 	local Moneybtn = RecursiveButton(layer, {ID_SCUFFLE_CTRL_BUTTON_INSPIRE1}); 
 	local Emoneybtn = RecursiveButton(layer, {ID_SCUFFLE_CTRL_BUTTON_INSPIRE2}); 
 	local labelBuffDesc = RecursiveLabel(layer, {22});
@@ -337,8 +338,8 @@ function p.LoadUI()
 	labelBuff:SetVisible(false);
 	Moneybtn:SetVisible(false);
 	Emoneybtn:SetVisible(false);
-    --]]
-    
+	--]]
+	
 	--屏蔽自动参战
 	local labelAutoFight = RecursiveLabel(layer, {29});
 	local checkBoxAutoFight=RecursiveCheckBox(layer,{ID_SCUFFLE_CTRL_CHECK_BUTTON_31});
@@ -1530,6 +1531,7 @@ function p.OnUIEventTip(uiNode, uiEventType, param)
 end
 
 function p.CloseUI()
+    MsgLogin.LeaveChaosBattle();
 	if p.ActivityState == 3 then
 		CloseUI(NMAINSCENECHILDTAG.CampBattle);	
 		return;

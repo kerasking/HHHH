@@ -100,7 +100,9 @@ DoFile("Msg/MsgDailyAction.lua");
 --boss战信息处理
 DoFile("Msg/MsgBossBattle.lua");
 
---斗地主
+
+DoFile("Msg/MsgRankList.lua");
+
 DoFile("Msg/MsgSlave.lua");
 
 

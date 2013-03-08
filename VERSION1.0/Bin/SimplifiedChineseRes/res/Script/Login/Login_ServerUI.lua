@@ -104,13 +104,13 @@ p.RoleListTag = {};
 --end
 	
 function p.LoadUI()
-
-    LogInfo("@@ Login_ServerUI::LoadUI()" );
+    p.ProcessNotifyClient2();
     
     local bFlag = HideLoginUI(NMAINSCENECHILDTAG.Login_ServerUI);
     if(bFlag) then
         return true;
     end
+    p.IsShow = true;
     
 --    LogInfo("test qbw 111")
 --	--播放背景音乐
@@ -594,9 +594,13 @@ function p.RefreshServer(nEventType)
     end
 end
 
+p.IsShow = false;
 function p.ProcessServerList(netdatas)
 	LogInfo("receive_serverlist");
-    
+    if(p.IsShow) then
+        p.GetNotice();
+        p.IsShow = false;
+    end
     
     local record = {};
     record.nServerID = netdatas:ReadShort();
@@ -734,6 +738,39 @@ end
 function p.GetAccountID()
 	return p.UIN;
 end
+
+
+function p.GetNotice()
+    local record = SqliteConfig.SelectNotice(1);
+    --ActivityNoticeUI.ShowUI(record.VER);
+end
+
+--踢人
+function p.ProcessNotifyClient2()
+    local usAction = MsgLogin.TT_Status;
+    if(not CheckN(usAction)) then
+        MsgLogin.TT_Status = nil;
+        return;
+    end
+    if(usAction == 0) then
+        local sTip = GetTxtPri("GMCOMM_T01");
+        CommonDlgNew.ShowYesDlg(sTip);
+    elseif(usAction == 1) then
+        local sTip = GetTxtPri("GMCOMM_T02");
+        CommonDlgNew.ShowYesDlg(sTip);
+    elseif(usAction == 2) then
+        local sTip = GetTxtPri("GMCOMM_T03");
+        CommonDlgNew.ShowYesDlg(sTip);
+    elseif(usAction == 3) then
+        local sTip = GetTxtPri("GMCOMM_T04");
+        CommonDlgNew.ShowYesDlg(sTip);
+    elseif(usAction == 4) then
+        local sTip = GetTxtPri("GMCOMM_T05");
+        CommonDlgNew.ShowYesDlg(sTip);
+    end
+    MsgLogin.TT_Status = nil;
+end
+
 --++Guosen 2012.8.4
 function p.LoginGameNew()
 	LogInfo( "@@ Login_ServerUI: LoginGameNew()" );

@@ -44,7 +44,18 @@ function p.LoadUI()
 		LogInfo("scene = nil,4");
 		return false;
 	end
-	uiLoad:Load("SM_FIGHT_RESULT.ini",layer,p.OnUIEvent,0,0);
+    if  ArenaUI.isInChallenge == 8 then
+    	-- 古迹寻宝
+		--uiLoad:Load("Treasure/FightResult.ini",layer,p.OnUIEvent,0,0);
+		--local ID_LIST_CONTAINER = 9;
+		--local pScrollViewContainer = GetScrollViewContainer( layer, ID_LIST_CONTAINER );
+		uiLoad:Load("SM_FIGHT_RESULT.ini",layer,p.OnUIEvent,0,0);
+		local pLabel	= GetLabel( layer, ID_FIGHTEVALUATE_CTRL_TEXT_INFO );
+		local szPrize	= MsgTreasureHunt.GetPrizeString()
+		pLabel:SetText( szPrize );
+    else
+		uiLoad:Load("SM_FIGHT_RESULT.ini",layer,p.OnUIEvent,0,0);
+	end
 	uiLoad:Free();
  
 end
@@ -200,6 +211,21 @@ function p.SetResult(result,money,repute,soph,emoney)
         end
         
                 
+
+    elseif  ArenaUI.isInChallenge == 8 then
+		-- 古迹寻宝
+        local layer	= p.GetParent();
+        if nil == layer then
+            return;
+        end
+        local bg	= GetImage(layer,ID_FIGHTEVALUATE_CTRL_PICTURE_STATE);
+        local pool	= DefaultPicPool();
+		if result ==1 then --战斗胜利
+			bg:SetPicture(pool:AddPicture(GetSMImgPath("battle/battle_icon3.png"), false), true);
+		elseif result ==0 then --战斗失败
+			bg:SetPicture(pool:AddPicture(GetSMImgPath("battle/battle_icon2.png"), false), true);
+		end
+
     elseif 7 == ArenaUI.isInChallenge then
     --斗地主
        local layer=p.GetParent();

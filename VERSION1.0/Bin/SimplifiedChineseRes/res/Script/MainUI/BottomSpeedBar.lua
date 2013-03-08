@@ -225,7 +225,7 @@ function p.LoadUI()
     sayListBtn:SetTag(p.BtnSayTag);
     sayListBtn:SetVisible(true);
    
-     --提交gm问题按钮
+     --[[提交gm问题按钮
     local gmPic	= pool:AddPicture(GetSMImg00Path(p.BtnGm), true);
     gmPic:Cut(p.BtnGMFindRect.cutNor);
     
@@ -235,7 +235,7 @@ function p.LoadUI()
     local gmBtn = p.CreateSceneButton(gmPic,gmSelPic,p.BtnGMRect,NMAINSCENECHILDTAG.GMProblemBtn);
     gmBtn:SetTag(p.BtnGMTag);
     gmBtn:SetVisible(false);  
-   
+   --]]
    
 
     --显示隐藏底
@@ -430,11 +430,11 @@ function p.OnUIEvent(uiNode, uiEventType, param)
             MsgArena.SendOpenArena();
         elseif( p.BtnFunc[16] == tag ) then  --征收
             Levy.LoadUI();
+        elseif( p.BtnFunc[17] == tag ) then  --祭祀
+            Fete.LoadUI();
         elseif( p.BtnFunc[18] == tag ) then  --占星--GM问题
             --GMProblemUI.LoadUI();
             MsgRealize.sendRealizeOp();
-        elseif( p.BtnFunc[18] == tag ) then  --GM问题
-            GMProblemUI.LoadUI();
         elseif( p.BtnFunc[19] == tag ) then  --删号
             --p.TestButtonClick();
         elseif( p.BtnFunc[20] == tag ) then  --退出

@@ -27,7 +27,10 @@ local BattleType = {
 	BT_BOSS			= 2,	-- BOSS战
 	BT_SPORTS		= 3,	-- 竞技场
 	BT_GRAIN		= 4,	-- 劫粮
-	BT_CHAOS		= 5,	-- 大乱斗 
+	BT_CHAOS		= 5,	-- 大乱斗
+	BT_AGBATTLE		= 6,	-- 军团战
+	BT_LANDLORD		= 7,	-- 斗地主
+	BT_RELIC		= 8,	-- 古迹寻宝 
 };
 
 ---------------------------------------------------
@@ -63,7 +66,7 @@ function p.ShowUI( tPacket )
 		LogInfo( "BattleUI_Title: ShowUI failed! uiLoad is nil" );
 		return false;
 	end
-	if ( tPacket.nBattleType == BattleType.BT_MONSTER ) then
+	if ( tPacket.nBattleType == BattleType.BT_MONSTER ) or ( tPacket.nBattleType == BattleType.BT_RELIC )then
 		uiLoad:Load( "Battle/BattleUI_Title1.ini", pLayer, nil, 0, 0 );
 		p.SetBattleName( pLayer, tPacket.szBattleName );
 	elseif ( tPacket.nBattleType == BattleType.BT_CHAOS ) then

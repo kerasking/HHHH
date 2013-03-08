@@ -19,7 +19,9 @@ p.TransportActionType =
     TRNSPORT = 6,       --开始运粮
     REFRESH_CAR = 7,       --刷新粮车  
     CALL_CAR = 8,       --召唤最高级粮车   
-    END = 9,
+    GW      = 9,
+    TRANSPORT_COUNT = 10,   --运粮次数和拦截次数
+    END = 11,
 }; 
 
 p.PlayerInfo = "显示玩家信息";
@@ -154,6 +156,22 @@ function p.MsgSendLootInfo(actionType, LootPlayerId)
     LogInfo("transport sendMsg end");    
 	return true;	
 end
+
+p.TransportCount = {YLCount = 0, RJCount = 0,}
+function p.GetTransportCount()
+    return p.TransportCount;
+end
+--** chh 2012-1-5 **--
+function p.MsgReciveTransportCount(netdatas)
+    local nActionType = netdatas:ReadByte();    --操作
+    if(nActionType == p.TransportActionType.TRANSPORT_COUNT) then
+        p.TransportCount.YLCount  = netdatas:ReadInt();       --运粮次数
+        p.TransportCount.RJCount  = netdatas:ReadInt();       --拦截次数
+        LogInfo("p.TransportCount.YLCount:[%d],p.TransportCount.RJCount:[%d]",p.TransportCount.YLCount,p.TransportCount.RJCount);
+    end
+end
+RegisterNetMsgHandler(NMSG_Type._MSG_SEND_TRANSPORT,  "p.MsgReciveTransportCount", p.MsgReciveTransportCount);
+
 
 --注册消息获取玩家活动信息
 RegisterNetMsgHandler(NMSG_Type._MSG_RECIVE_TRANSPORT,  "p.MsgReciveTransportInfo", p.MsgReciveTransportInfo);

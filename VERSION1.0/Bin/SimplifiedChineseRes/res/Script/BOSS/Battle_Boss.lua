@@ -78,6 +78,8 @@ function p.LoadUI( nActivityId )
     p.nTimerRefreshTimeID   = RegisterTimer( p.TimerRefreshTimer, 1 );
     p.nTimerGetInfoID       = RegisterTimer( p.TimerGetInfoTimer, TIMER_GETINFO );
     
+    MsgLogin.EnterBossBattle(p.nActivityId);
+    
     --[[
     --隐藏自动战斗
     local pCheckAuto = RecursiveCheckBox( layer, {TAG_AUTO_BATTLE} );
@@ -94,6 +96,8 @@ function p.LoadUI( nActivityId )
 end
 
 function p.UnLoadUI( nActivityId )
+    MsgLogin.LeaveBossBattle();
+
     p.FreeData();
     CloseUI(NMAINSCENECHILDTAG.BattleBossUI);
 end
@@ -106,7 +110,7 @@ function p.OnUIEvent(uiNode, uiEventType, param)
            p.UnLoadUI( p.nActivityId );
         elseif tag == TAG_SILVER_INSPIRE then       --银币鼓舞
             --CommonDlgNew.ShowYesDlg("暂不开放", nil, nil, 2);
-                        
+            
             
             local nCount = MsgBossBattle.GetBossBattleMaxEncourageCount();
             
@@ -125,7 +129,7 @@ function p.OnUIEvent(uiNode, uiEventType, param)
         elseif tag == TAG_COIN_INSPIRE then         --金币鼓舞
             --CommonDlgNew.ShowYesDlg("暂不开放", nil, nil, 2);
             
-                        local nCount = MsgBossBattle.GetBossBattleMaxEncourageCount();
+            local nCount = MsgBossBattle.GetBossBattleMaxEncourageCount();
             if(p.nUpData<nCount) then
                 
                 if( p.bIsTip ) then

@@ -65,9 +65,10 @@ LoadDataBaseTable("event_activity","event_activityTable");
 LoadDataBaseTable("sports_prize","sports_prizeTable");
 
 
-
-
 LoadDataBaseTable("encourage_config","encourage_configTable");
+
+LoadDataBaseTable("findbox_static_config","findbox_static_configTable");
+
 LoadDataBaseTable("dao_levelup_exp","dao_levelup_expTable");
 LoadDataBaseTable("daofa_static_config","daofa_static_configTable");
 LoadDataBaseTable("daofa_config","daofa_configTable");

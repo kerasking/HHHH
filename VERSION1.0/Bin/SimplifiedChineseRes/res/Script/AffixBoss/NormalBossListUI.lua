@@ -86,6 +86,7 @@ p.bBattleInfoRank = 0;  --副本是否已经通关过
 ---------------------------------------------------
 -- 创建并显示副本界面--WithCampaignID
 function p.LoadUI( nCampaignID, nPromptType)
+    MsgLogin.EnterInstanceBattle();
     ArenaUI.isInChallenge = 4;
     p.nCampaignID = nCampaignID;
     p.nPromptType = nPromptType;
@@ -912,6 +913,9 @@ function p.ShowConfirmDialog( nBattleID )
 end
 
 function p.GetIsBattleRank()
+    if(p.nChosenBattleID == nil) then
+        return 1;
+    end
 	local tBattleInfo	= AffixBossFunc.getBossInfo( p.nChosenBattleID );
     
 	if ( tBattleInfo == nil ) then
@@ -1060,6 +1064,7 @@ end
 -- 通过副本ID进入副本界面--定位到该副本ID所在的页
 -- 参数： nBattleID:副本ID, nPromptType:提示类型(0无提示，1当前副本, 2掉落副本)
 function p.LoadUIWithBattleID( nBattleID, nPromptType )
+    MsgLogin.EnterInstanceBattle();
 	p.nTaskBattleID		= nBattleID;
 	p.nPromptType		= nPromptType;
 	if ( nBattleID == nil ) then

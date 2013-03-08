@@ -53,7 +53,7 @@ local TagClose          = 533;      --关闭
 local TagDes            = 649;      --已出战人数描述
 local TagSkillList      = 1000;     --技能控件列表
 local TagMartialDesc    = 28;       --布阵说明
-
+local TAG_SWAP_EQUIP    = 36;       --快速换装
 
 local SkillDescFormat   = "";
 local TagSkillDesc = 26;    --技能描述
@@ -234,7 +234,7 @@ function p.LoadUI()
     p.clearData();
     
     MsgMagic.mUIListener = p.processNet;
-    
+    MsgItem.mUIListener = p.processNet;
     
     
     --设置关闭音效
@@ -381,8 +381,19 @@ function p.OnUIEventPet(uiNode, uiEventType, param)
 			local layer = p.GetPetInfoLayer();
             layer:SetVisible(false);
             p.PutData = {};
-        
+        elseif(TAG_SWAP_EQUIP == tag) then
+            local layer = p.GetPetInfoLayer();
+            local btn =GetButton(layer, TagPetInfBtn);
+            QuickSwapEquipUI.LoadUI(p.GetCurrLayer(), btn:GetParam1());
+            
+            --关闭层
+            local layer = p.GetPetInfoLayer();
+            layer:SetVisible(false);
+            p.PutData = {};
         elseif(TagPetInfBtn == tag) then  
+            local layer = p.GetPetInfoLayer();
+            layer:SetVisible(false);
+            
             local btn = ConverToButton(uiNode);
             local nPetId = btn:GetParam1();
             local bMatrix = p.isMartialByPetId(nPetId);
@@ -1389,6 +1400,7 @@ function p.freeData()
     p.MartialUsers  = nil;
     p.AllAlertSkill = nil;
     MsgMagic.mUIListener = nil;
+    MsgItem.mUIListener  = nil;
 end
 
 
@@ -1413,6 +1425,11 @@ function p.processNet(msgId, m)
         p.clickAllSkillList(nSkillId);
         p.setSkillChecked(nSkillId);
         p.TipChangeSkill();
+    elseif(msgId == NMSG_Type._MSG_ITEM_ACTION) then
+        if(m == 11) then
+            CommonDlgNew.ShowTipDlg(GetTxtPri("MSG_ITEM_T01"));
+            QuickSwapEquipUI.CloseUI();
+        end
 	end
     p.clearData();
 	CloseLoadBar();

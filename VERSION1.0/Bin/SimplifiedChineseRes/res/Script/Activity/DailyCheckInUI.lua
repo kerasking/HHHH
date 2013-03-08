@@ -566,3 +566,30 @@ function p.SendReset()
 end
 
 
+
+function p.GetTimeLastNum(iPreTime, iCurTime)
+
+    if iPreTime == 0 then
+        return 1;
+    else
+        local SecPerDay = 24*3600;
+
+        local PreNum = math.floor((iPreTime + 8 * 3600)/SecPerDay);
+        local CurNum = math.floor((iCurTime + 8 * 3600)/SecPerDay);
+        
+        return math.floor(CurNum - PreNum);
+    end
+end
+
+function p.HasSigh()
+    local nTimeLast = p.GetTimeLastNum(p.PreCheckInTime, p.CurCheckInTime);
+    LogInfo("nTimeLast:[%d]",nTimeLast);
+    if(nTimeLast > 0) then
+        return true;
+    end
+    
+    return false;
+end
+
+
+

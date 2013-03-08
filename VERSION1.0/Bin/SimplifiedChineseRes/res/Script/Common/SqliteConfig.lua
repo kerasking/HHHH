@@ -12,6 +12,9 @@ local ServerListCreateScript = "CREATE TABLE ServerList (ServerID INTEGER, Serve
 local RoleInfoTableName = "RoleList";
 local RoleInfoCreateScript = "CREATE TABLE RoleList (IdAccount INTEGER, ServerID INTEGER, RoleName NVARCHAR(10), Profession INTEGER, Level INTEGER, LastLogin INTEGER);";
 
+local NoticeTableName = "Notice"
+local NoticeCreateScript = "CREATE TABLE Notice (ID INTEGER, VER INTEGER, MSG NVARCHAR(300));";
+
         
 local ServerListCountById = "SELECT * FROM ServerList WHERE ServerID = %d";
 local ServerListAdd = "INSERT INTO ServerList VALUES(%d, \'%s\', \'%s\', %d, %d, \'%s\')";
@@ -32,6 +35,11 @@ local ServerListSelect = "SELECT * FROM ServerList ORDER BY ServerID DESC";
 local RoleListSelect = "SELECT * FROM RoleList";
 
 
+local NoticeInsert = "INSERT INTO Notice VALUES(%d, %d, \'%s\')";
+local NoticeUpdate = "UPDATE Notice SET VER = %d, MSG=\'%s\' WHERE ID=%d;";
+local NoticeSelect = "SELECT * FROM Notice WHERE ID=%d;";
+
+
 --初始化数据库表
 function p.InitDataBaseTable()
     LogInfo("Sqlite:InitDataBaseTable");
@@ -41,6 +49,7 @@ function p.InitDataBaseTable()
     
     p.CreateServerListTable();
     p.CreateRoleInfoTable();
+    p.CreateNoticeTable();
     
     --p.InsertServerList({nServerID=222,sServerName="zzj",nServerIP="192.168.65.7",nServePort=9528,nServerStatus=2,sRecommend="ss"});
 end
@@ -62,6 +71,16 @@ function p.CreateRoleInfoTable()
     if(not isExists) then
         LogInfo("Sqlite:CreateRoleInfoTable sql:[%s]",RoleInfoCreateScript);
         Sqlite_ExcuteSql(RoleInfoCreateScript);
+    end
+end
+
+--创建公告
+function p.CreateNoticeTable()
+    LogInfo("Sqlite:p.CreateNoticeTable");
+    local isExists = Sqlite_IsExistTable(NoticeTableName);
+    if(not isExists) then
+        LogInfo("Sqlite:CreateNoticeTable sql:[%s]",NoticeCreateScript);
+        Sqlite_ExcuteSql(NoticeCreateScript);
     end
 end
 
@@ -180,5 +199,51 @@ function p.DeleteRoleByAccountId(nAccountId)
     end
     return false;
 end
+
+--公告
+function p.InsertNotice(record)
+    LogInfo("p.InsertNotice");
+    local nIsExists = Sqlite_SelectData(string.format(NoticeSelect,record.ID),3);
+    
+    
+    
+    
+    if(nIsExists > 0) then
+        Sqlite_ExcuteSql(string.format(NoticeUpdate,record.VER,record.MSG,record.ID));
+        return false;
+    else
+        Sqlite_ExcuteSql(string.format(NoticeInsert,record.ID,record.VER,record.MSG));
+        return true;
+    end
+end
+
+function p.SelectNotice(nID)
+    LogInfo("p.SelectNotice");
+    
+    local total = Sqlite_SelectData(string.format(NoticeSelect,nID),3);
+    LogInfo("p.SelectNotice total:[%d]",total);
+    local record = {};
+    for i=1,total do
+        local index = i - 1;
+        
+        record.ID = Sqlite_GetColDataN(index,0);
+        record.VER = Sqlite_GetColDataN(index,1);
+        record.MSG = Sqlite_GetColDataS(index,2);
+        
+        LogInfo("p.SelectNotice record.ID:[%d],record.VER:[%d],record.MSG:[%s]",record.ID,record.VER,record.MSG);
+    end
+    if(total==0) then
+        record.ID = 1;
+        record.VER = 0;
+        record.MSG = "";
+    end
+    
+    return record;
+end
+
+
+
+
+
 
 RegisterGlobalEventHandler(GLOBALEVENT.GE_LOGIN_GAME,"SqliteConfig.InitDataBaseTable", p.InitDataBaseTable);

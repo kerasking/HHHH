@@ -269,6 +269,10 @@ function p.ProcessPetInfo(netdata)
     		if ( pLayer ~= nil and pLayer:IsVisibled() ) then
 				PlayEffectAnimation.ShowAnimation(2);
     			Music.PlayEffectSound(Music.SoundEffect.LEVUP);
+                
+                --Buff刷新
+                Buff.SendRequest();
+        
     		else
     			p.bShowLevelUpAnimation = true;--先置状态到特定界面里播放++Guosen 2012.8.6 有待判定战斗中
     		end
@@ -344,6 +348,9 @@ function p.ProcessPetInfoUpdate(netdata)
 			PlayEffectAnimation.ShowAnimation(2);
 			--成功音效    
     		Music.PlayEffectSound(Music.SoundEffect.LEVUP);
+    		
+    		--Buff刷新
+    		Buff.SendRequest();
 		end
 		
 		--主角切换技能

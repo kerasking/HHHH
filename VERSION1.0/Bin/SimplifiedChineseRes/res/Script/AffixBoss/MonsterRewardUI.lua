@@ -87,10 +87,17 @@ function p.OnUIEvent(uiNode,uiEventType,param)
 			if scene ~= nil then
 				scene:RemoveChildByTag(NMAINSCENECHILDTAG.MonsterReward,true);
 			end
+            
             --发送退出副本消息
-			MsgAffixBoss.sendNmlLeave();
-            WorldMap(NormalBossListUI.nCampaignID);  
-			NormalBossListUI.Redisplay();
+            MsgAffixBoss.sendNmlLeave();
+            
+            if( NormalBossListUI and NormalBossListUI.nCampaignID ) then
+                WorldMap(NormalBossListUI.nCampaignID);  
+                NormalBossListUI.Redisplay();
+            else
+                NormalBossListUI.OnBtnBack();
+            end
+            
 			return true;
 		elseif ID_DYNMAPSUCCESS_CTRL_ANGIN_BATTLE == tag then
             CloseBattle();
@@ -100,7 +107,9 @@ function p.OnUIEvent(uiNode,uiEventType,param)
                 scene:RemoveChildByTag(NMAINSCENECHILDTAG.MonsterReward,true);
             end	
 			MsgAffixBoss.sendNmlLeave();
+            
 			MsgAffixBoss.sendNmlEnter(NormalBossListUI.nChosenBattleID);
+            MsgLogin.EnterInstanceBattle();
 			return true;
 		elseif ID_DYNMAPSUCCESS_CTRL_NEXT_BATTLE == tag then
             Music.StopMusic();
@@ -331,6 +340,7 @@ function p.ShowItemInfo(itemType)
 end
 
 function p.LoadUI(money,repute)
+    MsgLogin.LeaveInstanceBattle();
     exp = repute;
 	local scene=GetSMGameScene();
 	if scene == nil then
@@ -360,7 +370,8 @@ function p.LoadUI(money,repute)
            
     --经验副本不能再次挑战
     local nEnergy = PlayerFunc.GetStamina(GetPlayerId());
-    if (NormalBossListUI.GetIsBattleType() == 1) or (nEnergy == 0) then
+    
+    if NormalBossListUI.nChosenBattleID == nil or (NormalBossListUI.GetIsBattleType() == 1) or (nEnergy == 0) then
         local button37 = GetButton(layer, ID_DYNMAPSUCCESS_CTRL_ANGIN_BATTLE);
         button37:SetVisible(false);  
     end     
