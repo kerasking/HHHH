@@ -92,19 +92,19 @@ void NDUIScrollContainer::ScrollToBottom()
 		it != children.end();
 		it++)
 	{
-		NDNode* node			= *it;
-		if (!node->IsKindOfClass(RUNTIME_CLASS(CUIScroll)))
+		NDNode* pkNode			= *it;
+		if (!pkNode->IsKindOfClass(RUNTIME_CLASS(CUIScroll)))
 		{
 			continue;
 		}
-		CUIScroll* scroll		= (CUIScroll*)node;
-		CCRect rect				= scroll->GetFrameRect();
-		if (rect.size.height < kSelfRect.size.height)
+		CUIScroll* pkScroll		= (CUIScroll*)pkNode;
+		CCRect kRect				= pkScroll->GetFrameRect();
+		if (kRect.size.height < kSelfRect.size.height)
 		{
 			continue;
 		}
-		scroll->SetFrameRect(CCRectMake(rect.origin.x, kSelfRect.size.height - rect.size.height, 
-										rect.size.width, rect.size.height));
+		pkScroll->SetFrameRect(CCRectMake(kRect.origin.x, kSelfRect.size.height - kRect.size.height, 
+										kRect.size.width, kRect.size.height));
 		break;
 	}
 }

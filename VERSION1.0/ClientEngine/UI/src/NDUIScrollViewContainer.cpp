@@ -18,6 +18,8 @@
 
 IMPLEMENT_CLASS(CUIScrollView, CUIScroll)
 
+static float s_fFanTan = 0.0f;
+
 CUIScrollView::CUIScrollView()
 {
 	INC_NDOBJ_RTCLS
@@ -270,19 +272,19 @@ void NDUIScrollViewContainer::AddView(CUIScrollView* view)
 	}
 
 	size_t childsize = m_pClientUINode->GetChildren().size();
-	CCRect rect = view->GetFrameRect();
+	CCRect kRect = view->GetFrameRect();
 	if (UIScrollStyleHorzontal == GetScrollStyle())
 	{
-		rect.origin.x = childsize * GetViewLen();
-		rect.origin.y = 0;
+		kRect.origin.x = childsize * GetViewLen();
+		kRect.origin.y = 0;
 	}
 	else
 	{
-		rect.origin.y = childsize * GetViewLen();
-		rect.origin.x = 0;
+		kRect.origin.y = childsize * GetViewLen();
+		kRect.origin.x = 0;
 	}
-	rect.size = m_sizeView;
-	view->SetFrameRect(rect);
+	kRect.size = m_sizeView;
+	view->SetFrameRect(kRect);
 	view->SetScrollStyle(GetScrollStyle());
 	view->SetMovableViewer(this);
 	view->SetScrollViewer(this);
@@ -566,7 +568,7 @@ void NDUIScrollViewContainer::AdjustView()
 		return;
 	}
 
-	this->ScrollView(uiFindInex);
+	ScrollView(uiFindInex);
 }
 
 unsigned int NDUIScrollViewContainer::WhichViewToScroll()
@@ -745,6 +747,7 @@ void NDUIScrollViewContainer::ScrollView(unsigned int uiIndex,
 	else
 	{
 		m_fScrollDistance = fDistance;
+		s_fFanTan = m_fScrollDistance * 0.5f;
 
 		EnableViewToScroll(true);
 	}
@@ -875,18 +878,18 @@ void NDUIScrollViewContainer::MoveClient(float fMove)
 		return;
 	}
 
-	CCRect rect = m_pClientUINode->GetFrameRect();
+	CCRect kRect = m_pClientUINode->GetFrameRect();
 
 	if (m_style == UIScrollStyleHorzontal)
 	{
-		rect.origin.x += fMove;
+		kRect.origin.x += fMove;
 	}
 	else
 	{
-		rect.origin.y += fMove;
+		kRect.origin.y += fMove;
 	}
 
-	m_pClientUINode->SetFrameRect(rect);
+	m_pClientUINode->SetFrameRect(kRect);
 }
 
 void NDUIScrollViewContainer::refrehClientSize()
@@ -896,25 +899,25 @@ void NDUIScrollViewContainer::refrehClientSize()
 		return;
 	}
 
-	CCRect rect = m_pClientUINode->GetFrameRect();
+	CCRect kRect = m_pClientUINode->GetFrameRect();
 
 	if (m_style == UIScrollStyleHorzontal)
 	{
-		rect.size.width = m_pClientUINode->GetChildren().size() * GetViewLen();
-		rect.size.height = this->GetFrameRect().size.height;
+		kRect.size.width = m_pClientUINode->GetChildren().size() * GetViewLen();
+		kRect.size.height = this->GetFrameRect().size.height;
 	}
 	else
 	{
-		rect.size.height = m_pClientUINode->GetChildren().size() * GetViewLen();
-		rect.size.width = this->GetFrameRect().size.width;
+		kRect.size.height = m_pClientUINode->GetChildren().size() * GetViewLen();
+		kRect.size.width = this->GetFrameRect().size.width;
 	}
 
 	if (0 == m_pClientUINode->GetChildren().size())
 	{
-		rect.origin = ccp(0, 0);
+		kRect.origin = ccp(0, 0);
 	}
 
-	m_pClientUINode->SetFrameRect(rect);
+	m_pClientUINode->SetFrameRect(kRect);
 }
 
 void NDUIScrollViewContainer::draw() //  m_fScrollDistance += speed; only to zero;  clientnode speed;
@@ -942,44 +945,61 @@ void NDUIScrollViewContainer::draw() //  m_fScrollDistance += speed; only to zer
 
 	float fMove = 0.0f;
 
-	if (m_fScrollDistance > 0.0f)
+	do 
 	{
-		if (m_fScrollDistance < m_fScrollToCenterSpeed)
+		if (m_fScrollDistance > 0.0f)
 		{
-			fMove = m_fScrollDistance;
-			m_fScrollDistance = 0.0f;
-			//m_bIsViewScrolling	= false;
-			EnableViewToScroll(false);
-			//SetBeginViewIndex(GetBeginIndex());
+			if (m_fScrollDistance < m_fScrollToCenterSpeed)
+			{
+				if (s_fFanTan > m_fScrollToCenterSpeed)
+				{
+					m_fScrollDistance = -s_fFanTan;
+					s_fFanTan = s_fFanTan * 0.5f;
+					break;
+				}
+
+				fMove = m_fScrollDistance;
+				m_fScrollDistance = 0.0f;
+				//m_bIsViewScrolling	= false;
+				EnableViewToScroll(false);
+				//SetBeginViewIndex(GetBeginIndex());
+			}
+			else
+			{
+				fMove = m_fScrollToCenterSpeed;
+				m_fScrollDistance = m_fScrollDistance - fMove;
+			}
+		}
+		else if (m_fScrollDistance < 0.0f)
+		{
+			if (s_fFanTan > -m_fScrollToCenterSpeed)
+			{
+				m_fScrollDistance = -s_fFanTan;
+				s_fFanTan = s_fFanTan * 0.5f;
+				break;
+			}
+
+			if (m_fScrollDistance > -m_fScrollToCenterSpeed)
+			{
+				fMove = m_fScrollDistance;
+				m_fScrollDistance = 0.0f;
+				//m_bIsViewScrolling	= false;
+				EnableViewToScroll(false);
+				//SetBeginViewIndex(GetBeginIndex());
+			}
+			else
+			{
+				fMove = -m_fScrollToCenterSpeed;
+				m_fScrollDistance = m_fScrollDistance - fMove;
+			}
 		}
 		else
 		{
-			fMove = m_fScrollToCenterSpeed;
-			m_fScrollDistance = m_fScrollDistance - fMove;
-		}
-	}
-	else if (m_fScrollDistance < 0.0f)
-	{
-		if (m_fScrollDistance > -m_fScrollToCenterSpeed)
-		{
-			fMove = m_fScrollDistance;
-			m_fScrollDistance = 0.0f;
-			//m_bIsViewScrolling	= false;
 			EnableViewToScroll(false);
 			//SetBeginViewIndex(GetBeginIndex());
+			//m_bIsViewScrolling	= false;
 		}
-		else
-		{
-			fMove = -m_fScrollToCenterSpeed;
-			m_fScrollDistance = m_fScrollDistance - fMove;
-		}
-	}
-	else
-	{
-		EnableViewToScroll(false);
-		//SetBeginViewIndex(GetBeginIndex());
-		//m_bIsViewScrolling	= false;
-	}
+	} while (false);
 
 	MoveClient(fMove);
 
@@ -1049,8 +1069,8 @@ void NDUIScrollViewContainer::OnScrollViewScrollMoveStop(NDObject* object)
 				continue;
 			}
 
-			CUIScrollView* view = (CUIScrollView*) child;
-			view->StopAccerate();
+			CUIScrollView* pkView = (CUIScrollView*) child;
+			pkView->StopAccerate();
 		}
 	}
 
@@ -1240,18 +1260,19 @@ void NDUIScrollViewContainer::DrawScrollBar()
 		bool bTouchDown = false;
 		if (m_pClientUINode)
 		{
-			const std::vector<NDNode*>& children =
+			const std::vector<NDNode*>& kChildren =
 					m_pClientUINode->GetChildren();
-			size_t size = children.size();
+			size_t size = kChildren.size();
 			for (size_t i = 0; i < size; i++)
 			{
-				NDNode *child = children[i];
-				if (!child
-						|| !child->IsKindOfClass(RUNTIME_CLASS(CUIScrollView)))
+				NDNode* pkChild = kChildren[i];
+				if (!pkChild
+						|| !pkChild->IsKindOfClass(RUNTIME_CLASS(CUIScrollView)))
 				{
 					continue;
 				}
-				CUIScrollView* pkView = (CUIScrollView*) child;
+
+				CUIScrollView* pkView = (CUIScrollView*) pkChild;
 				if (pkView->IsTouchDown())
 				{
 					bTouchDown = true;
@@ -1263,7 +1284,7 @@ void NDUIScrollViewContainer::DrawScrollBar()
 		{
 			//return;
 		}
-		CCRect rectself = GetSrcRectCache();
+		CCRect kSelfRect = GetSrcRectCache();
 		//rectself.origin = m_kScrRectCache.origin;
 		//rectself.size = m_kScrRectCache.size;
 
@@ -1286,15 +1307,15 @@ void NDUIScrollViewContainer::DrawScrollBar()
 
 		/*rect.origin			= ccp(rectself.size.width - rect.size.width,   (-rectClient.origin.y/(rectClient.size.height -rectself.size.height))*(rectself.size.height - rectself.origin.y -rect.size.height));*/
 
-		if (GetViewCount() * GetViewSize().height <= rectself.size.height)
+		if (GetViewCount() * GetViewSize().height <= kSelfRect.size.height)
 		{
 			return;
 		}
 
-		kRect.origin = ccp(rectself.size.width - kRect.size.width,
+		kRect.origin = ccp(kSelfRect.size.width - kRect.size.width,
 				(-kClientRect.origin.y
-						/ (kClientRect.size.height - rectself.size.height))
-						* (rectself.size.height - kRect.size.height));
+						/ (kClientRect.size.height - kSelfRect.size.height))
+						* (kSelfRect.size.height - kRect.size.height));
 
 		if (kRect.origin.y < 0)
 		{
@@ -1315,9 +1336,9 @@ void NDUIScrollViewContainer::DrawScrollBar()
 			CCSize kPictureSize = m_picScrollBg->GetSize();
 			CCRect kTempRect;
 			kTempRect.origin.x = kRect.origin.x;
-			kTempRect.origin.y = rectself.origin.y;
+			kTempRect.origin.y = kSelfRect.origin.y;
 			kTempRect.size.width = kPictureSize.width;
-			kTempRect.size.height = rectself.size.height;
+			kTempRect.size.height = kSelfRect.size.height;
 			m_picScrollBg->DrawInRect(kTempRect);
 		}
 
