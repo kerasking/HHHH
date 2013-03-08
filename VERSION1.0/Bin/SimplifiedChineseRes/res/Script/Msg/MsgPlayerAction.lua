@@ -17,8 +17,11 @@ p.PLAYER_ACTION_TYPE =
     FIRST_PAY = 3,             --首次充值
     ONCE_PAY = 4,             --单次充值  
     TOTAL_PAY = 5,           --累计充值
+    VIP_CHECK_IN = 6,           --VIP簽到
     DAILY_PAY = 7,            --每日充值  
-    END = 8,
+    DAILY_RETURN = 8,            --每日返還 
+    ONLINE_RETURN = 9,            --在線返還     
+    END = 10,
 };
 
 p.RechargeRewardActionType = 6;
@@ -34,6 +37,8 @@ p.PLAYER_ACTION_STATION =
     {type = p.PLAYER_ACTION_TYPE.TOTAL_PAY,  IsExit = 0,},       --累计充值
     {type = p.PLAYER_ACTION_TYPE.VIP_PAY,  IsExit = 1,},       --vip充值  
     {type = p.PLAYER_ACTION_TYPE.DAILY_PAY,  IsExit = 0,},       --每日充值
+    {type = p.PLAYER_ACTION_TYPE.DAILY_RETURN,  IsExit = 0,},       --每日返還   
+    {type = p.PLAYER_ACTION_TYPE.ONLINE_RETURN,  IsExit = 0,},       --在線返還    
 };
 
 
@@ -173,16 +178,15 @@ function p.IsActionOpen(iType)
         if (p.PLAYER_ACTION_STATION[p.PLAYER_ACTION_TYPE.FIRST_PAY].IsExit == 1) 
            or  (p.PLAYER_ACTION_STATION[p.PLAYER_ACTION_TYPE.ONCE_PAY].IsExit == 1) 
            or  (p.PLAYER_ACTION_STATION[p.PLAYER_ACTION_TYPE.TOTAL_PAY].IsExit == 1)  
-           or  (p.PLAYER_ACTION_STATION[p.PLAYER_ACTION_TYPE.DAILY_PAY].IsExit == 1)  then
-            LogInfo("33");   
+           or  (p.PLAYER_ACTION_STATION[p.PLAYER_ACTION_TYPE.DAILY_PAY].IsExit == 1)  
+           or  (p.PLAYER_ACTION_STATION[p.PLAYER_ACTION_TYPE.DAILY_RETURN].IsExit == 1)  
+           or  (p.PLAYER_ACTION_STATION[p.PLAYER_ACTION_TYPE.ONLINE_RETURN].IsExit == 1) then
             return true;
         else
-            LogInfo("44");   
             return false;
         end
     end
     
-    LogInfo("55");   
     return false
 end
 

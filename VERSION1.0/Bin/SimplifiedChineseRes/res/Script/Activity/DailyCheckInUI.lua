@@ -95,20 +95,26 @@ function  p.InitDataWhenDown()
         --获取活动的类型
         local nType = v.Type;
         
+		if nType == MsgPlayerAction.PLAYER_ACTION_TYPE.VIP_CHECK_IN then
+			for j, k in pairs(RechargeReward.EventReward) do
+                local Config_id = k.IdEventConfig;
+				if v.Id == Config_id then
+					table.insert(p.BoxAwardInfo.Vip, k);
+                end
+            end  
+		end
+		
         if nType == MsgPlayerAction.PLAYER_ACTION_TYPE.CHECK_IN  then  --登入签到
              for j, k in pairs(RechargeReward.EventReward) do
              
                 local Config_id = k.IdEventConfig;
-                
-                if v.Id == Config_id then
+				
+				if v.Id == Config_id then
                     table.insert(p.BoxAwardInfo.Normal, k);
-                elseif 100000 == Config_id then
-                    table.insert(p.BoxAwardInfo.Vip, k);
                 end
-            end  
+             end  
             
-            break;
-       end
+        end
     end
 end
 

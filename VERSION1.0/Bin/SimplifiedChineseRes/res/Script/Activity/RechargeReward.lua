@@ -40,6 +40,9 @@ p.ActionType =
     ONCE_PAY = 4,             --单次充值  
     TOTAL_PAY = 5,           --累计充值
     DAILY_PAY = 7,           --每日充值
+    DAILY_RETURN = 8,           --每日返還   
+    ONLINE_RETURN = 9,           --在線返還  
+    
 };               
 
 --加载充值活动主界面
@@ -456,6 +459,12 @@ function p.SetRightListFocus(nIndex)
     --领取的奖励提示
     local ShowText = "";
     
+    if InfoLeft.Type == p.ActionType.DAILY_RETURN 
+       or InfoLeft.Type == p.ActionType.ONLINE_RETURN  then
+       ShowText = ShowText ..GetTxtPri("Daily_return").."\n";
+       btnGet:EnalbeGray(true);
+    end
+    
     --奖励物品
     if (Info.ItemType ~= 0) and  (Info.ItemCount ~= 0) then
         ShowText = ShowText .."  ".. ItemFunc.GetName(Info.ItemType) .."X"..Info.ItemCount.."\n";
@@ -480,6 +489,11 @@ function p.SetRightListFocus(nIndex)
     if Info.Repute ~= 0 then
         ShowText = ShowText .."  "..GetTxtPub("ShenWan").."X"..Info.Repute.."\n";
     end  
+    
+    if InfoLeft.Type == p.ActionType.DAILY_RETURN 
+       or InfoLeft.Type == p.ActionType.ONLINE_RETURN  then
+       ShowText = ShowText ..string.format(GetTxtPri("Return_day"), Info.Param1).."\n";
+    end
     
     SetLabel(layer, p.UiCtr.awardText, ShowText);
 end
