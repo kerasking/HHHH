@@ -215,7 +215,7 @@ function p.sendRealizeBuyALL()
         --判断银币
         local nmoney = GetRoleBasicDataN(GetPlayerId(),USER_ATTR.USER_ATTR_MONEY);
         if(nmoney<60000) then
-            CommonDlgNew.ShowYesDlg(GetTxtPri("DU_T27"));
+            CommonDlgNew.ShowYesDlg(GetTxtPri("DU_T31"));
             p.CloseAutoDestiny();
             return;
         end
