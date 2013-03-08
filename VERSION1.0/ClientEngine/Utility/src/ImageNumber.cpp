@@ -368,7 +368,7 @@ unsigned int ImageNumber::SetTitleRedNumber(bool cleanUp, unsigned int number,
 	}
 
 	std::vector<unsigned int> bits;
-	this->NumberBits(number, bits);
+	NumberBits(number, bits);
 
 	for (unsigned int i = 0; i < bits.size(); i++)
 	{

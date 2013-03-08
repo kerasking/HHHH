@@ -560,7 +560,7 @@ void NDUIScrollViewContainer::AdjustView()
 		return;
 	}
 
-	unsigned int uiFindInex = this->WhichViewToScroll();
+	unsigned int uiFindInex = WhichViewToScroll();
 	if ((size_t) - 1 == uiFindInex)
 	{
 		return;
@@ -597,6 +597,22 @@ unsigned int NDUIScrollViewContainer::WhichViewToScroll()
 		CCRect kClientRect = GetClientRect(true);
 		CCRect kViewRect = pkViewScrollView->GetFrameRect();
 		int iCurShowIndex = GetBeginIndex();
+
+		/***
+		* 在這裡修正iCurshowIndex為0計算不對的問題
+		* 郭浩
+		*/
+		if (0 == iCurShowIndex)
+		{
+			iCurShowIndex = 1;
+		}
+
+		/************************************************************************/
+		/* 下面這裡不能這麼算，如果index為0，那麼那iCurMoveDis值就得到一个		*/
+		/* 小于0的值，那这个值就被判断成右移动。								*/
+		/*                                       				—— 郭浩		*/
+		/************************************************************************/
+
 		int iCurMoveDis = kClientRect.origin.x
 				- (-iCurShowIndex * kViewRect.size.width);
 
