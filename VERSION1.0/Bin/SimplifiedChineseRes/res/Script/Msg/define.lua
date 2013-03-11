@@ -101,5 +101,9 @@ DoFile("Msg/MsgDailyAction.lua");
 DoFile("Msg/MsgBossBattle.lua");
 
 
+DoFile("Msg/MsgRankList.lua");
+
+DoFile("Msg/MsgSlave.lua");
+
 
 

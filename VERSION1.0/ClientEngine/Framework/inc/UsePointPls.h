@@ -54,6 +54,9 @@ USING_NS_CC;
 
 //-----------------------------------------------------------------------------------------------------------
 
+#define IPHONE5_POINT_SIZE_WIDTH	568
+
+
 
 NS_NDENGINE_BGN
 class ConvertUtil
@@ -96,27 +99,24 @@ public: //@android
 	static CCPoint getAndroidScale();
 	static float getIosScale();
 
-public: //判断格子对齐
-	static bool isCellSizeOK(); //格子大小是否整除的
-	static bool isScreenPosAligned( const CCPoint& posScreen ); //屏幕位置是否对齐
-	static bool isPlayerPosAligned( const CCPoint& kCurrentPosition ); //角色位置是否对齐
+public:
+	static bool		is_iphone5();
+	static float	get_iphone5_width_scale_for_ui_480_based();
 };
 
 //-----------------------------------------------------------------------------------------------------------
 
 //之前的格子是方格（即等宽等高），考虑到android平台多分辨率，MAP_UNITSIZE应拆分为xy两个分量.
-#define MAP_UNITSIZE_X				(ConvertUtil::getCellSize().width)
-#define MAP_UNITSIZE_Y				(ConvertUtil::getCellSize().height)
+#define MAP_UNITSIZE_X				int(ConvertUtil::getCellSize().width)
+#define MAP_UNITSIZE_Y				int(ConvertUtil::getCellSize().height)
 
 //角色显示时相对于Cell的偏移
 #define DISPLAY_POS_X_OFFSET		(MAP_UNITSIZE_X / 2)
 #define DISPLAY_POS_Y_OFFSET		(MAP_UNITSIZE_Y)
 
-//判断格子对齐
-#define IS_CELLSIZE_OK				(ConvertUtil::isCellSizeOK())
-#define IS_SCREEN_POS_ALIGNED(pos)	(ConvertUtil::isScreenPosAligned(pos))
-#define IS_PLAYER_POS_ALIGNED(pos)	(ConvertUtil::isPlayerPosAligned(pos))
 //-----------------------------------------------------------------------------------------------------------
 
+#define IS_IPHONE5					(ConvertUtil::is_iphone5())
+#define IPHONE5_WIDTH_SCALE			(ConvertUtil::get_iphone5_width_scale_for_ui_480_based())
 
 NS_NDENGINE_END

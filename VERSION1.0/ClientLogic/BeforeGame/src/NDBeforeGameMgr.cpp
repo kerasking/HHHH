@@ -358,7 +358,7 @@ NDBeforeGameMgr::NDBeforeGameMgr()
 	NDNetMsgPoolObj->RegMsg(MB_SERVER_INFO_REQUEST, this);
 	//NDNetMsgPoolObj->RegMsg(_MSG_NOTIFY_CLIENT, this);
 	//NDNetMsgPoolObj->RegMsg(_MSG_MPF_VERSION, this);
-
+	SetLogUIUpdate(false);
 	//ndRegisterAccount = [[NDRegisterAccount alloc] init];
 #if USE_ROBOT == 0
 // 	NDDataPersist loginData;
@@ -460,6 +460,8 @@ NDBeforeGameMgr::~NDBeforeGameMgr()
 // 		[m_sdkLogin release];
 // 		m_sdkLogin = NULL;
 // 	}
+
+	SetLogUIUpdate(false);
 }
 
 bool NDBeforeGameMgr::Load()
@@ -1425,7 +1427,7 @@ void NDBeforeGameMgr::Login()
 bool NDBeforeGameMgr::doNDSdkLogin()
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-#if (defined(USE_NDSDK)
+#if (defined(USE_NDSDK))
 	if (m_sdkLogin)
 	{
 		//[m_sdkLogin release];
@@ -1944,6 +1946,9 @@ bool NDBeforeGameMgr::CheckClientVersion( const char* szURL,unsigned int uiPort 
 
 	NDTransData kData(_MSG_CLIENT_VERSION);
     
+	//每次检测版本都默认为非服务器列表页面
+    SetLogUIUpdate(false);
+
 	LOGD("Send the _MSG_CLIENT_VERSION message to server!");
 
 	kData << s_nVersion;
@@ -1952,6 +1957,53 @@ bool NDBeforeGameMgr::CheckClientVersion( const char* szURL,unsigned int uiPort 
     
     return true;
 }
+
+bool NDBeforeGameMgr::LoginSerUICheckClientVersion( const char* szURL, unsigned int uiPort)
+{
+	LOGD("NDBeforeGameMgr::CheckClientVersion");
+	int s_nVersion = 0;
+	unsigned char ucResType = RES_TYPE;
+
+	//取得当前客户端版本
+	bool bFile = true;
+	FILE* pkFile = 0;
+	char szLocalVersion[5] = {0};
+
+	//从caches下取版本信息
+	string sVersion = NDPath::GetCashesPath() + NDPath::GetRootResDirName() + SZ_VERINI_PATH;
+	LOGD("sVersion is %s",sVersion.c_str());
+	pkFile = fopen(sVersion.c_str(), "rb");
+
+	if (!pkFile)
+	{
+		LOGERROR("读取CACHES目录下版本文件失败");
+		bFile = 0;
+	}
+	else
+	{
+		fread(szLocalVersion, 1, 4, pkFile);
+		fclose(pkFile);
+		s_nVersion = atoi(szLocalVersion);
+	}
+
+	if (NDDataTransThread::DefaultThread()->GetThreadStatus() != ThreadStatusRunning)	
+	{
+		return false;
+	}
+
+	NDTransData kData(_MSG_CLIENT_VERSION);
+
+	//服务器列表页面升级
+	SetLogUIUpdate(true);
+
+	kData << s_nVersion;
+	kData << ucResType;
+	NDDataTransThread::DefaultThread()->GetSocket()->Send(&kData);
+
+	return true;
+}
+
+
 
 int NDBeforeGameMgr::ms_nCopyStatus = 0;
 int NDBeforeGameMgr::ms_nCopyLoginResStatus = 0;
@@ -2147,44 +2199,49 @@ void* CopyLoginResThread(void* ptr)
 
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-int recursiveDelete(char* dirname) {
-    DIR *dp;
-    struct dirent *ep;
-    
-    char abs_filename[FILENAME_MAX];
-    
-    dp = opendir (dirname);
-    if (dp != NULL)
-    {
-        while (ep = readdir (dp)) {
-            struct stat stFileInfo;
-            
-            snprintf(abs_filename, FILENAME_MAX, "%s/%s", dirname, ep->d_name);
-            
-            if (lstat(abs_filename, &stFileInfo) < 0)
-            {
-                LOGD("xxxxxerror lstat %s", abs_filename);
-            }            
-            if(S_ISDIR(stFileInfo.st_mode)) {
-                if(strcmp(ep->d_name, ".") &&
-                   strcmp(ep->d_name, "..")) {
-                    LOGD("xxxxx%s directory\n",abs_filename);
-                    recursiveDelete(abs_filename);
-                }
-            } else {
-                LOGD("xxxxx%s file\n",abs_filename);
-                remove(abs_filename);
-            }
-        }
-        (void) closedir (dp);
-    }
-    else
-        LOGD("xxxxxCouldn't open the directory");
-    
-    
-    remove(dirname);
-    return 0;
-    
+int recursiveDelete(char* dirname)
+{
+	DIR *dp;
+	struct dirent* ep = 0;
+
+	char abs_filename[FILENAME_MAX] = {0};
+
+	dp = opendir(dirname);
+	if (dp != NULL)
+	{
+		while (ep = readdir(dp))
+		{
+			struct stat stFileInfo;
+
+			snprintf(abs_filename, FILENAME_MAX, "%s/%s", dirname, ep->d_name);
+
+			if (lstat(abs_filename, &stFileInfo) < 0)
+			{
+				LOGD("xxxxxerror lstat %s", abs_filename);
+			}
+			if (S_ISDIR(stFileInfo.st_mode))
+			{
+				if (strcmp(ep->d_name, ".") && strcmp(ep->d_name, ".."))
+				{
+					LOGD("xxxxx%s directory\n", abs_filename);
+					recursiveDelete(abs_filename);
+				}
+			}
+			else
+			{
+				LOGD("xxxxx%s file\n", abs_filename);
+				remove(abs_filename);
+			}
+		}
+		(void) closedir(dp);
+	}
+	else
+	{
+		LOGD("xxxxxCouldn't open the directory");
+	}
+
+	remove(dirname);
+	return 0;
 }
 #endif
 

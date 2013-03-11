@@ -48,6 +48,8 @@ public:
 	void PlayAnimation( unsigned int nIndex, bool bReverse );
 	//+2012.6.3
 	
+	void setExtra( const int extra );
+
 private:
 
 	NDUINode*				m_pSpriteParentNode;
@@ -55,6 +57,7 @@ private:
 	
 protected:
 	void draw(); override
+	void debugDraw();
 };
 
 #endif // _UI_SPRITE_NODE_H_ZJH_

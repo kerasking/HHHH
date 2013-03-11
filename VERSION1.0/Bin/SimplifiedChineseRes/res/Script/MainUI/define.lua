@@ -10,3 +10,4 @@ DoFile("MainUI/EmailList.lua");
 DoFile("MainUI/PlayEffectAnimation.lua");
 DoFile("MainUI/GameSetting.lua");
 DoFile("MainUI/ActivityNoticeUI.lua");
+DoFile("MainUI/Buff.lua");

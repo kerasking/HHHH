@@ -22,15 +22,17 @@ class NDUIScrollContainer : public NDUILayer
 	~NDUIScrollContainer();
 	
 public:
-	void Initialization(); override
-	void SetLeftReserveDistance(unsigned int distance);
-	void SetRightReserveDistance(unsigned int distance);
-	void SetTopReserveDistance(unsigned int distance);
-	void SetBottomReserveDistance(unsigned int distance);
-	void ScrollToTop();
-	void ScrollToBottom();
+	virtual void Initialization(); override
+	virtual void SetLeftReserveDistance(unsigned int distance);
+	virtual void SetRightReserveDistance(unsigned int distance);
+	virtual void SetTopReserveDistance(unsigned int distance);
+	virtual void SetBottomReserveDistance(unsigned int distance);
 	
-	void EnableScrollBar(bool bEnable);
+	virtual void ScrollToTop();
+	virtual void ScrollToBottom();
+	
+	virtual void EnableScrollBar(bool bEnable);
+
 protected:
 	unsigned int				m_uiLeftDistance;
 	unsigned int				m_uiRightDistance;
@@ -40,12 +42,14 @@ protected:
 	NDPicture*					m_picScroll;
     NDPicture*					m_picScrollBg;
 	bool						m_bOpenScrollBar;
+
 protected:
-	bool TouchBegin(NDTouch* touch); override
-	void draw(); override
+	virtual bool TouchBegin(NDTouch* touch);
+	virtual void draw();
+	
 	// CommonProtol
-	bool CanHorizontalMove(NDObject* object, float& hDistance); override
-	bool CanVerticalMove(NDObject* object, float& vDistance); override
+	virtual bool CanHorizontalMove(NDObject* object, float& hDistance); override
+	virtual bool CanVerticalMove(NDObject* object, float& vDistance); override
 	virtual void DrawScrollBar();
 };
 

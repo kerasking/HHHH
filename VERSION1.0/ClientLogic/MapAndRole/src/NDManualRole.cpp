@@ -207,33 +207,19 @@ void NDManualRole::Update(unsigned long ulDiff)
 				kCurrentPosition.x -= DISPLAY_POS_X_OFFSET;
 				kCurrentPosition.y -= DISPLAY_POS_Y_OFFSET;
 
-//@del
-// 				if (int(kCurrentPosition.x) % int(MAP_UNITSIZE_X) != 0
-// 						|| int(kCurrentPosition.y) % int(MAP_UNITSIZE_Y) != 0)
-// 				{
-// 					//continue;
-// 					return;
-// 				}
-				if (!IS_SCREEN_POS_ALIGNED(kCurrentPosition))
+#if 1
+				if (int(kCurrentPosition.x) % int(MAP_UNITSIZE_X) != 0
+						|| int(kCurrentPosition.y) % int(MAP_UNITSIZE_Y) != 0)
 				{
-					if (NDDebugOpt::getTraceClickMapEnabled())
-					{
-						CCLog( "@@ NDManualRole::Update(), !IS_SCREEN_POS_ALIGNED(kCurrentPosition), return!");
-					}
+					//continue;
 					return;
 				}
+#endif
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-				float usOldRecordX = (kCurrentPosition.x) / MAP_UNITSIZE_X;
-				float usOldRecordY = (kCurrentPosition.y) / MAP_UNITSIZE_Y;
-				float usRecordX = usOldRecordX;
-				float usRecordY = usOldRecordY;
-#else
 				int usOldRecordX = (kCurrentPosition.x) / MAP_UNITSIZE_X;
 				int usOldRecordY = (kCurrentPosition.y) / MAP_UNITSIZE_Y;
 				int usRecordX = usOldRecordX;
 				int usRecordY = usOldRecordY;
-#endif
 
 				if (!GetXYByDir(usOldRecordX, usOldRecordY, nDir, usRecordX,
 						usRecordY))
@@ -2572,16 +2558,12 @@ bool NDManualRole::GetShowPetInfo(ShowPetInfo& info)
 
 void NDManualRole::ResetShowPetPosition()
 {
-	/*if (!m_pBattlePetShow)
-	 return;
 
-	 m_pBattlePetShow->SetPosition(GetPosition());*/
 }
 
 void NDManualRole::ResetShowPet()
 {
 	ShowPetInfo emptyShowPetInfo;
-	//SetShowPet(emptyShowPetInfo); ///<ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 }
 
 std::string NDManualRole::GetPeerageName(int nPeerage)
@@ -2628,18 +2610,11 @@ unsigned int NDManualRole::GetPeerageColor(int nPeerage)
 	return unClr;
 }
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-int NDManualRole::GetPathDir(float oldX, float oldY, float newX, float newY)
-#else
 int NDManualRole::GetPathDir(int oldX, int oldY, int newX, int newY)
-#endif
 {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	if (!(TAbs<float>(oldX - newX) <= 1 && TAbs<float>(oldY - newY) <= 1))
-#else
 	if (!(abs(oldX - newX) <= 1 && abs(oldY - newY) <= 1))
-#endif
 	{
+		CCLog( "@@ GetPathDir() err!! cell distance too big !!\r\n");
 		return -1;
 	}
 
@@ -2659,11 +2634,7 @@ int NDManualRole::GetPathDir(int oldX, int oldY, int newX, int newY)
 	return -1;
 }
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-bool NDManualRole::GetXYByDir(float oldX, float oldY, int dir, float& newX, float& newY)
-#else
 bool NDManualRole::GetXYByDir(int oldX, int oldY, int dir, int& newX, int& newY)
-#endif
 {
 	if (dir < 0 || dir > 7)
 	{

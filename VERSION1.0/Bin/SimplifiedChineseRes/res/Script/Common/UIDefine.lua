@@ -191,15 +191,27 @@ NMAINSCENECHILDTAG =
     MainPlayerListUI        = NUITAG_BEGIN + 178,                   --主城查看其它玩家
     Banquet					= NUITAG_BEGIN + 179,                    --宴会界面
     BattleUI_Title			= NUITAG_BEGIN + 180,                    --战斗TITLE界面
+ 	QuickSwapEquipUI        = NUITAG_BEGIN + 181,                   --快速换装备
     CampBattle              = 2015,                   --阵营战
      	
  	SyndicateBattleUI         =  2015,                   --军团战ui
  	SyndicateBattleSignUpUI           =  NUITAG_BEGIN + 180,                  --军团战报名ui
  	SyndicateBattleResultUI           =  NUITAG_BEGIN + 181,                   --军团战进程ui
+
+	LuckyBox							= NUITAG_BEGIN + 185,		-- 幸运宝箱
+	TreasureHunt						= 2015,--NUITAG_BEGIN + 183,		-- 古迹寻宝
+ 	
+
  	PVPADDUI           =  NUITAG_BEGIN + 184,                   --PVP属性界面
 
  	DestinyUI               = NUITAG_BEGIN + 182,                   --占星
     DestinyFeteUI           = NUITAG_BEGIN + 183,                   --占星祭祀
+
+	RankListUI              = NUITAG_BEGIN + 189,                   --名人堂
+	SlaveUI					= 2015,                   --斗地主
+
+    Buff           = NUITAG_BEGIN + 186,                   --玩家状态
+
     CommonDlg				= NDLGTAG_BEGIN,						--通用对话框
 	CommonDlgNew              = NDLGTAGNEW_BEGIN,                     --新通用对话框
 	--后面都被对话框占用了,请不要使用

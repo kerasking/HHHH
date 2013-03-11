@@ -141,6 +141,8 @@ local TAG_GEM_DESC         = 402;               --宝石描述
 local TAG_GEM_USE          = 55;                --镶嵌
 local TAG_GEM_SYNTHESIS    = 19;                --合成
 local TAG_GEM_CLOSE        = 533;               --关闭
+
+local TAG_GEM_UNALLGEM      = 16;               --全部卸下
 --宝石操作类型
 local GEM_OPER_TYPE = {MOSAIC = 0, UNSNATCH = 1,};
 
@@ -1378,6 +1380,14 @@ function p.refreshMosaicView(equipId)
     local sEquipName = ItemFunc.GetName(nItemTypeId);
     btnName:SetText(sEquipName);
     
+    
+    --设置全部卸下状态
+    local btnUnAllGem = GetButton(mosaicLayer, TAG_GEM_UNALLGEM);
+    if(bGenCount>0) then
+        btnUnAllGem:EnalbeGray(false);
+    else
+        btnUnAllGem:EnalbeGray(true);
+    end
     p.resetEduBtnDisplay();
 end
 
@@ -2021,10 +2031,22 @@ function p.OnUIEventMosaic(uiNode, uiEventType, param)
     local tag = uiNode:GetTag();
     LogInfo("镶嵌事件p.OnUIEventMosaic[%d], event:%d", tag, uiEventType);
     if uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK then
-    
+        
+        if(tag == TAG_GEM_UNALLGEM) then
+            --判断背包满
+            local bGenCount = Item.GetItemInfoN(p.nItemIdTemp, Item.ITEM_GEN_NUM);
+            if(ItemFunc.IsBagFull(bGenCount-1)) then
+                return true;
+            end
+            
+            MsgCompose.unAllEmbedGem(p.nItemIdTemp);
+            return true;
+        end
+        
+        
         if(p.isBackGemList(tag) == false) then
             LogInfo("p.OnUIEventMosaic not mosaic!");
-            return;
+            return true;
         end
         
         local btn = ConverToItemButton(uiNode);
@@ -2073,14 +2095,23 @@ function p.OnUIEventUnMosaic(uiNode, uiEventType, param)
     
         if tag == TAG_M_GEM_EQUIP then
             return;
+        elseif( tag == TAG_GEM_UNALLGEM ) then
+            local btAttrAmount = Item.GetItemInfoN(p.nItemIdTemp, Item.ITEM_GEN_NUM);
+            LogInfo("ch btAttrAmount:[%d]",btAttrAmount);
+            --判断背包是否已满
+            if(ItemFunc.IsBagFull(btAttrAmount-1)) then
+                return true;
+            end
+        
+            --卸下全部的宝石
+            MsgCompose.unAllEmbedGem(p.nItemIdTemp);
+        else
+            local btn = ConverToItemButton(uiNode);
+            local nGemTypeId = btn:GetItemType();
+            
+            --查看宝石信息
+            p.LoadGemInfo(nGemTypeId, GEM_OPER_TYPE.UNSNATCH);
         end
-    
-        local btn = ConverToItemButton(uiNode);
-        local nGemTypeId = btn:GetItemType();
-        
-        --查看宝石信息
-        p.LoadGemInfo(nGemTypeId, GEM_OPER_TYPE.UNSNATCH);
-        
     elseif(uiEventType == NUIEventType.TE_TOUCH_SC_VIEW_IN_BEGIN) then
         
         if(tag == TAG_M_GEM_LIST) then

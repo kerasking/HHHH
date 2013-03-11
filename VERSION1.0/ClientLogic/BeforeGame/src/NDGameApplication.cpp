@@ -365,18 +365,22 @@ void NDGameApplication::applicationWillEnterForeground()
 #ifdef USE_MGSDK
     [MBGPlatform resume];
 #endif
+
+	CCLog( "@@ NDGameApplication::applicationWillEnterForeground()\r\n" );
+
 	CCDirector::sharedDirector()->startAnimation();
 
 	if (NDDataTransThread::DefaultThread()->GetQuitGame())
 	{
-		quitGame();
 		NDDataTransThread::DefaultThread()->Stop();
 		NDDataTransThread::ResetDefaultThread();
+
+		CCLog( "@@ applicationWillEnterForeground(): now call quitGame()\r\n" );
+		quitGame();
 	}
 
 	// if you use SimpleAudioEngine, it must resume here
 	SimpleAudioEngine::sharedEngine()->resumeBackgroundMusic();
-	CCLog( "@@ NDGameApplication::applicationWillEnterForeground()\r\n" );
 }
 
 //@pm

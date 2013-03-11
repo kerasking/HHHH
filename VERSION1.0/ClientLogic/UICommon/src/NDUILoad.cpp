@@ -219,6 +219,16 @@ NDUINode* NDUILoad::LoadCtrl( CUIData& uiData, const int ctrlIndex, NDUINode *pa
 	{
 		node->SetBoundScale(2);
 	}
+
+	//特别处理：主界面右上角图标（点击半透明，类似NPC点击）
+	if (strstr(uiData.getIniFile().GetPath(), "MainUI.ini") != NULL
+		&& uiInfo.nID == 9
+		&& node->IsKindOfClass(RUNTIME_CLASS(NDUIButton)))
+	{
+		NDUIButton* btn = reinterpret_cast<NDUIButton*>(node);
+		btn->enableHighlight(true);
+	}
+
 	return node;
 }
 
@@ -268,11 +278,11 @@ NDUINode* NDUILoad::CreateCtrl( UIINFO& uiInfo, CCSize sizeOffset, const char*& 
 			ctrlTypeName = "MY_CONTROL_TYPE_TEXT";
 		}
 		break;
-	case MY_CONTROL_TYPE_LIST:
+	case MY_CONTROL_TYPE_LIST_HORZ: //@listbox
 		{
-			ControlHelp<MY_CONTROL_TYPE_LIST> help;
+			ControlHelp<MY_CONTROL_TYPE_LIST_HORZ> help;
 			node = (NDUINode*)help.Create(uiInfo, sizeOffset);
-			ctrlTypeName = "MY_CONTROL_TYPE_LIST";
+			ctrlTypeName = "MY_CONTROL_TYPE_LIST_HORZ";
 		}
 		break;
 	case MY_CONTROL_TYPE_PROGRESS:
@@ -324,11 +334,11 @@ NDUINode* NDUILoad::CreateCtrl( UIINFO& uiInfo, CCSize sizeOffset, const char*& 
 			ctrlTypeName = "MY_CONTROL_TYPE_HYPER_TEXT_BUTTON";
 		}
 		break;
-	case MY_CONTROL_TYPE_LIST_M:
+	case MY_CONTROL_TYPE_LIST_VERT: //@listbox
 		{
-			ControlHelp<MY_CONTROL_TYPE_LIST_M> help;
+			ControlHelp<MY_CONTROL_TYPE_LIST_VERT> help;
 			node = (NDUINode*)help.Create(uiInfo, sizeOffset);
-			ctrlTypeName = "MY_CONTROL_TYPE_LIST_M";
+			ctrlTypeName = "MY_CONTROL_TYPE_LIST_VERT";
 		}
 		break;
 	case MY_CONTROL_TYPE_ITEM_BUTTON:
@@ -479,6 +489,12 @@ void NDUILoad::PostLoad(UIINFO& uiInfo)
 	uiInfo.CtrlPos.y *= sy;
 	uiInfo.nCtrlWidth *= sx;
 	uiInfo.nCtrlHeight *= sy;	
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+	if (IS_IPHONE5)
+	{
+		uiInfo.CtrlPos.x	*= IPHONE5_WIDTH_SCALE;
+		uiInfo.nCtrlWidth	*= IPHONE5_WIDTH_SCALE;	
+	}
 #endif
 
 	//重置锚点(0,0)

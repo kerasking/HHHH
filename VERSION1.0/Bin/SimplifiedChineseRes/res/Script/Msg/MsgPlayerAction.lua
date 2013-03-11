@@ -17,8 +17,11 @@ p.PLAYER_ACTION_TYPE =
     FIRST_PAY = 3,             --首次充值
     ONCE_PAY = 4,             --单次充值  
     TOTAL_PAY = 5,           --累计充值
+    VIP_CHECK_IN = 6,           --VIP簽到
     DAILY_PAY = 7,            --每日充值  
-    END = 8,
+    DAILY_RETURN = 8,            --每日返還 
+    ONLINE_RETURN = 9,            --在線返還     
+    END = 10,
 };
 
 p.RechargeRewardActionType = 6;
@@ -34,6 +37,8 @@ p.PLAYER_ACTION_STATION =
     {type = p.PLAYER_ACTION_TYPE.TOTAL_PAY,  IsExit = 0,},       --累计充值
     {type = p.PLAYER_ACTION_TYPE.VIP_PAY,  IsExit = 1,},       --vip充值  
     {type = p.PLAYER_ACTION_TYPE.DAILY_PAY,  IsExit = 0,},       --每日充值
+    {type = p.PLAYER_ACTION_TYPE.DAILY_RETURN,  IsExit = 0,},       --每日返還   
+    {type = p.PLAYER_ACTION_TYPE.ONLINE_RETURN,  IsExit = 0,},       --在線返還    
 };
 
 
@@ -92,7 +97,28 @@ function p.MsgGetPlayerActionInfo(netdatas)
         LogInfo("i = %d, idevent = %d, iData1 = %d, iData2 = %d, iData3 = %d, iBeginTime = %d", i, p.StrActionInfo.iDb_event_config_id, 
                         p.StrActionInfo.iData1, p.StrActionInfo.iData2, p.StrActionInfo.iData3, p.StrActionInfo.iBeginTime);
 
-        local iType = GetDataBaseDataN("event_config", p.StrActionInfo.iDb_event_config_id, DB_EVENT_CONFIG.TYPE);
+        local iType = nil;
+   
+        if RechargeReward.GetIfNeedDown() then
+			 for i,v in pairs(RechargeReward.EventConfig) do
+				local id1 = v.Id;
+				local id2 = p.StrActionInfo.iDb_event_config_id;
+				
+				if v.Id == p.StrActionInfo.iDb_event_config_id then
+					iType = v.Type;
+					break;
+				end
+			 end
+			 
+			 if iType == nil then
+				return;
+			 end
+		else
+			iType = GetDataBaseDataN("event_config", p.StrActionInfo.iDb_event_config_id, DB_EVENT_CONFIG.TYPE);
+		end
+		 
+		 
+
         if cActionType == p.EVENT_ACTION_TYPE.ACTION_INFO then   --要启用的活动
             if (p.PLAYER_ACTION_TYPE.CHECK_IN == iType) then   --登入签到
                 DailyCheckInUI.SetUiInfo(p.StrActionInfo.iData1, p.StrActionInfo.iData2, p.StrActionInfo.iData3);
@@ -152,16 +178,15 @@ function p.IsActionOpen(iType)
         if (p.PLAYER_ACTION_STATION[p.PLAYER_ACTION_TYPE.FIRST_PAY].IsExit == 1) 
            or  (p.PLAYER_ACTION_STATION[p.PLAYER_ACTION_TYPE.ONCE_PAY].IsExit == 1) 
            or  (p.PLAYER_ACTION_STATION[p.PLAYER_ACTION_TYPE.TOTAL_PAY].IsExit == 1)  
-           or  (p.PLAYER_ACTION_STATION[p.PLAYER_ACTION_TYPE.DAILY_PAY].IsExit == 1)  then
-            LogInfo("33");   
+           or  (p.PLAYER_ACTION_STATION[p.PLAYER_ACTION_TYPE.DAILY_PAY].IsExit == 1)  
+           or  (p.PLAYER_ACTION_STATION[p.PLAYER_ACTION_TYPE.DAILY_RETURN].IsExit == 1)  
+           or  (p.PLAYER_ACTION_STATION[p.PLAYER_ACTION_TYPE.ONLINE_RETURN].IsExit == 1) then
             return true;
         else
-            LogInfo("44");   
             return false;
         end
     end
     
-    LogInfo("55");   
     return false
 end
 
@@ -172,8 +197,108 @@ function p.MsgPopDlg()
 end
 
 
+
+--修改充值活动数据由读取静态表数据修改为服务器下发---------------change 2013-2-16--by tzq
+
+--下发的数据类型   
+p.REV_ACTION_TYPE =
+{
+	ACTION_EVENTLIST_CONFIG_BEGIN = 1,		--活动配置
+	ACTION_EVENTLIST_CONFIG = 2,	       --活动配置
+	ACTION_EVENTLIST_AWARD_BEGIN = 3,		--活动奖励配置
+	ACTION_EVENTLIST_AWARD = 4,				--活动奖励配置
+};
+
+--[[  
+struct EventList
+{
+	OBJID idEventConfig;
+	char szName[_MAX_NAMESIZE];
+	UCHAR ucType;
+	UCHAR ucUIGroup;
+	UCHAR ucTimeType;
+	DWORD dwBeginTime;
+	DWORD dwEndTime;
+	char szContent[_MAX_WORDSSIZE];
+	char szBroadContent[_MAX_WORDSSIZE];
+	USHORT usServer;
+};
+struct EventAward
+{
+	OBJID idAward;
+	OBJID idEventConfig;
+	UCHAR ucStage;
+	DWORD dwStageCondition;
+	OBJID idItemType;
+	UCHAR ucAmount;
+	DWORD dwEMoney;
+	DWORD dwStamina;
+	DWORD dwMoney;
+	DWORD dwSoph;
+	DWORD dwRepute;
+	DWORD dwParam1;
+	DWORD dwParam2;
+	DWORD dwParam3;
+};
+]]
+	
+	
+function p.MsgGetRechargeRewardInfo(netdatas)
+ 
+    --数据的类型
+    local cActionType = netdatas:ReadShort();
+    --数据的数量
+    local cActionAmount = netdatas:ReadByte();
+    
+    if cActionType == p.REV_ACTION_TYPE.ACTION_EVENTLIST_CONFIG_BEGIN then
+		RechargeReward.EventConfig = {};   
+    elseif cActionType == p.REV_ACTION_TYPE.ACTION_EVENTLIST_AWARD_BEGIN then
+    	RechargeReward.EventReward = {};  
+    end
+    
+    --处理congfig数据
+    if cActionType == p.REV_ACTION_TYPE.ACTION_EVENTLIST_CONFIG_BEGIN or cActionType == p.REV_ACTION_TYPE.ACTION_EVENTLIST_CONFIG then
+		for i = 1, cActionAmount do
+			local Record = {};	
+			Record.Id = netdatas:ReadInt();
+			Record.Name = netdatas:ReadUnicodeString();
+			Record.Type = netdatas:ReadByte();
+			Record.Group = netdatas:ReadByte();
+			Record.TimeType = netdatas:ReadByte();  
+			Record.BeginTime = netdatas:ReadInt();   
+			Record.EndTime = netdatas:ReadInt();
+			Record.Content = netdatas:ReadUnicodeString();      
+			Record.Broad = netdatas:ReadUnicodeString();   
+			Record.Server = netdatas:ReadShort();
+			Record.RightListTable = {}; 
+			table.insert(RechargeReward.EventConfig, Record);    
+		end
+		
+	--处理reward数据	
+	elseif cActionType == p.REV_ACTION_TYPE.ACTION_EVENTLIST_AWARD_BEGIN or cActionType == p.REV_ACTION_TYPE.ACTION_EVENTLIST_AWARD then
+		for i = 1, cActionAmount do
+			local rightTable = {};  
+			rightTable.Id = netdatas:ReadInt();
+			rightTable.IdEventConfig = netdatas:ReadInt();
+			rightTable.Stage = netdatas:ReadByte();                --阶段
+			rightTable.StageCondition  = netdatas:ReadInt();   --阶段条件
+			rightTable.ItemType = netdatas:ReadInt();        --奖励物品类型
+			rightTable.ItemCount = netdatas:ReadByte();      --物品数
+			rightTable.Emoney= netdatas:ReadInt();          --金币
+			rightTable.Stamina = netdatas:ReadInt();        --奖励物品类型  --军令
+			rightTable.Money = netdatas:ReadInt();          --奖励物品类型  --银币  
+			rightTable.Soph = netdatas:ReadInt();           --奖励物品类型                --将魂
+			rightTable.Repute = netdatas:ReadInt();          --声望 
+			rightTable.Param1 = netdatas:ReadInt();  
+			rightTable.Param2 = netdatas:ReadInt();  
+			rightTable.Param3 = netdatas:ReadInt(); 
+			table.insert(RechargeReward.EventReward, rightTable);   
+		end
+   end
+end
+
 --注册消息获取玩家活动信息
 RegisterNetMsgHandler(NMSG_Type._MSG_PLAYER_ACTION_INFO,  "p.MsgGetPlayerActionInfo", p.MsgGetPlayerActionInfo);
-
---注册收到系统消息弹出处理
---RegisterNetMsgHandler(NMSG_Type._MSG_TALK, "p.MsgPopDlg", p.MsgPopDlg);
+--充值数据接收消息
+RegisterNetMsgHandler(NMSG_Type._MSG_EVENT_LIST,  "p.MsgGetRechargeRewardInfo", p.MsgGetRechargeRewardInfo);
+--change end

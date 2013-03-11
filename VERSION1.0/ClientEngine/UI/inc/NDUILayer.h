@@ -95,7 +95,7 @@ protected:
 	//----------------------------------------------------------------------------------------
 
 public:
-	void Initialization();override
+	virtual void Initialization();
 
 	void SetBackgroundImage(const char* imageFile);
 
@@ -113,15 +113,15 @@ public:
 
 	NDUINode* GetFocus();
 
-	bool UITouchBegin(NDTouch* touch);
+	virtual bool UITouchBegin(NDTouch* touch);
 
 	virtual void UITouchEnd(NDTouch* touch);
 
-	void UITouchCancelled(NDTouch* touch);
+	virtual void UITouchCancelled(NDTouch* touch);
 
-	void UITouchMoved(NDTouch* touch);
+	virtual void UITouchMoved(NDTouch* touch);
 
-	bool UITouchDoubleClick(NDTouch* touch);
+	virtual bool UITouchDoubleClick(NDTouch* touch);
 
 	virtual bool TouchBegin(NDTouch* touch);
 
@@ -150,10 +150,16 @@ public:
 	bool IsTouchDown();
 
 public:
-	void draw();override
+	virtual void draw();
 	bool IsVisibled();override
 	bool isTouchMoved( const int errorPixels = 3 );
 
+public:
+	void lazyDelete(); //@lazydel
+
+private:
+	NDTimer* m_pLazyDeleteTimer;
+	
 public:
 	CCPoint m_kBeginTouch;
 	CCPoint m_kEndTouch;

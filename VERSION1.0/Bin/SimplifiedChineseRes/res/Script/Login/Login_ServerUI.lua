@@ -13,7 +13,12 @@ p.Pwd="";
 p.UIN=317003333;
 
 p.LoginWait = true;
+p.LoginUiUpdate = false;          --在服务器列表是否要检测版本更新的标志
+
 p.SerName = "";
+p.SerIp = "";
+p.SerPort = "";
+
 p.nCurSerId = -1;
 p.nPreSerId = -1;
 
@@ -99,10 +104,13 @@ p.RoleListTag = {};
 --end
 	
 function p.LoadUI()
+    p.ProcessNotifyClient2();
+    
     local bFlag = HideLoginUI(NMAINSCENECHILDTAG.Login_ServerUI);
     if(bFlag) then
         return true;
     end
+    p.IsShow = true;
     
 --    LogInfo("test qbw 111")
 --	--播放背景音乐
@@ -492,11 +500,20 @@ function p.OnUIEvent(uiNode, uiEventType, param)
         local sServerIp = info.nServerIP;
         local nServerPort = info.nServePort;
         p.SerName = sServerName;
+        p.SerIp = sServerIp;
+		 p.SerPort = nServerPort;
+        
         p.nPreSerId = p.nCurSerId;
         p.nCurSerId = info.nServerID;
         
         LogInfo("登录服务器名:[%s],ip:[%s],port:[%d]",sServerName,sServerIp,nServerPort);
-        p.LoginGame(sServerName,sServerIp,nServerPort);
+        
+        if p.LoginUiUpdate then
+			--检测当前是否有版本更新
+			p.SendDataToCheckVision();
+		 else
+			p.LoginGame(sServerName,sServerIp,nServerPort);
+		 end
 	end
 	return true;
 end
@@ -511,6 +528,8 @@ function p.LoginOK_Guest(param)
 end
 
 function p.LoginOK_Normal(param)
+    LogInfo("@@ Login_ServerUI::LoginOK_Normal()" );
+    
     p.UIN = param;
     LogInfo("p.LoginOK_Normal uin:[%d]",param);
     p.ChangeUserLogin(p.UIN);
@@ -531,7 +550,7 @@ function p.RunGetServerListTimer()
     if(p.nTimerID == nil) then
         LogInfo("p.RunGetServerListTimer send!");
         sendMsgConnect(p.worldIP, p.worldPort, p.UIN);
-        p.nTimerID = RegisterTimer( p.TimerGetServerList, 30 );
+        p.nTimerID = RegisterTimer( p.TimerGetServerList, 10 );
     end
 end
 
@@ -575,9 +594,13 @@ function p.RefreshServer(nEventType)
     end
 end
 
+p.IsShow = false;
 function p.ProcessServerList(netdatas)
 	LogInfo("receive_serverlist");
-    
+    if(p.IsShow) then
+        p.GetNotice();
+        p.IsShow = false;
+    end
     
     local record = {};
     record.nServerID = netdatas:ReadShort();
@@ -715,11 +738,67 @@ end
 function p.GetAccountID()
 	return p.UIN;
 end
+
+
+function p.GetNotice()
+    local record = SqliteConfig.SelectNotice(1);
+    --ActivityNoticeUI.ShowUI(record.VER);
+end
+
+--踢人
+function p.ProcessNotifyClient2()
+    local usAction = MsgLogin.TT_Status;
+    if(not CheckN(usAction)) then
+        MsgLogin.TT_Status = nil;
+        return;
+    end
+    if(usAction == 0) then
+        local sTip = GetTxtPri("GMCOMM_T01");
+        CommonDlgNew.ShowYesDlg(sTip);
+    elseif(usAction == 1) then
+        local sTip = GetTxtPri("GMCOMM_T02");
+        CommonDlgNew.ShowYesDlg(sTip);
+    elseif(usAction == 2) then
+        local sTip = GetTxtPri("GMCOMM_T03");
+        CommonDlgNew.ShowYesDlg(sTip);
+    elseif(usAction == 3) then
+        local sTip = GetTxtPri("GMCOMM_T04");
+        CommonDlgNew.ShowYesDlg(sTip);
+    elseif(usAction == 4) then
+        local sTip = GetTxtPri("GMCOMM_T05");
+        CommonDlgNew.ShowYesDlg(sTip);
+    end
+    MsgLogin.TT_Status = nil;
+end
+
 --++Guosen 2012.8.4
 function p.LoginGameNew()
-	LogInfo( "Login_ServerUI: LoginGameNew()" );
+	LogInfo( "@@ Login_ServerUI: LoginGameNew()" );
 	Music.PlayLoginMusic()
 	p.LoadUI();
 	p.LoginOK_Normal( p.UIN )
 end
 RegisterGlobalEventHandler( GLOBALEVENT.GE_LOGIN_GAME,"Login_ServerUI.LoginGame", p.LoginGameNew );
+
+
+
+---------新加在服务器列表页面增加版本判断功能-----------tzq 2013-2-1 begin---------------
+
+--向世界服务器发送数据请求版本验证
+function p.SendDataToCheckVision()
+	local WorldSerIp = GetGameConfig("world_server_ip");
+	local WorldSerPort = GetWorldServerPort();
+	
+	LoginUICheckClientVersion(WorldSerIp, WorldSerPort);
+	--LogInfo( "LogSerUI CheckVision WorldSerIp = %s, WorldSerPort = %d", WorldSerIp, WorldSerPort);
+end
+
+--服务器列表更新版本后登入
+function p.LoguiLoginGame()
+   p.LoginGame(p.SerName, p.SerIp, p.SerPort);
+end
+
+
+
+
+---------新加在服务器列表页面增加版本判断功能-----------tzq 2013-2-1 end---------------

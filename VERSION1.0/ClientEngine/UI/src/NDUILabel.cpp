@@ -210,14 +210,24 @@ void NDUILabel::MakeCoordinates()
 		m_kCutRect.size = m_texture->getContentSizeInPixels();
 #endif
 			
-		m_pfCoordinates[0] = m_kCutRect.origin.x / m_texture->getPixelsWide();
-		m_pfCoordinates[1] = (m_kCutRect.origin.y + m_kCutRect.size.height) / m_texture->getPixelsHigh();
-		m_pfCoordinates[2] = (m_kCutRect.origin.x + m_kCutRect.size.width) / m_texture->getPixelsWide();
-		m_pfCoordinates[3] = m_pfCoordinates[1];
-		m_pfCoordinates[4] = m_pfCoordinates[0];
-		m_pfCoordinates[5] = m_kCutRect.origin.y / m_texture->getPixelsHigh();
-		m_pfCoordinates[6] = m_pfCoordinates[2];
-		m_pfCoordinates[7] = m_pfCoordinates[5];
+		if (m_texture->getPixelsWide() == 0 || m_texture->getPixelsHigh() == 0)
+		{
+			m_pfCoordinates[0] = m_pfCoordinates[1] = 0;
+			m_pfCoordinates[2] = m_pfCoordinates[3] = 1;
+			m_pfCoordinates[4] = m_pfCoordinates[5] = 0;
+			m_pfCoordinates[6] = m_pfCoordinates[7] = 1;
+		}
+		else
+		{
+			m_pfCoordinates[0] = m_kCutRect.origin.x / m_texture->getPixelsWide();
+			m_pfCoordinates[1] = (m_kCutRect.origin.y + m_kCutRect.size.height) / m_texture->getPixelsHigh();
+			m_pfCoordinates[2] = (m_kCutRect.origin.x + m_kCutRect.size.width) / m_texture->getPixelsWide();
+			m_pfCoordinates[3] = m_pfCoordinates[1];
+			m_pfCoordinates[4] = m_pfCoordinates[0];
+			m_pfCoordinates[5] = m_kCutRect.origin.y / m_texture->getPixelsHigh();
+			m_pfCoordinates[6] = m_pfCoordinates[2];
+			m_pfCoordinates[7] = m_pfCoordinates[5];
+		}
 	}
 }
 
@@ -334,6 +344,7 @@ void NDUILabel::draw()
 	this->preDraw();
 
 	if (!m_texture) return;
+	if (m_texture->getPixelsWide() == 0 || m_texture->getPixelsHigh() == 0) return;
 	
 	NDUINode::draw();
 	
@@ -395,11 +406,13 @@ void NDUILabel::draw()
 	}
 
 	CHECK_GL_ERROR_DEBUG();
+
+	debugDraw();
 }
 
 void NDUILabel::postDraw()
 {
-	debugDraw();
+	//debugDraw();
 }
 
 void NDUILabel::debugDraw()

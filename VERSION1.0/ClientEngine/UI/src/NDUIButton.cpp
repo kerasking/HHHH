@@ -118,6 +118,8 @@ NDUIButton::NDUIButton()
 	m_bGray = false;
 
 	m_colorFocusTitle = FONT_FOCUSCOLOR;
+
+	bEnableHighlight = false;
 }
 
 NDUIButton::~NDUIButton()
@@ -363,6 +365,11 @@ void NDUIButton::SetFrameRect(CCRect rect)
 	//m_title->SetFrameRect(CCRectMake(0, 0, rect.size.width, rect.size.height));
 }
 
+bool NDUIButton::isHighlight() const
+{
+	return bEnableHighlight && (m_touched || m_longTouched);
+}
+
 void NDUIButton::draw()
 {
 	//cocos2d::CCLog("Entry NDUIButton::draw()");
@@ -411,11 +418,12 @@ void NDUIButton::draw()
 							scrRect.origin.y
 									+ m_backgroundCustomRect.origin.y,
 							m_backgroundCustomRect.size.width,
-							m_backgroundCustomRect.size.height));
+							m_backgroundCustomRect.size.height),
+							isHighlight());
 		}
 		else
 		{
-			m_picBG->DrawInRect(scrRect);
+			m_picBG->DrawInRect(scrRect, isHighlight());
 		}
 	}
 	else if (m_combinePicBG)
@@ -525,7 +533,7 @@ void NDUIButton::drawLongTouch()
 		 */
 
 		CCRect scrRect = this->GetScreenRect();
-		pic->DrawInRect(scrRect);
+		pic->DrawInRect(scrRect, isHighlight());
 		pic->SetColor(m_normalImageColor);
 	}
 }
@@ -634,7 +642,7 @@ void NDUIButton::drawButtonImage()
 			if (m_image)
 			{
 				cocos2d::CCLog("entry m_image->DrawInRect(rect);");
-				m_image->DrawInRect(rect);
+				m_image->DrawInRect(rect, isHighlight());
 			}
 			else if (m_combinepicImg)
 				m_combinepicImg->DrawInRect(rect);
@@ -670,7 +678,7 @@ void NDUIButton::drawButtonImage()
 
 			if (m_image)
 			{
-				m_image->DrawInRect(rect);
+				m_image->DrawInRect(rect, isHighlight());
 			}
 // 			if (m_title 
 // 				&& m_title->GetText().length() > 0)
@@ -692,7 +700,7 @@ void NDUIButton::drawTouchDown()
 
 	if (m_picTouchBG)
 	{
-		m_picTouchBG->DrawInRect(scrRect);
+		m_picTouchBG->DrawInRect(scrRect, isHighlight());
 	}
 
 	if (m_combinePicTouchBG)
@@ -713,11 +721,12 @@ void NDUIButton::drawTouchDown()
 					scrRect.origin.y
 					+ m_touchDownImgCustomRect.origin.y,
 					m_touchDownImgCustomRect.size.width,
-					m_touchDownImgCustomRect.size.height));
+					m_touchDownImgCustomRect.size.height),
+					isHighlight());
 			}
 			else
 			{
-				m_touchDownImage->DrawInRect(scrRect);
+				m_touchDownImage->DrawInRect(scrRect,isHighlight());
 			}
 		}
 		else if (m_combinepicTouchDownImg)
@@ -738,7 +747,6 @@ void NDUIButton::drawTouchDown()
 				m_combinepicTouchDownImg->DrawInRect(scrRect);
 			}
 		}
-
 	}
 	else if (m_touchDownStatus == TouchDownColor)
 	{
@@ -930,11 +938,12 @@ void NDUIButton::drawFocus()
 				scrRect.origin.y
 				+ m_customFocusImageRect.origin.y,
 				m_customFocusImageRect.size.width,
-				m_customFocusImageRect.size.height));
+				m_customFocusImageRect.size.height),
+				isHighlight());
 		}
 		else
 		{
-			m_focusImage->DrawInRect(scrRect);
+			m_focusImage->DrawInRect(scrRect,isHighlight());
 		}
 	}
 }

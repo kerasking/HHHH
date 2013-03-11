@@ -76,6 +76,8 @@ LOCAL_SRC_FILES := \
 ../../UI/src/NDUIScrollContainer.cpp \
 ../../UI/src/NDUIScrollText.cpp \
 ../../UI/src/NDUIScrollViewContainer.cpp \
+../../UI/src/NDUIListHorz.cpp \
+../../UI/src/NDUIListVert.cpp \
 ../../UI/src/NDUISynLayer.cpp \
 ../../UI/src/SysTimer.cpp \
 ../../UI/src/NDUIChatText.cpp \
@@ -92,6 +94,7 @@ LOCAL_SRC_FILES := \
 ../../UI/src/NDUIScrollViewMulHand.cpp \
 ../../UI/src/NDUISpriteNode.cpp \
 ../../UI/import/src/IniFile.cpp \
+../../UI/import/src/NDControlHelp.cpp \
 ../../UI/import/src/NDUILoadEngine.cpp \
 ../../UI/import/src/UIData.cpp \
 ../../UI/src/UIEdit.cpp \

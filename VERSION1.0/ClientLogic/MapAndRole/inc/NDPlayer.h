@@ -65,6 +65,7 @@ public:
 
 	void OnDrawEnd(bool bDraw);
 	void DrawNameLabel(bool bDraw);
+	void DrawTest_NDBitmap(); //@ndbitmap
 
 	void SetLoadMapComplete()
 	{

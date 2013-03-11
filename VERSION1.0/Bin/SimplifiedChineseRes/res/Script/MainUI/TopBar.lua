@@ -25,6 +25,7 @@ local TOOL_BTN = {
     {Tag=38,Rect=CGRectMake(345*fScalex,70*fScaley,40*fScalex,40*fScaley)},--充值礼包  
     {Tag=39,Rect=CGRectMake(305*fScalex,70*fScaley,40*fScalex,40*fScaley)},--在线礼包 
     {Tag=40,Rect=CGRectMake(265*fScalex,70*fScaley,40*fScalex,40*fScaley)},--运粮活动   
+    {Tag=41,Rect=CGRectMake(225*fScalex,70*fScaley,40*fScalex,40*fScaley)},--名人堂
 };
 
 local MAIN_UI_BUTTON_TOPUP = 17; 
@@ -158,8 +159,10 @@ function p.LoadUI()
 		p.nTimerID			= nil;
     end
     
-    --p.SetTimerShowTrackTip()	
-     
+    local btnbuff = 	GetButton(layer,44);
+    btnbuff:SetVisible(false);
+    Buff.SendRequest();
+    
 	return;
 end
 
@@ -258,6 +261,9 @@ function p.OnUIEvent(uiNode, uiEventType, param)
 		
 			nLev = nLev + 1;
 			CommonDlgNew.ShowTipDlg(string.format(GetTxtPri("TB_T1"),nLev));
+		elseif tag ==  44 then
+			Buff.LoadUI();
+			return true;
         end
     end	
 end
@@ -438,6 +444,10 @@ function p.AdjustToolPos()
     local btnRecharge = GetButton(topBarLayer,TOOL_BTN[6].Tag);
     local btnOL = GetButton(topBarLayer,TOOL_BTN[7].Tag);
     local btnDailyAct = GetButton(topBarLayer,TOOL_BTN[8].Tag);
+    local btnRankList = GetButton(topBarLayer,TOOL_BTN[9].Tag);
+    btnRankList:SetVisible(false);
+    
+    
     local btns = {};
     if(btnArena:IsVisibled()) then
         table.insert(btns,btnArena);
@@ -616,7 +626,21 @@ function p.GetNewEmailButton()
     return pBtnNewEmail;
 end
 
-
+-- 获得buff按钮
+function p.GetBuffButton()
+    local scene = GetSMGameScene();
+	if scene == nil then
+		LogInfo("TopBar: GetNewEmailButton() scene == nil");
+		return nil;
+	end
+    local layer = GetUiLayer( scene, NMAINSCENECHILDTAG.MainUITop );
+	if layer == nil then
+		LogInfo("TopBar: GetNewEmailButton() layer == nil");
+		return nil;
+	end
+    local pBtnBuff = GetButton( layer, 44 );
+    return pBtnBuff;
+end
 
 --============定时刷新任务引导图片============----------
 

@@ -106,6 +106,9 @@ local g_nPlayerListBottom = 1;
 local MAX_PLAYER_NUM_PER_PAGE = 8;
 local MAX_REPORT_NUM_PER_PAGE = 3;
 
+local g_FailWaitTime = 15;	--失败时等待时间
+
+
 --玩家名字表
 local tPlayerName = {}
 
@@ -172,7 +175,8 @@ end
 
 
 --加载每日签到主界面
-function p.LoadUI()
+function p.LoadUI( nActivityId )
+    MsgLogin.EnterChaosBattle(nActivityId);
 	--p.TestInitList();
 	--40级以下返回
 	local nRoleId =  GetPlayerId();
@@ -325,7 +329,7 @@ function p.LoadUI()
 	--刷新玩家列表
 	--p.RefreshInfo();
 	
-    --[[屏蔽鼓舞功能
+	--[[屏蔽鼓舞功能
 	local Moneybtn = RecursiveButton(layer, {ID_SCUFFLE_CTRL_BUTTON_INSPIRE1}); 
 	local Emoneybtn = RecursiveButton(layer, {ID_SCUFFLE_CTRL_BUTTON_INSPIRE2}); 
 	local labelBuffDesc = RecursiveLabel(layer, {22});
@@ -334,8 +338,8 @@ function p.LoadUI()
 	labelBuff:SetVisible(false);
 	Moneybtn:SetVisible(false);
 	Emoneybtn:SetVisible(false);
-    --]]
-    
+	--]]
+	
 	--屏蔽自动参战
 	local labelAutoFight = RecursiveLabel(layer, {29});
 	local checkBoxAutoFight=RecursiveCheckBox(layer,{ID_SCUFFLE_CTRL_CHECK_BUTTON_31});
@@ -484,7 +488,7 @@ function p.TimerTick(tag)
 			
 
 			
-        elseif g_Count <= 30 then
+		elseif g_Count <= g_FailWaitTime then
 			if bIfAutoJoinNextBattle == tState.WINOutBattle then
 				CDLabel:SetChecked( true );
 				CDLabel:SetTitle(GetTxtPri("CB2_T2").." "..g_Count);
@@ -493,7 +497,7 @@ function p.TimerTick(tag)
 				--CDLabel:SetTitle(GetTxtPri("CB2_T2").." "..(g_Count-30));
 			end
 		else	
-			CDLabel:SetTitle(GetTxtPri("CB2_T2").." "..(g_Count-30));
+			CDLabel:SetTitle(GetTxtPri("CB2_T2").." "..(g_Count- g_FailWaitTime));
 			CDLabel:SetChecked( true );
 		end		
 	end
@@ -616,7 +620,7 @@ function p.updateCount(restCount)
 			
 			
 
-        elseif restCount <=30 then
+		elseif restCount <= g_FailWaitTime then
 			
 			CDlabel:SetTitle(FormatTime(restCount,1));
 			CDlabel:SetChecked( false );
@@ -1207,12 +1211,26 @@ GetTxtPri("CB2_T291"),
 GetTxtPri("CB2_T292"),
 GetTxtPri("CB2_T30"),
 GetTxtPri("CB2_T31"),
-GetTxtPri("CB2_T32"),
+
+GetTxtPri("CB2_T3211"),
+GetTxtPri("CB2_T3311"),
+GetTxtPri("CB2_T3411"),
+GetTxtPri("CB2_T3511"),
+GetTxtPri("CB2_T3611"),
+GetTxtPri("CB2_T3711"),
+GetTxtPri("CB2_T3811"),
+GetTxtPri("CB2_T3911"),
+GetTxtPri("CB2_T4011"),
+GetTxtPri("CB2_T4111"),
+
+
 GetTxtPri("CB2_T33"),
 GetTxtPri("CB2_T34"),
 GetTxtPri("CB2_T35"),
 GetTxtPri("CB2_T351"),
 GetTxtPri("CB2_T352"),
+GetTxtPri("CB2_T4211"),
+GetTxtPri("CB2_T4311"),
 }
 
 
@@ -1513,6 +1531,7 @@ function p.OnUIEventTip(uiNode, uiEventType, param)
 end
 
 function p.CloseUI()
+    MsgLogin.LeaveChaosBattle();
 	if p.ActivityState == 3 then
 		CloseUI(NMAINSCENECHILDTAG.CampBattle);	
 		return;

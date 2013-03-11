@@ -18,6 +18,12 @@ local LeftListSize = CGSizeMake(110*CoordScaleX, 40*CoordScaleY);
 local RightListSize = CGSizeMake(100*CoordScaleX, 28*CoordScaleY);                      
                    
 p.LeftTitleLIst = {};   --存储左边列表数据
+p.EventConfig = {};   
+p.EventReward = {};  
+
+--活动数据是否下发标志
+p.NeedDownFlag = false;  
+
 
 p.RechargeState = { First = {Num = 0, Flag = 0,},
                                    OnceFlag = {0, 0 , 0, 0, 0, 0, 0, 0, 0, 0,0, 0 , 0, 0, 0, 0, 0, 0, 0, 0,0, 0 , 0, 0, 0, 0, 0, 0, 0, 0,}, 
@@ -34,6 +40,9 @@ p.ActionType =
     ONCE_PAY = 4,             --单次充值  
     TOTAL_PAY = 5,           --累计充值
     DAILY_PAY = 7,           --每日充值
+    DAILY_RETURN = 8,           --每日返還   
+    ONLINE_RETURN = 9,           --在線返還  
+    
 };               
 
 --加载充值活动主界面
@@ -72,6 +81,55 @@ end
 
 -----------------------------获取父层layer---------------------------------
 function p.InitData()
+	if p.NeedDownFlag then
+		p.InitDataWhenDown();
+	else
+		p.InitDataWhenReadDb();
+	end
+end
+
+function p.InitDataWhenDown()
+
+    p.LeftTitleLIst = {};   --存储左边列表数据
+ 
+    if p.EventConfig ~= nil then
+        table.sort(p.EventConfig, function(a,b) return a.Id < b.Id   end);
+    end 
+    
+    if p.EventReward ~= nil then
+        table.sort(p.EventReward, function(a,b) return a.Id < b.Id   end);
+    end 
+	
+    for i,v in pairs(p.EventConfig) do
+        --获取活动的类型
+        local nType = v.Type;
+        
+        local delFlag = 0;
+        for j, k in pairs(MsgPlayerAction.PLAYER_ACTION_STATION) do
+            if k.type == nType and k.IsExit == 0 then
+                LogInfo("initdata type  = %d, IsExit  = %d has been delete",  k.type,  k.IsExit);    
+                delFlag = 1;  --说明这个活动已经删除
+                break;
+            end
+        end 
+
+        --获取所有活动所属的组别,同一组别在同一个列表显示
+        local nUiGroup = v.Group;
+        if nUiGroup == 3 and delFlag ~= 1 then   
+			 v.RightListTable = {}; 
+		      --获取右侧列表要显示的内容      
+            for j, k in pairs(p.EventReward) do
+                if v.Id == k.IdEventConfig then
+					table.insert(v.RightListTable, k);
+                end
+            end   
+            
+            table.insert(p.LeftTitleLIst, v);               			        
+        end
+    end
+end
+
+function p.InitDataWhenReadDb()
 
     p.LeftTitleLIst = {};   --存储左边列表数据
     --左边标题列表数据的获取
@@ -401,6 +459,12 @@ function p.SetRightListFocus(nIndex)
     --领取的奖励提示
     local ShowText = "";
     
+    if InfoLeft.Type == p.ActionType.DAILY_RETURN 
+       or InfoLeft.Type == p.ActionType.ONLINE_RETURN  then
+       ShowText = ShowText ..GetTxtPri("Daily_return").."\n";
+       btnGet:EnalbeGray(true);
+    end
+    
     --奖励物品
     if (Info.ItemType ~= 0) and  (Info.ItemCount ~= 0) then
         ShowText = ShowText .."  ".. ItemFunc.GetName(Info.ItemType) .."X"..Info.ItemCount.."\n";
@@ -425,6 +489,11 @@ function p.SetRightListFocus(nIndex)
     if Info.Repute ~= 0 then
         ShowText = ShowText .."  "..GetTxtPub("ShenWan").."X"..Info.Repute.."\n";
     end  
+    
+    if InfoLeft.Type == p.ActionType.DAILY_RETURN 
+       or InfoLeft.Type == p.ActionType.ONLINE_RETURN  then
+       ShowText = ShowText ..string.format(GetTxtPri("Return_day"), Info.Param1).."\n";
+    end
     
     SetLabel(layer, p.UiCtr.awardText, ShowText);
 end
@@ -688,3 +757,7 @@ function p.SendRechargeInfo()
 end
 
 
+--获取活动数据是否需要下发的标志
+function p.GetIfNeedDown()  
+	return p.NeedDownFlag;
+end

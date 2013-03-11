@@ -15,6 +15,35 @@ p.nQmdjCount = 0;--召唤次数
 p.nFreeCount = 0;--免费占星次数
 --=====逻辑
 
+p.bAutoDestiny  = false;
+p.nKeepDestiny  = nil;  --3蓝 4紫 5金 nil不保留
+
+function p.EnableAutoDestiny()
+    p.bAutoDestiny = true;
+end
+
+function p.CloseAutoDestiny()
+    p.bAutoDestiny = false;
+    p.NoKeep();
+    DestinyFeteUI.SetBtnStatus(false);
+end
+
+function p.KeepBlue()
+    p.nKeepDestiny = 3;
+end
+
+function p.KeepPurple()
+    p.nKeepDestiny = 4;
+end
+
+function p.KeepGold()
+    p.nKeepDestiny = 5;
+end
+
+function p.NoKeep()
+    p.nKeepDestiny = nil;
+end
+
 --获得召唤奇门遁甲次数
 function p.GetQmdjCount()
     return p.nQmdjCount;
@@ -181,7 +210,17 @@ end
 
 --一键悟道
 function p.sendRealizeBuyALL()
-	
+
+    if(p.IsAutoDestiny()) then
+        --判断银币
+        local nmoney = GetRoleBasicDataN(GetPlayerId(),USER_ATTR.USER_ATTR_MONEY);
+        if(nmoney<60000) then
+            CommonDlgNew.ShowYesDlg(GetTxtPri("DU_T31"));
+            p.CloseAutoDestiny();
+            return;
+        end
+    end
+    
 	local netdata = createNDTransData(NMSG_Type._MSG_REALIZE_BUY_ALL);
 	if nil == netdata then
 		return false;
@@ -204,6 +243,10 @@ function p.processRealizeBuyALL(netdata)
 	if (p.mUIListener) then
 		p.mUIListener( NMSG_Type._MSG_REALIZE_BUY_ALL, lst);
 	end
+    
+    if(p.IsAutoDestiny()) then
+        p.sendPickUpAll();
+    end
 end
 
 -- 悟道List
@@ -281,6 +324,14 @@ end
 
 -- 一键拾起
 function p.sendPickUpAll()
+    if(p.IsAutoDestiny()) then
+        --背包容量判断
+        if(ItemFunc.IsDestinyBagFull()) then
+            p.CloseAutoDestiny();
+            return;
+        end
+    end
+
 	local netdata = createNDTransData(NMSG_Type._MSG_REALIZE_PICKUP_ALL);
 	if nil == netdata then
 		return false;
@@ -303,6 +354,14 @@ function p.sendMergeAll()
 	if nil == netdata then
 		return false;
 	end
+    
+    if(p.IsAutoDestiny()) then
+        netdata:WriteByte(2);
+        netdata:WriteByte(p.nKeepDestiny);
+    else
+        netdata:WriteByte(1);
+    end
+    
 	SendMsg(netdata);
 	
 	netdata:Free();
@@ -329,7 +388,30 @@ function p.processRealizeMergeAll(netdata)
     p.nIsStopRefreshBag = false;
     DestinyUI.RefreshGoods();
     CloseLoadBar();
+    
+    if(p.IsAutoDestiny()) then
+        p.sendRealizeBuyALL();
+    end
 end
+
+
+function p.processRealizePickUpAll()
+    LogInfo("p.processRealizePickUpAll");
+    if(p.IsAutoDestiny()) then
+        p.sendMergeAll();
+    end
+end
+
+function p.IsAutoDestiny()
+    local scene = GetSMGameScene();
+	local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.DestinyFeteUI);
+    if(p.bAutoDestiny and layer) then
+        return true;
+    end
+    p.CloseAutoDestiny();
+    return false;
+end
+
 
 --======消息注册
 --==悟道购买
@@ -338,7 +420,7 @@ RegisterNetMsgHandler(NMSG_Type._MSG_REALIZE_OPEN, "p.processRealizeOpen", p.pro
 RegisterNetMsgHandler(NMSG_Type._MSG_REALIZE_BUY, "p.processRealizeBuy", p.processRealizeBuy);
 RegisterNetMsgHandler(NMSG_Type._MSG_REALIZE_LIST, "p.processRealizeList", p.processRealizeList);
 --RegisterNetMsgHandler(NMSG_Type._MSG_REALIZE_SALE, "p.processRealizeSale", p.processRealizeSale);
---RegisterNetMsgHandler(NMSG_Type._MSG_REALIZE_PICKUP_ALL, "p.processRealizePickUpAll", p.processRealizePickUpAll);
+RegisterNetMsgHandler(NMSG_Type._MSG_REALIZE_PICKUP_ALL, "p.processRealizePickUpAll", p.processRealizePickUpAll);
 --RegisterNetMsgHandler(NMSG_Type._MSG_REALIZE_SALE_ALL, "p.processRealizeSaleAll", p.processRealizeSaleAll);
 RegisterNetMsgHandler(NMSG_Type._MSG_REALIZE_MERGE_ALL, "p.processRealizeMergeAll", p.processRealizeMergeAll);
 RegisterNetMsgHandler(NMSG_Type._MSG_REALIZE_BUY_ALL, "p.processRealizeBuyALL", p.processRealizeBuyALL);

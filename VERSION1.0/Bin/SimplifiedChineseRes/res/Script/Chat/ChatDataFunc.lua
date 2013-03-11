@@ -116,6 +116,7 @@ function p.AddChatRecord(sID,cID,tID,spk,txt)
  	if  cID==ChatType.CHAT_CHANNEL_SYSTIP then
 		--ChatMainUI.AddChatText(sID,cID,spk,txt);
 		CommonDlgNew.ShowTipDlg(txt);
+        return;
 	end
     
     ChatGameScene.AddChatText(sID,cID,spk,txt,list_end);

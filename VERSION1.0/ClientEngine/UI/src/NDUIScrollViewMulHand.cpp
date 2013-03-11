@@ -847,16 +847,54 @@ int CUIScrollViewContainerM::WhichViewToScroll()
 	{
 		return uiIndexFind;
 	}
-    
+
     size_t size = m_pClientUINodes.size();
-    float fCenter = m_sizeView.width/2;
-    for (unsigned int i=0; i<size; i++) {
-        ContainerClientLayerM *m_pClientUINode = m_pClientUINodes[i];
-        if(fabs(m_pClientUINode->GetFrameRect().origin.x)<=fCenter){
-            uiIndexFind = i;
-            break;
-        }
-    }
+
+	if (UIScrollStyleHorzontal == GetScrollStyle())
+	{
+		CCRect viewrect			= m_pClientUINodes[0]->GetFrameRect();
+		int iCurShowIndex = GetBeginIndex();
+		int iCurMoveDis = viewrect.origin.x - (-iCurShowIndex*viewrect.size.width);  
+
+		CCLog("tzq iCurMoveDis = %d, viewrect.size.width = %05f, iCurShowIndex = %d", iCurMoveDis, viewrect.size.width, iCurShowIndex);
+
+		//獲取的移動距離如果小於0，那麼向右移動，索引增加
+		if(iCurMoveDis < 0)
+		{
+			if(abs(iCurMoveDis) > viewrect.size.width/8)
+			{
+				//iCurShowIndex = iCurShowIndex + 1 > size ? iCurShowIndex : iCurShowIndex + 1;
+				int iMoveNum = abs(iCurMoveDis)/viewrect.size.width + 1; 
+				iCurShowIndex = iCurShowIndex + iMoveNum > size - 1 ? size - 1 : iCurShowIndex + iMoveNum;
+			}
+		}
+		//獲取的移動距離如果大於0，那麼向左移動，索引減少
+		else if(iCurMoveDis > 0)
+		{
+			if(iCurMoveDis > viewrect.size.width/8)
+			{
+				//iCurShowIndex = iCurShowIndex - 1 < 0 ? iCurShowIndex : iCurShowIndex - 1;
+				int iMoveNum = abs(iCurMoveDis)/viewrect.size.width + 1; 
+				iCurShowIndex = iCurShowIndex - iMoveNum < 0 ? 0 : iCurShowIndex - iMoveNum;
+			}
+		}
+		CCLog("tzq iCurShowIndex = %d", iCurShowIndex);
+
+		return iCurShowIndex;
+	}
+	else
+	{
+		float fCenter = m_sizeView.width/2;
+		for (unsigned int i=0; i<size; i++) 
+		{
+			 ContainerClientLayerM *m_pClientUINode = m_pClientUINodes[i];
+			 if(fabs(m_pClientUINode->GetFrameRect().origin.x)<=fCenter)
+			 {
+				 uiIndexFind = i;
+				 break;
+			 }
+		}
+	}
     return uiIndexFind;
 }
 

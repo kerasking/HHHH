@@ -60,7 +60,7 @@ function p.LoadUI()
 
     ------------------------------------初始化数据------------------------------------------------------------------
     
-    p.Initdata();
+    p.InitData();
     --刷新显示
     p.Refresh();
     
@@ -68,8 +68,57 @@ function p.LoadUI()
 end
 
 
+function p.InitData()
+	if RechargeReward.GetIfNeedDown() then
+		p.InitDataWhenDown();
+	else
+		p.InitDataWhenReadDb();
+	end
+end
 
-function  p.Initdata()
+
+function  p.InitDataWhenDown()
+    p.BoxAwardInfo = {};    
+
+    if RechargeReward.EventConfig ~= nil then
+        table.sort(RechargeReward.EventConfig, function(a,b) return a.Id < b.Id   end);
+    end 
+    
+    if RechargeReward.EventReward ~= nil then
+        table.sort(RechargeReward.EventReward, function(a,b) return a.Id < b.Id   end);
+    end 
+    
+    p.BoxAwardInfo.Normal = {};
+    p.BoxAwardInfo.Vip = {};   
+    
+    for i, v in pairs(RechargeReward.EventConfig) do
+        --获取活动的类型
+        local nType = v.Type;
+        
+		if nType == MsgPlayerAction.PLAYER_ACTION_TYPE.VIP_CHECK_IN then
+			for j, k in pairs(RechargeReward.EventReward) do
+                local Config_id = k.IdEventConfig;
+				if v.Id == Config_id then
+					table.insert(p.BoxAwardInfo.Vip, k);
+                end
+            end  
+		end
+		
+        if nType == MsgPlayerAction.PLAYER_ACTION_TYPE.CHECK_IN  then  --登入签到
+             for j, k in pairs(RechargeReward.EventReward) do
+             
+                local Config_id = k.IdEventConfig;
+				
+				if v.Id == Config_id then
+                    table.insert(p.BoxAwardInfo.Normal, k);
+                end
+             end  
+            
+        end
+    end
+end
+
+function  p.InitDataWhenReadDb()
     p.BoxAwardInfo = {};    
 
     local idCofigs = GetDataBaseIdList("event_config");
@@ -515,5 +564,32 @@ function p.SendReset()
     LogInfo("p.SendReset  end"); 
 	return true;	
 end
+
+
+
+function p.GetTimeLastNum(iPreTime, iCurTime)
+
+    if iPreTime == 0 then
+        return 1;
+    else
+        local SecPerDay = 24*3600;
+
+        local PreNum = math.floor((iPreTime + 8 * 3600)/SecPerDay);
+        local CurNum = math.floor((iCurTime + 8 * 3600)/SecPerDay);
+        
+        return math.floor(CurNum - PreNum);
+    end
+end
+
+function p.HasSigh()
+    local nTimeLast = p.GetTimeLastNum(p.PreCheckInTime, p.CurCheckInTime);
+    LogInfo("nTimeLast:[%d]",nTimeLast);
+    if(nTimeLast > 0) then
+        return true;
+    end
+    
+    return false;
+end
+
 
 

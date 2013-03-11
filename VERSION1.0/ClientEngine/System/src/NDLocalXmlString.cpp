@@ -137,7 +137,7 @@ bool NDLocalXmlString::parseLines( vector<string>& vecLines )
 
 	bool bOK = true;
 	int index = 0;
-	while (index < vecLines.size() - 2)
+	while (index < vecLines.size() - 1)
 	{
 		const string& keyLine = vecLines[ index ];
 		const string& valLine = vecLines[ index + 1 ];

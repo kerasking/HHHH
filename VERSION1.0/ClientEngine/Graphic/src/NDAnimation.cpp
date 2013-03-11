@@ -63,7 +63,7 @@ CCRect NDAnimation::getRect()
 }
 
 void NDAnimation::runWithRunFrameRecord(NDFrameRunRecord* pkRunFrameRecord,
-		bool bNeedDraw, float fDrawScale)
+		bool bNeedDraw, float fDrawScale, int extra/*=0*/)
 {
 	if (!pkRunFrameRecord || !m_pkFrames) return;
 
@@ -87,7 +87,7 @@ void NDAnimation::runWithRunFrameRecord(NDFrameRunRecord* pkRunFrameRecord,
 
 				if (bNeedDraw)
 				{
-					pkFrame->run(fDrawScale);
+					pkFrame->run(fDrawScale, extra);
 				}
 
 				return;
@@ -98,7 +98,7 @@ void NDAnimation::runWithRunFrameRecord(NDFrameRunRecord* pkRunFrameRecord,
 
 				if (bNeedDraw)
 				{
-					pkFrame->run(fDrawScale);
+					pkFrame->run(fDrawScale, extra);
 				}
 
 				return;
@@ -131,7 +131,7 @@ void NDAnimation::runWithRunFrameRecord(NDFrameRunRecord* pkRunFrameRecord,
 		if (bNeedDraw)
 		{
 			//ÅÜÒ»Ö¡
-			pkFrame->run(fDrawScale);
+			pkFrame->run(fDrawScale, extra);
 		}
 	}
 }

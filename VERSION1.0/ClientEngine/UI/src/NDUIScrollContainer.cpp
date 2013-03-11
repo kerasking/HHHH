@@ -67,43 +67,44 @@ void NDUIScrollContainer::SetBottomReserveDistance(unsigned int distance)
 
 void NDUIScrollContainer::ScrollToTop()
 {
-	const std::vector<NDNode*>& children	= this->GetChildren();
-	for(std::vector<NDNode*>::const_iterator it = children.begin();
-		it != children.end();
+	const std::vector<NDNode*>& kChildren	= this->GetChildren();
+	for(std::vector<NDNode*>::const_iterator it = kChildren.begin();
+		it != kChildren.end();
 		it++)
 	{
-		NDNode* node			= *it;
-		if (!node->IsKindOfClass(RUNTIME_CLASS(CUIScroll)))
+		NDNode* pkNode			= *it;
+		if (!pkNode->IsKindOfClass(RUNTIME_CLASS(CUIScroll)))
 		{
 			continue;
 		}
-		CUIScroll* scroll		= (CUIScroll*)node;
-		CCRect rect				= scroll->GetFrameRect();
-		scroll->SetFrameRect(CCRectMake(rect.origin.x, 0, rect.size.width, rect.size.height));
+		CUIScroll* pkScroll		= (CUIScroll*)pkNode;
+		CCRect kRect				= pkScroll->GetFrameRect();
+		pkScroll->SetFrameRect(CCRectMake(kRect.origin.x, 0,
+			kRect.size.width, kRect.size.height));
 		break;
 	}
 }
 void NDUIScrollContainer::ScrollToBottom()
 {
-	CCRect selfRect							= this->GetFrameRect();
+	CCRect kSelfRect							= this->GetFrameRect();
 	const std::vector<NDNode*>& children	= this->GetChildren();
 	for(std::vector<NDNode*>::const_iterator it = children.begin();
 		it != children.end();
 		it++)
 	{
-		NDNode* node			= *it;
-		if (!node->IsKindOfClass(RUNTIME_CLASS(CUIScroll)))
+		NDNode* pkNode			= *it;
+		if (!pkNode->IsKindOfClass(RUNTIME_CLASS(CUIScroll)))
 		{
 			continue;
 		}
-		CUIScroll* scroll		= (CUIScroll*)node;
-		CCRect rect				= scroll->GetFrameRect();
-		if (rect.size.height < selfRect.size.height)
+		CUIScroll* pkScroll		= (CUIScroll*)pkNode;
+		CCRect kRect				= pkScroll->GetFrameRect();
+		if (kRect.size.height < kSelfRect.size.height)
 		{
 			continue;
 		}
-		scroll->SetFrameRect(CCRectMake(rect.origin.x, selfRect.size.height - rect.size.height, 
-										rect.size.width, rect.size.height));
+		pkScroll->SetFrameRect(CCRectMake(kRect.origin.x, kSelfRect.size.height - kRect.size.height, 
+										kRect.size.width, kRect.size.height));
 		break;
 	}
 }
@@ -113,13 +114,9 @@ void NDUIScrollContainer::draw()
 	{
 		return;
 	}
-	
-//#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+
 	NDDirector::DefaultDirector()->SetViewRect(this->GetScreenRect(), this);
-//#else
-//	NDDirector::DefaultDirector()->SetViewRect(this->GetScreenRect(), this);
-//#endif
-	
+
 	NDUILayer::draw();
 	DrawScrollBar();
 }
@@ -131,26 +128,26 @@ bool NDUIScrollContainer::CanHorizontalMove(NDObject* object, float& hDistance)
 		return false;
 	}
 	
-	CUIMovableLayer *layer = (CUIMovableLayer*)object;
+	CUIMovableLayer* pkLayer = (CUIMovableLayer*)object;
 	
-	CCRect rectself = this->GetFrameRect();
-	CCRect rectmove = layer->GetFrameRect();
+	CCRect kSelfRect = this->GetFrameRect();
+	CCRect kMoveRect = pkLayer->GetFrameRect();
 	
 	if (hDistance > 0.0f)
 	{
-		if ( (rectself.size.width - m_uiRightDistance) <
-			 (rectmove.origin.x + hDistance) )
+		if ( (kSelfRect.size.width - m_uiRightDistance) <
+			 (kMoveRect.origin.x + hDistance) )
 		{
-            hDistance = rectself.size.width - m_uiRightDistance - rectmove.origin.x;
+            hDistance = kSelfRect.size.width - m_uiRightDistance - kMoveRect.origin.x;
 			return true;
 		}
 	}
 	else if (hDistance < 0.0f)
 	{
 		if ( (m_uiLeftDistance) >
-			 (rectmove.origin.x + rectmove.size.width + hDistance) )
+			 (kMoveRect.origin.x + kMoveRect.size.width + hDistance) )
 		{
-            hDistance = m_uiLeftDistance - (rectmove.origin.x + rectmove.size.width);
+            hDistance = m_uiLeftDistance - (kMoveRect.origin.x + kMoveRect.size.width);
 			return true;
 		}
 	}
@@ -171,13 +168,13 @@ bool NDUIScrollContainer::CanVerticalMove(NDObject* object, float& vDistance)
 	
 	CUIMovableLayer *layer = (CUIMovableLayer*)object;
 	
-	CCRect rectself = this->GetFrameRect();
-	CCRect rectmove = layer->GetFrameRect();
+	CCRect kSelfRect = this->GetFrameRect();
+	CCRect kMoveRect = layer->GetFrameRect();
 	
 	if (vDistance > 0.0f)
 	{
-		if ( (rectself.size.height - m_uiBottomDistance) <
-			(rectmove.origin.y + vDistance) )
+		if ( (kSelfRect.size.height - m_uiBottomDistance) <
+			(kMoveRect.origin.y + vDistance) )
 		{
 			return false;
 		}
@@ -185,7 +182,7 @@ bool NDUIScrollContainer::CanVerticalMove(NDObject* object, float& vDistance)
 	else if (vDistance < 0.0f)
 	{
 		if ( (m_uiTopDistance) >
-			(rectmove.origin.y + rectmove.size.height + vDistance) )
+			(kMoveRect.origin.y + kMoveRect.size.height + vDistance) )
 		{
 			return false;
 		}
@@ -205,17 +202,20 @@ bool NDUIScrollContainer::TouchBegin(NDTouch* touch)
 		return false;
 	}
 
-	const std::vector<NDNode*>& childlist	= this->GetChildren();
-	std::vector<NDNode*>::const_iterator it	= childlist.begin();
+	const std::vector<NDNode*>& kChildList	= this->GetChildren();
+	std::vector<NDNode*>::const_iterator it	= kChildList.begin();
 	
-	for (; it != childlist.end(); it++) 
+	for (; it != kChildList.end(); it++) 
 	{
-		NDNode* pNode	= (*it);
+		NDNode* pNode = (*it);
+
 		if (!pNode->IsKindOfClass(RUNTIME_CLASS(NDUINode)))
 		{
 			continue;
 		}
-		if (cocos2d::CCRect::CCRectContainsPoint(((NDUINode*)pNode)->GetScreenRect(), touch->GetLocation()))
+
+		if (cocos2d::CCRect::CCRectContainsPoint(((NDUINode*)pNode)->GetScreenRect(),
+			touch->GetLocation()))
 		{
 			return NDUILayer::TouchBegin(touch);
 		}
@@ -263,35 +263,36 @@ void NDUIScrollContainer::DrawScrollBar()
 	{
 		return;
 	}
-	NDNode *pNode		= m_kChildrenList[0];
+	NDNode* pNode = m_kChildrenList[0];
 	if (!pNode || !pNode->IsKindOfClass(RUNTIME_CLASS(CUIScroll)))
 	{
 		return;
 	}
-	CUIScroll* scroll	= (CUIScroll*)pNode;
-	if (scroll->GetScrollStyle() != UIScrollStyleVerical ||
-		!scroll->IsTouchDown())
+	CUIScroll* pkScroll	= (CUIScroll*)pNode;
+	if (pkScroll->GetScrollStyle() != UIScrollStyleVerical ||
+		!pkScroll->IsTouchDown())
 	{
 		return;
 	}
-	CCRect rectScroll	= scroll->GetFrameRect();
-	if(rectScroll.size.height > this->GetFrameRect().size.height)
+	CCRect kScrollRect	= pkScroll->GetFrameRect();
+	if(kScrollRect.size.height > this->GetFrameRect().size.height)
 	{
-		CCRect rectself		= this->GetScreenRect();
-		CCRect rectClient	= rectScroll;
-		CCRect rect			= CCRectZero;
-		CCSize sizePic		= m_picScroll->GetSize();
-		rect.size.width		= sizePic.width;
-		rect.size.height	= rectself.size.height / rectClient.size.height * rectself.size.height;
-		rect.origin			= ccp(rectself.size.width - rect.size.width,
-								  -rectClient.origin.y / rectClient.size.height * rectself.size.height);
-		rect.origin			= ccpAdd(rect.origin, this->GetScreenRect().origin);
+		CCRect kSelfRect		= this->GetScreenRect();
+		CCRect kClientRect	= kScrollRect;
+		CCRect kRect			= CCRectZero;
+		CCSize kPicSize		= m_picScroll->GetSize();
+		kRect.size.width		= kPicSize.width;
+		kRect.size.height	= kSelfRect.size.height / kClientRect.size.height * kSelfRect.size.height;
+		kRect.origin			= ccp(kSelfRect.size.width - kRect.size.width,
+								  -kClientRect.origin.y / kClientRect.size.height * kSelfRect.size.height);
+		kRect.origin			= ccpAdd(kRect.origin, this->GetScreenRect().origin);
 		
-		m_picScroll->DrawInRect(rect);
-        
-        if(m_picScrollBg) {
-            rect.origin.y = rectClient.origin.y;
-            m_picScrollBg->DrawInRect(rect);
-        }
+		m_picScroll->DrawInRect(kRect);
+
+		if(m_picScrollBg)
+		{
+			kRect.origin.y = kClientRect.origin.y;
+			m_picScrollBg->DrawInRect(kRect);
+		}
 	}	
 }

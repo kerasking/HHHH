@@ -88,7 +88,7 @@ public:
 	bool enableRunNextFrame(NDFrameRunRecord* pkFrameRunRecord);
 	//跑一帧
 	void run();
-	void run(float fScale);
+	void run(float fScale, int extra = 0);
 
 	// 绘制人物头像
 	void drawHeadAt(CCPoint pos);

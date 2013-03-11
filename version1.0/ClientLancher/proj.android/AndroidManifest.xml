@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest package="tw.mobage.g23000052"
       android:installLocation="auto"
-      android:versionCode="7022"
-      android:versionName="7.0.2.2" xmlns:android="http://schemas.android.com/apk/res/android">
+      android:versionCode="7038"
+      android:versionName="7.0.3.8" xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="8"/>
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -30,7 +30,7 @@
                   android:screenOrientation="landscape"
                   android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
                   android:launchMode="standard"             
-                  android:configChanges="keyboardHidden"
+                  android:configChanges="keyboardHidden|orientation"
                   android:windowSoftInputMode="adjustPan">
             <intent-filter android:label="@string/app_name">
                 <action android:name="android.intent.action.MAIN" />
@@ -46,17 +46,13 @@
                 <action android:name="tw.mobage.g23000052.RUN" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-            <intent-filter>
-                <action android:name="tw.mobage.g23000052.RUN" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
         </activity>
          <activity android:name="org.DeNA.DHLJ.DaHuaLongJiang"
                   android:label="@string/app_name"
                   android:launchMode="singleTask"
                   android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
                   android:screenOrientation="landscape"
-                  android:configChanges="keyboardHidden"
+                  android:configChanges="keyboardHidden|orientation"
                   android:windowSoftInputMode="adjustPan">
             <intent-filter>
             	<action android:name="android.intent.action.VIEW" />
@@ -70,7 +66,7 @@
                 android:screenOrientation="landscape"
                 android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
                 android:launchMode="singleTask"
-                android:configChanges="keyboardHidden"
+                android:configChanges="keyboardHidden|orientation"
                 android:windowSoftInputMode="adjustPan">
         <intent-filter>
           <action android:name="android.intent.action.VIEW" />
@@ -83,7 +79,7 @@
                   android:launchMode="singleTask"
                   android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
                   android:screenOrientation="landscape"
-                  android:configChanges="keyboardHidden"
+                  android:configChanges="keyboardHidden|orientation"
                   android:windowSoftInputMode="adjustPan">
             <intent-filter>
             	<action android:name="android.intent.action.VIEW" />
@@ -92,6 +88,8 @@
             </intent-filter>
         </activity>
         <activity android:name="com.denachina.account.weakaccount.WeakAccountActivity"
+                  android:screenOrientation="landscape"
+                  android:configChanges="keyboardHidden|orientation"
             	  android:windowSoftInputMode="adjustPan"
                 android:label="WeakAccountLogin" 
                >

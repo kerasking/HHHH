@@ -646,7 +646,22 @@ void NDTile::debugDraw()
 	ccDrawLine( lb, rt );
 }
 
-void NDTile::SetDrawRect( CCRect rect, bool bBattleMap ) //@android
+//@android @iphone5
+//战斗地图需要缩放裁剪
+bool NDTile::withBattleMapScale() const
+{
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) && WITH_ANDROID_BATTLEMAP_SCALE
+	return true;
+
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS) && WITH_IPHONE5_BATTLEMAP_SCALE
+	return IS_IPHONE5;
+#else
+	return false;
+#endif
+}
+
+//@android @iphone5
+void NDTile::SetDrawRect( CCRect rect, bool bBattleMap ) 
 {
 	//传入的尺寸都是基于960*640的
 	float fScale = RESOURCE_SCALE_960;
@@ -657,6 +672,12 @@ void NDTile::SetDrawRect( CCRect rect, bool bBattleMap ) //@android
 		//android战斗地图下以X为主等比缩放
 		fScale = ConvertUtil::getAndroidScale().x;
 	}
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS) && WITH_IPHONE5_BATTLEMAP_SCALE
+	if (bBattleMap)
+	{
+		//IPHONE5战斗地图下以X为主等比缩放
+		fScale = IPHONE5_WIDTH_SCALE;
+	}	
 #endif
 
 	//等比缩放
@@ -666,52 +687,51 @@ void NDTile::SetDrawRect( CCRect rect, bool bBattleMap ) //@android
 	rect.size.height*= fScale;
 
 	//如果是android战斗地图（或剧情地图）则再裁剪一下Y.
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) && WITH_ANDROID_BATTLEMAP_SCALE
-	if (bBattleMap)
+	if (withBattleMapScale() && bBattleMap)
 	{
-		cutHeightForAndroidBattleMap( rect );
+		cutHeightForBattleMap( rect );
 	}
-#endif
 
 	m_kDrawRect = rect;
 }
 
-//android平台：	战斗地图宽度不够会有黑边，解决方法如下：
+//@android @iphone5
+//				战斗地图宽度不够会有黑边，解决方法如下：
 //				等比缩放战斗地图确保宽度足够，高度方面则从上面裁剪多余尺寸.
 //其他平台：	保持不变
 void NDTile::SetCutRect( CCRect rect, bool bBattleMap ) //@android
 {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) && WITH_ANDROID_BATTLEMAP_SCALE
-	if (bBattleMap)
+	if (withBattleMapScale() && bBattleMap)
 	{
 		float cutHeight = 0.0f;
-		if (cutHeightForAndroidBattleMap( rect, &cutHeight ))
+		if (cutHeightForBattleMap( rect, &cutHeight ))
 		{
 			rect.origin.y = cutHeight;
 		}
 	}
-#endif
+
 	m_kCutRect = rect;
 }
 
 //@android: android战斗地图专用，裁剪高度
-bool NDTile::cutHeightForAndroidBattleMap( CCRect& rect, float* cutHeight )
+bool NDTile::cutHeightForBattleMap( CCRect& rect, float* cutHeight )
 {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) && WITH_ANDROID_BATTLEMAP_SCALE
-	CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
-	float screenAspect = visibleSize.height / visibleSize.width;
-	float picAspect = rect.size.height / rect.size.width;
-
-	if (picAspect > screenAspect)
+	if (withBattleMapScale())
 	{
-		float newHeight = rect.size.width * screenAspect;
-		if (cutHeight)
+		CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
+		float screenAspect = visibleSize.height / visibleSize.width;
+		float picAspect = rect.size.height / rect.size.width;
+
+		if (picAspect > screenAspect)
 		{
-			*cutHeight = rect.size.height - newHeight; //被裁剪掉的尺寸
+			float newHeight = rect.size.width * screenAspect;
+			if (cutHeight)
+			{
+				*cutHeight = rect.size.height - newHeight; //被裁剪掉的尺寸
+			}
+			rect.size.height = newHeight; //裁剪高度
+			return true;
 		}
-		rect.size.height = newHeight; //裁剪高度
-		return true;
 	}
-#endif
 	return false;
 }

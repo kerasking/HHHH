@@ -115,7 +115,7 @@ function p.ProcessActivity( netdata )
             if ACTIVITY_TYPE.BOSS == nType then
                 Battle_Boss.LoadUI( nActivityId );
             elseif ACTIVITY_TYPE.CHAOS == nType then    --大乱斗
-            	CampBattle.LoadUI();
+            	CampBattle.LoadUI(nActivityId);
             end
             
         elseif nActivityStatus == ACTIVITY_STATUS.END then

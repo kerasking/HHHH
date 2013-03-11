@@ -1,6 +1,7 @@
 ﻿package org.DeNA.DHLJ;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -17,6 +18,7 @@ import org.cocos2dx.lib.Cocos2dxBitmap;
 import org.cocos2dx.lib.Cocos2dxEditText;
 import org.cocos2dx.lib.Cocos2dxGLSurfaceView;
 import org.cocos2dx.lib.Cocos2dxHelper;
+import org.cocos2dx.lib.NDBitmap;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.xmlpull.v1.XmlPullParserException;
@@ -115,11 +117,11 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 
 	private static Context s_context;
 	private static LinearLayout s_balancelayout;
-	private static LinearLayout s_TextViewlayout;
+	private static LinearLayout s_TextViewlayout = null;
 
 	private static Cocos2dxEditText edittext; // @ime
 	private static Button testbutton;
-	private static ImageView imgSplash;	
+	private static ImageView imgSplash;
 	private static TextView tv = null;
 	private static String textString;
 
@@ -180,9 +182,10 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 				s_TextViewlayout.removeView(tv);
 				menubar.removeView(s_TextViewlayout);
 				tv = null;
-			}
-			else {
-				Log.d(TAG, "Clear Splash2");
+			} else
+			{
+				Log.d(TAG, "Clear Splash2 " + tv + " " + s_TextViewlayout + " "
+						+ menubar);
 			}
 		};
 	};
@@ -236,14 +239,18 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	{
 		String strRet = "";
 
-		strRet = Build.MANUFACTURER + "-" + Build.MODEL + "-" + Build.VERSION.RELEASE;
+		strRet = Build.MANUFACTURER + "-" + Build.MODEL + "-"
+				+ Build.VERSION.RELEASE;
 
 		return strRet;
 	}
-	
+
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		Log.d("init", "@@ DaHuaLongJiang.onCreate()");
+
+		NDBitmap.test(); //@del
+		
 		if (isSDCardCanUse())
 		{
 			ms_pkDHLJ = this;
@@ -254,7 +261,8 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 			PushService.actionStart(context);
 
 			MobageLogin();
-			addTextView();
+			// addTextView();
+			s_TextViewlayout = null;
 
 			Log.e(TAG, "onCreate called");
 			nativeInit(480, 320);
@@ -329,6 +337,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		{
 			wm.removeView(myFV);
 		}
+		System.exit(0);
 	}
 
 	@Override
@@ -346,7 +355,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	{
 		super.onConfigurationChanged(newConfig);
 	}
-	
+
 	public void MobageLogin()
 	{
 		CookieSyncManager.createInstance(this);
@@ -366,13 +375,13 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	}
 
 	public static void drawText(int nProcess)
-	{		
+	{
 		textString = ms_pkDHLJ.getResources().getString(
-			R.string.unzip_text_firstrun)
-			+ String.valueOf(nProcess) + "%...";
+				R.string.unzip_text_firstrun)
+				+ String.valueOf(nProcess) + "%...";
 		UpdateTextHandler.post(mUpdateText);
 	}
-	
+
 	public void addBalanceView()
 	{
 		s_balancelayout = new LinearLayout(s_context);
@@ -400,11 +409,13 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		menubar.addView(s_balancelayout);
 		s_balancelayout.setVisibility(View.INVISIBLE);
 	}
+
 	public void addRootView()
 	{
 		// add surface view
 		menubar.addView(rootView);
 	}
+
 	public void setMain()
 	{
 		Log.d(TAG, "@@ DaHuaLongJiang::setMain()");
@@ -422,9 +433,9 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		addEditView();
 
 		addRootView();
-		
+
 		addTextView();
-		
+
 		addBalanceView();
 
 		// menubar.addView(testbutton);
@@ -444,27 +455,31 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 
 	public void setTextViewBg()
 	{
-		Drawable srcb=getResources().getDrawable(R.drawable.mobage_splash);
-		
+		Drawable srcb = getResources().getDrawable(R.drawable.mobage_splash);
+
 		DisplayMetrics dm = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(dm);
-		
-	    Paint paint = new Paint();
-	    Bitmap bg = Bitmap.createBitmap( dm.widthPixels, dm.heightPixels, Bitmap.Config.ARGB_8888 );//创建一个新的和SRC长度宽度一样的位图  
-	    for(int i = 0; i < dm.widthPixels; ++i)
-	    	for(int j = 0; j < dm.heightPixels; ++j)
-	    bg.setPixel(i, j, 0xFFFFFFFF);
 
-	    Canvas cv = new Canvas( bg );  
-	    Bitmap srcbitmap0 =  ((BitmapDrawable)srcb).getBitmap(); 
-	    
-	    int size = (int) dm.heightPixels;
+		Paint paint = new Paint();
+		Bitmap bg = Bitmap.createBitmap(dm.widthPixels, dm.heightPixels,
+				Bitmap.Config.ARGB_8888);// 创建一个新的和SRC长度宽度一样的位图
+		for (int i = 0; i < dm.widthPixels; ++i)
+			for (int j = 0; j < dm.heightPixels; ++j)
+				bg.setPixel(i, j, 0xFFFFFFFF);
 
-	    Bitmap srcbitmap = Bitmap.createScaledBitmap(srcbitmap0, size, size, true);
-	    
-	    cv.drawBitmap( srcbitmap, (dm.widthPixels-srcbitmap.getWidth())/2, (dm.heightPixels-srcbitmap.getHeight())/2, paint	 );//在 x，y坐标开始画入src  
+		Canvas cv = new Canvas(bg);
+		Bitmap srcbitmap0 = ((BitmapDrawable) srcb).getBitmap();
 
-	    s_TextViewlayout.setBackgroundDrawable(new BitmapDrawable(bg));
+		int size = (int) dm.heightPixels;
+
+		Bitmap srcbitmap = Bitmap.createScaledBitmap(srcbitmap0, size, size,
+				true);
+
+		cv.drawBitmap(srcbitmap, (dm.widthPixels - srcbitmap.getWidth()) / 2,
+				(dm.heightPixels - srcbitmap.getHeight()) / 2, paint);// 在
+																		// x，y坐标开始画入src
+
+		s_TextViewlayout.setBackgroundDrawable(new BitmapDrawable(bg));
 	}
 
 	public static void clearSplash()
@@ -531,6 +546,11 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 
 		if (edittext != null)
 		{
+			FrameLayout parent = (FrameLayout) edittext.getParent();
+			if (parent != null)
+			{
+				parent.removeView(edittext);
+			}
 			// add edit to layout
 			menubar.addView(edittext);
 
@@ -638,11 +658,12 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	private void addTextView()
 	{
 		Log.v(TAG, "begin addTextView");
-		if(s_TextViewlayout == null) {
+		if (s_TextViewlayout == null)
+		{
 			s_TextViewlayout = new LinearLayout(s_context);
 			s_TextViewlayout.setOrientation(LinearLayout.VERTICAL);
-			textString = ms_pkDHLJ.getResources().getString(R.string.unzip_text)
-				+ "...";
+			textString = ms_pkDHLJ.getResources()
+					.getString(R.string.unzip_text) + "...";
 
 			int pFontSize = 16;
 
@@ -683,6 +704,40 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		strRet = ms_pkDHLJ.getResources().getString(nTextID);
 
 		return strRet;
+	}
+	
+	public static void deleteFiles(String strFilePath)
+	{
+		File pkFile = new File(strFilePath);
+		
+		delete(pkFile);
+	}
+
+	public static void delete(File file)
+	{
+		if (file.isFile())
+		{
+			file.delete();
+			return;
+		}
+
+		if (file.isDirectory())
+		{
+			File[] childFiles = file.listFiles();
+
+			if (childFiles == null || childFiles.length == 0)
+			{
+				file.delete();
+				return;
+			}
+
+			for (int i = 0; i < childFiles.length; i++)
+			{
+				delete(childFiles[i]);
+			}
+
+			file.delete();
+		}
 	}
 
 	public static String getStringFromJasonFile(String strBuffer,
@@ -789,7 +844,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		{
 			ms_pkDHLJ.startVideoActivity();
 		}
-		
+
 		m_bVideoPlayed = true;
 
 		return 0;
@@ -878,7 +933,8 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 			public void onClick(DialogInterface dialog, int which)
 			{
 				dialog.dismiss();
-				MainActivity.onExit();
+				android.os.Process.killProcess(android.os.Process.myPid());
+				// MainActivity.onExit();
 			}
 		};
 
@@ -997,18 +1053,12 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		String osVer = android.os.Build.VERSION.RELEASE;
 		final String[] ver = osVer.split("\\.");
 
-		// for (String v : ver)
-		// {
-		// Log.d( "ver", "@@ v: " + v );
-		// }
-
 		return (ver[0].compareTo("2") == 0) ? 1 : 0;
 	}
 
 	static
 	{
 		System.loadLibrary("mobage");
-		System.loadLibrary("cocos2d");
 		System.loadLibrary("GameLauncher");
 	}
 

@@ -225,6 +225,7 @@ namespace NDEngine
         MobageSdkLogin *m_sdkLogin;
 #endif
         bool m_bOAuthTokenOK;
+
 	public:
 		enum LoginState
 		{
@@ -235,7 +236,9 @@ namespace NDEngine
 		LoginState m_LoginState;
 	//
 	public:
-		bool CheckClientVersion( const char* szURL,unsigned int uiPort );
+		bool CheckClientVersion( const char* szURL, unsigned int uiPort);
+		bool LoginSerUICheckClientVersion( const char* szURL, unsigned int uiPort);
+
 		bool isWifiNetWork();
 		bool CheckFirstTimeRuning();
 		void SetDeviceToken( const char * szDeviceToken ){ if ( szDeviceToken ) m_szDeviceToken = szDeviceToken;}
@@ -249,6 +252,11 @@ namespace NDEngine
 
         void CopyRes();
 		void CopyLoginRes();
+
+
+		bool m_bLogUIUpdate;    //标识是否为服务器列表页面更新
+		void SetLogUIUpdate(bool bValue){m_bLogUIUpdate = bValue;}
+		bool GetLogUIUpdate(){return m_bLogUIUpdate;}
 
 	protected:
 		std::string	m_szDeviceToken;

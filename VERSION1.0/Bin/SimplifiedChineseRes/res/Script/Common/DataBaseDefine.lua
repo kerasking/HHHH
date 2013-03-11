@@ -2097,3 +2097,11 @@ DB_MOUNT_TRAIN_TYPE_DESC = {
     MONEY   = 0,    
     EMONEY  = 1,   
 }
+
+
+DB_FINDBOX_CONFIG = {
+	ID			= 0,
+	VALUE		= 1,
+	COMMENT		= 2,
+};
+

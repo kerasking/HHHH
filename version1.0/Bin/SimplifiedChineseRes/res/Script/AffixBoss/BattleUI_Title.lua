@@ -27,7 +27,10 @@ local BattleType = {
 	BT_BOSS			= 2,	-- BOSS战
 	BT_SPORTS		= 3,	-- 竞技场
 	BT_GRAIN		= 4,	-- 劫粮
-	BT_CHAOS		= 5,	-- 大乱斗 
+	BT_CHAOS		= 5,	-- 大乱斗
+	BT_AGBATTLE		= 6,	-- 军团战
+	BT_LANDLORD		= 7,	-- 斗地主
+	BT_RELIC		= 8,	-- 古迹寻宝 
 };
 
 ---------------------------------------------------
@@ -63,9 +66,18 @@ function p.ShowUI( tPacket )
 		LogInfo( "BattleUI_Title: ShowUI failed! uiLoad is nil" );
 		return false;
 	end
-	if ( tPacket.nBattleType == BattleType.BT_MONSTER ) then
+	if ( tPacket.nBattleType == BattleType.BT_MONSTER ) or ( tPacket.nBattleType == BattleType.BT_RELIC )then
 		uiLoad:Load( "Battle/BattleUI_Title1.ini", pLayer, nil, 0, 0 );
 		p.SetBattleName( pLayer, tPacket.szBattleName );
+	elseif ( tPacket.nBattleType == BattleType.BT_CHAOS ) then
+		uiLoad:Load( "Battle/BattleUI_Title2.ini", pLayer, nil, 0, 0 );
+		p.SetFightersName( pLayer, tPacket.szAttackerName, tPacket.szDefenderName );
+		p.SetAttackerMount( pLayer, tPacket.nAttackerMountType, tPacket.nAttackerMountLevel );
+		p.SetDefenderMount( pLayer, tPacket.nDefenderMountType, tPacket.nDefenderMountLevel );
+		
+		--设置星级
+
+				
 	else
 		uiLoad:Load( "Battle/BattleUI_Title2.ini", pLayer, nil, 0, 0 );
 		p.SetFightersName( pLayer, tPacket.szAttackerName, tPacket.szDefenderName );
@@ -115,6 +127,35 @@ function p.SetFightersName( pLayer, szAttackerName, szDefenderName )
 	--SetLabel( pLayer, ID_LABEL_DEFENDER_NAME, szDefenderName );
 end
 
+
+
+function p.SetFightersLevel( pLayer, szAttackerlevel, szDefenderlevel )
+	if ( pLayer == nil ) then
+		LogInfo( "SetFightersLevel: pLayer nil" );
+		return;
+	end
+	local pLabelAttackerlevel = GetLabel( pLayer, 11 );
+	if ( pLabelAttackerlevel ~= nil )  then
+		if szAttackerlevel > 0 then
+			pLabelAttackerlevel:SetText( GetTxtPri("ADD_57_65_01")..(szAttackerlevel)..GetTxtPri("ADD_57_65_02") );
+		end
+	else
+		LogInfo( "SetFightersLevel: pLabelAttackerlevel nil" );
+			
+	end
+	
+	
+	local pLabelDefenderlevel = GetLabel( pLayer, 12 );
+	if ( pLabelDefenderlevel ~= nil ) then
+		if szDefenderlevel > 0 then
+			pLabelDefenderlevel:SetText( GetTxtPri("ADD_57_65_01")..(szDefenderlevel)..GetTxtPri("ADD_57_65_02") );
+		end	
+	else
+		LogInfo( "SetFightersLevel: pLabelDefenderlevel nil" );	
+	end
+end
+
+
 ---------------------------------------------------
 -- 进攻方名称
 function p.SetAttackerName( pLayer, szAttackerName )
@@ -147,7 +188,7 @@ function p.SetAttackerMount( pLayer, nMountType, nMountLevel )
 		else
     		local nTurn	= PetUI.GetTurn( nMountLevel );
     		local nStar	= PetUI.GetStar( nMountLevel );
-			pLabelLevl:SetText( nTurn .."转" .. nStar .. "星" );
+			pLabelLevl:SetText( nTurn ..GetTxtPri("PETUI_T1") .. nStar .. GetTxtPri("SYN_D30") );
 		end
 	end
 end
@@ -184,7 +225,7 @@ function p.SetDefenderMount( pLayer, nMountType, nMountLevel )
 		else
     		local nTurn	= PetUI.GetTurn( nMountLevel );
     		local nStar	= PetUI.GetStar( nMountLevel );
-			pLabelLevl:SetText( nTurn .."转" .. nStar .. "星" );
+			pLabelLevl:SetText( nTurn ..GetTxtPri("PETUI_T1") .. nStar .. GetTxtPri("SYN_D30") );
 		end
 	end
 end
@@ -202,7 +243,7 @@ end
 --    l_turn:SetText( PetUI.GetTurn(p.MountInfo.star).."转" );
 --
 --	local l_star = GetLabel(layer, p.TagMountLevel.STAR);
---    l_star:SetText( PetUI.GetStar(p.MountInfo.star).."星" );
+--    l_star:SetText( PetUI.GetStar(p.MountInfo.star)..GetTxtPri("SYN_D30") );
 
 ---------------------------------------------------
 -- 消息响应

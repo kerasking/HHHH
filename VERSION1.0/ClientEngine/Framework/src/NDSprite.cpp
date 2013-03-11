@@ -96,6 +96,8 @@ NDSprite::NDSprite()
 	m_bHightLight = false;
 
 	m_dBeginTime = 0.0;
+
+	m_nExtra = 0;
 }
 
 NDSprite::~NDSprite()
@@ -233,7 +235,7 @@ void NDSprite::RunAnimation_WithFrames(bool bDraw)
 	{
 		standAction(true);
 		m_pkCurrentAnimation->runWithRunFrameRecord(m_pkFrameRunRecord,
-			bDraw, m_fScale);
+			bDraw, m_fScale, m_nExtra);
 	}
 
 	OnDrawEnd(bDraw);
@@ -346,7 +348,7 @@ void NDSprite::MoveToPosition(std::vector<CCPoint> kToPos, SpriteSpeed speed,
 				CCPoint to = kToPos[i];
 
 #if 1 //计算寻路的时候用整数，否则错误.
-				from = ccp(int(m_kPosition.x), int(m_kPosition.y));
+				from = ccp(int(from.x), int(from.y));
 				to = ccp(int(kToPos[i].x), int(kToPos[i].y));
 #endif
 
@@ -1055,8 +1057,13 @@ void NDSprite::standAction(bool bStand)
 			if ((dCurTime - m_dBeginTime) > 5 && rand() % 100 > 95)
 			{
 				m_dBeginTime = dCurTime;
-				SetCurrentAnimation(MANUELROLE_RELAX,m_bReverse);
-				m_pkCurrentAnimation->setReverse(m_bReverse);
+
+				const char* sceneClsName = NDDirector::DefaultDirector()->GetRunningScene()->GetRuntimeClass()->className;
+				if (!strstr(sceneClsName, "DramaScene"))
+				{
+					SetCurrentAnimation(MANUELROLE_RELAX,m_bReverse);
+					m_pkCurrentAnimation->setReverse(m_bReverse);
+				}
 			}
 		}
 		//--Guosen 2012.11.27 自动强制将精灵的状态置为站立战斗中出问题，先注释
@@ -1178,7 +1185,7 @@ bool NDSprite::DrawSubAnimation(NDSubAniGroup& kSag)
 	// 子动画播放位置设置
 	aniGroup->setPosition( posTarget );
 	
-	ani->runWithRunFrameRecord( record, true, m_fScale );
+	ani->runWithRunFrameRecord( record, true, m_fScale, m_nExtra );
 	
 	aniGroup->setPosition( pos );
 	

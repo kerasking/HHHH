@@ -34,7 +34,7 @@
 #include "NDUIScrollViewExpand.h"
 #include "NDUIScrollViewMulHand.h"
 #include "NDUIScrollContainerExpand.h""
-#include "NDUIScrollView.h"
+#include "NDUIScrollViewContainer.h"
 #include "NDUIScrollContainer.h"
 #include "NDUIScroll.h"
 #include "NDUIMovableLayer.h"
@@ -244,6 +244,7 @@ void NDScriptRegLua::doReg()
     ETMEMBERFUNC("SetTouchEnabled",                 &NDUILayer::SetTouchEnabled)                //添加
 	ETMEMBERFUNC("SetFocus",						&NDUILayer::SetFocus)
 	ETMEMBERFUNC("GetFocus",						&NDUILayer::GetFocus)
+	ETMEMBERFUNC("lazyClose",						&NDUILayer::lazyDelete)
 	ETCLASSEND(NDUILayer)
 	
 //#pragma mark 按钮类导出"NDUIButton.h"
@@ -397,6 +398,7 @@ void NDScriptRegLua::doReg()
 	ETMEMBERFUNC("IsCenterAdjust",				&NDUIScrollViewContainer::IsCenterAdjust)
 	ETMEMBERFUNC("GetViewCount",				&NDUIScrollViewContainer::GetViewCount)
 	ETMEMBERFUNC("SetViewSize",				&NDUIScrollViewContainer::SetViewSize)
+	ETMEMBERFUNC("SetBottomSpeedBar",		&NDUIScrollViewContainer::SetBottomSpeedBar)
 	ETMEMBERFUNC("GetViewSize",				&NDUIScrollViewContainer::GetViewSize)
 	ETMEMBERFUNC("AddView",						&NDUIScrollViewContainer::AddView)
 	ETMEMBERFUNC("RemoveView",					&NDUIScrollViewContainer::RemoveView)
@@ -614,6 +616,7 @@ void NDScriptRegLua::doReg()
 	ETMEMBERFUNC("GetAnimationAmount",				&CUISpriteNode::GetAnimationAmount)
 	ETMEMBERFUNC("PlayAnimation",					&CUISpriteNode::PlayAnimation)
 	ETMEMBERFUNC("IsAnimationComplete",				&CUISpriteNode::IsAnimationComplete)
+	ETMEMBERFUNC("setExtra",						&CUISpriteNode::setExtra)
 	ETCLASSEND(CUISpriteNode)
 	
 //#pragma mark 编辑框控件 "UIEdit.h"

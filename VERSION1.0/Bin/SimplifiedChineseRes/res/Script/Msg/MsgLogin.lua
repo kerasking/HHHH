@@ -154,6 +154,115 @@ function p.SendCreateRoleReq(strName,nProfession,nLookFace)
     return true;
 end
 
+
+local OPERATE_STATUS = {
+    NONE            = 0,
+    INSTANCE_BATTLE = 1,    --副本战斗
+    BOSS_BATTLE     = 2,    --BOSS战
+    CHAOS_BATTLE    = 3,    --大乱斗
+};
+
+local OPERATESTATUS_DETAIL = {
+    NONE            = 0,
+    ENTER           = 1,    --进入
+    LEAVE           = 2,    --离开
+};
+
+--进入副本战
+function p.EnterInstanceBattle()
+    p.SendReConnectMsg(OPERATE_STATUS.INSTANCE_BATTLE, OPERATESTATUS_DETAIL.ENTER, 0, 0);
+end
+
+--离开副本战
+function p.LeaveInstanceBattle()
+    p.SendReConnectMsg(OPERATE_STATUS.INSTANCE_BATTLE, OPERATESTATUS_DETAIL.LEAVE, 0, 0);
+end
+
+--进入BOSS战
+function p.EnterBossBattle(nActivity)
+    p.SendReConnectMsg(OPERATE_STATUS.BOSS_BATTLE, OPERATESTATUS_DETAIL.ENTER, nActivity, 0);
+end
+
+--离开BOSS战
+function p.LeaveBossBattle()
+    p.SendReConnectMsg(OPERATE_STATUS.BOSS_BATTLE, OPERATESTATUS_DETAIL.LEAVE, 0, 0);
+end
+
+--进入大乱斗战
+function p.EnterChaosBattle(nActivity)
+    p.SendReConnectMsg(OPERATE_STATUS.CHAOS_BATTLE, OPERATESTATUS_DETAIL.ENTER, nActivity, 0);
+end
+
+--离开大乱斗战
+function p.LeaveChaosBattle()
+    p.SendReConnectMsg(OPERATE_STATUS.CHAOS_BATTLE, OPERATESTATUS_DETAIL.LEAVE, 0, 0);
+end
+
+
+
+--发送断线重连消息
+function p.SendReConnectMsg(nAction, nDestail, nLParam, nRParam)
+    if( not CheckN(nAction) or not CheckN(nDestail) ) then
+        LogInfo("p.SendReConnectMsg param error!");
+        return;
+    end
+    
+    LogInfo("p.SendReConnectMsg nAction:[%d],nDestail:[%d],nLParam:[%d],nRParam:[%d]", nAction, nDestail, nLParam, nRParam);
+    local netdata = createNDTransData(NMSG_Type._MSG_OPERATE_STATUS);
+    if nil == netdata then
+        return false;
+    end
+    
+    netdata:WriteByte(nAction);
+    netdata:WriteByte(nDestail);
+    netdata:WriteInt(nLParam);
+    netdata:WriteInt(nRParam);
+    
+    SendMsg(netdata);
+    netdata:Free();
+    return true;
+end
+
+
+p.TT_Status = nil;
+
+--踢人
+function p.ProcessNotifyClient2(netdata)
+    CloseLoadBar();
+    local usAction = netdata:ReadShort();
+    LogInfo("p.ProcessNotifyClient2 usAction:[%d]",usAction);
+    p.TT_Status = usAction;
+    
+    
+    local sTip = ""
+    if(usAction == 0) then
+        local sTip = GetTxtPri("GMCOMM_T01");
+        CommonDlgNew.ShowYesDlg(sTip,p.Quit);
+    elseif(usAction == 1) then
+        local sTip = GetTxtPri("GMCOMM_T02");
+        CommonDlgNew.ShowYesDlg(sTip);
+    elseif(usAction == 2) then
+        local sTip = GetTxtPri("GMCOMM_T03");
+        CommonDlgNew.ShowYesDlg(sTip);
+    elseif(usAction == 3) then
+        local sTip = GetTxtPri("GMCOMM_T04");
+        CommonDlgNew.ShowYesDlg(sTip,p.Quit);
+    elseif(usAction == 4) then
+        local sTip = GetTxtPri("GMCOMM_T05");
+        CommonDlgNew.ShowYesDlg(sTip);
+    end
+    
+end
+
+function p.Quit()
+    
+    QuitGame();
+end
+
+
+RegisterNetMsgHandler(NMSG_Type._MSG_GMCOMMAND, "p.ProcessNotifyClient2", p.ProcessNotifyClient2);
+
+
 RegisterNetMsgHandler(NMSG_Type._MSG_NOTIFY_CLIENT, "p.ProcessNotifyClient", p.ProcessNotifyClient);
 RegisterNetMsgHandler(NMSG_Type.MB_LOGINSYSTEM_MOBILE_SERVER_NOTIFY, "p.ProcessServerNotify", p.ProcessServerNotify);
 

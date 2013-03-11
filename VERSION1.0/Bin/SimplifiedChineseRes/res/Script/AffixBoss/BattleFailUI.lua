@@ -24,7 +24,7 @@ local ID_BATTLEFAIL_CTRL_BUTTON_23 = 6;
 local ID_BATTLEFAIL_CTRL_BUTTON_GOBACK = 8;
 
 function p.LoadUI()
-
+    MsgLogin.LeaveInstanceBattle();
 	local scene=GetSMGameScene();
 	if scene == nil then
 		return;

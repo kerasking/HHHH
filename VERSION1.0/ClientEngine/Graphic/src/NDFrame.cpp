@@ -201,7 +201,7 @@ void NDFrame::run()
 	run(1.0f);
 }
 
-void NDFrame::run(float fScale)
+void NDFrame::run(float fScale, int extra /*=0*/)
 {
 	if (m_bNeedInitTitles)
 	{
@@ -264,6 +264,12 @@ void NDFrame::run(float fScale)
 
 #if 1 //@todo @check
 		float fScaleResult = fScale * RESOURCE_SCALE_960;
+
+		//确保某些UI动画的缩放在横向可以充满
+		if (extra == 1)
+		{
+			fScaleResult = fScale * COORD_SCALE_X_960;
+		}
 
 		if (pkAnimation->getMidX() != 0)
 		{

@@ -280,6 +280,9 @@ public:
 	
 	bool CanDestroyOnRemoveAllChildren(NDNode* pNode);
 
+	void enableHighlight( bool flag ) { bEnableHighlight = flag; }
+	bool isHighlight() const;
+
 public:
 	void SetTitle();
 	void SetTwoTitle();
@@ -362,6 +365,7 @@ protected: //scroll text
 	bool			 m_bTabSel;
 	NDLightEffect* m_pSprite;
 	CCPoint			m_posSprite;
+	bool			bEnableHighlight;
 };
 
 NS_NDENGINE_END 

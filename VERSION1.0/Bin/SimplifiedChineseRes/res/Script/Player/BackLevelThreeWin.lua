@@ -486,7 +486,7 @@ function p.ShowUIProp(nItemId, nCurrPetId)
     local nItemType	= Item.GetItemInfoN(nItemId, Item.ITEM_TYPE);
     local nType = ItemFunc.GetPropType(nItemType);
     
-    if(nType == 1 or nType == 4 or nType == 5 or nType == 6) then
+    if(nType == 1 or nType == 4 or nType == 5 or nType == 6  or nType == 7) then
         btn:SetVisible(true);
     else
         btn:SetVisible(false);
@@ -904,6 +904,9 @@ function p.OnUIEventProp(uiNode, uiEventType, param)
             elseif(nType == 6) then     --神马鞭
                 CloseMainUI();
                 PetUI.LoadUI(true);
+           elseif nType == 7 then	--斗地主道具
+            	local count = Item.GetItemInfoN(nItemId, Item.ITEM_AMOUNT);
+            	p.nTagId = CommonDlgNew.ShowInputDlg(GetTxtPri("PLAYER_T3"), p.OnUIEventUseNum, {nItemId}, count, 2);               
             end
             
             

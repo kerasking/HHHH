@@ -66,7 +66,7 @@ function p.GetLogoutString( nTime )
 	elseif nTime < 1800 then
 		str=str..SafeN2S(getIntPart(nTime/60))..GetTxtPri("AREAUI_T8");
 	elseif nTime < 3600 then
-        str=str..GetTxtPri("AREAUI_T18");
+		str=str..GetTxtPri("AREAUI_T18");
 	elseif nTime < 86400 then
 		str=str..SafeN2S(getIntPart(nTime/3600))..GetTxtPri("AREAUI_T9");
 	else
@@ -574,6 +574,12 @@ function p.HandleMsgArmyGroupMemberList( tNetDataPackete )
 		if IsUIShow( NMAINSCENECHILDTAG.CreateOrJoinArmyGroup ) then
 			CreateOrJoinArmyGroup.RefreshMemberlist( p.tmpMemberList );
 		end
+		
+		--斗地主求救
+		if IsUIShow( NMAINSCENECHILDTAG.SlaveUI ) then
+			Slave.LoadUISynSos(p.tmpMemberList);			
+		end
+				
 	elseif ( nPacketFlag == PacketFlag.PF_SINGLE ) then
 		-- 按职位等级排
 		table.sort(p.tmpMemberList, function (a,b)  return (a[ArmyGroupMemberIndex.AGMI_POSITION] > b[ArmyGroupMemberIndex.AGMI_POSITION]) end);
@@ -589,6 +595,12 @@ function p.HandleMsgArmyGroupMemberList( tNetDataPackete )
 		if IsUIShow( NMAINSCENECHILDTAG.CreateOrJoinArmyGroup ) then
 			CreateOrJoinArmyGroup.RefreshMemberlist( p.tmpMemberList );
 		end
+		
+		--斗地主求救
+		if IsUIShow( NMAINSCENECHILDTAG.SlaveUI ) then		
+			Slave.LoadUISynSos(p.tmpMemberList);	
+		end
+	
 	end
 end
 

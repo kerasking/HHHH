@@ -156,6 +156,14 @@ function p.LoadUI( nCurrPetId )
         btn:SetTouchDownImage(nil);
     end
     
+    
+    local bIsOpen = GetVipIsOpen(DB_VIP_CONFIG.DESTINY_SELECT_AYTO);
+    if(bIsOpen == false) then
+        local btn = GetButton(layer, TAG_FAST_SELL);
+        btn:SetImage(nil);
+        btn:SetTouchDownImage(nil);
+    end
+    
 	return true;
 end
 
@@ -397,7 +405,6 @@ function p.CreateDescLayer()
     containter:EnableScrollBar(true);
     local size = containter:GetFrameRect().size;
     containter:SetViewSize(CGSizeMake(size.w,14*CoordScaleY));
-    --for i,v in ipairs(TAG_DESC_LAYER) do
 	for i,v in ipairs(DesInfos2) do
         local view = createUIScrollView();
         view:Init(false);
@@ -408,20 +415,10 @@ function p.CreateDescLayer()
         view:SetScrollViewer(containter);
         view:SetContainer(containter);
         containter:AddView(view);
-		
-		--[[
-		local uiLoad = createNDUILoad();
-		if not CheckP(uiLoad) then
-			return false;
-		end
-		uiLoad:Load(v, view, nil, 0, 0);
-		uiLoad:Free();
-        ]]
         
         local pLabelTips = _G.CreateColorLabel( v, 12, size.w );
         --pLabelTips:SetFrameRect(CGSizeMake(size.w,14*CoordScaleY));
         view:AddChild(pLabelTips);
-		
     end
 end
 
@@ -446,6 +443,9 @@ function p.OnUIEvent(uiNode, uiEventType, param)
         elseif(tag == TAG_DESC) then
             p.CreateDescLayer();
         elseif(nNpcId) then                     -- 占星
+            if(MsgRealize.IsAutoDestiny()) then
+                return true;
+            end
             
             --判断银币是否足够
             local nNeedMoney = GetDataBaseDataN("daofa_config",nNpcId,DB_DAOFA_CONFIG.REQ_MONEY)
@@ -469,7 +469,9 @@ function p.OnUIEvent(uiNode, uiEventType, param)
             DestinyUI.LoadUI( p.nCurrPetId );
             p.Close();
         elseif(tag == TAG_FAST_DESTINY) then    -- 一键占星
-            
+            if(MsgRealize.IsAutoDestiny()) then
+                return true;
+            end
             
             --vip等级判断
             local nVipRank = GetRoleBasicDataN(GetPlayerId(),USER_ATTR.USER_ATTR_VIP_RANK);
@@ -481,7 +483,17 @@ function p.OnUIEvent(uiNode, uiEventType, param)
             end
             
             local npc_list = MsgRealize.getNpcIdList();
-            local nNeedMoney = GetDataBaseDataN("daofa_config",npc_list[#npc_list],DB_DAOFA_CONFIG.REQ_MONEY);
+            
+            
+            local npc_id = 1;
+            for i,v in ipairs(npc_list) do
+                if(v>npc_id) then
+                    npc_id = v;
+                end
+            end
+            
+            
+            local nNeedMoney = GetDataBaseDataN("daofa_config",npc_id,DB_DAOFA_CONFIG.REQ_MONEY);
             
             if(p.IsNotMoney(nNeedMoney) == false) then
                 return true;
@@ -496,26 +508,62 @@ function p.OnUIEvent(uiNode, uiEventType, param)
             ShowLoadBar();
             MsgRealize.sendRealizeBuyALL();
         elseif(tag == TAG_FAST_GET) then        -- 一键获得
-            local zx,fx = p.GetZXandFXCount();
+            if(MsgRealize.IsAutoDestiny()) then
+                return true;
+            end
             
+            local zx,fx = p.GetZXandFXCount();
+            LogInfo("chh_00");
             if(zx == 0) then
                 if( fx == 0 ) then
                     CommonDlgNew.ShowTipsDlg(p.SetTxtColor(GetTxtPri("DU_T7")));
                     return true;
                 end
             
-                --判断背包是否已满
-                if(ItemFunc.IsDestinyBagFull()) then
-                    return true;
-                end
                 
+                
+            end
+            
+            --判断背包是否已满
+            if(ItemFunc.IsDestinyBagFull()) then
+                LogInfo("chh_01");
+                return true;
+            end
+            
+            
+            LogInfo("chh_02");
+            ShowLoadBar();
+            MsgRealize.sendPickUpAll();
+        elseif(tag == TAG_FAST_SELL) then       -- 一键出售
+            
+            local nVipRank = GetRoleBasicDataN(GetPlayerId(),USER_ATTR.USER_ATTR_VIP_RANK);
+            local nRequestVipRank = GetRequestVipLevel(DB_VIP_CONFIG.DESTINY_SELECT_AYTO);
+            LogInfo("nVipRank:[%d],nRequestVipRank:[%d]",nVipRank,nRequestVipRank);
+            if(nRequestVipRank>nVipRank) then
+                CommonDlgNew.ShowYesDlg(string.format(GetTxtPri("DU_T30"),nRequestVipRank));
+                return true;
+            end
+            
+            
+            local btn = ConverToButton(uiNode);
+            if(btn) then
+                if (MsgRealize.IsAutoDestiny()) then
+                    --停止占星
+                    MsgRealize.CloseAutoDestiny();
+                    --[[
+                    btn:SetTitle(GetTxtPri("DU_T28"));
+                    p.SetBtnStatus(false);
+                    ]]
+                    
+                else
+                    --开始自动占星
+                    p.CreateAutoDestinySelect();
+                end
             end
             
             
             
-            ShowLoadBar();
-            MsgRealize.sendPickUpAll();
-        elseif(tag == TAG_FAST_SELL) then       -- 一键出售
+            --[[
             local zx,fx = p.GetZXandFXCount();
             if(zx==0) then
                 CommonDlgNew.ShowTipsDlg(p.SetTxtColor(GetTxtPri("DU_T6")));
@@ -524,8 +572,12 @@ function p.OnUIEvent(uiNode, uiEventType, param)
             
             ShowLoadBar();
             MsgRealize.sendSaleAll();
-        elseif (tag == TAG_QMDJ) then           -- 召唤占星
+            ]]
             
+        elseif (tag == TAG_QMDJ) then           -- 召唤占星
+            if(MsgRealize.IsAutoDestiny()) then
+                return true;
+            end
             --vip等级判断
             local nVipRank = GetRoleBasicDataN(GetPlayerId(),USER_ATTR.USER_ATTR_VIP_RANK);
             local nRequestVipRank = GetRequestVipLevel(DB_VIP_CONFIG.DESTINY_CALL_QIMEN);
@@ -561,6 +613,10 @@ function p.OnUIEvent(uiNode, uiEventType, param)
             end
             
         elseif(tag == TAG_BTN_GOODS_SELL1 or tag == TAG_BTN_GOODS_SELL2) then       --拾取和出售功能
+            if(MsgRealize.IsAutoDestiny()) then
+                return true;
+            end
+            
             local itemBtn = ConverToButton(uiNode);
             LogInfo("tag == TAG_BTN_GOODS_SELL1 or tag == TAG_BTN_GOODS_SELL2");
             if itemBtn then
@@ -587,6 +643,92 @@ function p.OnUIEvent(uiNode, uiEventType, param)
     end
     return true;
 end
+
+function p.SetBtnStatus(status)
+    local player = p.GetCurrLayer();
+    if(player) then
+        local btn1 = GetButton(player, TAG_FAST_DESTINY);
+        local btn2 = GetButton(player, TAG_FAST_GET);
+        local btn3 = GetButton(player, TAG_QMDJ);
+        if(btn1) then
+            btn1:EnalbeGray(status);
+        end
+        if(btn2) then
+            btn2:EnalbeGray(status);
+        end
+        if(btn3) then
+            btn3:EnalbeGray(status);
+        end
+        
+        local btn = GetButton(player, TAG_FAST_SELL);
+        if(btn) then
+            if(status) then
+                btn:SetTitle(GetTxtPri("DU_T29"));
+            else
+                btn:SetTitle(GetTxtPri("DU_T28"));
+            end
+            
+        end
+    end
+end
+
+local DestinyFeteUIAUTO = 10101;
+local AUTO_J = 101;
+local AUTO_Z = 102;
+local AUTO_R = 103;
+
+function p.CreateAutoDestinySelect()
+    local player = p.GetCurrLayer();
+    local layer = createNDUILayer();
+	layer:Init();
+	layer:SetTag(DestinyFeteUIAUTO);
+	layer:SetFrameRect(RectFullScreenUILayer);
+	player:AddChildZ(layer,UILayerZOrder.NormalLayer+1);
+	
+    --加载UI
+	local uiLoad = createNDUILoad();
+	if not CheckP(uiLoad) then
+		return false;
+	end
+	uiLoad:Load("destiny/Destiny_Dlg.ini", layer, p.OnUIEventAutoDestiny, 0, 0);
+	uiLoad:Free();
+end
+
+function p.OnUIEventAutoDestiny(uiNode, uiEventType, param)
+    local tag = uiNode:GetTag();
+    if uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK then
+        if(tag == AUTO_J) then
+            MsgRealize.KeepGold();
+        elseif(tag == AUTO_Z) then
+            MsgRealize.KeepPurple();
+        elseif(tag == AUTO_R) then
+            MsgRealize.KeepBlue();
+        end
+        
+        
+        
+        
+        MsgRealize.EnableAutoDestiny();
+        MsgRealize.sendMergeAll();
+        
+        local player = p.GetCurrLayer();
+        if(player) then
+            player:RemoveChildByTag(DestinyFeteUIAUTO, true);
+        end
+        
+        p.SetBtnStatus(true);
+        
+        
+        --[[
+        local btn = GetButton(player, TAG_FAST_SELL);
+        if(btn) then
+            btn:SetTitle(GetTxtPri("DU_T29"));
+        end
+        ]]
+    end
+    return true;
+end
+
 
 --是否银币不足
 function p.IsNotMoney( nNeedMoney )

@@ -139,7 +139,7 @@ p.challengeID = {};
 
 --是否在竞技场,为了小版本不更新c++代码用,跟拦截功能区分开,以后大版本更新的时候改回来
 
-p.isInChallenge = 1;     --1竞技场   2.运粮   3.boss战  4.副本  5.大乱斗
+p.isInChallenge = 1;     --1竞技场   2.运粮   3.boss战  4.副本  5.大乱斗  6.军团战 7.斗地主 8.古迹寻宝
 
 
 p.battleID=
@@ -160,7 +160,11 @@ end
 function p.onCommonDlg2(nId, param)
         LogInfo("++++++++++remove_cd_Dlg_id++++++");
         if ( CommonDlgNew.BtnOk == nId ) then
-			local cost = getIntPart( (p.cdTime+59) / 60 ); 
+			local n=p.cdTime%60;
+			local cost=getIntPart(p.cdTime/60);
+			if n>0 then
+				cost=cost+1;
+			end
 			if cost > 0 then
 				local nPlayerId = GetPlayerId();
 				if nil == nPlayerId then
@@ -169,7 +173,7 @@ function p.onCommonDlg2(nId, param)
 				end
 	
                 local emoney = GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_EMONEY);
-				if cost < emoney then
+				if emoney >= cost then
                      LogInfo("++++++++++SendClearTime++++++ cost:" ..cost..", emoney:"..emoney );
 					_G.MsgArena.SendClearTime();
 				else
@@ -772,7 +776,124 @@ function p.OnUIRankItemEvent(uiNode, uiEventType, param)
 end
     
 function p.SetChallengeList(index,id,name,level,rank,lookfaceID)
-		
+	local layer=p.GetParent();
+    local nPlayerId = GetPlayerId();
+    LogInfo("p.SetChallengeList id = %d, nPlayerId = %d", id, nPlayerId);
+    p.challengeID[index]={rank,id,name};  
+    
+    if id == nPlayerId then
+       p.PlayerRank = rank;
+       p.RefreshUI();
+    end
+    
+    
+    
+    
+    
+    
+	if index == 1 then
+        local lbLev = GetLabel(layer, ID_ARENA_CTRL_TEXT_PLAYER_NAME_1);  
+        local lbRank = GetLabel(layer, ID_ARENA_CTRL_TEXT_TANK_1); 
+        if id == nPlayerId then
+            p.challengeID[1][1] = 0;   
+            lbLev:SetFontColor(ccc4(255,255,0, 255));
+            lbRank:SetFontColor(ccc4(255,255,0, 255));
+        else
+            lbLev:SetFontColor(ccc4(126,192, 238, 255));
+            lbRank:SetFontColor(ccc4(126,192, 238, 255));
+        end
+        
+		SetLabel(layer,ID_ARENA_CTRL_TEXT_PLAYER_NAME_1,"lv."..SafeN2S(level).."  "..name);
+		SetLabel(layer,ID_ARENA_CTRL_TEXT_TANK_1,"第"..SafeN2S(rank).."名");
+        local roleBtn = GetButton(layer, ID_ARENA_CTRL_BUTTON_ROLE_INFO_1);
+        local pic = GetArenaUIPlayerHeadPic(lookfaceID);      
+        if CheckP(pic) then
+            roleBtn:SetImage(pic);
+        end
+	elseif index == 2 then
+        local lbLev = GetLabel(layer, ID_ARENA_CTRL_TEXT_PLAYER_NAME_2);  
+        local lbRank = GetLabel(layer, ID_ARENA_CTRL_TEXT_TANK_2); 
+
+         if id == nPlayerId then
+            p.challengeID[2][1] = 0;   
+            lbLev:SetFontColor(ccc4(255,255,0, 255));
+            lbRank:SetFontColor(ccc4(255,255,0, 255));
+        else
+            lbLev:SetFontColor(ccc4(126,192, 238, 255));
+            lbRank:SetFontColor(ccc4(126,192, 238, 255));
+        end
+
+		SetLabel(layer,ID_ARENA_CTRL_TEXT_PLAYER_NAME_2,"lv."..SafeN2S(level).."  "..name);
+		SetLabel(layer,ID_ARENA_CTRL_TEXT_TANK_2, "第"..SafeN2S(rank).."名");
+        
+        local roleBtn = GetButton(layer, ID_ARENA_CTRL_BUTTON_ROLE_INFO_2);
+        local pic = GetArenaUIPlayerHeadPic(lookfaceID);      
+        if CheckP(pic) then
+            roleBtn:SetImage(pic);
+        end   
+        
+	elseif index == 3 then
+        local lbLev = GetLabel(layer, ID_ARENA_CTRL_TEXT_PLAYER_NAME_3);  
+        local lbRank = GetLabel(layer, ID_ARENA_CTRL_TEXT_TANK_3);   
+        if id == nPlayerId then
+            p.challengeID[3][1] = 0;   
+            lbLev:SetFontColor(ccc4(255,255,0, 255));
+            lbRank:SetFontColor(ccc4(255,255,0, 255));
+        else
+            lbLev:SetFontColor(ccc4(126,192, 238, 255));
+            lbRank:SetFontColor(ccc4(126,192, 238, 255));
+        end
+
+		SetLabel(layer,ID_ARENA_CTRL_TEXT_PLAYER_NAME_3,"lv."..SafeN2S(level).."  "..name);
+		SetLabel(layer,ID_ARENA_CTRL_TEXT_TANK_3, "第"..SafeN2S(rank).."名");
+        
+        local roleBtn = GetButton(layer, ID_ARENA_CTRL_BUTTON_ROLE_INFO_3);
+        local pic = GetArenaUIPlayerHeadPic(lookfaceID);      
+        if CheckP(pic) then
+            roleBtn:SetImage(pic);
+        end   
+    elseif index == 4 then
+        local lbLev = GetLabel(layer, ID_ARENA_CTRL_TEXT_PLAYER_NAME_4);  
+        local lbRank = GetLabel(layer, ID_ARENA_CTRL_TEXT_TANK_4); 
+        if id == nPlayerId then
+            p.challengeID[4][1] = 0;   
+            lbLev:SetFontColor(ccc4(255,255,0, 255));
+            lbRank:SetFontColor(ccc4(255,255,0, 255));
+        else
+            lbLev:SetFontColor(ccc4(126,192, 238, 255));
+            lbRank:SetFontColor(ccc4(126,192, 238, 255));
+        end
+
+		SetLabel(layer,ID_ARENA_CTRL_TEXT_PLAYER_NAME_4,"lv."..SafeN2S(level).."  "..name);
+		SetLabel(layer,ID_ARENA_CTRL_TEXT_TANK_4, "第"..SafeN2S(rank).."名");
+        
+        local roleBtn = GetButton(layer, ID_ARENA_CTRL_BUTTON_ROLE_INFO_4);
+        local pic = GetArenaUIPlayerHeadPic(lookfaceID);      
+        if CheckP(pic) then
+            roleBtn:SetImage(pic);
+        end   
+	elseif index == 5 then
+        local lbLev = GetLabel(layer, ID_ARENA_CTRL_TEXT_PLAYER_NAME_5);  
+        local lbRank = GetLabel(layer, ID_ARENA_CTRL_TEXT_TANK_5); 
+        if id == nPlayerId then
+            p.challengeID[5][1] = 0;   
+            lbLev:SetFontColor(ccc4(255,255,0, 255));
+            lbRank:SetFontColor(ccc4(255,255,0, 255));
+        else
+            lbLev:SetFontColor(ccc4(126,192, 238, 255));
+            lbRank:SetFontColor(ccc4(126,192, 238, 255));
+        end
+        
+		SetLabel(layer,ID_ARENA_CTRL_TEXT_PLAYER_NAME_5,"lv."..SafeN2S(level).."  "..name);
+		SetLabel(layer,ID_ARENA_CTRL_TEXT_TANK_5, "第"..SafeN2S(rank).."名");
+    
+        local roleBtn = GetButton(layer, ID_ARENA_CTRL_BUTTON_ROLE_INFO_5);
+        local pic = GetArenaUIPlayerHeadPic(lookfaceID);   
+        if CheckP(pic) then
+            roleBtn:SetImage(pic);
+        end   	
+    end
+	
 end
 
 function p.showRewardUI()

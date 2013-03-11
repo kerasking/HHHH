@@ -58,6 +58,8 @@ using namespace cocos2d;
 
 #define LONG_TOUCH_TIMER_TAG (6951)
 
+#define LAZY_DELETE_TIMER_TAG (99)
+
 NS_NDENGINE_BGN
 
 IMPLEMENT_CLASS(NDUILayer, NDUINode)
@@ -107,6 +109,8 @@ NDUILayer::NDUILayer()
 	m_bPopupDlg = false;
 
 	m_bDispatchBtnClickByPressDown = false;
+
+	m_pLazyDeleteTimer = new NDTimer;
 }
 
 NDUILayer::~NDUILayer()
@@ -1112,6 +1116,17 @@ void NDUILayer::OnTimer(OBJID tag)
 
 		m_bDispatchLongTouchEvent = true;
 	}
+	else if (m_pLazyDeleteTimer && tag == LAZY_DELETE_TIMER_TAG) //@lazydel
+	{
+		m_pLazyDeleteTimer->KillTimer( this, tag );
+		this->RemoveFromParent( true );
+	}
+}
+
+void NDUILayer::lazyDelete() //@lazydel
+{
+	if (m_pLazyDeleteTimer)
+		m_pLazyDeleteTimer->SetTimer(this, LAZY_DELETE_TIMER_TAG, 0.1f); 
 }
 
 bool NDUILayer::DispatchLongTouchClickEvent(CCPoint beginTouch,
@@ -2066,7 +2081,7 @@ bool NDUILayer::IsTouchOnButton( const CCPoint& touch )
 					|| pNode->IsKindOfClass( RUNTIME_CLASS(CUICheckBox))
 					|| pNode->IsKindOfClass( RUNTIME_CLASS(CUIHyperlinkButton))
 					|| pNode->IsKindOfClass( RUNTIME_CLASS(CUIHyperlinkText))
-					//|| pNode->IsKindOfClass( RUNTIME_CLASS(CUISpriteNode))
+					|| pNode->IsKindOfClass( RUNTIME_CLASS(CUIChatText))
 					)
 				{
 					CCRect nodeFrame = uiNode->GetBoundRect();

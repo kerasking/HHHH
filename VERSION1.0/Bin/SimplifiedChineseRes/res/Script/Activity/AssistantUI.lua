@@ -20,7 +20,7 @@ p.AssistantList = {};    --助手列表
 p.GiftBackList = {};     --礼包列表
 
 p.GifeItemSize = CGSizeMake(480*CoordScaleX, 45*CoordScaleY);
-
+local TagImageSize = 13;
 
 p.Infos = {};
 
@@ -54,6 +54,10 @@ function p.OnUIEvent(uiNode, uiEventType, param)
                 p.salaryDeal();
             elseif(typeId == 4) then
                 p.sportsDeal();
+            elseif(typeId == 5) then    --运粮
+                p.ylDeal();
+            elseif(typeId == 6) then    --签到
+                p.qdDeal();
             end
         end
         
@@ -83,6 +87,8 @@ function p.initData()
         {GetTxtPri("ZhenShouCount"),GetTxtPri("ZS_ZhenSou"),0},
         {GetTxtPri("FenLuCount"),GetTxtPri("ZS_LinQu"),0},
         {GetTxtPri("TiaoZhanCount"),GetTxtPri("ZZ_JinJi"),0},
+        {GetTxtPri("YunLiangCount"),GetTxtPri("ZZ_YunLiang"),0},
+        {GetTxtPri("QianDaoCount"),GetTxtPri("ZZ_QianDao"),0},
     };
 
 
@@ -138,6 +144,20 @@ function p.initData()
         LogInfo("assis p.initData  table.insert(p.AssistantList,4)");
         p.Infos[4][1] = string.format(p.Infos[4][1],allowSportsCount);
         p.Infos[4][3] = allowSportsCount;
+    end
+    
+    --运粮次数判断
+    local tInfo = MsgTransport.GetTransportCount();
+    if(tInfo.YLCount >0 or tInfo.RJCount >0) then
+        table.insert(p.AssistantList,5);
+        p.Infos[5][1] = string.format(p.Infos[5][1],tInfo.YLCount,tInfo.RJCount);
+    end
+    
+    --签到
+    local bIsSigh = DailyCheckInUI.HasSigh();
+    if(bIsSigh) then
+        table.insert(p.AssistantList,6);
+        p.Infos[6][1] = string.format(p.Infos[6][1]);
     end
     
 	MsgActivityMix.mUIListener = p.processNet;
@@ -196,6 +216,18 @@ end
 function p.sportsDeal()
     CloseMainUI();
     _G.MsgArena.SendOpenArena();
+end
+
+function p.ylDeal()
+    CloseMainUI();
+    --打开运粮
+    DailyAction.SendActionInfo(4);--发送打开运粮消息
+    ShowLoadBar();
+end
+
+function p.qdDeal()
+    CloseMainUI();
+    DailyCheckInUI.LoadUI();
 end
 
 ---------------------------初始化助手信息-----------------------------------
@@ -286,6 +318,7 @@ end
 function p.RefreshUI()
     local container = p.GetGiftListContainer();
     container:RemoveAllView();
+    container:EnableScrollBar(true);
     local rectview = container:GetFrameRect();
     container:SetViewSize(p.GifeItemSize);
     
@@ -307,8 +340,6 @@ function p.CreateAssistantItem(container,i)
         view:SetScrollViewer(container);
         view:SetContainer(container);
         
-        container:AddView(view);
-        
         --初始化ui
         local uiLoad = createNDUILoad();
         if nil == uiLoad then
@@ -316,12 +347,14 @@ function p.CreateAssistantItem(container,i)
         end
         
         LogInfo("ass p.CreateAssistantItem uiLoad:Load begin");  
-        uiLoad:Load("achieve_3_L.ini", view, p.OnUIEvent, 0, 0);
+        uiLoad:Load("event_2_L.ini", view, p.OnUIEvent, 0, 0);
         
         --实例化每一项
         p.RefreshAssistantItem(view,i);
         LogInfo("p.CreateAssistantItem p.RefreshAssistantItem end");
         uiLoad:Free();
+        
+        container:AddView(view);
 end
 
 function p.RefreshAssistantItem(view,i)  
@@ -341,6 +374,10 @@ function p.RefreshAssistantItem(view,i)
     local btn = GetButton(view, TAG_LIST_TAKE);
     btn:SetTitle(p.Infos[gift][2]);
     btn:SetParam1(gift);
+    
+    local img = GetImage(view, TagImageSize);
+    local container = p.GetGiftListContainer();
+    container:SetViewSize(img:GetFrameRect().size);
 end
 
 --获得助手列表

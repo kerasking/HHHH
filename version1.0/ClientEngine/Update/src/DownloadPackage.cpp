@@ -135,9 +135,17 @@ void DownloadPackage::DownloadThreadExcute()
  	}		
  	m_pkHttp->setTimeout(60 * 1000);
 	//获取已经下载文件的大小,如果已经存在，则进行续传
+	m_nFileLen = 0;
     int startpos = GetFileSize(m_strDownloadPath.c_str());
+	LOGD("Download startpos is %d",startpos);
  	int nDoneLength = m_pkHttp->getHttpFile(m_strDownloadURL.c_str(),
 		m_strDownloadPath.c_str(), startpos);
+   if (startpos >0 && m_pkHttp->getStatusCode() == 416)
+   {
+	   LOGD("already Download succeeded ,to unzip file!");
+	   DidDownloadStatus(DownloadStatusSuccess);
+	   return ;
+   }
 	//网络连接失败,进行重新连接尝试
 	int nReconnectCount = RECONNECTCOUNT;
 	if (nDoneLength == -1 || ((nDoneLength < m_nFileLen) && (nDoneLength > 0)))
@@ -146,10 +154,11 @@ void DownloadPackage::DownloadThreadExcute()
 		{
 			nReconnectCount--;
 			sleep(10000);
+			m_nFileLen = 0;
 			startpos = GetFileSize(m_strDownloadPath.c_str());
 			nDoneLength = m_pkHttp->getHttpFile(m_strDownloadURL.c_str(),
 				m_strDownloadPath.c_str(), startpos);
-			if (nDoneLength >= m_nFileLen)
+			if ((nDoneLength >= m_nFileLen) && (m_nFileLen > 0))
 			{
 				break;
 			}
@@ -183,15 +192,15 @@ void DownloadPackage::Download()
 
 int DownloadPackage::GetFileSize(const char* filepath)
 {
-	//int size = 0;
-  //  #ifdef WIN32
+	int size = 0;
 	FILE* file = fopen(filepath, "rb");
 	if(file)
 	{
 		fseek(file, 0L, SEEK_END);
-		return ftell(file); 
+		size = ftell(file); 
+		fclose(file);
 	}
-	return 0;
+	return size;
 #if 0
 
  #ifdef WIN32
