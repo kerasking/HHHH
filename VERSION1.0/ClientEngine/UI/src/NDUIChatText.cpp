@@ -131,7 +131,7 @@ void CUIChatText::SetContent_WithNDBitmap(int speakerID, int channel, const char
 void CUIChatText::SetContent(int speakerID, int channel, const char* speaker,
 							 const char* text, int style, int fontSizelua, ccColor4B color)
 {
-#if WITH_NDBITMAP //@ndbitmap
+#if WITH_NDBITMAP && 0 //@ndbitmap //强制关闭！因为后面的点击响应会有问题
 	return SetContent_WithNDBitmap( speakerID, channel, speaker, text, style, fontSizelua, color );
 #endif
 
