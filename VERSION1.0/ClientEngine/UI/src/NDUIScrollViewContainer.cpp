@@ -198,6 +198,7 @@ NDUIScrollViewContainer::NDUIScrollViewContainer()
 	m_unBeginIndex = 0;
 	m_bCenterAdjust = false;
 	m_bRecaclClientEventRect = false;
+	m_bIsBottomSpeedBar = false;
 }
 
 NDUIScrollViewContainer::~NDUIScrollViewContainer()
@@ -600,21 +601,6 @@ unsigned int NDUIScrollViewContainer::WhichViewToScroll()
 		CCRect kViewRect = pkViewScrollView->GetFrameRect();
 		int iCurShowIndex = GetBeginIndex();
 
-		/***
-		* 在這裡修正iCurshowIndex為0計算不對的問題
-		* 郭浩
-		*/
-		if (0 == iCurShowIndex)
-		{
-			iCurShowIndex = 1;
-		}
-
-		/************************************************************************/
-		/* 下面這裡不能這麼算，如果index為0，那麼那iCurMoveDis值就得到一个		*/
-		/* 小于0的值，那这个值就被判断成右移动。								*/
-		/*                                       				—— 郭浩		*/
-		/************************************************************************/
-
 		int iCurMoveDis = kClientRect.origin.x
 				- (-iCurShowIndex * kViewRect.size.width);
 
@@ -623,10 +609,30 @@ unsigned int NDUIScrollViewContainer::WhichViewToScroll()
 		{
 			if (abs(iCurMoveDis) > kViewRect.size.width / 8)
 			{
+				/***
+				* 在這裡修正iCurshowIndex為0計算不對的問題
+				* 郭浩
+				*/
 				int iMoveNum = abs(iCurMoveDis) / kViewRect.size.width + 1;
-				iCurShowIndex =
+
+				/************************************************************************/
+				/* 這裡出了問題，計算的時候多出一格來，應該減1							*/
+				/* 																		*/
+				/*                                       				   —— 郭浩	*/
+				/************************************************************************/
+
+				if (m_bIsBottomSpeedBar)
+				{
+					iCurShowIndex =
 						iCurShowIndex + iMoveNum > kSize - 1 ?
-								kSize - 1 : iCurShowIndex + iMoveNum;
+						kSize - 1 : iCurShowIndex + iMoveNum - 1;
+				}
+				else
+				{
+					iCurShowIndex =
+						iCurShowIndex + iMoveNum > kSize - 1 ?
+						kSize - 1 : iCurShowIndex + iMoveNum;
+				}
 			}
 		}
 		//獲取的移動距離如果大於0，那麼向左移動，索引減少
@@ -766,6 +772,7 @@ bool NDUIScrollViewContainer::CaclViewCenter(CUIScrollView* view,
 	CCRect kClientRect = GetClientRect(bJudeOver);
 	CCRect kViewRect = view->GetFrameRect();
 	fCenter = 0.0f;
+
 	if (UIScrollStyleHorzontal == GetScrollStyle())
 	{
 		fCenter = kClientRect.origin.x + kViewRect.origin.x
@@ -951,12 +958,12 @@ void NDUIScrollViewContainer::draw() //  m_fScrollDistance += speed; only to zer
 		{
 			if (m_fScrollDistance < m_fScrollToCenterSpeed)
 			{
-				if (s_fFanTan > m_fScrollToCenterSpeed)
-				{
-					m_fScrollDistance = -s_fFanTan;
-					s_fFanTan = s_fFanTan * 0.5f;
-					break;
-				}
+// 				if (s_fFanTan > m_fScrollToCenterSpeed)
+// 				{
+// 					m_fScrollDistance = -s_fFanTan;
+// 					s_fFanTan = s_fFanTan * 0.5f;
+// 					break;
+// 				}
 
 				fMove = m_fScrollDistance;
 				m_fScrollDistance = 0.0f;
@@ -972,12 +979,12 @@ void NDUIScrollViewContainer::draw() //  m_fScrollDistance += speed; only to zer
 		}
 		else if (m_fScrollDistance < 0.0f)
 		{
-			if (s_fFanTan > -m_fScrollToCenterSpeed)
-			{
-				m_fScrollDistance = -s_fFanTan;
-				s_fFanTan = s_fFanTan * 0.5f;
-				break;
-			}
+// 			if (s_fFanTan > -m_fScrollToCenterSpeed)
+// 			{
+// 				m_fScrollDistance = -s_fFanTan;
+// 				s_fFanTan = s_fFanTan * 0.5f;
+// 				break;
+// 			}
 
 			if (m_fScrollDistance > -m_fScrollToCenterSpeed)
 			{
@@ -1352,6 +1359,11 @@ bool NDUIScrollViewContainer::CanDestroyOnRemoveAllChildren(NDNode* pNode)
 		return false;
 	}
 	return true;
+}
+
+void NDUIScrollViewContainer::SetBottomSpeedBar( bool bBar )
+{
+	m_bIsBottomSpeedBar = bBar;
 }
 
 /*

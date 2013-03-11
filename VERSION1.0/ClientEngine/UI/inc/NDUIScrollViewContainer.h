@@ -64,6 +64,7 @@ public:
     
     //设置每个view的大小
 	void SetViewSize(CCSize size);
+	void SetBottomSpeedBar(bool bBar);
 
     //获取每个view的大小 
 	CCSize GetViewSize();
@@ -107,6 +108,7 @@ private:
 	CCSize					m_sizeView;
 	unsigned int			m_unBeginIndex;
 	bool					m_bCenterAdjust;
+	bool					m_bIsBottomSpeedBar;
 	bool					m_bRecaclClientEventRect;
 	CAutoLink<CUIScrollView> m_linkCurView;
 	
